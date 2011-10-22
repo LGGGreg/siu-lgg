@@ -1,0 +1,35 @@
+C:\Users\LGG\Desktop\LOL-Skinning\Installer creation\Skin Installer Ultimate\MessageForm\bin\Debug\MessageForm.dll
+C:\Users\LGG\Desktop\LOL-Skinning\Installer creation\Skin Installer Ultimate\MessageForm\bin\Debug\MessageForm.pdb
+C:\Users\LGG\Desktop\LOL-Skinning\Installer creation\Skin Installer Ultimate\MessageForm\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\LGG\Desktop\LOL-Skinning\Installer creation\Skin Installer Ultimate\MessageForm\obj\Debug\Cliver.MessageForm.resources
+C:\Users\LGG\Desktop\LOL-Skinning\Installer creation\Skin Installer Ultimate\MessageForm\obj\Debug\CliverSoft.Properties.Resources.resources
+C:\Users\LGG\Desktop\LOL-Skinning\Installer creation\Skin Installer Ultimate\MessageForm\obj\Debug\MessageForm.csproj.GenerateResource.Cache
+C:\Users\LGG\Desktop\LOL-Skinning\Installer creation\Skin Installer Ultimate\MessageForm\obj\Debug\MessageForm.dll
+C:\Users\LGG\Desktop\LOL-Skinning\Installer creation\Skin Installer Ultimate\MessageForm\obj\Debug\MessageForm.pdb
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\MessageForm\bin\Debug\MessageForm.dll
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\MessageForm\bin\Debug\MessageForm.pdb
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\MessageForm\obj\Debug\ResolveAssemblyReference.cache
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\MessageForm\obj\Debug\Cliver.MessageForm.resources
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\MessageForm\obj\Debug\CliverSoft.Properties.Resources.resources
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\MessageForm\obj\Debug\GenerateResource-ResGen.read.1.tlog
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\MessageForm\obj\Debug\GenerateResource-ResGen.write.1.tlog
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\MessageForm\obj\Debug\MessageForm.dll
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\MessageForm\obj\Debug\MessageForm.pdb
+C:\Users\LGG\Desktop\Skin Installer Ultimate\MessageForm\bin\Debug\MessageForm.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\MessageForm\bin\Debug\MessageForm.pdb
+C:\Users\LGG\Desktop\Skin Installer Ultimate\MessageForm\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\LGG\Desktop\Skin Installer Ultimate\MessageForm\obj\Debug\Cliver.MessageForm.resources
+C:\Users\LGG\Desktop\Skin Installer Ultimate\MessageForm\obj\Debug\CliverSoft.Properties.Resources.resources
+C:\Users\LGG\Desktop\Skin Installer Ultimate\MessageForm\obj\Debug\ResGen.read.1.tlog
+C:\Users\LGG\Desktop\Skin Installer Ultimate\MessageForm\obj\Debug\ResGen.write.1.tlog
+C:\Users\LGG\Desktop\Skin Installer Ultimate\MessageForm\obj\Debug\MessageForm.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\MessageForm\obj\Debug\MessageForm.pdb
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\MessageForm\bin\Debug\MessageForm.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\MessageForm\bin\Debug\MessageForm.pdb
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\MessageForm\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\MessageForm\obj\Debug\Cliver.MessageForm.resources
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\MessageForm\obj\Debug\CliverSoft.Properties.Resources.resources
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\MessageForm\obj\Debug\ResGen.read.1.tlog
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\MessageForm\obj\Debug\ResGen.write.1.tlog
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\MessageForm\obj\Debug\MessageForm.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\MessageForm\obj\Debug\MessageForm.pdb

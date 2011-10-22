@@ -1,0 +1,10 @@
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\ThirdParty\ItzWarty\ItzWartyLib\obj\Debug\ResolveAssemblyReference.cache
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\ThirdParty\ItzWarty\ItzWartyLib\bin\Debug\.wLib.dll
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\ThirdParty\ItzWarty\ItzWartyLib\bin\Debug\.wLib.pdb
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\ThirdParty\ItzWarty\ItzWartyLib\obj\Debug\.wLib.dll
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\ThirdParty\ItzWarty\ItzWartyLib\obj\Debug\.wLib.pdb
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\ItzWarty\ItzWartyLib\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\ItzWarty\ItzWartyLib\bin\Debug\wLib.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\ItzWarty\ItzWartyLib\bin\Debug\wLib.pdb
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\ItzWarty\ItzWartyLib\obj\Debug\wLib.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\ItzWarty\ItzWartyLib\obj\Debug\wLib.pdb

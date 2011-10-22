@@ -1,0 +1,604 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MessageForm</name>
+    </assembly>
+    <members>
+        <member name="T:Cliver.MessageForm">
+            <summary>
+            Dynamic dialog box with many answer cases
+            </summary>
+        </member>
+        <member name="F:Cliver.MessageForm.components">
+            <summary>
+            Required designer variable.
+            </summary>
+        </member>
+        <member name="M:Cliver.MessageForm.Dispose(System.Boolean)">
+            <summary>
+            Clean up any resources being used.
+            </summary>
+        </member>
+        <member name="M:Cliver.MessageForm.InitializeComponent">
+            <summary>
+            Required method for Designer support - do not modify
+            the contents of this method with the code editor.
+            </summary>
+        </member>
+        <member name="F:Cliver.MessageForm.SpanY">
+            <summary>
+            Vertical span in pixels between controls 
+            </summary>
+        </member>
+        <member name="F:Cliver.MessageForm.SpanX">
+            <summary>
+            Horizontal span in pixels between controls 
+            </summary>
+        </member>
+        <member name="F:Cliver.MessageForm.ButtonInternalMarginX">
+            <summary>
+            Span between button horizontal bound and its text
+            </summary>
+        </member>
+        <member name="F:Cliver.MessageForm.ButtonInternalMarginY">
+            <summary>
+            Span between button vertical bound and its text
+            </summary>
+        </member>
+        <member name="F:Cliver.MessageForm.MessageBoxWidth2HeightDesiredRegard">
+            <summary>
+            Desired proportion of the message label (not dialog window!) sides
+            </summary>
+        </member>
+        <member name="F:Cliver.MessageForm.MaxWindowSize">
+            <summary>
+            Max size of window.
+            </summary>
+        </member>
+        <member name="M:Cliver.MessageForm.#ctor(System.String,System.String,System.Drawing.Color[],System.String[],System.Int32,System.String,System.Drawing.Icon)">
+            <summary>
+            Construct dynamic dialog box with many answer cases
+            </summary>
+            <param name="caption">window caption</param>
+            <param name="message">message information</param>
+            <param name="button_colors">button colors</param>
+            <param name="answers">array of possible answers</param>
+            <param name="default_answer">default answer zero-based index</param>
+            <param name="silent_box_text">silent check box text; if null then check box will not be displayed</param>
+            <param name="icon">icon to be displayed</param>
+        </member>
+        <member name="M:Cliver.MessageForm.#ctor(System.String,System.String,System.Drawing.Color[],System.String[],System.Int32,System.String,System.Drawing.Image)">
+            <summary>
+            Construct dynamic dialog box with many answer cases
+            </summary>
+            <param name="caption">window caption</param>
+            <param name="message">message information</param>
+            <param name="button_colors">button colors</param>
+            <param name="answers">array of possible answers</param>
+            <param name="default_answer">default answer zero-based index</param>
+            <param name="silent_box_text">silent check box text; if null then check box will not be displayed</param>
+            <param name="image">image to be displayed as the message icon</param>
+        </member>
+        <member name="F:Cliver.MessageForm.Answer">
+            <summary>
+            Zero-based index of chosen answer. Cancel = -1
+            </summary>
+        </member>
+        <member name="M:Cliver.MessageForm.GetAnswer">
+            <summary>
+            Show MessageForm as a dialog box and get user's answer
+            </summary>
+            <returns>zero-based index of chosen answer. Cancel = -1</returns>
+        </member>
+        <member name="F:Cliver.MessageForm.Silent">
+            <summary>
+            Whether this answer should be repeated automatically
+            </summary>
+        </member>
+        <member name="T:CliverSoft.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:CliverSoft.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:CliverSoft.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:Cliver.IconRoutines">
+            <summary>
+            Routines to extract icon from the binary (.NET ExtractAssociatedIcon does not get 16x16 icons)
+            </summary>
+        </member>
+        <member name="M:Cliver.IconRoutines.ExtractIconEx(System.String,System.Int32,System.IntPtr[],System.IntPtr[],System.Int32)">
+            <summary>
+            Extracts the specified icon from the file.
+            </summary>
+            <param name="lpszFile">path of the icon file</param>
+            <param name="nIconIndex">index of the icon with the file</param>
+            <param name="phIconLarge">32x32 icon</param>
+            <param name="phIconSmall">16x16 icon</param>
+            <param name="nIcons">number of icons to extract</param>
+            <returns>number of icons within the file</returns>
+        </member>
+        <member name="M:Cliver.IconRoutines.ExtractIconFromLibrary(System.String,Cliver.IconRoutines.IconSize)">
+            <summary>
+            Extracts icon from the binary file like .exe, .dll, etc. (because of .NET ExtractAssociatedIcon does not get 16x16 icons)
+            </summary>
+            <param name="file">fiel path from where icon is to be extracted</param>
+            <param name="size">size of the icon</param>
+            <returns>extracted icon</returns>
+        </member>
+        <member name="M:Cliver.IconRoutines.ExtractIconFromLibrary(System.String)">
+            <summary>
+            Extract all icon images from the library file like .exe, .dll, etc. 
+            .NET Icon Explorer (http://www.vbaccelerator.com/home/NET/Utilities/Icon_Extractor/article.asp) is used here.
+            </summary>
+            <param name="file">file where icon is extracted from</param>
+            <returns>extracted icon</returns>
+        </member>
+        <member name="T:Cliver.IconRoutines.IconSize">
+            <summary>
+            Used as a parameter type for ExtractIconFromFile
+            </summary>
+        </member>
+        <member name="F:Cliver.IconRoutines.IconSize.Large">
+            <summary>
+            32x32
+            </summary>
+        </member>
+        <member name="F:Cliver.IconRoutines.IconSize.Small">
+            <summary>
+            16x16
+            </summary>
+        </member>
+        <member name="T:vbAccelerator.Components.Win32.GroupIconResources">
+            <summary>
+            Enumerates Group Icon resources for the specified library
+            </summary>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.GroupIconResources.#ctor">
+            <summary>
+            Creates an instance of the class but doesn't
+            enumerate any resources
+            </summary>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.GroupIconResources.#ctor(System.String)">
+            <summary>
+            Creates an instance of the class and enumerates
+            icon resources for the specified file.
+            </summary>
+            <param name="libraryFile">File to get resources
+            for</param>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.GroupIconResources.Item(System.Int32)">
+            <summary>
+            Gets the GroupIconResource with the specified index
+            </summary>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.GroupIconResources.LibraryFile">
+            <summary>
+            Gets/sets the library file to load resources from
+            </summary>
+        </member>
+        <member name="T:vbAccelerator.Components.Win32.GroupIconResource">
+            <summary>
+            Stores the identifier for a single group
+            icon resource.
+            </summary>
+        </member>
+        <member name="T:Cliver.Message">
+            <summary>
+            Show MessageForm with predefined features
+            </summary>
+        </member>
+        <member name="F:Cliver.Message.ShowMessagesInTurn">
+            <summary>
+            Defines how message boxes will be showed in multithreaded environment:
+            TRUE: strongly in turn one after another even if sent from different threads;
+            FALSE: simultaneously if sent from different threads - like .NET MessageBox does;
+            </summary>
+        </member>
+        <member name="F:Cliver.Message.WindowIcon">
+            <summary>
+            Icon in the window header. By default it is the icon of the application.
+            </summary>
+        </member>
+        <member name="F:Cliver.Message.Caption">
+            <summary>
+            Caption that will be used by default. By default it is the application's product name.
+            </summary>
+        </member>
+        <member name="F:Cliver.Message.ShowInTaskbar">
+            <summary>
+            Whether the message box is displayed in the Windows taskbar.
+            </summary>
+        </member>
+        <member name="F:Cliver.Message.SilentBoxText">
+            <summary>
+            Text for repeat-my-answer-in-the future checkbox
+            </summary>
+        </member>
+        <member name="F:Cliver.Message.ButtonColors">
+            <summary>
+            Default colors that buttons will be colored to.
+            </summary>
+        </member>
+        <member name="F:Cliver.Message.NextTime_Owner">
+            <summary>
+            Owner of the first next message.
+            Not thread-safe!
+            </summary>
+        </member>
+        <member name="M:Cliver.Message.Ok(System.String,System.Drawing.Icon,System.String)">
+            <summary>
+            Show information message box.
+            </summary>
+            <param name="caption">box caption</param>
+            <param name="icon">icon to be displayed beside message</param>
+            <param name="message">message</param>
+        </member>
+        <member name="M:Cliver.Message.Ok(System.Drawing.Icon,System.String)">
+            <summary>
+            Show information message box with predefined caption.
+            </summary>
+            <param name="icon">icon to be displayed beside message</param>
+            <param name="message">message</param>
+        </member>
+        <member name="M:Cliver.Message.Error(System.Exception)">
+            <summary>
+            Show error message box.
+            </summary>
+            <param name="e">exception</param>
+        </member>
+        <member name="M:Cliver.Message.Error(System.String)">
+            <summary>
+            Show error message box.
+            </summary>
+            <param name="message">message</param>
+        </member>
+        <member name="M:Cliver.Message.Inform(System.String)">
+            <summary>
+            Show inform message box.
+            </summary>
+            <param name="message">message</param>
+        </member>
+        <member name="M:Cliver.Message.YesNo(System.String,System.Drawing.Icon,System.String,System.Boolean)">
+            <summary>
+            Show "Yes|No" question box. 
+            </summary>
+            <param name="caption">box caption</param>
+            <param name="icon">icon to be displayed beside message</param>
+            <param name="question">question</param>
+            <param name="default_yes">whether 'yes' button is selected</param>
+            <returns>zero-based index of chosen answer</returns>
+        </member>
+        <member name="M:Cliver.Message.YesNo(System.Drawing.Icon,System.String)">
+            <summary>
+            Show "YesNo" question box with predefined caption. 
+            </summary>
+            <param name="icon">icon to be displayed beside message</param>
+            <param name="question">question</param>
+            <returns>zero-based index of chosen answer</returns>
+        </member>
+        <member name="M:Cliver.Message.YesNo(System.String,System.String,System.Boolean)">
+            <summary>
+            Show "Yes|No" question box with the question icon. 
+            </summary>
+            <param name="caption">box caption</param>
+            <param name="question">question</param>
+            <param name="default_yes">whether 'yes' button is selected</param>
+            <returns>zero-based index of chosen answer</returns>
+        </member>
+        <member name="M:Cliver.Message.YesNo(System.String)">
+            <summary>
+            Show "YesNo" question box with predefined caption and the question icon. 
+            </summary>
+            <param name="question">question</param>
+            <returns>zero-based index of chosen answer</returns>
+        </member>
+        <member name="M:Cliver.Message.YesNo(System.String,System.Boolean)">
+            <summary>
+            Show "YesNo" question box with predefined caption and the question icon. 
+            </summary>
+            <param name="question">question</param>
+            <param name="default_yes">whether 'yes' button is selected</param>
+            <returns>zero-based index of chosen answer</returns>
+        </member>
+        <member name="M:Cliver.Message.Ask(System.String,System.Int32,System.String[])">
+            <summary>
+            Show a question box with many answer cases and predefined caption.
+            </summary>
+            <param name="message">message</param>
+            <param name="default_answer">zero-based index of default button</param>
+            <param name="answers">possible answers</param>
+            <returns>zero-based index of chosen answer</returns>
+        </member>
+        <member name="M:Cliver.Message.Ask(System.Boolean@,System.String,System.Int32,System.String[])">
+            <summary>
+            Show a question box with many answer cases, silent checkbox and predefined caption.
+            </summary>
+            <param name="silent_box">Whether this answer should be repeated automatically</param>
+            <param name="message">message</param>
+            <param name="default_answer">zero-based index of default button</param>
+            <param name="answers">possible answers</param>
+            <returns>zero-based index of chosen answer</returns>
+        </member>
+        <member name="M:Cliver.Message.Show(System.String,System.Drawing.Icon,System.String,System.Int32,System.String[])">
+            <summary>
+            Show a dialog box with many answer cases and default button colors.
+            </summary>
+            <param name="caption">box caption</param>
+            <param name="icon">icon to be displayed beside message</param>
+            <param name="message">message</param>
+            <param name="default_answer">zero-based index of default button</param>
+            <param name="answers">possible answers</param>
+            <returns>zero-based index of chosen answer</returns>
+        </member>
+        <member name="M:Cliver.Message.Show(System.Drawing.Icon,System.String,System.Int32,System.String[])">
+            <summary>
+            Show a dialog box with many answer cases, default caption and button colors.
+            </summary>
+            <param name="icon">icon to be displayed beside message</param>
+            <param name="message">message</param>
+            <param name="default_answer">zero-based index of default button</param>
+            <param name="answers">possible answers</param>
+            <returns>zero-based index of chosen answer</returns>
+        </member>
+        <member name="M:Cliver.Message.Show(System.String,System.Drawing.Icon,System.Boolean@,System.String,System.Int32,System.String[])">
+            <summary>
+            Show a dialog box with many answer cases, silent-answer checkbox and default button colors.
+            </summary>
+            <param name="caption">box caption</param>
+            <param name="icon">icon to be displayed beside message</param>
+            <param name="silent_box">whether this answer should be repeated automatically</param>
+            <param name="message">message</param>
+            <param name="default_answer">zero-based index of default button</param>
+            <param name="answers">possible answers</param>
+            <returns>zero-based index of chosen answer</returns>
+        </member>
+        <member name="M:Cliver.Message.Show(System.Drawing.Icon,System.Boolean@,System.String,System.Int32,System.String[])">
+            <summary>
+            Show a dialog box with many answer cases, silent-answer checkbox, default caption and button colors.
+            </summary>
+            <param name="icon">icon to be displayed beside message</param>
+            <param name="silent_box">Whether this answer should be repeated automatically</param>
+            <param name="message">message</param>
+            <param name="default_answer">zero-based index of default button</param>
+            <param name="answers">possible answers</param>
+            <returns>zero-based index of chosen answer</returns>
+        </member>
+        <member name="P:Cliver.Message.NextTime_ButtonColors">
+            <summary>
+            Colors that buttons will be colored to in the first next message. If no need color, must be set to null. 
+            Not thread-safe!
+            </summary>
+        </member>
+        <member name="T:vbAccelerator.Components.Win32.IconExException">
+            <summary>
+            Exception thrown for unreadable icons
+            </summary>
+        </member>
+        <member name="T:vbAccelerator.Components.Win32.IconEx">
+            <summary>
+            Manages a true Windows Icon with multiple images
+            (colour depths and sizes)
+            </summary>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconEx.FromFile(System.String)">
+            <summary>
+            Loads an icon from the specified file
+            </summary>
+            <param name="iconFile">File containing icon</param>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconEx.FromLibrary(System.String,System.Int32)">
+            <summary>
+            Loads an icon from an executable or library
+            with the specified integer resource id
+            </summary>
+            <param name="libraryFile">Executable or DLL 
+            containing icon</param>
+            <param name="resourceId">Integer resource identifier</param>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconEx.FromLibrary(System.String,System.String)">
+            <summary>
+            Loads an icon from an executable or library
+            with the specified string resource id
+            </summary>
+            <param name="libraryFile">Executable or DLL 
+            containing icon</param>
+            <param name="resourceName">String resource identifier</param>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconEx.Save(System.String)">
+            <summary>
+            Saves the icon to the specified file
+            </summary>
+            <param name="iconFile">File to save to</param>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconEx.GetIcon">
+            <summary>
+            Convert this IconEx to Icon
+            </summary>
+            <returns>icon</returns>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconEx.#ctor">
+            <summary>
+            Constructs a new, empty instance of the IconEx
+            object
+            </summary>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconEx.#ctor(System.String)">
+            <summary>
+            Constructs an IconEx instance and opens the icon
+            file specified.
+            </summary>
+            <param name="iconFile">Icon file to read</param>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconEx.#ctor(System.String,System.Int32)">
+            <summary>
+            Constructs an IconEx instance and opens the icon
+            from the specified library (Executable or DLL)
+            with the specified integer resource identifier
+            </summary>
+            <param name="libraryFile">Executable or DLL to extract
+            icon from</param>
+            <param name="resourceId">Integer resource Id</param>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconEx.#ctor(System.String,System.String)">
+            <summary>
+            Constructs an IconEx instance and opens the icon
+            from the specified library (Executable or DLL)
+            with the specified string resource identifier
+            </summary>
+            <param name="libraryFile">Executable or DLL to extract
+            icon from</param>
+            <param name="resourceName">String resource Id</param>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.IconEx.Items">
+            <summary>
+            Returns the collection of device images
+            within this icon 
+            </summary>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.IconEx.IconFile">
+            <summary>
+            Gets the file the icon was loaded from
+            </summary>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.IconEx.LibraryFile">
+            <summary>
+            Gets the library this icon was loaded from
+            or a blank string if the icon was not sourced
+            from a library.
+            </summary>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.IconEx.ResourceId">
+            <summary>
+            Gets the integer resource id of this icon if it
+            was loaded from a library
+            </summary>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.IconEx.ResourceName">
+            <summary>
+            Gets the string resource id of this icon if it
+            was loaded from a library
+            </summary>
+        </member>
+        <member name="T:vbAccelerator.Components.Win32.IconDeviceImageCollection">
+            <summary>
+            Manages a read/write collection of icon resources
+            within an Icon file
+            </summary>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconDeviceImageCollection.Add(vbAccelerator.Components.Win32.IconDeviceImage)">
+            <summary>
+            Add a new icon device image
+            </summary>
+            <param name="icon">Icon to add</param>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconDeviceImageCollection.#ctor">
+            <summary>
+             Constructs a new, empty collection of device
+             images.
+            </summary>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconDeviceImageCollection.#ctor(vbAccelerator.Components.Win32.IconDeviceImage[])">
+            <summary>
+            Constructs a new collection of device images
+            </summary>
+            <param name="icons">Icons to add</param>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.IconDeviceImageCollection.Item(System.Int32)">
+            <summary>
+            Gets the IconDevice Image at the specified
+            index
+            </summary>
+        </member>
+        <member name="T:vbAccelerator.Components.Win32.IconDeviceImage">
+            <summary>
+            Manages a single icon device image within an
+            Icon file
+            </summary>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconDeviceImage.IconImageDataBytes">
+            <summary>
+            Internal method.  Returns the number of bytes in the
+            icon data.  Not intended for public use.
+            </summary>
+            <returns>Number of bytes of icon data</returns>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconDeviceImage.SaveIconBitmapData(System.IO.BinaryWriter)">
+            <summary>
+            Internal method.  Writes the icon bitmap data to
+            the specified BinaryWriter.  Not intended for 
+            public use.
+            </summary>
+            <param name="bw">BinaryWriter to write to</param>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconDeviceImage.#ctor(System.Drawing.Size,System.Windows.Forms.ColorDepth)">
+            <summary>
+            Constructs a new IconDeviceImage with the specified
+            size and colour depth.
+            </summary>
+            <param name="size">Size of device image</param>
+            <param name="colorDepth">Colour depth of device image</param>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconDeviceImage.#ctor(System.Drawing.Icon)">
+            <summary>
+            Constructs a new IconDeviceImage from a Managed Icon
+            </summary>
+            <param name="icon">Icon to construct from</param>		
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconDeviceImage.#ctor(System.Byte[])">
+            <summary>
+            Constructs a new icon device image from an array of
+            bytes in the Icon file format
+            </summary>
+            <param name="b">Array of bytes</param>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.IconDeviceImage.Dispose">
+            <summary>
+            Clears up any resources associated with this
+            Icon Device Image.
+            </summary>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.IconDeviceImage.Handle">
+            <summary>
+            Gets the Icon handle for this device image
+            </summary>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.IconDeviceImage.IconSize">
+            <summary>
+            Gets the size of this device image
+            </summary>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.IconDeviceImage.ColorDepth">
+            <summary>
+            Gets the colour depth of this device image
+            </summary>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.IconDeviceImage.MaskImage">
+            <summary>
+            Gets/sets the Mask Image of the icon as a bitmap
+            </summary>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.IconDeviceImage.IconImage">
+            <summary>
+            Gets/sets the image portion of the icon as a bitmap
+            </summary>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.IconDeviceImage.Icon">
+            <summary>
+            Gets the device image as a managed icon
+            Note that you should clone the icon if you want to keep it
+            after this class has been disposed.		
+            </summary>
+        </member>
+    </members>
+</doc>

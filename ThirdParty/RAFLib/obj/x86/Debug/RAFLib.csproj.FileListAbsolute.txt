@@ -1,0 +1,36 @@
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\RAFLib\obj\x86\Debug\ResolveAssemblyReference.cache
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\RAFLib\obj\x86\Debug\RAFLib.g.resources
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\RAFLib\obj\x86\Debug\GenerateResource-ResGen.read.1.tlog
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\RAFLib\obj\x86\Debug\GenerateResource-ResGen.write.1.tlog
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\RAFLib\bin\Debug\RAFLib.dll
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\RAFLib\bin\Debug\RAFLib.pdb
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\RAFLib\bin\Debug\.wLib.dll
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\RAFLib\bin\Debug\zlib.net.dll
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\RAFLib\bin\Debug\.wLib.pdb
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\RAFLib\bin\Debug\zlib.net.pdb
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\RAFLib\obj\x86\Debug\RAFLib.Properties.Resources.resources
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\RAFLib\obj\x86\Debug\RAFLib.dll
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\RAFLib\obj\x86\Debug\RAFLib.pdb
+C:\Users\LGG\Desktop\Skin Installer Ultimate\RAFLib\bin\Debug\RAFLib.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\RAFLib\bin\Debug\RAFLib.pdb
+C:\Users\LGG\Desktop\Skin Installer Ultimate\RAFLib\bin\Debug\zlib.net.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\RAFLib\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\LGG\Desktop\Skin Installer Ultimate\RAFLib\obj\x86\Debug\RAFLib.g.resources
+C:\Users\LGG\Desktop\Skin Installer Ultimate\RAFLib\obj\x86\Debug\RAFLib.Properties.Resources.resources
+C:\Users\LGG\Desktop\Skin Installer Ultimate\RAFLib\obj\x86\Debug\ResGen.read.1.tlog
+C:\Users\LGG\Desktop\Skin Installer Ultimate\RAFLib\obj\x86\Debug\ResGen.write.1.tlog
+C:\Users\LGG\Desktop\Skin Installer Ultimate\RAFLib\obj\x86\Debug\RAFLib.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\RAFLib\obj\x86\Debug\RAFLib.pdb
+C:\Users\LGG\Desktop\Skin Installer Ultimate\RAFLib\bin\Debug\wLib.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\RAFLib\bin\Debug\wLib.pdb
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\RAFLib\bin\Debug\RAFLib.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\RAFLib\bin\Debug\RAFLib.pdb
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\RAFLib\bin\Debug\wLib.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\RAFLib\bin\Debug\wLib.pdb
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\RAFLib\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\RAFLib\obj\x86\Debug\RAFLib.g.resources
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\RAFLib\obj\x86\Debug\RAFLib.Properties.Resources.resources
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\RAFLib\obj\x86\Debug\ResGen.read.1.tlog
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\RAFLib\obj\x86\Debug\ResGen.write.1.tlog
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\RAFLib\obj\x86\Debug\RAFLib.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\RAFLib\obj\x86\Debug\RAFLib.pdb

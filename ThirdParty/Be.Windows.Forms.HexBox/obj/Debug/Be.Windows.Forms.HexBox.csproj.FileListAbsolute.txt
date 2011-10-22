@@ -1,0 +1,18 @@
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.dll
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.pdb
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.xml
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\ResolveAssemblyReference.cache
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.resources
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\GenerateResource-ResGen.read.1.tlog
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\GenerateResource-ResGen.write.1.tlog
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.dll
+G:\Documents\Projects\LOL-Skinning_StartUp_Kit\Installer creation\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.pdb
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.pdb
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.xml
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.resources
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\ResGen.read.1.tlog
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\ResGen.write.1.tlog
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.dll
+C:\Users\LGG\Desktop\Skin Installer Ultimate\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.pdb
