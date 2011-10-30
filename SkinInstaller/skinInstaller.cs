@@ -337,6 +337,8 @@ namespace SkinInstaller
         private ListViewColumnSorter lvwColumnSorter = new ListViewColumnSorter();
         private ToolStripMenuItem previewThisSkinToolStripMenuItem;
         private ToolStripMenuItem loLViewerOpenNotPreviewToolStripMenuItem;
+        private Panel addFilesPanel;
+        private Panel AddToDatabasePanel;
 
         
         //private ColorSlider cs;
@@ -556,7 +558,8 @@ namespace SkinInstaller
             this.listView1.ListViewItemSorter=lvwColumnSorter;
             this.tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
             this.tabControl1.DrawItem += new DrawItemEventHandler(this.tabControl1_DrawItem);
-            this.tabControl1.SelectTab(1);
+            //only show database tab if we have installed a skin before.
+            this.tabControl1.SelectTab(Properties.Settings.Default.lastSelectedTab);
             this.glControl1 = new OpenTK.GLControl(mode);
             this.glControl1.Dock = DockStyle.Fill;
 
@@ -1425,6 +1428,9 @@ namespace SkinInstaller
         }
         private void processNewDirectory(string[] origonalInputFiles)
         {
+            addFilesPanel.BackColor = System.Drawing.SystemColors.Control;
+            AddToDatabasePanel.BackColor = Color.Lime;
+
             int num = 0;
             int num2 = 0;
             ListBox box = new ListBox();
@@ -1926,6 +1932,9 @@ namespace SkinInstaller
             }
             if (doit)
             {
+                addFilesPanel.BackColor = Color.Lime;
+                AddToDatabasePanel.BackColor = System.Drawing.SystemColors.Control; 
+            
                 this.skinNameTextbox.Text = "";
                 this.textBoxauthor.Text = "Unknown";
                 this.installFiles_ListBox.Items.Clear();
@@ -2203,6 +2212,7 @@ namespace SkinInstaller
                 this.ExecuteQuery(qurry);
                 //Cliver.Message.Inform("Added " + this.skinNameTextbox.Text + " to the Skin Database!\nGo to the other tab to install it!");
                 this.UpdateListView();
+            
 
                 //this.tabControl1.SelectTab(1);
                 int install = Properties.Settings.Default.optionInstallAsWellOption;
@@ -2878,6 +2888,13 @@ namespace SkinInstaller
         }
         private void dbInstall_Click(object sender, EventArgs e)
         {
+            if (listView1.CheckedItems.Count < 1)
+            {
+                Cliver.Message.Inform("Please click the check mark of the skin you want to install above\n"+
+                    "\nIf you do not see any skins to install, please add them in the other tab\n"+
+                "\"Add New Skin\"");
+                return;
+            }
             if (backgroundWorker1.IsBusy)
             {
                 Cliver.Message.Inform("Please wait a moment for this program to finish updating\r\nThe Progress Bar below will show you the status of this");
@@ -3302,14 +3319,15 @@ namespace SkinInstaller
             this.label8 = new System.Windows.Forms.Label();
             this.textBoxauthor = new System.Windows.Forms.TextBox();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.addFilesPanel = new System.Windows.Forms.Panel();
+            this.b_IAddFiles = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
+            this.b_IAddDirectory = new System.Windows.Forms.Button();
             this.saveToDb = new System.Windows.Forms.CheckBox();
             this.b_IClearAll = new System.Windows.Forms.Button();
-            this.b_IAddFiles = new System.Windows.Forms.Button();
             this.button1 = new System.Windows.Forms.Button();
             this.b_IRemoveFiles = new System.Windows.Forms.Button();
             this.b_IInstallFiles = new System.Windows.Forms.Button();
-            this.b_IAddDirectory = new System.Windows.Forms.Button();
             this.clearButton = new System.Windows.Forms.Button();
             this.resetLoadScreenBox = new System.Windows.Forms.Button();
             this.resetSkinBox = new System.Windows.Forms.Button();
@@ -3414,6 +3432,7 @@ namespace SkinInstaller
             this.timeupdatecount = new System.Windows.Forms.Timer(this.components);
             this.backgroundWorkerCountUpdate = new System.ComponentModel.BackgroundWorker();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
+            this.AddToDatabasePanel = new System.Windows.Forms.Panel();
             this.listView1 = new SkinInstaller.ListViewItemHover();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -3429,6 +3448,7 @@ namespace SkinInstaller
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.addFilesPanel.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.splitContainer2.Panel1.SuspendLayout();
@@ -3452,6 +3472,7 @@ namespace SkinInstaller
             this.panelGL.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).BeginInit();
             this.panel7.SuspendLayout();
+            this.AddToDatabasePanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // exit
@@ -3574,7 +3595,7 @@ namespace SkinInstaller
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(811, 318);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Skin Installer";
+            this.tabPage2.Text = "Add New Skin";
             // 
             // panel4
             // 
@@ -3667,31 +3688,64 @@ namespace SkinInstaller
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.SystemColors.Control;
-            this.panel3.Controls.Add(this.label2);
+            this.panel3.Controls.Add(this.AddToDatabasePanel);
+            this.panel3.Controls.Add(this.addFilesPanel);
             this.panel3.Controls.Add(this.saveToDb);
             this.panel3.Controls.Add(this.b_IClearAll);
-            this.panel3.Controls.Add(this.b_IAddFiles);
-            this.panel3.Controls.Add(this.button1);
             this.panel3.Controls.Add(this.b_IRemoveFiles);
             this.panel3.Controls.Add(this.b_IInstallFiles);
-            this.panel3.Controls.Add(this.b_IAddDirectory);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Right;
             this.panel3.Location = new System.Drawing.Point(641, 3);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(167, 312);
             this.panel3.TabIndex = 38;
             // 
+            // addFilesPanel
+            // 
+            this.addFilesPanel.BackColor = System.Drawing.Color.Lime;
+            this.addFilesPanel.Controls.Add(this.b_IAddFiles);
+            this.addFilesPanel.Controls.Add(this.label2);
+            this.addFilesPanel.Controls.Add(this.b_IAddDirectory);
+            this.addFilesPanel.Location = new System.Drawing.Point(3, 7);
+            this.addFilesPanel.Name = "addFilesPanel";
+            this.addFilesPanel.Size = new System.Drawing.Size(164, 88);
+            this.addFilesPanel.TabIndex = 37;
+            // 
+            // b_IAddFiles
+            // 
+            this.b_IAddFiles.Location = new System.Drawing.Point(6, 5);
+            this.b_IAddFiles.Name = "b_IAddFiles";
+            this.b_IAddFiles.Size = new System.Drawing.Size(64, 23);
+            this.b_IAddFiles.TabIndex = 25;
+            this.b_IAddFiles.Text = "Add Files";
+            this.b_IAddFiles.UseVisualStyleBackColor = true;
+            this.b_IAddFiles.Click += new System.EventHandler(this.b_IAddFiles_Click);
+            this.b_IAddFiles.MouseEnter += new System.EventHandler(this.b_IAddFiles_MouseEnter);
+            this.b_IAddFiles.MouseLeave += new System.EventHandler(this.NoToolTip_MouseLeave);
+            // 
             // label2
             // 
             this.label2.AutoSize = true;
             this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label2.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label2.Location = new System.Drawing.Point(44, 33);
+            this.label2.Location = new System.Drawing.Point(40, 30);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(79, 54);
             this.label2.TabIndex = 36;
             this.label2.Text = "You may also\r\nDrag and Drop\r\nFiles or Folders\r\nHere\r\n";
             this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
+            // b_IAddDirectory
+            // 
+            this.b_IAddDirectory.Location = new System.Drawing.Point(81, 4);
+            this.b_IAddDirectory.Name = "b_IAddDirectory";
+            this.b_IAddDirectory.Size = new System.Drawing.Size(80, 23);
+            this.b_IAddDirectory.TabIndex = 31;
+            this.b_IAddDirectory.Text = "Add Directory";
+            this.b_IAddDirectory.UseVisualStyleBackColor = true;
+            this.b_IAddDirectory.Click += new System.EventHandler(this.b_IAddDirectory_Click);
+            this.b_IAddDirectory.MouseEnter += new System.EventHandler(this.b_IAddDirectory_MouseEnter);
+            this.b_IAddDirectory.MouseLeave += new System.EventHandler(this.NoToolTip_MouseLeave);
             // 
             // saveToDb
             // 
@@ -3710,7 +3764,7 @@ namespace SkinInstaller
             // 
             // b_IClearAll
             // 
-            this.b_IClearAll.Location = new System.Drawing.Point(85, 90);
+            this.b_IClearAll.Location = new System.Drawing.Point(85, 107);
             this.b_IClearAll.Name = "b_IClearAll";
             this.b_IClearAll.Size = new System.Drawing.Size(80, 23);
             this.b_IClearAll.TabIndex = 27;
@@ -3720,23 +3774,11 @@ namespace SkinInstaller
             this.b_IClearAll.MouseEnter += new System.EventHandler(this.b_IClearAll_MouseEnter);
             this.b_IClearAll.MouseLeave += new System.EventHandler(this.NoToolTip_MouseLeave);
             // 
-            // b_IAddFiles
-            // 
-            this.b_IAddFiles.Location = new System.Drawing.Point(3, 3);
-            this.b_IAddFiles.Name = "b_IAddFiles";
-            this.b_IAddFiles.Size = new System.Drawing.Size(80, 23);
-            this.b_IAddFiles.TabIndex = 25;
-            this.b_IAddFiles.Text = "Add Files";
-            this.b_IAddFiles.UseVisualStyleBackColor = true;
-            this.b_IAddFiles.Click += new System.EventHandler(this.b_IAddFiles_Click);
-            this.b_IAddFiles.MouseEnter += new System.EventHandler(this.b_IAddFiles_MouseEnter);
-            this.b_IAddFiles.MouseLeave += new System.EventHandler(this.NoToolTip_MouseLeave);
-            // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(4, 136);
+            this.button1.Location = new System.Drawing.Point(15, 10);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(161, 56);
+            this.button1.Size = new System.Drawing.Size(132, 65);
             this.button1.TabIndex = 35;
             this.button1.Text = "Add to DataBase";
             this.button1.UseVisualStyleBackColor = true;
@@ -3746,7 +3788,7 @@ namespace SkinInstaller
             // 
             // b_IRemoveFiles
             // 
-            this.b_IRemoveFiles.Location = new System.Drawing.Point(3, 90);
+            this.b_IRemoveFiles.Location = new System.Drawing.Point(3, 107);
             this.b_IRemoveFiles.Name = "b_IRemoveFiles";
             this.b_IRemoveFiles.Size = new System.Drawing.Size(80, 23);
             this.b_IRemoveFiles.TabIndex = 26;
@@ -3758,7 +3800,7 @@ namespace SkinInstaller
             // 
             // b_IInstallFiles
             // 
-            this.b_IInstallFiles.Location = new System.Drawing.Point(53, 207);
+            this.b_IInstallFiles.Location = new System.Drawing.Point(55, 234);
             this.b_IInstallFiles.Name = "b_IInstallFiles";
             this.b_IInstallFiles.Size = new System.Drawing.Size(80, 23);
             this.b_IInstallFiles.TabIndex = 28;
@@ -3768,18 +3810,6 @@ namespace SkinInstaller
             this.b_IInstallFiles.Click += new System.EventHandler(this.b_IInstallFiles_Click);
             this.b_IInstallFiles.MouseEnter += new System.EventHandler(this.b_IInstallFiles_MouseEnter);
             this.b_IInstallFiles.MouseLeave += new System.EventHandler(this.NoToolTip_MouseLeave);
-            // 
-            // b_IAddDirectory
-            // 
-            this.b_IAddDirectory.Location = new System.Drawing.Point(85, 3);
-            this.b_IAddDirectory.Name = "b_IAddDirectory";
-            this.b_IAddDirectory.Size = new System.Drawing.Size(80, 23);
-            this.b_IAddDirectory.TabIndex = 31;
-            this.b_IAddDirectory.Text = "Add Directory";
-            this.b_IAddDirectory.UseVisualStyleBackColor = true;
-            this.b_IAddDirectory.Click += new System.EventHandler(this.b_IAddDirectory_Click);
-            this.b_IAddDirectory.MouseEnter += new System.EventHandler(this.b_IAddDirectory_MouseEnter);
-            this.b_IAddDirectory.MouseLeave += new System.EventHandler(this.NoToolTip_MouseLeave);
             // 
             // clearButton
             // 
@@ -3917,7 +3947,7 @@ namespace SkinInstaller
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage4.Size = new System.Drawing.Size(811, 318);
             this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Skin Database";
+            this.tabPage4.Text = "Install Existing Skin";
             // 
             // splitContainer2
             // 
@@ -3940,8 +3970,6 @@ namespace SkinInstaller
             // 
             // dataBaseListMenuStrip1
             // 
-            //this.dataBaseListMenuStrip1.BackColor = System.Drawing.Color.LightGray;
-            //this.dataBaseListMenuStrip1.ForeColor = System.Drawing.Color.Black;
             this.dataBaseListMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripSelectUninstalled,
             this.toolStripSelectAllInstalled,
@@ -3951,7 +3979,7 @@ namespace SkinInstaller
             this.previewThisSkinToolStripMenuItem});
             this.dataBaseListMenuStrip1.Name = "contextMenuStrip1";
             this.dataBaseListMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.dataBaseListMenuStrip1.Size = new System.Drawing.Size(210, 158);
+            this.dataBaseListMenuStrip1.Size = new System.Drawing.Size(210, 136);
             this.dataBaseListMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             this.dataBaseListMenuStrip1.Opened += new System.EventHandler(this.contextMenuStrip1_Opened);
             // 
@@ -4406,8 +4434,6 @@ namespace SkinInstaller
             // 
             // menuStrip1
             // 
-            //this.menuStrip1.BackColor = System.Drawing.Color.LightGray;
-            //this.menuStrip1.ForeColor = System.Drawing.Color.Black;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutToolStripMenuItem,
             this.helpToolStripMenuItem,
@@ -4492,7 +4518,6 @@ namespace SkinInstaller
             // 
             // debugToolStripMenuItem
             // 
-            //this.debugToolStripMenuItem.BackColor = System.Drawing.Color.LightGray;
             this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.soundFileLocationToolStripMenuItem,
             this.clientLocationToolStripMenuItem,
@@ -4511,7 +4536,6 @@ namespace SkinInstaller
             this.testReadResFilesToolStripMenuItem,
             this.unpackSoundsToolStripMenuItem,
             this.loLViewerOpenNotPreviewToolStripMenuItem});
-            //this.debugToolStripMenuItem.ForeColor = System.Drawing.Color.Black;
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
             this.debugToolStripMenuItem.Text = "Debug";
@@ -4775,6 +4799,14 @@ namespace SkinInstaller
             // 
             this.backgroundWorkerCountUpdate.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerCountUpdate_DoWork);
             // 
+            // AddToDatabasePanel
+            // 
+            this.AddToDatabasePanel.Controls.Add(this.button1);
+            this.AddToDatabasePanel.Location = new System.Drawing.Point(4, 136);
+            this.AddToDatabasePanel.Name = "AddToDatabasePanel";
+            this.AddToDatabasePanel.Size = new System.Drawing.Size(161, 87);
+            this.AddToDatabasePanel.TabIndex = 38;
+            // 
             // listView1
             // 
             this.listView1.AutoArrange = false;
@@ -4880,6 +4912,8 @@ namespace SkinInstaller
             this.panel5.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.addFilesPanel.ResumeLayout(false);
+            this.addFilesPanel.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.splitContainer2.Panel1.ResumeLayout(false);
@@ -4908,6 +4942,7 @@ namespace SkinInstaller
             this.panelGL.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).EndInit();
             this.panel7.ResumeLayout(false);
+            this.AddToDatabasePanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -6345,20 +6380,27 @@ namespace SkinInstaller
         
         private void glControl1_Load(object sender, EventArgs e)
         {
-           
-            GL.ClearColor(Color.Black);
-            SetupViewport();
-            frameTime = DateTime.Now;
-            timer1.Start();
-            // Setup GL state for ordinary texturing.
-            TexUtil.InitTexturing();
-
-            // Load a bitmap from disc, and put it in a GL texture.
-             lggsiu1tex = TexUtil.CreateTextureFromFile(Application.StartupPath + "//LGGSIU1.bmp");
-             loaded = true;
-            
-            // Create a TextureFont object from the loaded texture.
-            //lggsiu1Font = new TextureFont(tex);
+           try
+            {
+	
+	            GL.ClearColor(Color.Black);
+	            SetupViewport();
+	            frameTime = DateTime.Now;
+	            timer1.Start();
+	            // Setup GL state for ordinary texturing.
+	            TexUtil.InitTexturing();
+	
+	            // Load a bitmap from disc, and put it in a GL texture.
+	             lggsiu1tex = TexUtil.CreateTextureFromFile(Application.StartupPath + "//LGGSIU1.bmp");
+	             loaded = true;
+	            
+	            // Create a TextureFont object from the loaded texture.
+	            //lggsiu1Font = new TextureFont(tex);
+            }
+           catch 
+           {
+               loaded = false;
+           }
 
         }
 
@@ -6458,68 +6500,75 @@ namespace SkinInstaller
                 if(previewWindow.Visible) return;
 
             if (( DateTime.Now-frameTime).TotalMilliseconds < (1000/60)) return;
-
-            frameTime = DateTime.Now;
-            //image
-            GL.Clear(ClearBufferMask.ColorBufferBit| ClearBufferMask.DepthBufferBit);
-            GL.MatrixMode(MatrixMode.Modelview);
-            GL.LoadIdentity();
-            int w = glControl1.Width;
-            int h = glControl1.Height;
-
-
-            GL.PushMatrix();
-
-            TexUtil.InitTexturing();
-            double tth = ((double)((DateTime.Now - started).TotalMilliseconds) / 5000.0) % 1.0;
-            double vv = Math.Sin(tth * 2 * Math.PI) * .07;
-            double ttth = ((double)((DateTime.Now - started).TotalMilliseconds) / 24000.0) % 1.0;
-            int vvv = (int)Math.Floor((Math.Sin(ttth * 2 * Math.PI) *.5+.5)*255
-                *((double)Properties.Settings.Default.lgglogostrangth/100.0));
-
-            GL.Color3(Color.FromArgb(vvv,vvv,vvv));         
-            GL.BindTexture(TextureTarget.Texture2D, lggsiu1tex);
-            GL.Begin(BeginMode.Quads);
-            double x1 =( w / 4) + (w * vv / 4);
-            double x2 = (w / 4 * 3) - (w * vv / 4);
-            GL.TexCoord2(0, 1); GL.Vertex3(x1, 0,1);
-            GL.TexCoord2(1, 1); GL.Vertex3(x2, 0,1);
-            GL.TexCoord2(1, 0); GL.Vertex3(x2, h,1);
-            GL.TexCoord2(0, 0); GL.Vertex3(x1, h,1);
-            GL.End();
-            GL.Disable(EnableCap.Texture2D);
-            GL.PopMatrix();
-
-            if (Properties.Settings.Default.drawGraficsLines)
+            
+            try
             {
-                GL.Color3(Color.White);
-                double longt2h = ((double)((DateTime.Now - started).TotalMilliseconds) / 5000.0) % 1.0;
-
-                GL.Rotate(
-                   Math.Sin(longt2h * 2 * Math.PI) * 5.0
-                , 0, 0, 1);
-
-                GL.PushMatrix();
-                GL.Begin(BeginMode.Lines);
-                Random r = new Random(1);
-                for (int x = 0; x < w; x++)
-                {
-                    double hue = (float)x / 3.0;
-                    double longth = ((double)((DateTime.Now - started).TotalMilliseconds) / 20000.0) % 1.0;
-                    double hueh = ((double)((DateTime.Now - started).TotalMilliseconds) / 11000.0) % 1.0;
-
-                    double ll = (Math.Sin(longth * Math.PI * 2) * .5) + .5;
-                    double huel = (Math.Sin(hueh * Math.PI * 2) * .7) + .5;
-
-                    hue -= huel * 150;
-                    if (hue < 0) hue = 0;
-                    if (hue > 360) hue = 360;
-
-                    //this.helpText.Text = longth.ToString();
-                    centerline(hue, x, (Math.Sin((x / 20.0 * ll) + ll * 40) * 0.40) + 0.6 + (r.NextDouble() * ll), h, r);
-                }
-                GL.End();
-                GL.PopMatrix();
+	            frameTime = DateTime.Now;
+	            //image
+	            GL.Clear(ClearBufferMask.ColorBufferBit| ClearBufferMask.DepthBufferBit);
+	            GL.MatrixMode(MatrixMode.Modelview);
+	            GL.LoadIdentity();
+	            int w = glControl1.Width;
+	            int h = glControl1.Height;
+	
+	
+	            GL.PushMatrix();
+	
+	            TexUtil.InitTexturing();
+	            double tth = ((double)((DateTime.Now - started).TotalMilliseconds) / 5000.0) % 1.0;
+	            double vv = Math.Sin(tth * 2 * Math.PI) * .07;
+	            double ttth = ((double)((DateTime.Now - started).TotalMilliseconds) / 24000.0) % 1.0;
+	            int vvv = (int)Math.Floor((Math.Sin(ttth * 2 * Math.PI) *.5+.5)*255
+	                *((double)Properties.Settings.Default.lgglogostrangth/100.0));
+	
+	            GL.Color3(Color.FromArgb(vvv,vvv,vvv));         
+	            GL.BindTexture(TextureTarget.Texture2D, lggsiu1tex);
+	            GL.Begin(BeginMode.Quads);
+	            double x1 =( w / 4) + (w * vv / 4);
+	            double x2 = (w / 4 * 3) - (w * vv / 4);
+	            GL.TexCoord2(0, 1); GL.Vertex3(x1, 0,1);
+	            GL.TexCoord2(1, 1); GL.Vertex3(x2, 0,1);
+	            GL.TexCoord2(1, 0); GL.Vertex3(x2, h,1);
+	            GL.TexCoord2(0, 0); GL.Vertex3(x1, h,1);
+	            GL.End();
+	            GL.Disable(EnableCap.Texture2D);
+	            GL.PopMatrix();
+	
+	            if (Properties.Settings.Default.drawGraficsLines)
+	            {
+	                GL.Color3(Color.White);
+	                double longt2h = ((double)((DateTime.Now - started).TotalMilliseconds) / 5000.0) % 1.0;
+	
+	                GL.Rotate(
+	                   Math.Sin(longt2h * 2 * Math.PI) * 5.0
+	                , 0, 0, 1);
+	
+	                GL.PushMatrix();
+	                GL.Begin(BeginMode.Lines);
+	                Random r = new Random(1);
+	                for (int x = 0; x < w; x++)
+	                {
+	                    double hue = (float)x / 3.0;
+	                    double longth = ((double)((DateTime.Now - started).TotalMilliseconds) / 20000.0) % 1.0;
+	                    double hueh = ((double)((DateTime.Now - started).TotalMilliseconds) / 11000.0) % 1.0;
+	
+	                    double ll = (Math.Sin(longth * Math.PI * 2) * .5) + .5;
+	                    double huel = (Math.Sin(hueh * Math.PI * 2) * .7) + .5;
+	
+	                    hue -= huel * 150;
+	                    if (hue < 0) hue = 0;
+	                    if (hue > 360) hue = 360;
+	
+	                    //this.helpText.Text = longth.ToString();
+	                    centerline(hue, x, (Math.Sin((x / 20.0 * ll) + ll * 40) * 0.40) + 0.6 + (r.NextDouble() * ll), h, r);
+	                }
+	                GL.End();
+	                GL.PopMatrix();
+	            }
+            }
+            catch 
+            {
+                loaded = false;
             }
             try { glControl1.SwapBuffers(); }
             catch //(System.Exception ex)
@@ -7327,6 +7376,7 @@ namespace SkinInstaller
         private void skinInstaller_FormClosing(object sender, FormClosingEventArgs e)
         {
             Properties.Settings.Default.size = this.Size;
+            Properties.Settings.Default.lastSelectedTab = tabControl1.SelectedIndex;
             Properties.Settings.Default.Save();
         }
 

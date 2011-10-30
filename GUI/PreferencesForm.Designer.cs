@@ -63,7 +63,7 @@
             "Install New LoadScreens",
             "Install New In-Game Character Icons",
             "Install New In-Game Spell Icons",
-            "* Install Air mods (Character Selection Icons, etc)",
+            "Install Air mods (Character Selection Icons, etc)",
             "* Install New Sounds",
             "* Install New Menu and Text Mods",
             "Show This Dialog on Every Skin Install",
