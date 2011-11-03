@@ -16,7 +16,8 @@
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message);
+                Console.WriteLine(exception.Message);
+                //MessageBox.Show(exception.Message);
             }
         }
         public static void ForceDeleteDirectory(string path)
@@ -59,7 +60,7 @@
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message+"\r\n on the file "+fileName+"\r\ngoing to \r\n"+fileDest);
+                MessageBox.Show(exception.Message + "\r\n on the file " + fileName + "\r\ngoing to \r\n" + fileDest);
             }
         }
 

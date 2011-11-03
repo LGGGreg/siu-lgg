@@ -212,6 +212,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="TreeViewImages\lemon.png" />
+    <None Include="TreeViewImages\Dee-dee.png" />
+    <None Include="TreeViewImages\tex-2.png" />
+    <None Include="TreeViewImages\skul16b.png" />
+    <None Include="TreeViewImages\skin.png" />
+    <None Include="TreeViewImages\folder.png" />
     <EmbeddedResource Include="fixs\soundfix\CorporateMundo.spellcasteffor_1.wav" />
     <EmbeddedResource Include="fixs\soundfix\CorporateMundo.spellcasteffor_2.wav" />
     <EmbeddedResource Include="fixs\soundfix\CorporateMundo.spellcasteffor_3.wav" />

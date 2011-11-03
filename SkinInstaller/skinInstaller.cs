@@ -80,6 +80,7 @@ namespace SkinInstaller
     using OpenTK.Graphics.OpenGL;
     using OpenTK.Platform;
     using System.Reflection;
+    using System.Collections;
 
     public class skinInstaller : Form
     {
@@ -89,6 +90,7 @@ namespace SkinInstaller
         
         #endregion
         #region vars
+        TreeNode newRafNode=new TreeNode("RAF");
         PreviewWindow previewWindow;
         Dictionary<String, String> charFixs = new Dictionary<String, String>();
         Dictionary<String, int> dxtVersions = new Dictionary<string, int>();
@@ -339,6 +341,18 @@ namespace SkinInstaller
         private ToolStripMenuItem loLViewerOpenNotPreviewToolStripMenuItem;
         private Panel addFilesPanel;
         private Panel AddToDatabasePanel;
+        private TabPage tabPage3;
+        private SplitContainer splitContainer4;
+        private SplitContainer splitContainer5;
+        private TreeView treeView1;
+        private Button buttonRebuildTree;
+        private BackgroundWorker rafTreeBuilderWorker2;
+        private ContextMenuStrip treeViewMenuStrip1;
+        private ToolStripMenuItem exportSelectedFilesToolStripMenuItem;
+        private ToolStripMenuItem deselectAllFilesToolStripMenuItem;
+        private FolderBrowserDialog exportFolderBrowserDialog1;
+        private ToolStripMenuItem helpToolStripMenuItem1;
+        private Button button3exporttree;
 
         
         //private ColorSlider cs;
@@ -909,7 +923,7 @@ namespace SkinInstaller
             //log.SelectionStart = log.Text.Length;
             //log.ScrollToCaret();
         }
-        public void rafBackup(string destination, string altDestination)
+        public void rafBackup(string destination, string altDestination="", bool addLocalDirsToPath=false)
         {
             String rafLocation = destination.Substring(0, destination.IndexOf(".raf") + 4);
             //do a test for raf.dat, warn if not exist
@@ -922,9 +936,16 @@ namespace SkinInstaller
             String backupDir = Application.StartupPath + @"\backup\";
             if (!Directory.Exists(backupDir)) Directory.CreateDirectory(backupDir);
             string backupDest = backupDir + localLocation;
-            if (altDestination != "") backupDest = altDestination;
+            if (altDestination != "")
+            {
+                backupDest = altDestination;
+                if (addLocalDirsToPath) backupDest +=
+                    rafInnerLocation.Replace("/", "\\");
+                    //rafInnerLocation.Substring(0,rafInnerLocation.LastIndexOf("/")).Replace("/","\\");
+            }
+            
 
-            string infos = "atempting to backup A RAF FILE\r\n\r\ndesitnation is\r\n" + destination + "\r\n raf file is\r\n" + rafLocation
+            string infos = "attempting to backup A RAF FILE\r\n\r\ndesitnation is\r\n" + destination + "\r\n raf file is\r\n" + rafLocation
              + "\r\ninner location is\r\n" + rafInnerLocation+"\r\n backup destination is \r\n"+backupDest;
 
             string[] strArray = backupDest.Split(new char[] { '\\' });
@@ -1133,17 +1154,14 @@ namespace SkinInstaller
         {
             this.helpText.Text = "Change the character icon size";
         }
-
         private void dbDelete_MouseEnter(object sender, EventArgs e)
         {
             this.helpText.Text = "Deletes the selected skin(s) from the database";
         }
-
         private void dbInstall_MouseEnter(object sender, EventArgs e)
         {
             this.helpText.Text = "Installs the selected skin(s) to your game directory";
         }
-
         private void locateGameClient_MouseEnter(object sender, EventArgs e)
         {
             this.helpText.Text = gameDirectory;
@@ -1707,8 +1725,9 @@ namespace SkinInstaller
                 }
             }
             //cleanup
+            debugadd("cleaning up folders");
             if (Directory.Exists(Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL))
-            SIFileOp.DirectoryDelete(Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL, true);
+                SIFileOp.DirectoryDelete(Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL, true);
             if (Directory.Exists(Application.StartupPath + "\\" + c_TEMP_DIR_NAME_FIXED_SKIN_FILES))
             SIFileOp.DirectoryDelete(Application.StartupPath + "\\" + c_TEMP_DIR_NAME_FIXED_SKIN_FILES,true);
         }
@@ -2845,7 +2864,7 @@ namespace SkinInstaller
             
                 String tn = path+name;
                 
-                //we miight need to back this up!
+                //we might need to back this up!
                 //check if its in char or particles or one of the zip..
                 //edit this is only if this type of install has a zip!
                 if(int.Parse(allFilesExtensions[0])!=0)
@@ -2872,8 +2891,32 @@ namespace SkinInstaller
                 }
                 String backupDir = Application.StartupPath+@"\backup\";
                 if(!Directory.Exists(backupDir))Directory.CreateDirectory(backupDir);
-                //make sure we dont already have a backup there.. dont wana overwrite
-                    
+                // We need to do some crazy path changing for air files
+                // currently air files are automatically moved to a higher version number
+                // C:\Riot Games\League of Legends\RADS\projects\lol_air_client\releases\0.0.0.95
+                // This makes old backups not work.
+                // We need to remove the version dependency
+                // We also want this to work with older SIU backups...
+                // For now, just make sure the file doesn't exist in ANY version air backup
+                // To do: also make sure we can restore this correctly...
+                int airIndex = path.ToLower().IndexOf("\\lol_air_client\\releases\\");
+                if (airIndex>0)
+                {
+                    //oh boy it is a air file, 
+                    //search backups dir for other air backups so we don't replace one
+                    DirectoryInfo airbackupDir =  new DirectoryInfo(backupDir + path.Substring(0, airIndex + 25));
+                    string remainingPath = path.Substring(path.Substring(airIndex + 25).IndexOf("\\")+airIndex+25);
+                    debugadd("air file backup dir :"+airbackupDir.FullName);
+                    if(airbackupDir.Exists)
+                    foreach (DirectoryInfo dir in airbackupDir.GetDirectories())
+                    {
+                        string toCheck = airbackupDir.FullName + dir + remainingPath + name;
+                        if (File.Exists(toCheck)) return;//we already have this in a version non-specific folder
+                    }
+
+                }
+
+                //make sure we don't already have a backup there.. don't want to overwrite                    
                 if (!File.Exists(backupDir + tn))
                 {
                     this.SIFileOp.FileMove(gameDirectory + tn, backupDir + tn);
@@ -3294,6 +3337,7 @@ namespace SkinInstaller
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(skinInstaller));
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
             this.exit = new System.Windows.Forms.Button();
             this.skinFile = new System.Windows.Forms.OpenFileDialog();
             this.helpBar = new System.Windows.Forms.StatusStrip();
@@ -3319,13 +3363,14 @@ namespace SkinInstaller
             this.label8 = new System.Windows.Forms.Label();
             this.textBoxauthor = new System.Windows.Forms.TextBox();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.AddToDatabasePanel = new System.Windows.Forms.Panel();
+            this.button1 = new System.Windows.Forms.Button();
             this.addFilesPanel = new System.Windows.Forms.Panel();
             this.b_IAddFiles = new System.Windows.Forms.Button();
             this.label2 = new System.Windows.Forms.Label();
             this.b_IAddDirectory = new System.Windows.Forms.Button();
             this.saveToDb = new System.Windows.Forms.CheckBox();
             this.b_IClearAll = new System.Windows.Forms.Button();
-            this.button1 = new System.Windows.Forms.Button();
             this.b_IRemoveFiles = new System.Windows.Forms.Button();
             this.b_IInstallFiles = new System.Windows.Forms.Button();
             this.clearButton = new System.Windows.Forms.Button();
@@ -3376,6 +3421,14 @@ namespace SkinInstaller
             this.dbUninstall = new System.Windows.Forms.Button();
             this.createZip = new System.Windows.Forms.Button();
             this.button3repath = new System.Windows.Forms.Button();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.splitContainer4 = new System.Windows.Forms.SplitContainer();
+            this.splitContainer5 = new System.Windows.Forms.SplitContainer();
+            this.treeView1 = new System.Windows.Forms.TreeView();
+            this.treeViewMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.exportSelectedFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deselectAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.buttonRebuildTree = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
@@ -3432,7 +3485,9 @@ namespace SkinInstaller
             this.timeupdatecount = new System.Windows.Forms.Timer(this.components);
             this.backgroundWorkerCountUpdate = new System.ComponentModel.BackgroundWorker();
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
-            this.AddToDatabasePanel = new System.Windows.Forms.Panel();
+            this.rafTreeBuilderWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.exportFolderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.listView1 = new SkinInstaller.ListViewItemHover();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -3443,11 +3498,12 @@ namespace SkinInstaller
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.helpBar.SuspendLayout();
+            this.button3exporttree = new System.Windows.Forms.Button();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel3.SuspendLayout();
+            this.AddToDatabasePanel.SuspendLayout();
             this.addFilesPanel.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage4.SuspendLayout();
@@ -3462,6 +3518,13 @@ namespace SkinInstaller
             this.splitContainer3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.splitContainer4.Panel1.SuspendLayout();
+            this.splitContainer4.Panel2.SuspendLayout();
+            this.splitContainer4.SuspendLayout();
+            this.splitContainer5.Panel2.SuspendLayout();
+            this.splitContainer5.SuspendLayout();
+            this.treeViewMenuStrip1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
@@ -3472,7 +3535,6 @@ namespace SkinInstaller
             this.panelGL.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).BeginInit();
             this.panel7.SuspendLayout();
-            this.AddToDatabasePanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // exit
@@ -3495,10 +3557,6 @@ namespace SkinInstaller
             // helpBar
             // 
             this.helpBar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
-            this.helpBar.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.helpText,
-            this.toolStripStatusLabel1,
-            this.statusText});
             this.helpBar.Location = new System.Drawing.Point(0, 463);
             this.helpBar.Name = "helpBar";
             this.helpBar.Size = new System.Drawing.Size(819, 22);
@@ -3595,7 +3653,7 @@ namespace SkinInstaller
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage2.Size = new System.Drawing.Size(811, 318);
             this.tabPage2.TabIndex = 1;
-            this.tabPage2.Text = "Add New Skin";
+            this.tabPage2.Text = "==Add New Skin==";
             // 
             // panel4
             // 
@@ -3700,6 +3758,26 @@ namespace SkinInstaller
             this.panel3.Size = new System.Drawing.Size(167, 312);
             this.panel3.TabIndex = 38;
             // 
+            // AddToDatabasePanel
+            // 
+            this.AddToDatabasePanel.Controls.Add(this.button1);
+            this.AddToDatabasePanel.Location = new System.Drawing.Point(4, 136);
+            this.AddToDatabasePanel.Name = "AddToDatabasePanel";
+            this.AddToDatabasePanel.Size = new System.Drawing.Size(161, 87);
+            this.AddToDatabasePanel.TabIndex = 38;
+            // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(15, 10);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(132, 65);
+            this.button1.TabIndex = 35;
+            this.button1.Text = "Add to DataBase";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.addToDatabase_click);
+            this.button1.MouseEnter += new System.EventHandler(this.button1_MouseEnter);
+            this.button1.MouseLeave += new System.EventHandler(this.NoToolTip_MouseLeave);
+            // 
             // addFilesPanel
             // 
             this.addFilesPanel.BackColor = System.Drawing.Color.Lime;
@@ -3773,18 +3851,6 @@ namespace SkinInstaller
             this.b_IClearAll.Click += new System.EventHandler(this.b_IClearAll_Click);
             this.b_IClearAll.MouseEnter += new System.EventHandler(this.b_IClearAll_MouseEnter);
             this.b_IClearAll.MouseLeave += new System.EventHandler(this.NoToolTip_MouseLeave);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(15, 10);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(132, 65);
-            this.button1.TabIndex = 35;
-            this.button1.Text = "Add to DataBase";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.addToDatabase_click);
-            this.button1.MouseEnter += new System.EventHandler(this.button1_MouseEnter);
-            this.button1.MouseLeave += new System.EventHandler(this.NoToolTip_MouseLeave);
             // 
             // b_IRemoveFiles
             // 
@@ -3925,6 +3991,7 @@ namespace SkinInstaller
             this.tabControl1.AllowDrop = true;
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage4);
+            this.tabControl1.Controls.Add(this.tabPage3);
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
@@ -3947,7 +4014,7 @@ namespace SkinInstaller
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
             this.tabPage4.Size = new System.Drawing.Size(811, 318);
             this.tabPage4.TabIndex = 3;
-            this.tabPage4.Text = "Install Existing Skin";
+            this.tabPage4.Text = "==Install Existing Skin==";
             // 
             // splitContainer2
             // 
@@ -4330,6 +4397,108 @@ namespace SkinInstaller
             this.button3repath.Text = "Fix Skin (Re-path)";
             this.button3repath.UseVisualStyleBackColor = true;
             this.button3repath.Click += new System.EventHandler(this.button3repath_Click);
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.splitContainer4);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(811, 318);
+            this.tabPage3.TabIndex = 5;
+            this.tabPage3.Text = "==Skin Creation==";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // splitContainer4
+            // 
+            this.splitContainer4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer4.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer4.Name = "splitContainer4";
+            this.splitContainer4.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer4.Panel1
+            // 
+            this.splitContainer4.Panel1.Controls.Add(this.splitContainer5);
+            // 
+            // splitContainer4.Panel2
+            // 
+            this.splitContainer4.Panel2.Controls.Add(this.button3exporttree);
+            this.splitContainer4.Panel2.Controls.Add(this.buttonRebuildTree);
+            this.splitContainer4.Size = new System.Drawing.Size(805, 312);
+            this.splitContainer4.SplitterDistance = 283;
+            this.splitContainer4.TabIndex = 0;
+            // 
+            // splitContainer5
+            // 
+            this.splitContainer5.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer5.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer5.Name = "splitContainer5";
+            // 
+            // splitContainer5.Panel2
+            // 
+            this.splitContainer5.Panel2.Controls.Add(this.treeView1);
+            this.splitContainer5.Size = new System.Drawing.Size(805, 283);
+            this.splitContainer5.SplitterDistance = 25;
+            this.splitContainer5.TabIndex = 0;
+            // 
+            // treeView1
+            // 
+            this.treeView1.CheckBoxes = true;
+            this.treeView1.ContextMenuStrip = this.treeViewMenuStrip1;
+            this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView1.FullRowSelect = true;
+            this.treeView1.HotTracking = true;
+            this.treeView1.ItemHeight = 16;
+            this.treeView1.Location = new System.Drawing.Point(0, 0);
+            this.treeView1.Name = "treeView1";
+            treeNode1.Name = "Please Wait";
+            treeNode1.Text = "Please wait for the progress bar to finish loading bellow...";
+            treeNode1.ToolTipText = "Please wait...";
+            this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
+            treeNode1});
+            this.treeView1.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.treeView1.ShowNodeToolTips = true;
+            this.treeView1.Size = new System.Drawing.Size(776, 283);
+            this.treeView1.TabIndex = 0;
+            this.treeView1.BeforeCheck += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeCheck);
+            this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
+            this.treeView1.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterExpand);
+            this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            // 
+            // treeViewMenuStrip1
+            // 
+            this.treeViewMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.exportSelectedFilesToolStripMenuItem,
+            this.deselectAllFilesToolStripMenuItem,
+            this.helpToolStripMenuItem1});
+            this.treeViewMenuStrip1.Name = "treeViewMenuStrip1";
+            this.treeViewMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.treeViewMenuStrip1.Size = new System.Drawing.Size(181, 70);
+            // 
+            // exportSelectedFilesToolStripMenuItem
+            // 
+            this.exportSelectedFilesToolStripMenuItem.Name = "exportSelectedFilesToolStripMenuItem";
+            this.exportSelectedFilesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportSelectedFilesToolStripMenuItem.Text = "Export Selected Files";
+            this.exportSelectedFilesToolStripMenuItem.Click += new System.EventHandler(this.exportSelectedFilesToolStripMenuItem_Click);
+            // 
+            // deselectAllFilesToolStripMenuItem
+            // 
+            this.deselectAllFilesToolStripMenuItem.Name = "deselectAllFilesToolStripMenuItem";
+            this.deselectAllFilesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.deselectAllFilesToolStripMenuItem.Text = "Deselect All Files";
+            this.deselectAllFilesToolStripMenuItem.Click += new System.EventHandler(this.deselectAllFilesToolStripMenuItem_Click);
+            // 
+            // buttonRebuildTree
+            // 
+            this.buttonRebuildTree.Location = new System.Drawing.Point(288, 2);
+            this.buttonRebuildTree.Name = "buttonRebuildTree";
+            this.buttonRebuildTree.Size = new System.Drawing.Size(119, 23);
+            this.buttonRebuildTree.TabIndex = 0;
+            this.buttonRebuildTree.Text = "Rebuild Tree View";
+            this.buttonRebuildTree.UseVisualStyleBackColor = true;
+            this.buttonRebuildTree.Visible = false;
+            this.buttonRebuildTree.Click += new System.EventHandler(this.buttonRebuildTree_Click);
             // 
             // tabPage1
             // 
@@ -4799,13 +4968,23 @@ namespace SkinInstaller
             // 
             this.backgroundWorkerCountUpdate.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorkerCountUpdate_DoWork);
             // 
-            // AddToDatabasePanel
+            // rafTreeBuilderWorker2
             // 
-            this.AddToDatabasePanel.Controls.Add(this.button1);
-            this.AddToDatabasePanel.Location = new System.Drawing.Point(4, 136);
-            this.AddToDatabasePanel.Name = "AddToDatabasePanel";
-            this.AddToDatabasePanel.Size = new System.Drawing.Size(161, 87);
-            this.AddToDatabasePanel.TabIndex = 38;
+            this.rafTreeBuilderWorker2.WorkerReportsProgress = true;
+            this.rafTreeBuilderWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.rafTreeBuilderWorker2_DoWork);
+            this.rafTreeBuilderWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.rafTreeBuilderWorker2_ProgressChanged);
+            this.rafTreeBuilderWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.rafTreeBuilderWorker2_RunWorkerCompleted);
+            // 
+            // exportFolderBrowserDialog1
+            // 
+            this.exportFolderBrowserDialog1.Description = "Please Choose the Export Directory";
+            // 
+            // helpToolStripMenuItem1
+            // 
+            this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
+            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.helpToolStripMenuItem1.Text = "Help!";
+            this.helpToolStripMenuItem1.Click += new System.EventHandler(this.helpToolStripMenuItem1_Click);
             // 
             // listView1
             // 
@@ -4882,6 +5061,16 @@ namespace SkinInstaller
             this.columnHeader7.Text = "Character";
             this.columnHeader7.Width = 90;
             // 
+            // button3exporttree
+            // 
+            this.button3exporttree.Location = new System.Drawing.Point(27, 2);
+            this.button3exporttree.Name = "button3exporttree";
+            this.button3exporttree.Size = new System.Drawing.Size(205, 23);
+            this.button3exporttree.TabIndex = 1;
+            this.button3exporttree.Text = "Export Checked Files to Computer Directory";
+            this.button3exporttree.UseVisualStyleBackColor = true;
+            this.button3exporttree.Click += new System.EventHandler(this.button3exporttree_Click);
+            // 
             // skinInstaller
             // 
             this.AllowDrop = true;
@@ -4904,14 +5093,13 @@ namespace SkinInstaller
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.skinInstaller_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.skinInstaller_DragEnter);
             this.DragOver += new System.Windows.Forms.DragEventHandler(this.skinInstaller_DragOver);
-            this.helpBar.ResumeLayout(false);
-            this.helpBar.PerformLayout();
             this.tabPage2.ResumeLayout(false);
             this.panel4.ResumeLayout(false);
             this.panel5.ResumeLayout(false);
             this.panel5.PerformLayout();
             this.panel3.ResumeLayout(false);
             this.panel3.PerformLayout();
+            this.AddToDatabasePanel.ResumeLayout(false);
             this.addFilesPanel.ResumeLayout(false);
             this.addFilesPanel.PerformLayout();
             this.tabControl1.ResumeLayout(false);
@@ -4929,6 +5117,13 @@ namespace SkinInstaller
             this.splitContainer3.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel1.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.splitContainer4.Panel1.ResumeLayout(false);
+            this.splitContainer4.Panel2.ResumeLayout(false);
+            this.splitContainer4.ResumeLayout(false);
+            this.splitContainer5.Panel2.ResumeLayout(false);
+            this.splitContainer5.ResumeLayout(false);
+            this.treeViewMenuStrip1.ResumeLayout(false);
             this.tabPage1.ResumeLayout(false);
             this.splitContainer1.Panel1.ResumeLayout(false);
             this.splitContainer1.Panel2.ResumeLayout(false);
@@ -4942,7 +5137,6 @@ namespace SkinInstaller
             this.panelGL.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).EndInit();
             this.panel7.ResumeLayout(false);
-            this.AddToDatabasePanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -4976,7 +5170,7 @@ namespace SkinInstaller
             string[] strArray = new string[2];
             if (File.Exists(Application.StartupPath + "\\allfiles.ini"))
             {
-                allFilesList.Clear();
+                allFilesList = new List<KeyValuePair<String, String>>();
                 TextReader reader = new StreamReader(Application.StartupPath + "\\allfiles.ini");
                 //allFilesCt = 0;
                 bool firstLine = true;
@@ -5426,7 +5620,7 @@ namespace SkinInstaller
                     foreach (string str in Directory.GetFiles(Application.StartupPath + @"\skins\" + item.SubItems[1].Text, "*.*", SearchOption.AllDirectories))
                     {
                         string[] strArray2 = str.Split(new char[] { '\\' });
-                        string str2 = string.Empty;
+                        string path = string.Empty;
                         bool flag = false;
                         for (int i = 1; i < (strArray2.Length - 1); i++)
                         {
@@ -5436,45 +5630,95 @@ namespace SkinInstaller
                             }
                             else if (flag)
                             {
-                                str2 = str2 + strArray2[i] + @"\";
+                                path = path + strArray2[i] + @"\";
                             }
                         }
-                        string str3 = strArray2[strArray2.Length - 1];
+                        string fileName = strArray2[strArray2.Length - 1];
                         //Cliver.Message.Inform("str2 is " + str2 + " str3 is " + str3);
-                        if ((str2 != null) && File.Exists(gameDirectory + str2 + str3))
+                        int airIndex = path.ToLower().IndexOf("\\lol_air_client\\releases\\");
+                        //path must exist, unless its a air silly thing, in which case we need to check new version    
+                        if ((path != null) && (File.Exists(gameDirectory + path + fileName) || (airIndex > 0)))
                         {
                             //check and see if we have a backup to restore
                             String backupDir = Application.StartupPath + @"\backup\";
-                            debugadd("Uninstalling " + gameDirectory + str2 + str3 + " looking for backup in " + backupDir + str2 + str3);
-                            String bf = backupDir + str2 + str3;
+
+                            debugadd("Uninstalling " + gameDirectory + path + fileName + " looking for backup in " + backupDir + path + fileName);
+                            String bf = backupDir + path + fileName;
+                            //we need to add a fancy check about air files here
+                            //make sure we use the older version backup we have so legacy backups still work
+                            //we need to also make sure we re-install the backup to the new air location
+                            if (airIndex > 0)
+                            {
+                                //oh boy it is a air file
+                                DirectoryInfo airRestoreDir = new DirectoryInfo(backupDir + path.Substring(0, airIndex + 25));
+                                string remainingPath = path.Substring(path.Substring(airIndex + 25).IndexOf("\\") + airIndex + 25);
+                                //debugadd("air file restore dir :"+airbackupDir.FullName);
+                                string lowestVersion = "";
+                                if (airRestoreDir.Exists)
+                                    foreach (DirectoryInfo dir in airRestoreDir.GetDirectories())
+                                    {
+                                        if (lowestVersion == "") lowestVersion = dir.Name;
+                                        else
+                                        {
+                                            string[] versions = dir.Name.Split('.');
+                                            string[] lowestversions = lowestVersion.Split('.');
+                                            for (int i = versions.Length - 1; i >= 0; i--)
+                                            {
+                                                int vA = int.Parse(versions[i].Trim());
+                                                int lvA = int.Parse(lowestversions[i].Trim());
+                                                if (vA < lvA) lowestVersion = dir.Name;
+                                            }
+                                        }
+                                    }
+                                bf = airRestoreDir + lowestVersion + remainingPath + fileName;
+                                //ok we have the correct backup, now we have to find 
+                                DirectoryInfo airWorkingDir = new DirectoryInfo(gameDirectory + path.Substring(0, airIndex + 25));
+                                foreach (DirectoryInfo dir in airWorkingDir.GetDirectories())
+                                {
+                                    //make sure we pick the highest version
+                                    
+                                    string[] versions = dir.Name.Split('.');
+                                    string[] lowestversions = lowestVersion.Split('.');
+                                    for (int i = versions.Length - 1; i >= 0; i--)
+                                    {
+                                        int vA = int.Parse(versions[i].Trim());
+                                        int lvA = int.Parse(lowestversions[i].Trim());
+                                        //tacky but im re-using this var name to mean "highest dir"
+                                        if (vA > lvA) lowestVersion = dir.Name;
+                                        
+                                    }
+                                }
+                                path = path.Substring(0, airIndex + 25) + lowestVersion+remainingPath;
+                                
+                            }
                             if (File.Exists(bf))
                             {
-                                this.SIFileOp.FileDelete(gameDirectory + str2 + str3);
+                                this.SIFileOp.FileDelete(gameDirectory + path + fileName);
 
-                                this.SIFileOp.FileCopy(bf, gameDirectory + str2 + str3);
+                                this.SIFileOp.FileCopy(bf, gameDirectory + path + fileName);
                             }
                             else
                             {
-                                debugadd("Missing backup for " + str2 + " and " + str3 + ", this probably means it was skippped durring instal");
+                                debugadd("Missing backup for " + path + " and " + fileName + ", this probably means it was skipped during install");
                             }
                         }
-                        else if (str2.Contains(".raf"))
+                        else if (path.Contains(".raf"))
                         {
-                            //handle this one diferent
+                            //handle this one different
 
                             //check and see if we have a backup to restore
                             String backupDir = Application.StartupPath + @"\backup\";
-                            debugadd("Uninstalling " + gameDirectory + str2 + str3 + " looking for backup in " + backupDir + str2 + str3);
-                            String bf = backupDir + str2 + str3;
+                            debugadd("Uninstalling " + gameDirectory + path + fileName + " looking for backup in " + backupDir + path + fileName);
+                            String bf = backupDir + path + fileName;
                             if (File.Exists(bf))
                             {
                                 //this.SIFileOp.FileCopy(bf, gameDirectory + str2 + str3);
-                                rafInject(bf, gameDirectory + str2 + str3);
+                                rafInject(bf, gameDirectory + path + fileName);
                             }
 
 
                         }
-                        if (str2.Contains("formatedsounds"))
+                        if (path.Contains("formatedsounds"))
                         {
                             soundsflag = true;
                         }
@@ -5584,6 +5828,7 @@ namespace SkinInstaller
                 "\r\n\r\nIt is a modification of the original program by sgun found here \r\n http://forum.leaguecraft.com/index.php?/topic/5542-tool-lol-skin-installer-skin-installation-and-management-tool \r\n" +
                 "with sound installation code from here http://forum.leaguecraft.com/index.php?/topic/21301-release-lolmod \r\n" +
                 "and RAF reading code from ItzWarty! here http://code.google.com/p/raf-manager/source/browse/ \r\n" +
+                "and 3dModel viewing from LoLViewer here http://code.google.com/p/lolmodelviewer/ \r\n"+
                 "\r\nThis program works with the new LoL installer and can auto detect where old files are supposed to go\r\n"+            
                 "\r\n Major Changes include" +
                 "\r\n\t* Works with new RAF format" +
@@ -5915,6 +6160,8 @@ namespace SkinInstaller
                 b_IAddFiles.Enabled = true;
                 b_IAddDirectory.Enabled = true;
                 UpdateListView();
+
+                rebuildTree();
 
             }
             else
@@ -7379,7 +7626,6 @@ namespace SkinInstaller
             Properties.Settings.Default.lastSelectedTab = tabControl1.SelectedIndex;
             Properties.Settings.Default.Save();
         }
-
         private void previewThisSkinToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (backgroundWorker1.IsBusy)
@@ -7411,7 +7657,6 @@ namespace SkinInstaller
             }
 
         }
-
         private void loLViewerOpenNotPreviewToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (backgroundWorker1.IsBusy)
@@ -7424,8 +7669,329 @@ namespace SkinInstaller
             main.reader.SetRoot(gameDirectory);
             main.Show();
         }
-       
-        
+        #region TreeViewStuff
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
+        }
+        private void buttonRebuildTree_Click(object sender, EventArgs e)
+        {
+            rebuildTree();
+        }
+        private void rebuildTree()
+        {
+            treeView1.Nodes.Clear();
+            treeView1.ImageList = new ImageList();
+            treeView1.ImageList.ImageSize = new Size(treeView1.ItemHeight, treeView1.ItemHeight);
+            treeView1.ImageList.Images.Add(Properties.Resource.folder);
+            treeView1.ImageList.Images.Add(Properties.Resource.skul16b);
+            treeView1.ImageList.Images.Add(Properties.Resource.skin);
+            treeView1.ImageList.Images.Add(Properties.Resource.Dee_dee);
+            treeView1.ImageList.Images.Add(Properties.Resource.tex_2);
+            treeView1.ImageList.Images.Add(Properties.Resource.lemon);
+            treeView1.TreeViewNodeSorter = new NodeSorter();
+            #region modelsTreeBuild
+            TreeNode modelsRootNode = new TreeNode("Models");
+            treeView1.Nodes.Add(modelsRootNode);
+            if (previewWindow != null)
+            {
+                foreach (KeyValuePair<string, LOLViewer.IO.LOLModel> kv in previewWindow.reader.models)
+                {
+                    int firstSlash = kv.Key.IndexOf("/");
+                    String charFolder = kv.Key.Substring(0, firstSlash);
+                    if (!modelsRootNode.Nodes.ContainsKey(charFolder))
+                    {
+                        modelsRootNode.Nodes.Add(charFolder,charFolder);
+                        TreeNode temp = modelsRootNode.Nodes.Find(charFolder, false)[0];
+                        temp.ToolTipText = charFolder;
+                    }
+                    String charName = kv.Key.Substring(firstSlash+1); 
+                    TreeNode folderNode = modelsRootNode.Nodes.Find(charFolder, false)[0];
+                    folderNode.Nodes.Add(charName, charName);
+                    TreeNode charNode = folderNode.Nodes.Find(charName, false)[0];
+                    charNode.ToolTipText = kv.Key;
+                    charNode.Tag = kv.Value;
+                    //add models and stuff
+                    if (kv.Value.animations.Count > 0)
+                    {
+                        TreeNode animationsNode = new TreeNode("Animations");
+                        animationsNode.ToolTipText = "List of animations used by this model";
+                        foreach (KeyValuePair<string, RAFFileListEntry> animkv in kv.Value.animations)
+                        {
+                            TreeNode tempAnimNode = new TreeNode(animkv.Key);
+                            tempAnimNode.Tag = animkv.Value;
+                            tempAnimNode.ToolTipText = animkv.Value.FileName;
+                            tempAnimNode.ImageIndex = tempAnimNode.SelectedImageIndex = 3;
+                            animationsNode.Nodes.Add(tempAnimNode);
+                        }
+                        charNode.Nodes.Add(animationsNode);
+                    }
+                    //skn
+                    FileInfo sknInfo = new FileInfo(kv.Value.skn.FileName);
+                    TreeNode sknNode = new TreeNode(sknInfo.Name.Substring(0, sknInfo.Name.IndexOf(".")));
+                    sknNode.ToolTipText = kv.Value.skn.FileName;
+                    sknNode.ImageIndex = sknNode.SelectedImageIndex = 2;
+                    sknNode.Tag = kv.Value.skn;
+                    charNode.Nodes.Add(sknNode);
+                    //skl
+                    FileInfo sklInfo = new FileInfo(kv.Value.skl.FileName);
+                    TreeNode sklNode = new TreeNode(sklInfo.Name.Substring(0, sklInfo.Name.IndexOf(".")));
+                    sklNode.ToolTipText = kv.Value.skl.FileName;
+                    sklNode.Tag = kv.Value.skl;
+                    sklNode.ImageIndex = sklNode.SelectedImageIndex = 1;
+                    charNode.Nodes.Add(sklNode);
+                    //texture
+                    FileInfo txtInfo = new FileInfo(kv.Value.texture.FileName);
+                    TreeNode txtNode = new TreeNode(txtInfo.Name.Substring(0, txtInfo.Name.IndexOf(".")));
+                    txtNode.ToolTipText = kv.Value.texture.FileName;
+                    txtNode.Tag = kv.Value.texture;
+                    txtNode.ImageIndex = txtNode.SelectedImageIndex = 4;
+                    charNode.Nodes.Add(txtNode);
+                }
+                //we added all the models, remove unnecessary folders now
+                TreeNode othersNode = new TreeNode("Others");
+                othersNode.ToolTipText="Other non-character models";
+                modelsRootNode.Nodes.Add(othersNode);
+                List<string> toRemoves = new List<string>();
+                List<TreeNode> toAdds = new List<TreeNode>();
+                foreach (TreeNode folderNode in modelsRootNode.Nodes)
+                {
+                    if (folderNode.Nodes.Count == 1)
+                    {
+                        // no need for a folder here
+                        TreeNode tempNode = folderNode.Nodes[0];
+                        toRemoves.Add(folderNode.Name);
+                        toAdds.Add(tempNode);
+                    }
+                }
+                foreach (string toRemove in toRemoves)
+                {
+                    modelsRootNode.Nodes.RemoveByKey(toRemove);                
+                }
+                foreach (TreeNode toAdd in toAdds)
+                {
+                    othersNode.Nodes.Add(toAdd);
+                }
+
+            }
+            //modelsRootNode.Expand();
+            #endregion
+            treeView1.Nodes.Add("RAF","RAF");
+            TreeNode rafNode = treeView1.Nodes.Find("RAF", false)[0];
+            rafNode.Name = "RAF";
+            rafNode.Nodes.Add("Loading...(Watch Progress bar at bottom)");
+                    
+
+        }
+        private void loadRafIntoTree()
+        {
+            rafTreeBuilderWorker2.ReportProgress(1);
+            #region rafTreeBuild
+            TreeNode rafRootNode = new TreeNode("RAF");
+            rafRootNode.Nodes.Clear();
+            int prog = 0;
+            int lastReport = 1;
+            foreach (KeyValuePair<String, String> fileskv in allFilesList)
+            {
+                prog++;
+                int newProg = (int)Math.Floor(((double)prog / (double)allFilesList.Count) * 99);
+                if (newProg > lastReport)
+                {
+                    lastReport = newProg;
+                    rafTreeBuilderWorker2.ReportProgress(newProg);
+                }
+                //rafRootNode.Nodes.Add(fileskv.Value.ToLower());
+                if (fileskv.Value.ToLower().Contains(".raf\\"))
+                {
+                    string rafPath = fileskv.Value.Substring(
+                        fileskv.Value.ToLower().IndexOf(".raf\\") + 6);
+                    FileInfo rafFileInfo = new FileInfo(rafPath);
+                    string[] folderParts=new string[0];
+                    if (rafPath.Contains("\\"))
+                    {
+                        rafPath = rafPath.Remove(rafPath.Length - rafFileInfo.Name.Length).ToUpper().Replace("\\\\","\\");
+                        //folderParts = Regex.Split(rafPath, "\\\\");
+                        folderParts = rafPath.Split('\\');
+                    }
+                    
+                    TreeNode lookIn = rafRootNode;
+                    if(folderParts.Length>0)
+                      for (int i = 0; i < folderParts.Length; i++)
+                      {
+                          if (folderParts[i].Length < 1)
+                          {
+                              if (i == folderParts.Length-1) continue;
+                              else  i++;
+                          }
+                          if (!lookIn.Nodes.ContainsKey(folderParts[i]))
+                          {
+                              lookIn.Nodes.Add(folderParts[i],
+                                  Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(folderParts[i].ToLower()));
+                          }
+                          lookIn = lookIn.Nodes.Find(folderParts[i], false)[0];
+
+                      }
+                      //we may need to add some extra logic here if a raf file has duplicate entries across versions
+                      lookIn.Nodes.Add(fileskv.Value, Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(rafFileInfo.Name));
+                      TreeNode addedNode = lookIn.Nodes.Find(fileskv.Value, false)[0];
+                      addedNode.ToolTipText = fileskv.Value;
+                      addedNode.Tag = fileskv.Value;
+                      int imageIndex = 5;
+                      switch (rafFileInfo.Extension.ToLower())
+                      {
+                          case ".skl": imageIndex = 1; break;
+                          case ".skn": imageIndex = 2; break;
+                          case ".anm": imageIndex = 3; break;
+                          case ".dds": imageIndex = 4; break;
+                          default: imageIndex = 5; break;
+                      }
+                      addedNode.ImageIndex = addedNode.SelectedImageIndex =imageIndex;
+               
+                  }
+
+            }
+            newRafNode = rafRootNode;
+            
+            #endregion
+            rafTreeBuilderWorker2.ReportProgress(100);
+        }
+        private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
+        {
+           
+        }
+        private void treeView1_AfterExpand(object sender, TreeViewEventArgs e)
+        {
+            if (e.Node.Name == "RAF" && e.Node.Nodes.Count < 2)
+                rafTreeBuilderWorker2.RunWorkerAsync();
+        }
+        private void rafTreeBuilderWorker2_DoWork(object sender, DoWorkEventArgs e)
+        {
+            loadRafIntoTree();
+        }
+        private void rafTreeBuilderWorker2_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            UpdateProgressSafe(e.ProgressPercentage);
+        }
+        private void rafTreeBuilderWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            TreeNode rafRootNode = treeView1.Nodes.Find("RAF", false)[0];
+            
+            rafRootNode.Nodes.Clear();
+            foreach (TreeNode node in newRafNode.Nodes)
+            {
+                rafRootNode.Nodes.Add(node);
+            }
+            //treeView1.Nodes.Remove(rafRootNode);
+            //treeView1.Nodes.Add(newRafNode);
+            treeView1.Sort();
+        }
+        private void treeView1_BeforeCheck(object sender, TreeViewCancelEventArgs e)
+        {
+            setNodeAndChildrenCheck(!e.Node.Checked,e.Node);
+        }
+        private void setNodeAndChildrenCheck(bool check,TreeNode node)
+        {
+            foreach (TreeNode innerNode in node.Nodes)
+            {
+                innerNode.Checked = check;
+                setNodeAndChildrenCheck(check, innerNode);
+            }
+        }
+        private void exportSelectedFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            //to do: export them!
+            List<TreeNode> checkedNodes = new List<TreeNode>();
+
+            foreach (TreeNode node in treeView1.Nodes)
+            {
+                getCheckedNodes(node, ref checkedNodes);
+            }
+            string output = "";
+            List<String> toBackup = new List<String>();
+            if (checkedNodes.Count == 0)
+            {
+                Cliver.Message.Show("Nothing Checked", SystemIcons.Error,
+                    "Please check the mark on the files you want to export",
+                    0, new String[] { "Ok" });
+                return;
+            }
+            foreach (TreeNode checkedNode in checkedNodes)
+            {
+                if (checkedNode.Nodes.Count == 0)//no folders
+                {
+                    string fileLocation = "";
+                    if (checkedNode.FullPath.ToLower().Contains("models\\"))
+                    {
+                        //this one will have model style tags
+                        RAFFileListEntry rafEntry = (RAFFileListEntry)checkedNode.Tag;
+                        fileLocation = rafEntry.RAFArchive.RAFFilePath + "\\" +
+                            rafEntry.FileName.Replace("/", "\\");
+                    }
+                    else if (checkedNode.FullPath.ToLower().Contains("raf\\"))
+                    {
+                        if (rafTreeBuilderWorker2.IsBusy)
+                        {
+
+                        }
+                        else
+                        {
+                            String fullRafPath = (String)checkedNode.Tag;
+                            fileLocation = gameDirectory.Substring(0,gameDirectory.Length-1) + fullRafPath.Replace("\\\\", "\\");
+                        }
+                    }
+                    toBackup.Add(fileLocation);
+                    output += fileLocation + "\r\n";
+                }
+            }
+            if (exportFolderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                foreach(String rafFile in toBackup)
+                {
+                    rafBackup(rafFile,  exportFolderBrowserDialog1.SelectedPath+"\\",true);
+                }
+            }
+            Cliver.Message.Show("Success",SystemIcons.Application,"Successfully processed:\r\n" + output,0,new string[]{"Yay!"});
+            
+        }
+        private void deselectAllFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            List<TreeNode> checkedNodes = new List<TreeNode>();
+
+            foreach (TreeNode node in treeView1.Nodes)
+            {
+                getCheckedNodes(node, ref checkedNodes);
+            }
+            foreach (TreeNode checkedNode in checkedNodes)
+            {
+                checkedNode.Checked = false;
+            }
+        }
+        private void getCheckedNodes(TreeNode node, ref List<TreeNode> checkedNodes)
+        {
+            if(node.Checked)checkedNodes.Add(node);
+            foreach (TreeNode innerNode in node.Nodes)
+            {
+                getCheckedNodes(innerNode, ref checkedNodes);
+            }
+        }
+        private void helpToolStripMenuItem1_Click(object sender, EventArgs e)
+        {
+            Cliver.Message.Show("How to create skins",SystemIcons.Information,
+                "To create a skin, you need to modify current files that are already inside the game\r\n\r\n"+
+            "Most Files reside inside of archive files with a .raf extension\r\n"+
+            "You can see the files inside in the tree in the skin install tab\r\n\r\n"+
+            "You can check mark the files you want to change, then RIGHT CLICK and choose to export them\r\n\r\n"+
+            "Once you have them on your computer you can modify them with various programs, and then put them back into the game using the \r\n"+
+            "\"Add New Skin\" tab.\r\n\r\n"+
+            "If you want more help on how to modify these files, see http://forum.leaguecraft.com/index.php?/topic/29647-model-replacement-tutorial/ \r\n"+
+            "",
+                0,new string[]{"OK"});
+        }
+        private void button3exporttree_Click(object sender, EventArgs e)
+        {
+            exportSelectedFilesToolStripMenuItem_Click(sender, e);
+        }
+        #endregion
     }
     #region strucks
     public class LogTextWriter : TextWriter
@@ -7450,7 +8016,21 @@ namespace SkinInstaller
                 return Encoding.ASCII;
             }
         }
-    }   
+    }
+    public class NodeSorter : IComparer
+    {
+        // compare between two tree nodes
+        public int Compare(object thisObj, object otherObj)
+        {
+            TreeNode thisNode = thisObj as TreeNode;
+            TreeNode otherNode = otherObj as TreeNode;
+            if ((thisNode.Nodes.Count != otherNode.Nodes.Count)&&(thisNode.Nodes.Count==0 || otherNode.Nodes.Count==0))
+            {
+                return -1*thisNode.Nodes.Count.CompareTo(otherNode.Nodes.Count);
+            }
+            return thisNode.Text.CompareTo(otherNode.Text);
+        }
+    } 
     #endregion
 }
 
