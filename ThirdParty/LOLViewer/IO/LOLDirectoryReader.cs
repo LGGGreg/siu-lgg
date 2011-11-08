@@ -111,12 +111,12 @@ namespace LOLViewer.IO
             animationLists.Clear();
             animations.Clear();           
 
-            // Sanity
-            if (root.Contains("League of Legends") == false &&
-                root.Contains("Riot Games") == false)
+            // InSanity!
+            /*if (root.ToLower().Contains("league of legends") == false &&
+                root.ToLower().Contains("riot games") == false)
             {
                 return false;
-            }
+            }*/
 
             //
             // Start from the root and try to read
@@ -248,7 +248,7 @@ namespace LOLViewer.IO
             // Sanity
             if (animationLists.ContainsKey(model.animationList) == true)
             {
-                result = ANMListReader.ReadAnimationList(model.skinNumber,
+                result = ANMListReader.ReadAnimationList(model.skinNumber - 1, // indexing in animations.list assumes the original skin to be -1
                     animationLists[model.animationList], ref animationStrings);
             }
 
@@ -434,9 +434,11 @@ namespace LOLViewer.IO
             try
             {
                 DirectoryInfo di = new DirectoryInfo(dir.FullName);
-                foreach (DirectoryInfo d in di.GetDirectories())
+                // Read directories in reverse order to prioritize newer files.
+                DirectoryInfo[] children = di.GetDirectories();
+                for (int i = 1; i <= children.Length; ++i)
                 {
-                    result = OpenGameClientVersion(d);
+                    result = OpenGameClientVersion(children[children.Length - i]);
                     if (result == false) 
                         break;
                 }
@@ -566,6 +568,8 @@ namespace LOLViewer.IO
 
                 // Get the texture files.
                 List<RAFFileListEntry> files = fileList.SearchFileEntries(".dds");
+                List<RAFFileListEntry> capsfiles = fileList.SearchFileEntries(".DDS");
+                files.AddRange(capsfiles);
                 foreach (RAFFileListEntry e in files)
                 {
                     // Try to parse out unwanted textures.

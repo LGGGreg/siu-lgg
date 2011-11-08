@@ -377,6 +377,47 @@ namespace LOLViewer.IO
                 }
             }
 
+            // Newer section.
+            // I don't know what exactly these values represent.
+            // I think it's related to champions with the new rage mechanic.
+            // I'm just using it to increment the stream.
+            // So, when I get to the part to read in strings, the pointer is at the
+            // correct location.
+            if ((format & 0x0080) == 0)
+            {
+#if VERBOSE
+                DebugOut("No offsets segment", "skipping");
+#endif
+            }
+            else
+            {
+#if VERBOSE
+                DebugOut("Rage values start position", stream.Position);
+#endif
+                long[] rageKeys = ReadSegmentKeys(ref stream);
+                if (rageKeys != null)
+                {
+#if VERBOSE
+                    DebugOut("Rage keys found", rageKeys.Length);
+#endif
+                    foreach (long key in rageKeys)
+                    {
+                        float val1 = ReadFloat(ref stream);
+                        float val2 = ReadFloat(ref stream);
+                        float val3 = ReadFloat(ref stream);
+#if VERBOSE
+                        DebugOut("Rage prop 1(" + key + ")", val1);
+                        DebugOut("Rage prop 2(" + key + ")", val2);
+                        DebugOut("Rage prop 3(" + key + ")", val3);
+#endif
+                        // If you actually need these values, figure out what 12 byte
+                        // structure they represent and add that property.  
+                        // It's probably a Vector3.
+                        // file.AddProperty(key, MyRageKeyStructure);
+                    }
+                }
+            }
+
             // Old-style offsets to strings
             if ((format & 0x1000) == 0)
             {
