@@ -234,6 +234,15 @@
     <EmbeddedResource Include="fixs\soundfix\001.Odin1.female1.Welcome_The_1.wav" />
     <EmbeddedResource Include="fixs\soundfix\103.Odin1.female1.NexusEnemy__1.wav" />
     <EmbeddedResource Include="fixs\soundfix\103.Odin1.female1.NexusEnemy__2.wav" />
+    <EmbeddedResource Include="fixs\soundfix\Shyvana.spellcasteffort.wav" />
+    <EmbeddedResource Include="fixs\soundfix\Shyvana.spellcasteffort_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_2.wav" />
+    <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_3.wav" />
+    <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_4.wav" />
+    <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_5.wav" />
+    <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_6.wav" />
+    <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_7.wav" />
     <Content Include="LeagueOfLegendsSkinInstallerLeagueCraftIntegration.user.js">
       <SubType>Form</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>

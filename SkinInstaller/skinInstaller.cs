@@ -353,6 +353,7 @@ namespace SkinInstaller
         private FolderBrowserDialog exportFolderBrowserDialog1;
         private ToolStripMenuItem helpToolStripMenuItem1;
         private Button button3exporttree;
+        private Label label10;
 
         
         //private ColorSlider cs;
@@ -610,7 +611,7 @@ namespace SkinInstaller
         private void skinInstaller_Load(object sender, EventArgs e)
         {
             loadNameReplacements();
-            if (Application.StartupPath.Length > 65)
+            if (Application.StartupPath.Length > 63)
             {
                 Cliver.Message.Inform("The path that this program is running from\n\"" +
                     Application.StartupPath + "\" \nIs too long and could potentially cause errors.\n\n" +
@@ -3428,6 +3429,8 @@ namespace SkinInstaller
             this.treeViewMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.exportSelectedFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deselectAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.button3exporttree = new System.Windows.Forms.Button();
             this.buttonRebuildTree = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -3487,7 +3490,6 @@ namespace SkinInstaller
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.rafTreeBuilderWorker2 = new System.ComponentModel.BackgroundWorker();
             this.exportFolderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.listView1 = new SkinInstaller.ListViewItemHover();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -3498,7 +3500,7 @@ namespace SkinInstaller
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.button3exporttree = new System.Windows.Forms.Button();
+            this.label10 = new System.Windows.Forms.Label();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -4422,6 +4424,7 @@ namespace SkinInstaller
             // 
             // splitContainer4.Panel2
             // 
+            this.splitContainer4.Panel2.Controls.Add(this.label10);
             this.splitContainer4.Panel2.Controls.Add(this.button3exporttree);
             this.splitContainer4.Panel2.Controls.Add(this.buttonRebuildTree);
             this.splitContainer4.Size = new System.Drawing.Size(805, 312);
@@ -4443,9 +4446,11 @@ namespace SkinInstaller
             // 
             // treeView1
             // 
+            this.treeView1.BackColor = System.Drawing.Color.Black;
             this.treeView1.CheckBoxes = true;
             this.treeView1.ContextMenuStrip = this.treeViewMenuStrip1;
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.treeView1.ForeColor = System.Drawing.Color.Red;
             this.treeView1.FullRowSelect = true;
             this.treeView1.HotTracking = true;
             this.treeView1.ItemHeight = 16;
@@ -4488,6 +4493,23 @@ namespace SkinInstaller
             this.deselectAllFilesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
             this.deselectAllFilesToolStripMenuItem.Text = "Deselect All Files";
             this.deselectAllFilesToolStripMenuItem.Click += new System.EventHandler(this.deselectAllFilesToolStripMenuItem_Click);
+            // 
+            // helpToolStripMenuItem1
+            // 
+            this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
+            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.helpToolStripMenuItem1.Text = "Help!";
+            this.helpToolStripMenuItem1.Click += new System.EventHandler(this.helpToolStripMenuItem1_Click);
+            // 
+            // button3exporttree
+            // 
+            this.button3exporttree.Location = new System.Drawing.Point(27, 2);
+            this.button3exporttree.Name = "button3exporttree";
+            this.button3exporttree.Size = new System.Drawing.Size(205, 23);
+            this.button3exporttree.TabIndex = 1;
+            this.button3exporttree.Text = "Export Checked Files to Computer Directory";
+            this.button3exporttree.UseVisualStyleBackColor = true;
+            this.button3exporttree.Click += new System.EventHandler(this.button3exporttree_Click);
             // 
             // buttonRebuildTree
             // 
@@ -4979,13 +5001,6 @@ namespace SkinInstaller
             // 
             this.exportFolderBrowserDialog1.Description = "Please Choose the Export Directory";
             // 
-            // helpToolStripMenuItem1
-            // 
-            this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
-            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
-            this.helpToolStripMenuItem1.Text = "Help!";
-            this.helpToolStripMenuItem1.Click += new System.EventHandler(this.helpToolStripMenuItem1_Click);
-            // 
             // listView1
             // 
             this.listView1.AutoArrange = false;
@@ -5061,15 +5076,14 @@ namespace SkinInstaller
             this.columnHeader7.Text = "Character";
             this.columnHeader7.Width = 90;
             // 
-            // button3exporttree
+            // label10
             // 
-            this.button3exporttree.Location = new System.Drawing.Point(27, 2);
-            this.button3exporttree.Name = "button3exporttree";
-            this.button3exporttree.Size = new System.Drawing.Size(205, 23);
-            this.button3exporttree.TabIndex = 1;
-            this.button3exporttree.Text = "Export Checked Files to Computer Directory";
-            this.button3exporttree.UseVisualStyleBackColor = true;
-            this.button3exporttree.Click += new System.EventHandler(this.button3exporttree_Click);
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(238, 7);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(253, 13);
+            this.label10.TabIndex = 2;
+            this.label10.Text = "Items are colored by version, green is new, red is old";
             // 
             // skinInstaller
             // 
@@ -5120,6 +5134,7 @@ namespace SkinInstaller
             this.tabPage3.ResumeLayout(false);
             this.splitContainer4.Panel1.ResumeLayout(false);
             this.splitContainer4.Panel2.ResumeLayout(false);
+            this.splitContainer4.Panel2.PerformLayout();
             this.splitContainer4.ResumeLayout(false);
             this.splitContainer5.Panel2.ResumeLayout(false);
             this.splitContainer5.ResumeLayout(false);
@@ -7670,6 +7685,35 @@ namespace SkinInstaller
             main.Show();
         }
         #region TreeViewStuff
+        private Color colorFromRafVersion(string fileString)
+        {
+            return colorFromRafPower(getRafPowerFromVersion(fileString));
+        }
+        private Color colorFromRafPower(int rafPower)
+        {
+            int numberOfRafVersions = previewWindow.reader.rafArchives.Count;
+            return new HSLColor(
+                ((double)(numberOfRafVersions - rafPower) /
+                (double)numberOfRafVersions) /
+                (double)3.0,
+                1.0, .5);
+        }
+        private int getRafPowerFromVersion(string fileString)
+        {
+            int rafPower = 0;
+            int numberOfRafVersions = previewWindow.reader.rafArchives.Count;
+            Regex rafRegex = new Regex(@"\\\d+\.\d+\.\d+\.\d+\\");
+            Match rafMatch = rafRegex.Match(fileString);
+            string caught = rafMatch.Captures[0].Value.Substring(1, rafMatch.Captures[0].Value.Length - 2);
+            for (int i = 0; i < numberOfRafVersions; i++)
+            {
+                if (previewWindow.reader.rafArchives.Keys.ToArray()[i].Contains(caught))
+                {
+                    rafPower = i;
+                }
+            }
+            return rafPower;
+        }
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
 
@@ -7710,7 +7754,7 @@ namespace SkinInstaller
                     folderNode.Nodes.Add(charName, charName);
                     TreeNode charNode = folderNode.Nodes.Find(charName, false)[0];
                     charNode.ToolTipText = kv.Key;
-                    charNode.Tag = kv.Value;
+                    //charNode.Tag = new rafTreeDataObject(0, "");// kv.Value;
                     //add models and stuff
                     if (kv.Value.animations.Count > 0)
                     {
@@ -7719,7 +7763,12 @@ namespace SkinInstaller
                         foreach (KeyValuePair<string, RAFFileListEntry> animkv in kv.Value.animations)
                         {
                             TreeNode tempAnimNode = new TreeNode(animkv.Key);
-                            tempAnimNode.Tag = animkv.Value;
+                            rafTreeDataObject tag = new rafTreeDataObject();
+                            tag.fileLocation = animkv.Value.RAFArchive.RAFFilePath + "\\" +
+                            animkv.Value.FileName.Replace("/", "\\");
+                            tag.rafPower =getRafPowerFromVersion(tag.fileLocation);
+                            tempAnimNode.Tag = tag;
+                            tempAnimNode.ForeColor = colorFromRafPower(tag.rafPower);
                             tempAnimNode.ToolTipText = animkv.Value.FileName;
                             tempAnimNode.ImageIndex = tempAnimNode.SelectedImageIndex = 3;
                             animationsNode.Nodes.Add(tempAnimNode);
@@ -7732,12 +7781,25 @@ namespace SkinInstaller
                     sknNode.ToolTipText = kv.Value.skn.FileName;
                     sknNode.ImageIndex = sknNode.SelectedImageIndex = 2;
                     sknNode.Tag = kv.Value.skn;
+                    rafTreeDataObject skntag = new rafTreeDataObject();
+                    skntag.fileLocation = kv.Value.skn.RAFArchive.RAFFilePath + "\\" +
+                    kv.Value.skn.FileName.Replace("/", "\\");
+                    skntag.rafPower = getRafPowerFromVersion(skntag.fileLocation);
+                    sknNode.Tag = skntag;
+                    sknNode.ForeColor = colorFromRafPower(skntag.rafPower);
+                            
                     charNode.Nodes.Add(sknNode);
                     //skl
                     FileInfo sklInfo = new FileInfo(kv.Value.skl.FileName);
                     TreeNode sklNode = new TreeNode(sklInfo.Name.Substring(0, sklInfo.Name.IndexOf(".")));
                     sklNode.ToolTipText = kv.Value.skl.FileName;
-                    sklNode.Tag = kv.Value.skl;
+                    rafTreeDataObject skltag = new rafTreeDataObject();
+                    skltag.fileLocation = kv.Value.skl.RAFArchive.RAFFilePath + "\\" +
+                    kv.Value.skl.FileName.Replace("/", "\\");
+                    skltag.rafPower = getRafPowerFromVersion(skltag.fileLocation);
+                    sklNode.Tag = skltag;
+                    sklNode.ForeColor = colorFromRafPower(skltag.rafPower);
+                            
                     sklNode.ImageIndex = sklNode.SelectedImageIndex = 1;
                     charNode.Nodes.Add(sklNode);
                     //texture
@@ -7745,6 +7807,13 @@ namespace SkinInstaller
                     TreeNode txtNode = new TreeNode(txtInfo.Name.Substring(0, txtInfo.Name.IndexOf(".")));
                     txtNode.ToolTipText = kv.Value.texture.FileName;
                     txtNode.Tag = kv.Value.texture;
+                    rafTreeDataObject txttag = new rafTreeDataObject();
+                    txttag.fileLocation = kv.Value.texture.RAFArchive.RAFFilePath + "\\" +
+                    kv.Value.texture.FileName.Replace("/", "\\");
+                    txttag.rafPower = getRafPowerFromVersion(txttag.fileLocation);
+                    txtNode.Tag = txttag;
+                    txtNode.ForeColor = colorFromRafPower(txttag.rafPower);
+                            
                     txtNode.ImageIndex = txtNode.SelectedImageIndex = 4;
                     charNode.Nodes.Add(txtNode);
                 }
@@ -7775,13 +7844,58 @@ namespace SkinInstaller
 
             }
             //modelsRootNode.Expand();
+            colorizeFolders();
             #endregion
             treeView1.Nodes.Add("RAF","RAF");
             TreeNode rafNode = treeView1.Nodes.Find("RAF", false)[0];
             rafNode.Name = "RAF";
             rafNode.Nodes.Add("Loading...(Watch Progress bar at bottom)");
+            
                     
 
+        }
+        private int colorizeFolder(TreeNode folder)
+        {
+            int toReturn=0;
+            if (folder.Nodes.Count > 0)
+            {
+                //is a folder
+                
+                int lowestRafPower = 100000;
+                foreach (TreeNode innerNode in folder.Nodes)
+                {
+                     int nodesPower=-1;
+                    if (innerNode.Tag != null)                    
+                    {
+                        nodesPower = ((rafTreeDataObject)innerNode.Tag).rafPower;
+                        
+                    }else
+                    {
+                        nodesPower=colorizeFolder(innerNode);
+                    }
+                    if (nodesPower < lowestRafPower)
+                    {
+                        lowestRafPower = nodesPower;
+                    }
+                }
+                if (lowestRafPower != 100000)
+                {
+                    rafTreeDataObject tag = new rafTreeDataObject();
+                    tag.fileLocation = "";
+                    tag.rafPower = lowestRafPower;
+                    folder.Tag = tag;
+                    folder.ForeColor = colorFromRafPower(tag.rafPower);
+                    toReturn = tag.rafPower;
+                }
+            }
+            return toReturn;
+        }
+        private void colorizeFolders()
+        {
+            foreach (TreeNode node in treeView1.Nodes)
+            {
+                colorizeFolder(node);
+            }
         }
         private void loadRafIntoTree()
         {
@@ -7835,7 +7949,13 @@ namespace SkinInstaller
                       lookIn.Nodes.Add(fileskv.Value, Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(rafFileInfo.Name));
                       TreeNode addedNode = lookIn.Nodes.Find(fileskv.Value, false)[0];
                       addedNode.ToolTipText = fileskv.Value;
-                      addedNode.Tag = fileskv.Value;
+                      rafTreeDataObject tag = new rafTreeDataObject();
+                    tag.fileLocation=
+                        gameDirectory.Substring(0, gameDirectory.Length - 1) + 
+                        fileskv.Value.Replace("\\\\", "\\");
+                    tag.rafPower = getRafPowerFromVersion(tag.fileLocation);
+
+                    addedNode.Tag = tag;
                       int imageIndex = 5;
                       switch (rafFileInfo.Extension.ToLower())
                       {
@@ -7846,12 +7966,13 @@ namespace SkinInstaller
                           default: imageIndex = 5; break;
                       }
                       addedNode.ImageIndex = addedNode.SelectedImageIndex =imageIndex;
+                      addedNode.ForeColor = colorFromRafPower(tag.rafPower);
                
                   }
 
             }
             newRafNode = rafRootNode;
-            
+            colorizeFolder(newRafNode);
             #endregion
             rafTreeBuilderWorker2.ReportProgress(100);
         }
@@ -7919,26 +8040,8 @@ namespace SkinInstaller
             {
                 if (checkedNode.Nodes.Count == 0)//no folders
                 {
-                    string fileLocation = "";
-                    if (checkedNode.FullPath.ToLower().Contains("models\\"))
-                    {
-                        //this one will have model style tags
-                        RAFFileListEntry rafEntry = (RAFFileListEntry)checkedNode.Tag;
-                        fileLocation = rafEntry.RAFArchive.RAFFilePath + "\\" +
-                            rafEntry.FileName.Replace("/", "\\");
-                    }
-                    else if (checkedNode.FullPath.ToLower().Contains("raf\\"))
-                    {
-                        if (rafTreeBuilderWorker2.IsBusy)
-                        {
-
-                        }
-                        else
-                        {
-                            String fullRafPath = (String)checkedNode.Tag;
-                            fileLocation = gameDirectory.Substring(0,gameDirectory.Length-1) + fullRafPath.Replace("\\\\", "\\");
-                        }
-                    }
+                    string fileLocation = ((rafTreeDataObject)checkedNode.Tag).fileLocation;
+                    
                     toBackup.Add(fileLocation);
                     output += fileLocation + "\r\n";
                 }
@@ -8016,6 +8119,16 @@ namespace SkinInstaller
                 return Encoding.ASCII;
             }
         }
+    }
+    public struct rafTreeDataObject
+    {
+        public rafTreeDataObject(int rafPowerIn, string fileLocationIn)
+        {
+            rafPower=rafPowerIn;
+            fileLocation = fileLocationIn;
+        }
+        public int rafPower;
+        public string fileLocation;
     }
     public class NodeSorter : IComparer
     {
