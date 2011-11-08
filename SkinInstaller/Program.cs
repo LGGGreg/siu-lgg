@@ -34,7 +34,7 @@ namespace SkinInstaller
                allArgs += "" + a + "|";
             }
             string appName = "LoL Skin Installer +lgg v";
-            string version = "3.294";
+            string version = "3.295";
             string windowName = appName+version.ToString();
             MessageHelper msg = new MessageHelper();
             int result = 0;
