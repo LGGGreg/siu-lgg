@@ -1574,6 +1574,9 @@ namespace SkinInstaller
                 {
                     String oldFullNameAndPath = fullNameAndPath;
                     String newFullNameAndPath = this.fixRiotv40Name(fullNameAndPath);
+                    //cuz we cnat check sounds yet,error on the side of making new sounds work
+                    if (fileName.ToLower().Contains(".wav")) newFullNameAndPath = oldFullNameAndPath;
+                  
                     FileInfo fiold = new FileInfo(oldFullNameAndPath);
                     FileInfo finew = new FileInfo(newFullNameAndPath);
                     String mixedNewPathOldName = finew.DirectoryName + "\\" + fiold.Name;
