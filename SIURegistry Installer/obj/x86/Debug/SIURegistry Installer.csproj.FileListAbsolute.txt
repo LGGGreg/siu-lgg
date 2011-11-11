@@ -8,3 +8,13 @@ C:\Users\LGG\Desktop\Skin Installer Ultimate\SIURegistry Installer\obj\x86\Debug
 C:\Users\LGG\Desktop\Skin Installer Ultimate\SIURegistry Installer\obj\x86\Debug\ResGen.write.1.tlog
 C:\Users\LGG\Desktop\Skin Installer Ultimate\SIURegistry Installer\obj\x86\Debug\sai.exe
 C:\Users\LGG\Desktop\Skin Installer Ultimate\SIURegistry Installer\obj\x86\Debug\sai.pdb
+C:\Users\Adrian\SIU\SIURegistry Installer\bin\Debug\sai.exe.config
+C:\Users\Adrian\SIU\SIURegistry Installer\bin\Debug\sai.exe
+C:\Users\Adrian\SIU\SIURegistry Installer\bin\Debug\sai.pdb
+C:\Users\Adrian\SIU\SIURegistry Installer\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Adrian\SIU\SIURegistry Installer\obj\x86\Debug\SIURegistry_Installer.Form1.resources
+C:\Users\Adrian\SIU\SIURegistry Installer\obj\x86\Debug\SIURegistry_Installer.Properties.Resources.resources
+C:\Users\Adrian\SIU\SIURegistry Installer\obj\x86\Debug\ResGen.read.1.tlog
+C:\Users\Adrian\SIU\SIURegistry Installer\obj\x86\Debug\ResGen.write.1.tlog
+C:\Users\Adrian\SIU\SIURegistry Installer\obj\x86\Debug\sai.exe
+C:\Users\Adrian\SIU\SIURegistry Installer\obj\x86\Debug\sai.pdb
