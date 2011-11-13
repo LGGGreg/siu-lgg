@@ -83,9 +83,11 @@ namespace ParticleReferenceForSIU
                     
                         String championName = String.Empty;
                         String spell = String.Empty;
+                        // Naming scheme: Word separations is either with underscores or humpback letters
                         if (iconFileName.Contains("_"))
                         {
                             championName = iconFileName.Split('_')[0].ToLower();
+                            // Change the name of Rumble's ult so code isn't lookin for "r" as a spell name
                             if (iconFileName == "Rumble_R.dds")
                             {
                                 spell = "rumble_ult";
@@ -97,6 +99,7 @@ namespace ParticleReferenceForSIU
                         }
                         else
                         {
+                            // Find index of second uppercase letter
                             int splitIndex = 0;
                             char[] charArray = iconFileName.ToCharArray();
                             for (int i = 1; i < charArray.Length; i++)
@@ -127,6 +130,7 @@ namespace ParticleReferenceForSIU
                         if (spell == "passive")
                             continue;
 
+                        // Create dictionary structure if it doesn't already exist
                         if (!particleDef.ContainsKey(championName))
                         {
                             particleDef[championName] = new Dictionary<String, Dictionary<String, List<String>>>();
@@ -172,12 +176,14 @@ namespace ParticleReferenceForSIU
                 if (file.Contains("DATA\\\\Particles"))
                 {
                     String particleFileName = file.Split('|')[0].ToLower();
+                    // Only look for troybins and inibins
                     if (particleFileName.IndexOf("troybin") != -1 || particleFileName.IndexOf("inibin") != -1)
                     {
-                        troybinTotal++;
+                        troybinTotal++; // For debugging purposes
                         Boolean matchFound = false;
                         foreach (KeyValuePair<String, Dictionary<String, Dictionary<String, List<String>>>> championKVP in particleDef)
                         {
+                            // Search for the champion's name in the troybin file name
                             if (particleFileName.Replace("_", "").IndexOf(championKVP.Key) != -1)
                             {
                                 particleDef[championKVP.Key]["troybins"][particleFileName] = new List<String>();
@@ -201,6 +207,7 @@ namespace ParticleReferenceForSIU
                 {
                     foreach (KeyValuePair<String, List<String>> spellKVP in particleDef[championKVP.Key]["spellNames"])
                     {
+                        // Search for spell names in the troybin file name
                         if (troybin.Replace("_", "").IndexOf(spellKVP.Key.Replace("_", "")) != -1)
                         {
                             if (!particleDef[championKVP.Key]["troybins"].ContainsKey(troybin))
