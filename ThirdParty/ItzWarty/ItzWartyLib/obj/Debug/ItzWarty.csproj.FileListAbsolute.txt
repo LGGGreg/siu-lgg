@@ -1,0 +1,5 @@
+C:\Users\Adrian\SIU\ThirdParty\ItzWarty\ItzWartyLib\bin\Debug\wLib.dll
+C:\Users\Adrian\SIU\ThirdParty\ItzWarty\ItzWartyLib\bin\Debug\wLib.pdb
+C:\Users\Adrian\SIU\ThirdParty\ItzWarty\ItzWartyLib\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Adrian\SIU\ThirdParty\ItzWarty\ItzWartyLib\obj\Debug\wLib.dll
+C:\Users\Adrian\SIU\ThirdParty\ItzWarty\ItzWartyLib\obj\Debug\wLib.pdb
