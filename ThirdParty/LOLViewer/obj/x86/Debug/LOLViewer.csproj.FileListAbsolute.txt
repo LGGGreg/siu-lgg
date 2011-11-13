@@ -1,0 +1,12 @@
+C:\Users\Adrian\SIU\ThirdParty\LOLViewer\obj\x86\Debug\ResolveAssemblyReference.cache
+C:\Users\Adrian\SIU\ThirdParty\LOLViewer\obj\x86\Debug\ResGen.read.1.tlog
+C:\Users\Adrian\SIU\ThirdParty\LOLViewer\obj\x86\Debug\ResGen.write.1.tlog
+C:\Users\Adrian\SIU\ThirdParty\LOLViewer\obj\x86\Debug\LOLViewer.LoadingModelsWindow.resources
+C:\Users\Adrian\SIU\ThirdParty\LOLViewer\obj\x86\Debug\LOLViewer.MainWindow.resources
+C:\Users\Adrian\SIU\ThirdParty\LOLViewer\obj\x86\Debug\LOLViewer.PreviewWindow.resources
+C:\Users\Adrian\SIU\ThirdParty\LOLViewer\obj\x86\Debug\LOLViewer.Properties.Resources.resources
+C:\Users\Adrian\SIU\bin\debug\LOLViewer.exe.config
+C:\Users\Adrian\SIU\bin\debug\LOLViewer.exe
+C:\Users\Adrian\SIU\bin\debug\LOLViewer.pdb
+C:\Users\Adrian\SIU\ThirdParty\LOLViewer\obj\x86\Debug\LOLViewer.exe
+C:\Users\Adrian\SIU\ThirdParty\LOLViewer\obj\x86\Debug\LOLViewer.pdb

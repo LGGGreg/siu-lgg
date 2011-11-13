@@ -1,0 +1,9 @@
+C:\Users\Adrian\SIU\ThirdParty\Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.dll
+C:\Users\Adrian\SIU\ThirdParty\Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.pdb
+C:\Users\Adrian\SIU\ThirdParty\Be.Windows.Forms.HexBox\bin\Debug\Be.Windows.Forms.HexBox.xml
+C:\Users\Adrian\SIU\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\ResolveAssemblyReference.cache
+C:\Users\Adrian\SIU\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.resources
+C:\Users\Adrian\SIU\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\ResGen.read.1.tlog
+C:\Users\Adrian\SIU\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\ResGen.write.1.tlog
+C:\Users\Adrian\SIU\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.dll
+C:\Users\Adrian\SIU\ThirdParty\Be.Windows.Forms.HexBox\obj\Debug\Be.Windows.Forms.HexBox.pdb
