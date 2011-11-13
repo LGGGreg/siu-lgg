@@ -52,7 +52,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\debug\</OutputPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>TRACE;DEBUG;(RemoveThis)USkin,SKINTHING</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;(RemoveThis)USkin,(OrRemoveThis)SKINTHING</DefineConstants>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
