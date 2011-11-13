@@ -135,6 +135,9 @@
     <Compile Include="IO\SKNReader.cs" />
     <Compile Include="IO\SKNVertex.cs" />
     <Compile Include="GL\OpenTKExtras.cs" />
+    <EmbeddedResource Include="GUI\LoadingModelsWindow.resx">
+      <DependentUpon>LoadingModelsWindow.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\MainWindow.resx">
       <DependentUpon>MainWindow.cs</DependentUpon>
     </EmbeddedResource>

@@ -281,7 +281,6 @@ namespace SkinInstaller
         private PictureBox pictureBox2;
         private BackgroundWorker updateWorker2;
         private ToolStripMenuItem checkForUpdateToolStripMenuItem;
-        private Label label2;
         private BackgroundWorker webPinger;
         private ToolStripMenuItem pingToolStripMenuItem;
         private ToolStripMenuItem viewStatsToolStripMenuItem;
@@ -355,9 +354,9 @@ namespace SkinInstaller
         private Button button3exporttree;
         private Label label10;
 
-        
-        //private ColorSlider cs;
         PaintEventHandler crazyP;
+        private TextBox textBox3;
+        PaintEventHandler importantP;
         #endregion
         #region webIntegrate
         private void button3lcintegrate_Click(object sender, EventArgs e)
@@ -598,9 +597,11 @@ namespace SkinInstaller
             if (Properties.Settings.Default.omfgred) changeColors(Color.Red, Color.FromArgb(10, 0, 0));
 
             crazyP = new System.Windows.Forms.PaintEventHandler(this.crazyPaint);
-
-            
             makePaint(this.Controls, crazyP);
+            
+            importantP = new System.Windows.Forms.PaintEventHandler(this.makeLookImportant);
+            this.addFilesPanel.Paint += importantP;
+            this.AddToDatabasePanel.Paint += importantP;
 
 
             this.argsToProc = args;
@@ -610,6 +611,15 @@ namespace SkinInstaller
 
         private void skinInstaller_Load(object sender, EventArgs e)
         {
+#if(USkin)
+            string skinUPath = Application.StartupPath +
+                    "\\guiskinning\\"+
+                   // "ConcaveD.msstyles"
+                   //"ClearLooks.msstyles" 
+                   "DiyGreen.msstyles";
+            USkinSDK.USkinInit("", "", skinUPath);
+                USkinSDK.USkinLoadSkin(skinUPath);
+#endif
             loadNameReplacements();
             if (Application.StartupPath.Length > 63)
             {
@@ -3371,7 +3381,6 @@ namespace SkinInstaller
             this.button1 = new System.Windows.Forms.Button();
             this.addFilesPanel = new System.Windows.Forms.Panel();
             this.b_IAddFiles = new System.Windows.Forms.Button();
-            this.label2 = new System.Windows.Forms.Label();
             this.b_IAddDirectory = new System.Windows.Forms.Button();
             this.saveToDb = new System.Windows.Forms.CheckBox();
             this.b_IClearAll = new System.Windows.Forms.Button();
@@ -3433,6 +3442,7 @@ namespace SkinInstaller
             this.exportSelectedFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deselectAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.label10 = new System.Windows.Forms.Label();
             this.button3exporttree = new System.Windows.Forms.Button();
             this.buttonRebuildTree = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
@@ -3493,6 +3503,7 @@ namespace SkinInstaller
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.rafTreeBuilderWorker2 = new System.ComponentModel.BackgroundWorker();
             this.exportFolderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
+            this.textBox3 = new System.Windows.Forms.TextBox();
             this.listView1 = new SkinInstaller.ListViewItemHover();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -3503,7 +3514,6 @@ namespace SkinInstaller
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.label10 = new System.Windows.Forms.Label();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -3766,7 +3776,7 @@ namespace SkinInstaller
             // AddToDatabasePanel
             // 
             this.AddToDatabasePanel.Controls.Add(this.button1);
-            this.AddToDatabasePanel.Location = new System.Drawing.Point(4, 136);
+            this.AddToDatabasePanel.Location = new System.Drawing.Point(4, 157);
             this.AddToDatabasePanel.Name = "AddToDatabasePanel";
             this.AddToDatabasePanel.Size = new System.Drawing.Size(161, 87);
             this.AddToDatabasePanel.TabIndex = 38;
@@ -3786,12 +3796,12 @@ namespace SkinInstaller
             // addFilesPanel
             // 
             this.addFilesPanel.BackColor = System.Drawing.Color.Lime;
+            this.addFilesPanel.Controls.Add(this.textBox3);
             this.addFilesPanel.Controls.Add(this.b_IAddFiles);
-            this.addFilesPanel.Controls.Add(this.label2);
             this.addFilesPanel.Controls.Add(this.b_IAddDirectory);
             this.addFilesPanel.Location = new System.Drawing.Point(3, 7);
             this.addFilesPanel.Name = "addFilesPanel";
-            this.addFilesPanel.Size = new System.Drawing.Size(164, 88);
+            this.addFilesPanel.Size = new System.Drawing.Size(164, 115);
             this.addFilesPanel.TabIndex = 37;
             // 
             // b_IAddFiles
@@ -3805,18 +3815,6 @@ namespace SkinInstaller
             this.b_IAddFiles.Click += new System.EventHandler(this.b_IAddFiles_Click);
             this.b_IAddFiles.MouseEnter += new System.EventHandler(this.b_IAddFiles_MouseEnter);
             this.b_IAddFiles.MouseLeave += new System.EventHandler(this.NoToolTip_MouseLeave);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.label2.ForeColor = System.Drawing.SystemColors.ControlDark;
-            this.label2.Location = new System.Drawing.Point(40, 30);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(79, 54);
-            this.label2.TabIndex = 36;
-            this.label2.Text = "You may also\r\nDrag and Drop\r\nFiles or Folders\r\nHere\r\n";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
             // 
             // b_IAddDirectory
             // 
@@ -3847,7 +3845,7 @@ namespace SkinInstaller
             // 
             // b_IClearAll
             // 
-            this.b_IClearAll.Location = new System.Drawing.Point(85, 107);
+            this.b_IClearAll.Location = new System.Drawing.Point(85, 128);
             this.b_IClearAll.Name = "b_IClearAll";
             this.b_IClearAll.Size = new System.Drawing.Size(80, 23);
             this.b_IClearAll.TabIndex = 27;
@@ -3859,7 +3857,7 @@ namespace SkinInstaller
             // 
             // b_IRemoveFiles
             // 
-            this.b_IRemoveFiles.Location = new System.Drawing.Point(3, 107);
+            this.b_IRemoveFiles.Location = new System.Drawing.Point(3, 128);
             this.b_IRemoveFiles.Name = "b_IRemoveFiles";
             this.b_IRemoveFiles.Size = new System.Drawing.Size(80, 23);
             this.b_IRemoveFiles.TabIndex = 26;
@@ -4504,11 +4502,20 @@ namespace SkinInstaller
             this.helpToolStripMenuItem1.Text = "Help!";
             this.helpToolStripMenuItem1.Click += new System.EventHandler(this.helpToolStripMenuItem1_Click);
             // 
+            // label10
+            // 
+            this.label10.AutoSize = true;
+            this.label10.Location = new System.Drawing.Point(272, 7);
+            this.label10.Name = "label10";
+            this.label10.Size = new System.Drawing.Size(253, 13);
+            this.label10.TabIndex = 2;
+            this.label10.Text = "Items are colored by version, green is new, red is old";
+            // 
             // button3exporttree
             // 
             this.button3exporttree.Location = new System.Drawing.Point(27, 2);
             this.button3exporttree.Name = "button3exporttree";
-            this.button3exporttree.Size = new System.Drawing.Size(205, 23);
+            this.button3exporttree.Size = new System.Drawing.Size(239, 23);
             this.button3exporttree.TabIndex = 1;
             this.button3exporttree.Text = "Export Checked Files to Computer Directory";
             this.button3exporttree.UseVisualStyleBackColor = true;
@@ -5004,6 +5011,18 @@ namespace SkinInstaller
             // 
             this.exportFolderBrowserDialog1.Description = "Please Choose the Export Directory";
             // 
+            // textBox3
+            // 
+            this.textBox3.AllowDrop = true;
+            this.textBox3.Location = new System.Drawing.Point(16, 34);
+            this.textBox3.Multiline = true;
+            this.textBox3.Name = "textBox3";
+            this.textBox3.ReadOnly = true;
+            this.textBox3.Size = new System.Drawing.Size(124, 68);
+            this.textBox3.TabIndex = 37;
+            this.textBox3.Text = "You may also\r\nDrag and Drop\r\nFiles or Folders\r\nHere";
+            this.textBox3.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            // 
             // listView1
             // 
             this.listView1.AutoArrange = false;
@@ -5078,15 +5097,6 @@ namespace SkinInstaller
             // 
             this.columnHeader7.Text = "Character";
             this.columnHeader7.Width = 90;
-            // 
-            // label10
-            // 
-            this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(238, 7);
-            this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(253, 13);
-            this.label10.TabIndex = 2;
-            this.label10.Text = "Items are colored by version, green is new, red is old";
             // 
             // skinInstaller
             // 
@@ -7558,7 +7568,43 @@ namespace SkinInstaller
             }
 
         }
-        
+        private void makeLookImportant(object sender, PaintEventArgs e)
+        {
+            Panel senderPanel = (Panel)sender;
+            base.OnPaint(e);
+            if (senderPanel.BackColor != Color.Lime) return;
+            Graphics g = e.Graphics;
+            int w = e.ClipRectangle.Width;
+            int h = e.ClipRectangle.Height;
+            if (w == 0) return;
+
+            Brush myBrush;
+            PointF[] p = new PointF[] { new PointF(0, 0), new PointF(w, 0),
+                new PointF(w, h),new PointF(0,h) };
+            GraphicsPath pth = new GraphicsPath();
+            pth.AddLines(p);
+            PathGradientBrush pgb = new PathGradientBrush(pth);
+            ColorBlend cb = new ColorBlend(6);
+            cb.Positions = new float[]{
+                0.0f,
+                0.3f,
+                0.4f,
+                0.6f,
+                0.8f,
+                1.0f
+            };
+            cb.Colors = new Color[]{
+                Properties.Settings.Default.omfgred?Color.FromArgb(10, 0, 0):
+            Color.Lime,
+                 Color.Yellow,
+                 Color.Green,
+                 Color.Yellow,
+                 Color.Green,
+                 Color.Yellow};
+            pgb.InterpolationColors = cb;
+            myBrush = pgb;
+            e.Graphics.FillRectangle(myBrush, 0, 0, w, h);
+        }
         private void crazyPaint(object sender, PaintEventArgs e)
         {
             base.OnPaint(e);
@@ -7626,9 +7672,6 @@ namespace SkinInstaller
             if (Properties.Settings.Default.wtfRainbows)
             {
                 Properties.Settings.Default.wtfRainbows = false;
-
-                
-
             }
             else
             {

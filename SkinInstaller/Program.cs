@@ -17,11 +17,17 @@
  * along with LOLViewer.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+//uncomment bellow if you wanna play with http://www.skincrafter.com/
+//#define SKINTHING
+//#define USkin
 namespace SkinInstaller
 {
     using System;
     using System.IO;
     using System.Windows.Forms;
+#if (SKINTHING)
+    using DMSoft;
+#endif
 
     internal static class Program
     {
@@ -44,9 +50,39 @@ namespace SkinInstaller
             result = msg.sendWindowsStringMessage(hWnd, 0,allArgs);
             if (hWnd == 0)
             {
+                
                 Application.EnableVisualStyles();
                 Application.SetCompatibleTextRenderingDefault(false);
+
+#if (SKINTHING)
+                DMSoft.SkinCrafter.Init();
+                DMSoft.SkinCrafter SkinOb = new DMSoft.SkinCrafter();
+                SkinOb.InitLicenKeys("SKINCRAFTER","SKINCRAFTER.COM",
+                "esupport@skincrafter.com","DEMOSKINCRAFTERLICENCE");
+                SkinOb.InitDecoration(true);
+                SkinOb.LoadSkinFromFile(Application.StartupPath + "\\guiskinning\\WindowSkin.skf");
+                SkinOb.ApplySkin();
+#endif
+#if(USkin)
+                /*string skinUPath = Application.StartupPath +
+                    "\\guiskinning\\"+
+                   // "ConcaveD.msstyles"
+                   //"ClearLooks.msstyles" 
+                   "DiyGreen.msstyles";
+                USkinSDK.USkinInit("", "", skinUPath
+                   );
+                USkinSDK.USkinLoadSkin(skinUPath);*/
+#endif
                 Application.Run(new skinInstaller(appName, version, allArgs));
+#if(USkin)
+                USkinSDK.USkinExit();
+#endif
+#if (SKINTHING)
+                SkinOb.DeInitDecoration();
+                DMSoft.SkinCrafter.Terminate();
+#endif
+                
+
             }
             else
             {

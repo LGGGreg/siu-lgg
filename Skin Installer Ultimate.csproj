@@ -52,7 +52,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\debug\</OutputPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;(RemoveThis)USkin,(OrRemoveThis)SKINTHING</DefineConstants>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
@@ -62,6 +62,7 @@
   </PropertyGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
+    <Compile Include="guiskinning\USkinSDK.cs" />
     <Compile Include="GUI\dxtVersionReader.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -129,6 +130,9 @@
     <Reference Include="OpenTK.GLControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>ThirdParty\OpenTK\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="skincrafter.net-vs2003">
+      <HintPath>..\..\..\..\Program Files (x86)\SkinCrafter3\SkinCrafterDemo\SkinCrafterDotNet_vs2003\skincrafter.net-vs2003.dll</HintPath>
     </Reference>
     <Reference Include="System.configuration" />
     <Reference Include="System.Data.SQLite">
@@ -212,6 +216,18 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="guiskinning\ClearLooks.msstyles">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="guiskinning\ConcaveD.msstyles">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="guiskinning\DiyGreen.msstyles">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="guiskinning\WindowSkin.skf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
     <None Include="TreeViewImages\lemon.png" />
     <None Include="TreeViewImages\Dee-dee.png" />
     <None Include="TreeViewImages\tex-2.png" />
@@ -243,6 +259,9 @@
     <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_5.wav" />
     <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_6.wav" />
     <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_7.wav" />
+    <Content Include="USkin.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="LeagueOfLegendsSkinInstallerLeagueCraftIntegration.user.js">
       <SubType>Form</SubType>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -366,5 +385,7 @@
       <Name>RAFLib</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
 </Project>

@@ -65,7 +65,7 @@ namespace LOLViewer
             // loadingLabel
             // 
             this.loadingLabel.AutoSize = true;
-            this.loadingLabel.Location = new System.Drawing.Point(41, 9);
+            this.loadingLabel.Location = new System.Drawing.Point(86, 5);
             this.loadingLabel.Name = "loadingLabel";
             this.loadingLabel.Size = new System.Drawing.Size(139, 13);
             this.loadingLabel.TabIndex = 0;
@@ -74,7 +74,7 @@ namespace LOLViewer
             // label1
             // 
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(35, 25);
+            this.label1.Location = new System.Drawing.Point(80, 21);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(150, 13);
             this.label1.TabIndex = 1;
@@ -90,7 +90,7 @@ namespace LOLViewer
             // 
             // loadingCancelButton
             // 
-            this.loadingCancelButton.Location = new System.Drawing.Point(134, 81);
+            this.loadingCancelButton.Location = new System.Drawing.Point(106, 79);
             this.loadingCancelButton.Name = "loadingCancelButton";
             this.loadingCancelButton.Size = new System.Drawing.Size(75, 23);
             this.loadingCancelButton.TabIndex = 3;
@@ -101,7 +101,7 @@ namespace LOLViewer
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(221, 116);
+            this.ClientSize = new System.Drawing.Size(294, 114);
             this.ControlBox = false;
             this.Controls.Add(this.loadingCancelButton);
             this.Controls.Add(this.loadingProgressBar);
@@ -109,7 +109,7 @@ namespace LOLViewer
             this.Controls.Add(this.loadingLabel);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(227, 142);
+            this.MaximumSize = new System.Drawing.Size(300, 142);
             this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(227, 142);
             this.Name = "LoadingModelsWindow";
