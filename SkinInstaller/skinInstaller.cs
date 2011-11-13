@@ -2436,7 +2436,12 @@ namespace SkinInstaller
                 if (newOptions.Count != 0)
                     betterOptions = newOptions;
             }
-
+            if (betterOptions.Count != 1)
+            {
+                List<String> newOptions = pickFileNameFixRafVersion(new List<String>(options), directoryWODirPath);
+                if (newOptions.Count != 0)
+                    betterOptions = newOptions;
+            }
             if (betterOptions.Count != 1)
             {
                 List<String> newOptions = pickFileNameHarder2(new List<String>(options), directoryWODirPath);
@@ -5854,6 +5859,7 @@ namespace SkinInstaller
                 " http://www.leagueoflegends.com \r\n" +
                 "\r\nA good website to browse such skins is http://leaguecraft.com/skins "+
                 "\r\n\r\nIt is a modification of the original program by sgun found here \r\n http://forum.leaguecraft.com/index.php?/topic/5542-tool-lol-skin-installer-skin-installation-and-management-tool \r\n" +
+                "With particle magic organizing code by RichieSams!\r\n"+
                 "with sound installation code from here http://forum.leaguecraft.com/index.php?/topic/21301-release-lolmod \r\n" +
                 "and RAF reading code from ItzWarty! here http://code.google.com/p/raf-manager/source/browse/ \r\n" +
                 "and 3dModel viewing from LoLViewer here http://code.google.com/p/lolmodelviewer/ \r\n"+
@@ -5861,7 +5867,7 @@ namespace SkinInstaller
                 "\r\n Major Changes include" +
                 "\r\n\t* Works with new RAF format" +
                 "\r\n\t* Automatic Backup System" +
-                "\r\n\t* Ability to install into all folders (sounds, menus, etc)" +
+                "\r\n\t* Ability to install into all folders (sounds, menus, air, etc)" +
                 "\r\n\t* Ability to only install certain parts of a skin" +
                 "\r\n\t* Sound installation through fsbext found here http://aluigi.altervista.org/papers.htm " +
                 "\r\n\t* It's red o.o (or at least it was till a evil black cat came around)" +
