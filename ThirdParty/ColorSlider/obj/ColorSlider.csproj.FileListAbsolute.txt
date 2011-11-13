@@ -1,7 +1,0 @@
-C:\Users\LGG\Desktop\ColorSlider_src\ColorSlider\ColorSlider\bin\Release\ColorSlider.dll
-C:\Users\LGG\Desktop\ColorSlider_src\ColorSlider\ColorSlider\bin\Release\ColorSlider.pdb
-C:\Users\LGG\Desktop\ColorSlider_src\ColorSlider\ColorSlider\obj\Release\ResolveAssemblyReference.cache
-C:\Users\LGG\Desktop\ColorSlider_src\ColorSlider\ColorSlider\obj\Release\MB.Controls.ColorSlider.resources
-C:\Users\LGG\Desktop\ColorSlider_src\ColorSlider\ColorSlider\obj\Release\ColorSlider.csproj.GenerateResource.Cache
-C:\Users\LGG\Desktop\ColorSlider_src\ColorSlider\ColorSlider\obj\Release\ColorSlider.dll
-C:\Users\LGG\Desktop\ColorSlider_src\ColorSlider\ColorSlider\obj\Release\ColorSlider.pdb
