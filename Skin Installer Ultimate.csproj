@@ -70,6 +70,12 @@
     <Compile Include="GUI\dxtVersionReader.Designer.cs">
       <DependentUpon>dxtVersionReader.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\ParticleReference.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ParticleReference.Designer.cs">
+      <DependentUpon>ParticleReference.cs</DependentUpon>
+    </Compile>
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
