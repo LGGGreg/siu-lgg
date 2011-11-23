@@ -69,6 +69,7 @@ namespace SkinInstaller
             }
             reportProgress(12);
             i = 0;
+            List<RAFFileList> listsToSearchLater = new List<RAFFileList>();
             foreach (String file in rafFiles)
             {
                 i++;
@@ -76,6 +77,7 @@ namespace SkinInstaller
                 //time to process the raf files
                 RAFArchive raf = new RAFArchive(rafFile.FullName);
                 fileList.AddRange(raf.GetDirectoryFile().GetFileList().GetFileEntries());
+                listsToSearchLater.Add(raf.GetDirectoryFile().GetFileList());
                 raf.GetDataFileContentStream().Close();
                 reportProgress((int)(((double)i * 10.0) / (double)rafFiles.Count) + 12);
             }
@@ -262,9 +264,66 @@ namespace SkinInstaller
                     String result = reader.ReadToEnd();
                     reader.Close();
                     myInput.Close();
-
                     // Release the archive
                     rafArchive.GetDataFileContentStream().Close();
+
+                    String cleanString = Regex.Replace(result, @"[^\u0000-\u007F]", "").Replace('\0','?');
+                    Regex captureFileNames = new Regex(@"([a-zA-z0-9\-_ ]+\.(?:tga|sco|scb|dds|png))",RegexOptions.IgnoreCase);
+                    MatchCollection matches = captureFileNames.Matches(cleanString);
+                    foreach (Match match in matches)
+                    {
+                        string matchedFile = "/" + match.Groups[1].Value;
+
+                        //foreach (String file in rafFiles)
+                        //{
+                        foreach(RAFFileList listToSearchNow in listsToSearchLater)
+                        {
+                            //FileInfo rafFile = new FileInfo(file);
+                            //time to process the raf files
+                            //RAFArchive searchRaf = new RAFArchive(rafFile.FullName);
+
+                            //searching takes forever, F that
+                            //troybinKVP.Value.AddRange(listToSearchNow.SearchFileEntries(matchedFile));
+                            
+                            //damnit this also takes freking forever!
+                            /*
+                            bool found = false;
+                            RAFFileListEntry entry =
+                                    listToSearchNow.GetFileEntry("DATA/Particles" + matchedFile);
+                            if (entry != null)
+                            {
+                                troybinKVP.Value.Add(entry);
+                                found = true;
+                            }
+                            if (matchedFile.ToLower().Contains(".tga"))
+                            {
+                                entry =
+                                    listToSearchNow.GetFileEntry("DATA/Particles" + matchedFile.ToLower().Replace(".tga",".dds"));
+                                if (entry != null)
+                                {
+                                    troybinKVP.Value.Add(entry);
+                                    found = true;
+                                }
+                            }
+                            if (!found)
+                            {
+                                //todo look at not found files and see whats up
+                            }*/
+                        }
+
+                        //screw it, just fake a entry :|
+                        //in fact.. ill do the final search thingy when they actually export!
+                        RAFFileListEntry entry = new RAFFileListEntry(null, "DATA/Particles" + 
+                            matchedFile.Replace(".tga",".dds").Replace(".TGA",".DDS"), 0,0,0);
+                        troybinKVP.Value.Add(entry);
+                        cleanString = matchedFile + "\r\n" + cleanString;
+                        //searchRaf.GetDataFileContentStream().Close();
+                        
+                    }
+                    if (textBox1.Text == "") textBox1.Text = cleanString;
+
+                    
+
                 }
             }
             reportProgress(100);
@@ -327,6 +386,10 @@ namespace SkinInstaller
                     {
                         textBox.AppendText("\t\t" + troybinKVP.Key.FileName + "\n");
                         //troybinCount++;
+                        foreach (RAFFileListEntry fileEntry in troybinKVP.Value)
+                        {
+                            textBox.AppendText("\t\t\t" + fileEntry.FileName + "\n");
+                        }
                     }
                 }
             }
