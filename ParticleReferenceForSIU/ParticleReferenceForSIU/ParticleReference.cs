@@ -215,25 +215,25 @@ namespace ParticleReferenceForSIU
                     leftoverTroybins.Add(troybin);
             }
 
-            //foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<RAFFileListEntry>>>> championKVP in particleDef)
-            //{
-            //    foreach (KeyValuePair<RAFFileListEntry, List<RAFFileListEntry>> troybinKVP in particleDef[championKVP.Key]["troybins"])
-            //    {
-            //        // Search troybins for .dds, .sco, .scb, etc.
-            //        // Create a new archive
-            //        RAFArchive rafArchive = troybinKVP.Key.RAFArchive;
+            foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<RAFFileListEntry>>>> championKVP in particleDef)
+            {
+                foreach (KeyValuePair<RAFFileListEntry, List<RAFFileListEntry>> troybinKVP in particleDef[championKVP.Key]["troybins"])
+                {
+                    // Search troybins for .dds, .sco, .scb, etc.
+                    // Create a new archive
+                    RAFArchive rafArchive = new RAFArchive(troybinKVP.Key.RAFArchive.RAFFilePath);
 
-            //        // Get the data from the archive
-            //        MemoryStream myInput = new MemoryStream(rafArchive.GetDirectoryFile().GetFileList().GetFileEntry(troybinKVP.Key.FileName).GetContent());
-            //        StreamReader reader = new StreamReader(myInput);
-            //        String result = reader.ReadToEnd();
-            //        reader.Close();
-            //        myInput.Close();
+                    // Get the data from the archive
+                    MemoryStream myInput = new MemoryStream(rafArchive.GetDirectoryFile().GetFileList().GetFileEntry(troybinKVP.Key.FileName).GetContent());
+                    StreamReader reader = new StreamReader(myInput);
+                    String result = reader.ReadToEnd();
+                    reader.Close();
+                    myInput.Close();
 
-            //        // Release the archive
-            //        rafArchive.GetDataFileContentStream().Close();
-            //    }
-            //}
+                    // Release the archive
+                    rafArchive.GetDataFileContentStream().Close();
+                }
+            }
 
 
             return particleDef;
