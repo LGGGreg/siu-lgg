@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.IO;
 using RAFLib;
+using System.Text.RegularExpressions;
 
 namespace ParticleReferenceForSIU
 {
@@ -23,19 +24,10 @@ namespace ParticleReferenceForSIU
             
         }
         public Dictionary
-            <String, Dictionary
-            <String, Dictionary
-            <String, List<String>>>> getParticleStructure(string rafPath)
+                <String, Dictionary
+                    <String, Dictionary
+                        <String, List<String>>>> getParticleStructure(string rafPath)
         {
-            Dictionary
-            <String, Dictionary
-            <String, Dictionary
-            <String, List<String>>>>
-            particleDef = new Dictionary
-                <String, Dictionary
-                <String, Dictionary
-                <String, List
-                <String>>>>();
 
             List<String> fileList = new List<string>();
             String baseDir = rafPath;
@@ -77,9 +69,12 @@ namespace ParticleReferenceForSIU
                         }
                     }
                     fStream.Close();
+
             }
 
-            //Dictionary<String, Dictionary<String, Dictionary<String, List<String>>>> particleDef = new Dictionary<String, Dictionary<String, Dictionary<String, List<String>>>>();
+            Dictionary<String, Dictionary
+                <String, Dictionary
+                    <String, List<String>>>> particleDef = new Dictionary<String, Dictionary<String, Dictionary<String, List<String>>>>();
             List<String> exceptions = new List<String>();
 
             // Reference spellnames to champion names
@@ -95,7 +90,7 @@ namespace ParticleReferenceForSIU
                     
                         String championName = String.Empty;
                         String spell = String.Empty;
-                        // Naming scheme: Word separations is either with underscores or humpback letters
+                        // Naming scheme: Word separations is either with underscores or camelcase letters
                         if (iconFileName.Contains("_"))
                         {
                             championName = iconFileName.Split('_')[0].ToLower();
@@ -188,6 +183,8 @@ namespace ParticleReferenceForSIU
                 if (file.Contains("DATA\\\\Particles"))
                 {
                     String particleFileName = file.Split('|')[0].ToLower();
+                    String rafNumber = file.Split('|')[1].Substring(0, Regex.Match(file.Split('|')[1], "((\\\\\\\\).*?){3}").Groups[2].Captures[2].Index);
+
                     // Only look for troybins and inibins
                     if (particleFileName.IndexOf("troybin") != -1 || particleFileName.IndexOf("inibin") != -1)
                     {
@@ -198,13 +195,13 @@ namespace ParticleReferenceForSIU
                             // Search for the champion's name in the troybin file name
                             if (particleFileName.Replace("_", "").IndexOf(championKVP.Key) != -1)
                             {
-                                particleDef[championKVP.Key]["troybins"][particleFileName] = new List<String>();
+                                particleDef[championKVP.Key]["troybins"][particleFileName+"&"+rafNumber] = new List<String>();
                                 matchFound = true;
                                 break;
                             }
                         }
                         if(!matchFound)
-                            missedTroybins.Add(particleFileName);
+                            missedTroybins.Add(particleFileName + "&" + rafNumber);
                     }
                 }
             }
@@ -235,6 +232,27 @@ namespace ParticleReferenceForSIU
                     leftoverTroybins.Add(troybin);
             }
 
+            foreach (KeyValuePair<String, Dictionary<String, Dictionary<String, List<String>>>> championKVP in particleDef)
+            {
+                foreach (KeyValuePair<String, List<String>> troybinKVP in particleDef[championKVP.Key]["troybins"])
+                {
+                    // Search troybins for .dds, .sco, .scb, etc.
+                    // Create a new archive
+                    RAFArchive rafArchive = new RAFArchive(baseDir + troybinKVP.Key.Split('&')[1].Replace("\\\\", "\\"));
+
+                    // Get the data from the archive
+                    MemoryStream myInput = new MemoryStream(rafArchive.GetDirectoryFile().GetFileList().GetFileEntry(troybinKVP.Key.Split('&')[0]).GetContent());
+                    StreamReader reader = new StreamReader(myInput);
+                    String result = reader.ReadToEnd();
+                    reader.Close();
+                    myInput.Close();
+
+                    // Release the archive
+                    rafArchive.GetDataFileContentStream().Close();
+                }
+            }
+
+
             return particleDef;
         }
 
@@ -243,10 +261,10 @@ namespace ParticleReferenceForSIU
         private void button1_Click(object sender, EventArgs e)
         {
             Dictionary
-           <String, Dictionary
-           <String, Dictionary
-           <String, List<String>>>>
-           particleDef = getParticleStructure("C:\\Riot Games\\League of Legends\\RADS\\projects\\lol_game_client\\filearchives\\");
+                <String, Dictionary
+                    <String, Dictionary
+                        <String, List<String>>>>
+                            particleDef = getParticleStructure("C:\\Riot Games\\League of Legends\\RADS\\projects\\lol_game_client\\filearchives\\");
 
             //int troybinCount = 0;
             // Display particleDef for debugging purposes
