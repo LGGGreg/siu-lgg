@@ -1,4 +1,4 @@
-﻿namespace ParticleReferenceForSIU
+﻿namespace SkinInstaller
 {
     partial class ParticleReference
     {
@@ -30,6 +30,9 @@
         {
             this.button1 = new System.Windows.Forms.Button();
             this.textBox = new System.Windows.Forms.RichTextBox();
+            this.particleReaderWorker = new System.ComponentModel.BackgroundWorker();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
+            this.textBox1 = new System.Windows.Forms.TextBox();
             this.SuspendLayout();
             // 
             // button1
@@ -50,17 +53,43 @@
             this.textBox.TabIndex = 1;
             this.textBox.Text = "";
             // 
+            // particleReaderWorker
+            // 
+            this.particleReaderWorker.WorkerReportsProgress = true;
+            this.particleReaderWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.particleReaderWorker_DoWork);
+            this.particleReaderWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.particleReaderWorker_ProgressChanged);
+            this.particleReaderWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.particleReaderWorker_RunWorkerCompleted);
+            // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(35, 36);
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(528, 23);
+            this.progressBar1.TabIndex = 2;
+            // 
+            // textBox1
+            // 
+            this.textBox1.Location = new System.Drawing.Point(569, 3);
+            this.textBox1.Multiline = true;
+            this.textBox1.Name = "textBox1";
+            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
+            this.textBox1.Size = new System.Drawing.Size(208, 56);
+            this.textBox1.TabIndex = 3;
+            // 
             // ParticleReference
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(789, 792);
+            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.textBox);
             this.Controls.Add(this.button1);
             this.Name = "ParticleReference";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.ParticleReference_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -68,6 +97,9 @@
 
         private System.Windows.Forms.Button button1;
         private System.Windows.Forms.RichTextBox textBox;
+        private System.ComponentModel.BackgroundWorker particleReaderWorker;
+        private System.Windows.Forms.ProgressBar progressBar1;
+        private System.Windows.Forms.TextBox textBox1;
     }
 }
 
