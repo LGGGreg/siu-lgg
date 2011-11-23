@@ -120,6 +120,9 @@
     <EmbeddedResource Include="GUI\LCIntHelp.resx">
       <DependentUpon>LCIntHelp.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ParticleReference.resx">
+      <DependentUpon>ParticleReference.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\UpdateAvailiableForm1.resx">
       <DependentUpon>UpdateAvailiableForm1.cs</DependentUpon>
     </EmbeddedResource>
