@@ -2,8 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
+using SkinInstaller;
 
-namespace ParticleReferenceForSIU
+namespace SkinInstaller
 {
     static class Program
     {

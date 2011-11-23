@@ -83,6 +83,7 @@ namespace SkinInstaller
     using System.Reflection;
     using System.Collections;
 
+
     public class skinInstaller : Form
     {
         #region consts
@@ -7903,6 +7904,10 @@ namespace SkinInstaller
             TreeNode rafNode = treeView1.Nodes.Find("RAF", false)[0];
             rafNode.Name = "RAF";
             rafNode.Nodes.Add("Loading...(Watch Progress bar at bottom)");
+            treeView1.Nodes.Add("Particles", "Particles");
+            TreeNode particleNode = treeView1.Nodes.Find("Particles", false)[0];
+            particleNode.Name = "Particles";
+            particleNode.Nodes.Add("Loading...(Watch Progress bar at bottom)");
             
                     
 
@@ -8037,6 +8042,11 @@ namespace SkinInstaller
         {
             if (e.Node.Name == "RAF" && e.Node.Nodes.Count < 2)
                 rafTreeBuilderWorker2.RunWorkerAsync();
+            if (e.Node.Name == "Particles" && e.Node.Nodes.Count < 2)
+            {
+                ParticleReference p = new ParticleReference();
+                p.startGettingParticleStructure(this,gameDirectory + "RADS\\projects\\lol_game_client\\filearchives\\");
+            }
         }
         private void rafTreeBuilderWorker2_DoWork(object sender, DoWorkEventArgs e)
         {
@@ -8146,6 +8156,22 @@ namespace SkinInstaller
         private void button3exporttree_Click(object sender, EventArgs e)
         {
             exportSelectedFilesToolStripMenuItem_Click(sender, e);
+        }
+        public void recieveParticleInformation(Dictionary
+                <String, Dictionary
+                    <String, Dictionary
+                        <RAFFileListEntry, List<RAFFileListEntry>>>> particleInfo)
+        {
+            TreeNode particleNode = treeView1.Nodes.Find("Particles", false)[0];
+            particleNode.Nodes.Clear();
+            particleNode.Nodes.Add("Loaded.  (TODO, actually load it)");
+            //todo add to tree
+
+            UpdateProgressSafe(100);
+        }
+        public void recieveParticleProgress(int p)
+        {
+            UpdateProgressSafe(p/2);
         }
         #endregion
     }
