@@ -50,6 +50,7 @@
 // To make navigation of this code easier, inside msvc
 // press ctrl+M, then ctrl+O to collapse regions.
 
+
 namespace SkinInstaller
 {
     using LOLViewer;
