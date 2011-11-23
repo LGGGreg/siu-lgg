@@ -22,11 +22,23 @@ namespace ParticleReferenceForSIU
         {
             
         }
-
-        private void button1_Click(object sender, EventArgs e)
+        public Dictionary
+            <String, Dictionary
+            <String, Dictionary
+            <String, List<String>>>> getParticleStructure(string rafPath)
         {
+            Dictionary
+            <String, Dictionary
+            <String, Dictionary
+            <String, List<String>>>>
+            particleDef = new Dictionary
+                <String, Dictionary
+                <String, Dictionary
+                <String, List
+                <String>>>>();
+
             List<String> fileList = new List<string>();
-            String baseDir = "C:\\Riot Games\\League of Legends\\RADS\\projects\\lol_game_client\\filearchives\\";
+            String baseDir = rafPath;
             string[] files = Directory.GetFiles(baseDir, "*", SearchOption.AllDirectories);
             Directory.GetDirectories(baseDir);
             string[] array = files;
@@ -67,7 +79,7 @@ namespace ParticleReferenceForSIU
                     fStream.Close();
             }
 
-            Dictionary<String, Dictionary<String, Dictionary<String, List<String>>>> particleDef = new Dictionary<String, Dictionary<String, Dictionary<String, List<String>>>>();
+            //Dictionary<String, Dictionary<String, Dictionary<String, List<String>>>> particleDef = new Dictionary<String, Dictionary<String, Dictionary<String, List<String>>>>();
             List<String> exceptions = new List<String>();
 
             // Reference spellnames to champion names
@@ -223,7 +235,20 @@ namespace ParticleReferenceForSIU
                     leftoverTroybins.Add(troybin);
             }
 
-            int troybinCount = 0;
+            return particleDef;
+        }
+
+
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            Dictionary
+           <String, Dictionary
+           <String, Dictionary
+           <String, List<String>>>>
+           particleDef = getParticleStructure("C:\\Riot Games\\League of Legends\\RADS\\projects\\lol_game_client\\filearchives\\");
+
+            //int troybinCount = 0;
             // Display particleDef for debugging purposes
             foreach (KeyValuePair<String, Dictionary<String, Dictionary<String, List<String>>>> championKVP in particleDef)
             {
@@ -237,11 +262,12 @@ namespace ParticleReferenceForSIU
                 foreach (KeyValuePair<String, List<String>> troybinKVP in particleDef[championKVP.Key]["troybins"])
                 {
                     textBox.AppendText("\t\t" + troybinKVP.Key + "\n");
-                    troybinCount++;
+                    //troybinCount++;
                 }
             }
-            int temp = troybinCount + leftoverTroybins.Count;
-            textBox.AppendText("Troybins identified: " + troybinCount);
+            //int temp = troybinCount + leftoverTroybins.Count;
+            textBox.AppendText("Troybins identified: ");// + troybinCount);
+
         }
     }
 }
