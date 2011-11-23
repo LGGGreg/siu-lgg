@@ -12,7 +12,8 @@
     <ApplicationIcon>Other\LGGIcon.ico</ApplicationIcon>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <ApplicationManifest>Other\app.manifest</ApplicationManifest>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <PublishUrl>publish\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
