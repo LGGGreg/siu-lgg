@@ -1,9 +1,0 @@
-C:\Users\Adrian\SIU\ThirdParty\MessageForm\bin\Debug\MessageForm.dll
-C:\Users\Adrian\SIU\ThirdParty\MessageForm\bin\Debug\MessageForm.pdb
-C:\Users\Adrian\SIU\ThirdParty\MessageForm\obj\Debug\ResolveAssemblyReference.cache
-C:\Users\Adrian\SIU\ThirdParty\MessageForm\obj\Debug\Cliver.MessageForm.resources
-C:\Users\Adrian\SIU\ThirdParty\MessageForm\obj\Debug\CliverSoft.Properties.Resources.resources
-C:\Users\Adrian\SIU\ThirdParty\MessageForm\obj\Debug\ResGen.read.1.tlog
-C:\Users\Adrian\SIU\ThirdParty\MessageForm\obj\Debug\ResGen.write.1.tlog
-C:\Users\Adrian\SIU\ThirdParty\MessageForm\obj\Debug\MessageForm.dll
-C:\Users\Adrian\SIU\ThirdParty\MessageForm\obj\Debug\MessageForm.pdb
