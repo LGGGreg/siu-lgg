@@ -37,7 +37,7 @@ namespace SkinInstaller
             if (p != lastProgress)
             {
                 lastProgress = p;
-
+                
                 particleReaderWorker.ReportProgress(p);
                 progs += "|" + p.ToString() + "|";
                 
