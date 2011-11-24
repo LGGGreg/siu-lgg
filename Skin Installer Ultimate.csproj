@@ -216,6 +216,7 @@
     <EmbeddedResource Include="Properties\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="SkinInstaller\skinInstaller.resx">
       <DependentUpon>skinInstaller.cs</DependentUpon>
@@ -269,6 +270,8 @@
     <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_5.wav" />
     <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_6.wav" />
     <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_7.wav" />
+    <None Include="TreeViewImages\small-cube-1.png" />
+    <None Include="TreeViewImages\small-cube-2.png" />
     <Content Include="USkin.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
