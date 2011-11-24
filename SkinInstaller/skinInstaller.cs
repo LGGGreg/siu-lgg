@@ -359,6 +359,7 @@ namespace SkinInstaller
         PaintEventHandler crazyP;
         private TextBox textBox3;
         private ToolStripMenuItem openParticleReferenceToolStripMenuItem;
+        private BackgroundWorker ParticleTreeWorker2;
         PaintEventHandler importantP;
         #endregion
         #region webIntegrate
@@ -3359,7 +3360,7 @@ namespace SkinInstaller
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(skinInstaller));
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
+            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
             this.exit = new System.Windows.Forms.Button();
             this.skinFile = new System.Windows.Forms.OpenFileDialog();
             this.helpBar = new System.Windows.Forms.StatusStrip();
@@ -3503,6 +3504,7 @@ namespace SkinInstaller
             this.testReadResFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.unpackSoundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loLViewerOpenNotPreviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openParticleReferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panelGL = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
@@ -3522,7 +3524,7 @@ namespace SkinInstaller
             this.colorDialog1 = new System.Windows.Forms.ColorDialog();
             this.rafTreeBuilderWorker2 = new System.ComponentModel.BackgroundWorker();
             this.exportFolderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
-            this.openParticleReferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.ParticleTreeWorker2 = new System.ComponentModel.BackgroundWorker();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -4553,11 +4555,11 @@ namespace SkinInstaller
             this.treeView1.ItemHeight = 16;
             this.treeView1.Location = new System.Drawing.Point(0, 0);
             this.treeView1.Name = "treeView1";
-            treeNode1.Name = "Please Wait";
-            treeNode1.Text = "Please wait for the progress bar to finish loading bellow...";
-            treeNode1.ToolTipText = "Please wait...";
+            treeNode2.Name = "Please Wait";
+            treeNode2.Text = "Please wait for the progress bar to finish loading bellow...";
+            treeNode2.ToolTipText = "Please wait...";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
+            treeNode2});
             this.treeView1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.treeView1.ShowNodeToolTips = true;
             this.treeView1.Size = new System.Drawing.Size(776, 283);
@@ -4973,6 +4975,13 @@ namespace SkinInstaller
             this.loLViewerOpenNotPreviewToolStripMenuItem.Text = "LoLViewer Open (Not Preview)";
             this.loLViewerOpenNotPreviewToolStripMenuItem.Click += new System.EventHandler(this.loLViewerOpenNotPreviewToolStripMenuItem_Click);
             // 
+            // openParticleReferenceToolStripMenuItem
+            // 
+            this.openParticleReferenceToolStripMenuItem.Name = "openParticleReferenceToolStripMenuItem";
+            this.openParticleReferenceToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.openParticleReferenceToolStripMenuItem.Text = "Open Particle Reference";
+            this.openParticleReferenceToolStripMenuItem.Click += new System.EventHandler(this.openParticleReferenceToolStripMenuItem_Click);
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.panelGL);
@@ -5108,12 +5117,12 @@ namespace SkinInstaller
             // 
             this.exportFolderBrowserDialog1.Description = "Please Choose the Export Directory";
             // 
-            // openParticleReferenceToolStripMenuItem
+            // ParticleTreeWorker2
             // 
-            this.openParticleReferenceToolStripMenuItem.Name = "openParticleReferenceToolStripMenuItem";
-            this.openParticleReferenceToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
-            this.openParticleReferenceToolStripMenuItem.Text = "Open Particle Reference";
-            this.openParticleReferenceToolStripMenuItem.Click += new System.EventHandler(this.openParticleReferenceToolStripMenuItem_Click);
+            this.ParticleTreeWorker2.WorkerReportsProgress = true;
+            this.ParticleTreeWorker2.DoWork += new System.ComponentModel.DoWorkEventHandler(this.ParticleTreeWorker2_DoWork);
+            this.ParticleTreeWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ParticleTreeWorker2_ProgressChanged);
+            this.ParticleTreeWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.ParticleTreeWorker2_RunWorkerCompleted);
             // 
             // skinInstaller
             // 
@@ -7801,6 +7810,8 @@ namespace SkinInstaller
             treeView1.ImageList.Images.Add(Properties.Resource.Dee_dee);
             treeView1.ImageList.Images.Add(Properties.Resource.tex_2);
             treeView1.ImageList.Images.Add(Properties.Resource.lemon);
+            treeView1.ImageList.Images.Add(Properties.Resource.small_cube_1);
+            treeView1.ImageList.Images.Add(Properties.Resource.small_cube_2);            
             treeView1.TreeViewNodeSorter = new NodeSorter();
             #region modelsTreeBuild
             TreeNode modelsRootNode = new TreeNode("Models");
@@ -8037,7 +8048,7 @@ namespace SkinInstaller
                           case ".dds": imageIndex = 4; break;
                           default: imageIndex = 5; break;
                       }
-                      addedNode.ImageIndex = addedNode.SelectedImageIndex =imageIndex;
+                      addedNode.ImageIndex = addedNode.SelectedImageIndex = imageIndex;
                       addedNode.ForeColor = colorFromRafPower(tag.rafPower);
                
                   }
@@ -8058,7 +8069,7 @@ namespace SkinInstaller
                 rafTreeBuilderWorker2.RunWorkerAsync();
             if (e.Node.Name == "Particles" && e.Node.Nodes.Count < 2)
             {
-                PartRefParticleReference p = new PartRef.ParticleReference();
+                PartRef.ParticleReference p = new PartRef.ParticleReference();
                 p.startGettingParticleStructure(this,gameDirectory + "RADS\\projects\\lol_game_client\\filearchives\\");
             }
         }
@@ -8117,10 +8128,21 @@ namespace SkinInstaller
             {
                 if (checkedNode.Nodes.Count == 0)//no folders
                 {
-                    string fileLocation = ((rafTreeDataObject)checkedNode.Tag).fileLocation;
-                    
-                    toBackup.Add(fileLocation);
-                    output += fileLocation + "\r\n";
+                    if (checkedNode.FullPath.ToLower().IndexOf("particles") == 0)
+                    {
+                        //todo back it up
+                        //find tga and dds
+                        //watch out for empty folders! (check for extension)
+                    }
+                    else
+                    {
+
+
+                        string fileLocation = ((rafTreeDataObject)checkedNode.Tag).fileLocation;
+
+                        toBackup.Add(fileLocation);
+                        output += fileLocation + "\r\n";
+                    }
                 }
             }
             if (exportFolderBrowserDialog1.ShowDialog() == DialogResult.OK)
@@ -8171,25 +8193,133 @@ namespace SkinInstaller
         {
             exportSelectedFilesToolStripMenuItem_Click(sender, e);
         }
-        public void recieveParticleInformation(Dictionary
-                <String, Dictionary
-                    <String, Dictionary
-                        <RAFFileListEntry, List<String>>>> particleInfo)
+        public void recieveParticleInformation(Dictionary<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> particleDef)
         {
-            TreeNode particleNode = treeView1.Nodes.Find("Particles", false)[0];
-            particleNode.Nodes.Clear();
-            particleNode.Nodes.Add("Loaded.  (TODO, actually load it)");
-            //todo add to tree
-
-            UpdateProgressSafe(100);
+            ParticleTreeWorker2.RunWorkerAsync(particleDef);            
         }
         public void recieveParticleProgress(int p)
         {
             UpdateProgressSafe(p/2);
         }
+        private void ParticleTreeWorker2_DoWork(object sender, DoWorkEventArgs e)
+        {
+            TreeNode particleNode = new TreeNode("Particles");//treeView1.Nodes.Find("Particles", false)[0];
+            particleNode.Nodes.Clear();
+
+            int i = 0;
+            int lastProg = 0;
+            
+            foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in
+                (Dictionary
+                <String, Dictionary
+                    <String, Dictionary
+                        <RAFFileListEntry, List<String>>>>)e.Argument)
+            {
+                i++;
+                int prog = (int)(((double)i / (double)((Dictionary
+                <String, Dictionary
+                    <String, Dictionary
+                        <RAFFileListEntry, List<String>>>>)e.Argument).Count) * 45) + 50;
+                if (prog != lastProg) { lastProg = prog; ParticleTreeWorker2.ReportProgress(prog); }
+
+                particleNode.Nodes.Add(championKVP.Key,Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(championKVP.Key));
+                TreeNode champNode =particleNode.Nodes.Find(championKVP.Key, false)[0];
+                int lowestPower = int.MaxValue;
+                foreach (KeyValuePair<RAFFileListEntry, List<String>> troybinKVP in championKVP.Value["troybins"])
+                {
+                    FileInfo troyFileInfo = new FileInfo(troybinKVP.Key.FileName);
+                    champNode.Nodes.Add(troybinKVP.Key.FileName, Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(troyFileInfo.Name.Substring(0, troyFileInfo.Name.IndexOf("."))));
+
+                    TreeNode troybinNode = champNode.Nodes.Find(troybinKVP.Key.FileName, false)[0];
+                    rafTreeDataObject tag = new rafTreeDataObject();
+                    
+                    //get troy version number
+                    string troyfullpath = "";
+                    Color troyColor = Color.Red;
+                    foreach (KeyValuePair<String, String> pairFileName_Path in allFilesList)
+                    {
+                        if (pairFileName_Path.Key.ToLower() == troyFileInfo.Name.ToLower())
+                        {
+                            troyfullpath = pairFileName_Path.Value;
+                            break;
+                        }
+                    }
+                    if (troyfullpath != "")
+                    {
+                        tag.rafPower = getRafPowerFromVersion(troyfullpath);
+                        troyColor = colorFromRafPower(tag.rafPower);
+                        if (tag.rafPower < lowestPower) lowestPower = tag.rafPower;
+                    }
+
+                    tag.fileLocation = troyfullpath;
+                    troybinNode.ToolTipText = tag.fileLocation;
+                    troybinNode.ForeColor = troyColor;
+                    troybinNode.Tag = tag;
+
+                    foreach (String fileEntry in troybinKVP.Value)
+                    {
+                        troybinNode.Nodes.Add(fileEntry,fileEntry);
+                        TreeNode fileNode = troybinNode.Nodes.Find(fileEntry, false)[0];
+                        Color fileColor = troyColor;
+                        FileInfo fileNodeInfo = new FileInfo(fileEntry);
+                        int imageIndex = 5;
+                        rafTreeDataObject filetag = new rafTreeDataObject();
+                        switch (fileNodeInfo.Extension.ToLower())                        
+                        {
+                            case ".skl": imageIndex = 1; break;
+                            case ".skn": imageIndex = 2; break;
+                            case ".anm": imageIndex = 3; break;
+                            case ".dds": imageIndex = 4; break;
+                            case ".tga": imageIndex = 4; break;
+                            case ".sco": imageIndex = 6; break;
+                            case ".scb": imageIndex = 7; break;
+                            default: imageIndex = 5; break;
+                        }
+                        string filefullpath = "";
+                        fileNode.ToolTipText = "DATA\\Particles\\" + fileEntry;
+                        filetag.fileLocation = fileEntry;
+                        //still slow as hell
+                        /*foreach (KeyValuePair<String, String> pairFileName_Path in allFilesList)
+                        {
+                            if (pairFileName_Path.Key.ToLower() == fileNodeInfo.Name.ToLower())
+                            {
+                                filefullpath = pairFileName_Path.Value;
+                                break;
+                            }
+                        }*/
+                        if (filefullpath != "")
+                        {
+                            filetag.rafPower = getRafPowerFromVersion(filefullpath);
+                            fileColor = colorFromRafPower(filetag.rafPower);
+                            fileNode.ToolTipText = filefullpath;
+                            filetag.fileLocation = filefullpath;
+                            if (filetag.rafPower < lowestPower) lowestPower = filetag.rafPower;
+                        }
+                        fileNode.Tag = tag;
+                        fileNode.ImageIndex = fileNode.SelectedImageIndex = imageIndex;
+                    }
+                }
+                champNode.ForeColor = colorFromRafPower(lowestPower);
+            }
+
+            e.Result = particleNode;
+        }
+        private void ParticleTreeWorker2_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            UpdateProgressSafe(e.ProgressPercentage);
+        }
+        private void ParticleTreeWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            TreeNode particleNode = treeView1.Nodes.Find("Particles", false)[0];
+            particleNode.Nodes.Clear();
+            foreach (TreeNode node in ((TreeNode)e.Result).Nodes)
+            {
+                particleNode.Nodes.Add(node);
+            }
+            UpdateProgressSafe(100);
+        }
         #endregion
 
-        
     }
     #region strucks
     public class LogTextWriter : TextWriter
