@@ -16,7 +16,7 @@ namespace SkinInstaller
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ParticleReference());
+            Application.Run(new PartRef.ParticleReference());
         }
     }
 }
