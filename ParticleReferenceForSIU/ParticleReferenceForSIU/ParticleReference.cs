@@ -10,6 +10,7 @@ using System.IO;
 using RAFLib;
 using System.Text.RegularExpressions;
 using SkinInstaller;
+using System.Globalization;
 
 namespace PartRef
 {
@@ -45,7 +46,6 @@ namespace PartRef
         }
         public PStruct getParticleStructure(string rafPath)
         {
-
             List<RAFFileListEntry> fileList = new List<RAFFileListEntry>();
             String baseDir = rafPath;
             string[] files = Directory.GetFiles(baseDir, "*", SearchOption.AllDirectories);
@@ -104,8 +104,23 @@ namespace PartRef
                         if (iconFileName.Contains("_"))
                         {
                             championName = iconFileName.Split('_')[0].ToLower();
-                            // Change the name of Rumble's ult so code isn't lookin for "r" as a spell name
-                            if (iconFileName == "Rumble_R.dds")
+                            // Ignore chamion names that were incorrectly created by spellIcon algorithm
+                            if (championName == "eagleeye" || championName == "spiderqueen" || championName == "gw" || championName == "bantamsting" || championName == "toxicshot" || championName == "rod" || championName == "pet" || championName == "spell" || championName == "leblancmirrorimage" || championName == "storm" || championName == "odin" || championName == "crystal")
+                                continue;
+                            // Fix referencing of Monkey King since his name is two words
+                            else if (championName == "monkey")
+                            {
+                                championName = "monkeyking";
+                                spell = iconFileName.Substring(10, iconFileName.Length - 10);
+                            }
+                            // Change Vladmir to Vlad since all his particles use vlad
+                            else if (championName == "vladimir")
+                            {
+                                championName = "vlad";
+                                spell = iconFileName.Split('_')[1].Split('.')[0].ToLower().Replace(" ", "");
+                            }
+                            // Change the name of Rumble's ult so code isn't looking for "r" as a spell name
+                            else if (iconFileName == "Rumble_R.dds")
                             {
                                 spell = "rumble_ult";
                             }
@@ -140,7 +155,25 @@ namespace PartRef
                             // Ignore "IsPriate, IsNinja, etc. "
                             if (championName == "is")
                                 continue;
-                            spell = iconFileName.Substring(splitIndex, iconFileName.Length - splitIndex).Split('.')[0].ToLower().Replace(" ", "");
+                            // Ignore chamion names that were incorrectly created by spellIcon algorithm
+                            else if (championName == "eagleeye" || championName == "spiderqueen" || championName == "gw" || championName == "bantamsting" || championName == "toxicshot" || championName == "rod" || championName == "pet" || championName == "spell" || championName == "leblancmirrorimage" || championName == "storm" || championName == "odin" || championName == "crystal")
+                                continue;
+                            // Fix referencing of Monkey King since his name is two words
+                            else if (championName == "monkey")
+                            {
+                                championName = "monkeyking";
+                                spell = iconFileName.Substring(10, iconFileName.Length - 10);
+                            }
+                            // Change Vladmir to Vlad since all his particles use vlad
+                            else if (championName == "vladimir")
+                            {
+                                championName = "vlad";
+                                spell = iconFileName.Substring(splitIndex, iconFileName.Length - splitIndex).Split('.')[0].ToLower().Replace(" ", "");
+                            }
+                            else
+                            {
+                                spell = iconFileName.Substring(splitIndex, iconFileName.Length - splitIndex).Split('.')[0].ToLower().Replace(" ", "");
+                            }
                         }
 
                         // Don't add passives to spell list because the name isn't unique
@@ -175,11 +208,6 @@ namespace PartRef
             // Create "other" champion which will contain all the extra troybins, like nexus, summoner spells, general poison, et.
             //
             // Add exception for Trundle's bite vs. Anivia's Frostbite, Swain's torment vs. Morganna's tormented soul
-            //
-            // Delete champions: "eagleeye", "spiderqueen", "gw", "bantamsting", "toxicshot", "rod", "pet", "spell", "leblancmirrorimage", "storm", 
-            //                   "odin", "crystal", 
-            //
-            // Add exception to champion/spell splitting for MonkeyKing
             //
             //
             //
@@ -228,24 +256,34 @@ namespace PartRef
                 Boolean matchFound = false;
                 foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in particleDef)
                 {
-                    // Only use spells not troybin list
-                    if(championKVP.Key != "troybins")
+                    foreach (KeyValuePair<String, Dictionary<RAFFileListEntry, List<String>>> spellKVP in championKVP.Value)
                     {
-                        // Search for spell names in the troybin file name
-                        if (troybin.FileName.Replace("_", "").IndexOf(championKVP.Key.Replace("_", "")) != -1)
+                        // Only use spells not troybin list
+                        if (spellKVP.Key != "troybins")
                         {
-                            if (!particleDef[championKVP.Key]["troybins"].ContainsKey(troybin))
+                            // Search for spell names in the troybin file name
+                            if (troybin.FileName.Replace("_", "").ToLower().IndexOf(spellKVP.Key.Replace("_", "").ToLower()) != -1)
                             {
-                                particleDef[championKVP.Key]["troybins"][troybin] = new List<String>();
+                                if (!particleDef[championKVP.Key]["troybins"].ContainsKey(troybin))
+                                {
+                                    particleDef[championKVP.Key]["troybins"][troybin] = new List<String>();
+                                }
+                                matchFound = true;
+                                break;
                             }
-                            matchFound = true;
-                            break;
                         }
                     }
                 }
                 if (!matchFound)
                     leftoverTroybins.Add(troybin);
             }
+
+            String leftoverOuput = String.Empty;
+            foreach (RAFFileListEntry troyFile in leftoverTroybins)
+            {
+                leftoverOuput += troyFile.FileName + "\n";
+            }
+
             reportProgress(58);
             i = 0;
             foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in particleDef)
@@ -363,6 +401,9 @@ namespace PartRef
 
         private void particleReaderWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            // Creates a TextInfo based on the "en-US" culture.
+            TextInfo usTxtInfo = new CultureInfo("en-US", false).TextInfo;
+
             PStruct particleDef =(PStruct)e.Result;
             //int troybinCount = 0;
             if (this.Visible)
@@ -372,10 +413,11 @@ namespace PartRef
                 // Display particleDef for debugging purposes
                 foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in particleDef)
                 {
-                    TreeNode champNode = rootNode.Nodes.Add(championKVP.Key);
+                    TreeNode champNode = rootNode.Nodes.Add(usTxtInfo.ToTitleCase(championKVP.Key));
                     foreach (KeyValuePair<RAFFileListEntry, List<String>> troybinKVP in particleDef[championKVP.Key]["troybins"])
                     {
-                        TreeNode troybinNode = champNode.Nodes.Add(troybinKVP.Key.FileName);
+                        Match match = Regex.Match(troybinKVP.Key.FileName, "/(.+).troybin", RegexOptions.IgnoreCase);
+                        TreeNode troybinNode = champNode.Nodes.Add(match.Groups[1].Value.Split('/')[1]);
                         //troybinCount++;
                         foreach (String fileEntry in troybinKVP.Value)
                         {
@@ -384,6 +426,7 @@ namespace PartRef
                     }
                 }
                 treeView1.Nodes.Add(rootNode);
+                treeView1.Sort();
             }
             if (mySkinInstaller != null)
             {
