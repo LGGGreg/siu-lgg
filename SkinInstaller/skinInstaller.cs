@@ -6063,7 +6063,7 @@ namespace SkinInstaller
         }
         private void openParticleReferenceToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            ParticleReference p = new ParticleReference();
+            PartRef.ParticleReference p = new PartRef.ParticleReference();
             p.Show();
         }
         #endregion
@@ -8058,7 +8058,7 @@ namespace SkinInstaller
                 rafTreeBuilderWorker2.RunWorkerAsync();
             if (e.Node.Name == "Particles" && e.Node.Nodes.Count < 2)
             {
-                ParticleReference p = new ParticleReference();
+                PartRefParticleReference p = new PartRef.ParticleReference();
                 p.startGettingParticleStructure(this,gameDirectory + "RADS\\projects\\lol_game_client\\filearchives\\");
             }
         }
