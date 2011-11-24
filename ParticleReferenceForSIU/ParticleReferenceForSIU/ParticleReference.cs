@@ -86,6 +86,11 @@ namespace PartRef
             PStruct particleDef = new PStruct();
             List<String> exceptions = new List<String>();
             i = 0;
+
+            // Create place for unreferenced troybins to live
+            particleDef["other"] = new Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>();
+            particleDef["other"]["troybins"] = new Dictionary<RAFFileListEntry, List<String>>();
+
             // Reference spellnames to champion names
             foreach ( RAFFileListEntry file in fileList)
             {
@@ -100,79 +105,86 @@ namespace PartRef
                     {
                         String championName = String.Empty;
                         String spell = String.Empty;
-                        // Naming scheme: Word separations is either with underscores or camelcase letters
-                        if (iconFileName.Contains("_"))
+                        // Manual spell fixes
+                        if(iconFileName.ToLower().Contains("blastnova"))
                         {
-                            championName = iconFileName.Split('_')[0].ToLower();
-                            // Ignore chamion names that were incorrectly created by spellIcon algorithm
-                            if (championName == "eagleeye" || championName == "spiderqueen" || championName == "gw" || championName == "bantamsting" || championName == "toxicshot" || championName == "rod" || championName == "pet" || championName == "spell" || championName == "leblancmirrorimage" || championName == "storm" || championName == "odin" || championName == "crystal")
-                                continue;
-                            // Fix referencing of Monkey King since his name is two words
-                            else if (championName == "monkey")
-                            {
-                                championName = "monkeyking";
-                                spell = iconFileName.Substring(10, iconFileName.Length - 10);
-                            }
-                            // Change Vladmir to Vlad since all his particles use vlad
-                            else if (championName == "vladimir")
-                            {
-                                championName = "vlad";
-                                spell = iconFileName.Split('_')[1].Split('.')[0].ToLower().Replace(" ", "");
-                            }
-                            // Change the name of Rumble's ult so code isn't looking for "r" as a spell name
-                            else if (iconFileName == "Rumble_R.dds")
-                            {
-                                spell = "rumble_ult";
-                            }
-                            else
-                            {
-                                spell = iconFileName.Split('_')[1].Split('.')[0].ToLower().Replace(" ", "");
-                            }
+                            championName = "yeti";
+                            spell = "absolutezero";
+                        }
+                        else if (iconFileName.ToLower().Contains("leapstrike"))
+                        {
+                            championName = "masteryi";
+                            spell = "alphastrike";
                         }
                         else
-
                         {
-                            // Find index of second uppercase letter
-                            int splitIndex = 0;
-                            char[] charArray = iconFileName.ToCharArray();
-                            for (int ii = 1; ii < charArray.Length; ii++)
+                            // Naming scheme: Word separations is either with underscores or camelcase letters
+                            if (iconFileName.Contains("_"))
                             {
-                                if (char.IsUpper(charArray[ii]))
+                                championName = iconFileName.Split('_')[0].ToLower();
+                                // Ignore chamion names that were incorrectly created by spellIcon algorithm
+                                if (championName == "eagleeye" || championName == "spiderqueen" || championName == "gw" || championName == "bantamsting" || championName == "toxicshot" || championName == "rod" || championName == "pet" || championName == "spell" || championName == "leblancmirrorimage" || championName == "storm" || championName == "odin" || championName == "crystal")
+                                    continue;
+                                // Ignore fiddlestick as opposed to fiddlesticks
+                                if (championName == "fiddlestick")
+                                    continue;
+                                // Fix referencing of Monkey King since his name is two words
+                                else if (championName == "monkey")
                                 {
-                                    splitIndex = ii;
-                                    break;
+                                    championName = "monkeyking";
+                                    spell = iconFileName.Substring(10, iconFileName.Length - 10);
                                 }
-                            }
-
-                            if (splitIndex == 0)
-                            {
-                                // Store exceptions for debugging purposes
-                                exceptions.Add(iconFileName);
-                                continue;
-                            }
-
-                            championName = iconFileName.Substring(0, splitIndex).ToLower();
-                            // Ignore "IsPriate, IsNinja, etc. "
-                            if (championName == "is")
-                                continue;
-                            // Ignore chamion names that were incorrectly created by spellIcon algorithm
-                            else if (championName == "eagleeye" || championName == "spiderqueen" || championName == "gw" || championName == "bantamsting" || championName == "toxicshot" || championName == "rod" || championName == "pet" || championName == "spell" || championName == "leblancmirrorimage" || championName == "storm" || championName == "odin" || championName == "crystal")
-                                continue;
-                            // Fix referencing of Monkey King since his name is two words
-                            else if (championName == "monkey")
-                            {
-                                championName = "monkeyking";
-                                spell = iconFileName.Substring(10, iconFileName.Length - 10);
-                            }
-                            // Change Vladmir to Vlad since all his particles use vlad
-                            else if (championName == "vladimir")
-                            {
-                                championName = "vlad";
-                                spell = iconFileName.Substring(splitIndex, iconFileName.Length - splitIndex).Split('.')[0].ToLower().Replace(" ", "");
+                                // Change the name of Rumble's ult so code isn't looking for "r" as a spell name
+                                else if (iconFileName == "Rumble_R.dds")
+                                {
+                                    spell = "rumble_ult";
+                                }
+                                else
+                                {
+                                    spell = iconFileName.Split('_')[1].Split('.')[0].ToLower().Replace(" ", "");
+                                }
                             }
                             else
                             {
-                                spell = iconFileName.Substring(splitIndex, iconFileName.Length - splitIndex).Split('.')[0].ToLower().Replace(" ", "");
+                                // Find index of second uppercase letter
+                                int splitIndex = 0;
+                                char[] charArray = iconFileName.ToCharArray();
+                                for (int ii = 1; ii < charArray.Length; ii++)
+                                {
+                                    if (char.IsUpper(charArray[ii]))
+                                    {
+                                        splitIndex = ii;
+                                        break;
+                                    }
+                                }
+
+                                if (splitIndex == 0)
+                                {
+                                    // Store exceptions for debugging purposes
+                                    exceptions.Add(iconFileName);
+                                    continue;
+                                }
+
+                                championName = iconFileName.Substring(0, splitIndex).ToLower();
+                                // Ignore "IsPriate, IsNinja, etc. "
+                                if (championName == "is")
+                                    continue;
+                                // Ignore chamion names that were incorrectly created by spellIcon algorithm
+                                else if (championName == "eagleeye" || championName == "spiderqueen" || championName == "gw" || championName == "bantamsting" || championName == "toxicshot" || championName == "rod" || championName == "pet" || championName == "spell" || championName == "leblancmirrorimage" || championName == "storm" || championName == "odin" || championName == "crystal")
+                                    continue;
+                                // Ignore fiddle's "paranoia" since it conflicts with nocturne's and fiddle's is extraneous anyways
+                                else if (championName == "fiddlesticks" && iconFileName.Substring(splitIndex, iconFileName.Length - splitIndex).Split('.')[0].ToLower().Replace(" ", "") == "paranoia")
+                                    continue;
+                                // Fix referencing of Monkey King since his name is two words
+                                else if (championName == "monkey")
+                                {
+                                    championName = "monkeyking";
+                                    spell = iconFileName.Substring(10, iconFileName.Length - 10);
+                                }
+                                else
+                                {
+                                    spell = iconFileName.Substring(splitIndex, iconFileName.Length - splitIndex).Split('.')[0].ToLower().Replace(" ", "");
+                                }
                             }
                         }
 
@@ -201,7 +213,7 @@ namespace PartRef
 
             // 
             // Need to add exceptions for champions who's name spelling changes from icon to troybin
-            // List so far: Orianna, Maokai, Xin Xhao, Tryndamere (?Dark champion?), Evelynn, 
+            // List so far: Xin Xhao, Tryndamere (?Dark champion?), Evelynn, 
             //
             // Figure out why 2 troybins are being missed (3011 vs 3013)
             //
@@ -224,15 +236,34 @@ namespace PartRef
                 {
                     String particleFileName = file.FileName.ToLower();
 
-                    // Only look for troybins and inibins
-                    if (particleFileName.IndexOf("troybin") != -1 || particleFileName.IndexOf("inibin") != -1)
+                    // Only look for troybins //// No longer looking for inibins as there are only 3 and all are irrelevant
+                    if (particleFileName.IndexOf("troybin") != -1)
                     {
                         troybinTotal++; // For debugging purposes
                         Boolean matchFound = false;
                         foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in particleDef)
                         {
+                            // Alternate name to search by for special cases
+                            String altSearchStr = String.Empty;
+                            // Search for alternate spelling of Maokai
+                            if (championKVP.Key == "maokai")
+                                altSearchStr = "maoki";
+                            // Search for alternate spelling of Orianna
+                            else if (championKVP.Key == "orianna")
+                                altSearchStr = "oriana";
+                            // Search for alternate spelling of Xen Xhao
+                            else if (championKVP.Key == "xenzhao")
+                                altSearchStr = "xenziou";
+                            // Search for vlad since all his particle use that istead of his full name
+                            else if (championKVP.Key == "vladimir")
+                                altSearchStr = "vlad";
+                            // Search for cass since Cassiopeia uses that for some of her particles
+                            else if (championKVP.Key == "cassiopeia")
+                                altSearchStr = "cass";
+                            else
+                                altSearchStr = championKVP.Key;
                             // Search for the champion's name in the troybin file name
-                            if (particleFileName.Replace("_", "").IndexOf(championKVP.Key) != -1)
+                            if (particleFileName.Replace("_", "").ToLower().IndexOf(championKVP.Key) != -1 || particleFileName.Replace("_", "").ToLower().IndexOf(altSearchStr) != -1)
                             {
                                 particleDef[championKVP.Key]["troybins"][file] = new List<String>();
                                 matchFound = true;
@@ -245,10 +276,10 @@ namespace PartRef
                 }
             }
 
-            List<RAFFileListEntry> leftoverTroybins = new List<RAFFileListEntry>();
+            String nonReferencedTroys = String.Empty;
             i = 0;
             reportProgress(47);
-            // Search for troybins and inibins that correspond to the champion spells
+            // Search for troybins that correspond to the champion spells
             foreach (RAFFileListEntry troybin in missedTroybins)
             {
                 i++;
@@ -275,13 +306,11 @@ namespace PartRef
                     }
                 }
                 if (!matchFound)
-                    leftoverTroybins.Add(troybin);
-            }
-
-            String leftoverOuput = String.Empty;
-            foreach (RAFFileListEntry troyFile in leftoverTroybins)
-            {
-                leftoverOuput += troyFile.FileName + "\n";
+                    if (!particleDef["other"]["troybins"].ContainsKey(troybin))
+                    {
+                        particleDef["other"]["troybins"][troybin] = new List<String>();
+                        nonReferencedTroys += troybin.FileName + "\n";
+                    }
             }
 
             reportProgress(58);
