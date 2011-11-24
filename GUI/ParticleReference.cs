@@ -373,14 +373,13 @@ namespace PartRef
                 foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in particleDef)
                 {
                     TreeNode champNode = rootNode.Nodes.Add(championKVP.Key);
-                    TreeNode troyLabelNode = champNode.Nodes.Add("Troybins");
                     foreach (KeyValuePair<RAFFileListEntry, List<String>> troybinKVP in particleDef[championKVP.Key]["troybins"])
                     {
-                        TreeNode troyFileNode = troyLabelNode.Nodes.Add(troybinKVP.Key.FileName);
+                        TreeNode troybinNode = champNode.Nodes.Add(troybinKVP.Key.FileName);
                         //troybinCount++;
                         foreach (String fileEntry in troybinKVP.Value)
                         {
-                            troyFileNode.Nodes.Add(fileEntry);
+                            troybinNode.Nodes.Add(fileEntry);
                         }
                     }
                 }
