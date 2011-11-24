@@ -23,7 +23,7 @@ namespace SkinInstaller
         public class PStruct : Dictionary
                 <String, Dictionary
                     <String, Dictionary
-                        <RAFFileListEntry, List<RAFFileListEntry>>>> { }
+                        <RAFFileListEntry, List<String>>>> { }
         //public skinInstaller mySkinInstaller = null;
         public int lastProgress = 0;
         string progs = "";
@@ -151,10 +151,10 @@ namespace SkinInstaller
                         // Create dictionary structure if it doesn't already exist
                         if (!particleDef.ContainsKey(championName))
                         {
-                            particleDef[championName] = new Dictionary<String, Dictionary<RAFFileListEntry, List<RAFFileListEntry>>>();
-                            particleDef[championName]["troybins"] = new Dictionary<RAFFileListEntry, List<RAFFileListEntry>>();
+                            particleDef[championName] = new Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>();
+                            particleDef[championName]["troybins"] = new Dictionary<RAFFileListEntry, List<String>>();
                         }
-                        particleDef[championName][spell] = new Dictionary<RAFFileListEntry, List<RAFFileListEntry>>();
+                        particleDef[championName][spell] = new Dictionary<RAFFileListEntry, List<String>>();
                     }
                     else
                     {
@@ -201,12 +201,12 @@ namespace SkinInstaller
                     {
                         troybinTotal++; // For debugging purposes
                         Boolean matchFound = false;
-                        foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<RAFFileListEntry>>>> championKVP in particleDef)
+                        foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in particleDef)
                         {
                             // Search for the champion's name in the troybin file name
                             if (particleFileName.Replace("_", "").IndexOf(championKVP.Key) != -1)
                             {
-                                particleDef[championKVP.Key]["troybins"][file] = new List<RAFFileListEntry>();
+                                particleDef[championKVP.Key]["troybins"][file] = new List<String>();
                                 matchFound = true;
                                 break;
                             }
@@ -226,7 +226,7 @@ namespace SkinInstaller
                 i++;
                 reportProgress((int)(((double)i * 10.0) / (double)missedTroybins.Count) + 47);
                 Boolean matchFound = false;
-                foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<RAFFileListEntry>>>> championKVP in particleDef)
+                foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in particleDef)
                 {
                     // Only use spells not troybin list
                     if(championKVP.Key != "troybins")
@@ -236,7 +236,7 @@ namespace SkinInstaller
                         {
                             if (!particleDef[championKVP.Key]["troybins"].ContainsKey(troybin))
                             {
-                                particleDef[championKVP.Key]["troybins"][troybin] = new List<RAFFileListEntry>();
+                                particleDef[championKVP.Key]["troybins"][troybin] = new List<String>();
                             }
                             matchFound = true;
                             break;
@@ -248,11 +248,11 @@ namespace SkinInstaller
             }
             reportProgress(58);
             i = 0;
-            foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<RAFFileListEntry>>>> championKVP in particleDef)
+            foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in particleDef)
             {
                 reportProgress((int)(((double)i * 40) / (double)particleDef.Count) + 58);
                 i++;
-                foreach (KeyValuePair<RAFFileListEntry, List<RAFFileListEntry>> troybinKVP in particleDef[championKVP.Key]["troybins"])
+                foreach (KeyValuePair<RAFFileListEntry, List<String>> troybinKVP in particleDef[championKVP.Key]["troybins"])
                 {
                     // Search troybins for .dds, .sco, .scb, etc.
                     // Create a new archive
@@ -272,12 +272,12 @@ namespace SkinInstaller
                     MatchCollection matches = captureFileNames.Matches(cleanString);
                     foreach (Match match in matches)
                     {
-                        string matchedFile = "/" + match.Groups[1].Value;
+                        particleDef[championKVP.Key]["troybins"][troybinKVP.Key].Add(match.Groups[1].Value);
 
                         //foreach (String file in rafFiles)
                         //{
-                        foreach(RAFFileList listToSearchNow in listsToSearchLater)
-                        {
+                        //foreach(RAFFileList listToSearchNow in listsToSearchLater)
+                        //{
                             //FileInfo rafFile = new FileInfo(file);
                             //time to process the raf files
                             //RAFArchive searchRaf = new RAFArchive(rafFile.FullName);
@@ -309,18 +309,18 @@ namespace SkinInstaller
                             {
                                 //todo look at not found files and see whats up
                             }*/
-                        }
+                        //}
 
                         //screw it, just fake a entry :|
                         //in fact.. ill do the final search thingy when they actually export!
-                        RAFFileListEntry entry = new RAFFileListEntry(null, "DATA/Particles" + 
-                            matchedFile.Replace(".tga",".dds").Replace(".TGA",".DDS"), 0,0,0);
-                        troybinKVP.Value.Add(entry);
-                        cleanString = matchedFile + "\r\n" + cleanString;
+                        //RAFFileListEntry entry = new RAFFileListEntry(null, "DATA/Particles" + 
+                        //    matchedFile.Replace(".tga",".dds").Replace(".TGA",".DDS"), 0,0,0);
+                        //troybinKVP.Value.Add(entry);
+                        //cleanString = matchedFile + "\r\n" + cleanString;
                         //searchRaf.GetDataFileContentStream().Close();
                         
                     }
-                    if (textBox1.Text == "") textBox.AppendText(cleanString);
+                    //if (textBox1.Text == "") textBox.AppendText(cleanString);
 
                     
 
@@ -367,38 +367,31 @@ namespace SkinInstaller
             //int troybinCount = 0;
             if (this.Visible)
             {
-                textBox.AppendText(progs + "\r\n\r\n");
                 this.button1.Enabled = true;
+                TreeNode rootNode = new TreeNode("root");
                 // Display particleDef for debugging purposes
-                foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<RAFFileListEntry>>>> championKVP in particleDef)
+                foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in particleDef)
                 {
-                    textBox.AppendText(championKVP.Key + "->>\n");
-                    textBox.AppendText("\tSpell->>\n");
-                    foreach (KeyValuePair<String, Dictionary<RAFFileListEntry, List<RAFFileListEntry>>> spellKVP in particleDef[championKVP.Key])
+                    TreeNode champNode = rootNode.Nodes.Add(championKVP.Key);
+                    TreeNode troyLabelNode = champNode.Nodes.Add("Troybins");
+                    foreach (KeyValuePair<RAFFileListEntry, List<String>> troybinKVP in particleDef[championKVP.Key]["troybins"])
                     {
-                        if (spellKVP.Key != "troybins")
-                        {
-                            textBox.AppendText("\t\t" + spellKVP.Key + "\n");
-                        }
-                    }
-                    textBox.AppendText("\tTroybins->>\n");
-                    foreach (KeyValuePair<RAFFileListEntry, List<RAFFileListEntry>> troybinKVP in particleDef[championKVP.Key]["troybins"])
-                    {
-                        textBox.AppendText("\t\t" + troybinKVP.Key.FileName + "\n");
+                        TreeNode troyFileNode = troyLabelNode.Nodes.Add(troybinKVP.Key.FileName);
                         //troybinCount++;
-                        foreach (RAFFileListEntry fileEntry in troybinKVP.Value)
+                        foreach (String fileEntry in troybinKVP.Value)
                         {
-                            textBox.AppendText("\t\t\t" + fileEntry.FileName + "\n");
+                            troyFileNode.Nodes.Add(fileEntry);
                         }
                     }
                 }
+                treeView1.Nodes.Add(rootNode);
             }
             //if (mySkinInstaller != null)
             //{
             //    mySkinInstaller.recieveParticleInformation(particleDef);
             //}
             //int temp = troybinCount + leftoverTroybins.Count;
-            textBox.AppendText("Troybins identified: ");// + troybinCount);
+            //textBox.AppendText("Troybins identified: ");// + troybinCount);
         }
     }
 }
