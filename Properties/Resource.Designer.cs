@@ -95,6 +95,20 @@ namespace SkinInstaller.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap small_cube_1 {
+            get {
+                object obj = ResourceManager.GetObject("small_cube_1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        internal static System.Drawing.Bitmap small_cube_2 {
+            get {
+                object obj = ResourceManager.GetObject("small_cube_2", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap tex_2 {
             get {
                 object obj = ResourceManager.GetObject("tex_2", resourceCulture);
