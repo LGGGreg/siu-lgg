@@ -8046,6 +8046,9 @@ namespace SkinInstaller
                           case ".skn": imageIndex = 2; break;
                           case ".anm": imageIndex = 3; break;
                           case ".dds": imageIndex = 4; break;
+                          case ".tga": imageIndex = 4; break;
+                          case ".sco": imageIndex = 6; break;
+                          case ".scb": imageIndex = 7; break;
                           default: imageIndex = 5; break;
                       }
                       addedNode.ImageIndex = addedNode.SelectedImageIndex = imageIndex;
@@ -8258,8 +8261,14 @@ namespace SkinInstaller
 
                     foreach (String fileEntry in troybinKVP.Value)
                     {
-                        troybinNode.Nodes.Add(fileEntry,fileEntry);
-                        TreeNode fileNode = troybinNode.Nodes.Find(fileEntry, false)[0];
+                        TreeNode[] matchingNodes = troybinNode.Nodes.Find(fileEntry, false);
+                        if (matchingNodes.Length==0)//avoid duplicate entries
+                        {
+                            troybinNode.Nodes.Add(fileEntry, fileEntry);
+                            matchingNodes = troybinNode.Nodes.Find(fileEntry, false);                   
+                        }
+                        TreeNode fileNode = matchingNodes[0];
+                        
                         Color fileColor = troyColor;
                         FileInfo fileNodeInfo = new FileInfo(fileEntry);
                         int imageIndex = 5;
@@ -8316,6 +8325,7 @@ namespace SkinInstaller
             {
                 particleNode.Nodes.Add(node);
             }
+            treeView1.Sort();
             UpdateProgressSafe(100);
         }
         #endregion
@@ -8366,6 +8376,19 @@ namespace SkinInstaller
             {
                 return -1*thisNode.Nodes.Count.CompareTo(otherNode.Nodes.Count);
             }
+            //try extension sort too.
+            int dotIndex1 =thisNode.Text.LastIndexOf(".");            
+            int dotIndex2 =otherNode.Text.LastIndexOf(".");
+            if(dotIndex1>=0 && dotIndex2>=0)
+            {
+                string ext1 = thisNode.Text.Substring(dotIndex1).ToLower();
+                string ext2 = otherNode.Text.Substring(dotIndex2).ToLower();
+                if (ext1 != ext2)
+                {
+                    return ext1.CompareTo(ext2);
+                }
+            }
+
             return thisNode.Text.CompareTo(otherNode.Text);
         }
     } 
