@@ -401,4 +401,8 @@
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
   </ItemGroup>
+  <PropertyGroup>
+    <PreBuildEvent>"$(ProjectDir)Prebuild.bat"
+</PreBuildEvent>
+  </PropertyGroup>
 </Project>
