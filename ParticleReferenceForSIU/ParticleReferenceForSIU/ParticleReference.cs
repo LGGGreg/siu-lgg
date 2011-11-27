@@ -91,6 +91,15 @@ namespace PartRef
             particleDef["other"] = new Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>();
             particleDef["other"]["troybins"] = new Dictionary<RAFFileListEntry, List<String>>();
 
+            // Create place for item troybins to live
+            particleDef["items"] = new Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>();
+            particleDef["items"]["troybins"] = new Dictionary<RAFFileListEntry, List<String>>();
+
+            // Create place for map troybins to live
+            particleDef["map"] = new Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>();
+            particleDef["map"]["troybins"] = new Dictionary<RAFFileListEntry, List<String>>();
+
+
             // Reference spellnames to champion names
             foreach ( RAFFileListEntry file in fileList)
             {
@@ -106,15 +115,23 @@ namespace PartRef
                         String championName = String.Empty;
                         String spell = String.Empty;
                         // Manual spell fixes
-                        if(iconFileName.ToLower().Contains("blastnova"))
+                        // Fix for Nunu's absolute zero
+                        if(iconFileName.ToLower() == "yeti_frostnova.dds")
                         {
                             championName = "yeti";
                             spell = "absolutezero";
                         }
+                        // Fix for Master Yi's alpha strike
                         else if (iconFileName.ToLower().Contains("leapstrike"))
                         {
                             championName = "masteryi";
                             spell = "alphastrike";
+                        }
+                        // Fix for Master Yi's wuju style
+                        else if (iconFileName.ToLower().Contains("sunderingstrikes"))
+                        {
+                            championName = "masteryi";
+                            spell = "wujustyle";
                         }
                         else
                         {
@@ -123,7 +140,7 @@ namespace PartRef
                             {
                                 championName = iconFileName.Split('_')[0].ToLower();
                                 // Ignore chamion names that were incorrectly created by spellIcon algorithm
-                                if (championName == "eagleeye" || championName == "spiderqueen" || championName == "gw" || championName == "bantamsting" || championName == "toxicshot" || championName == "rod" || championName == "pet" || championName == "spell" || championName == "leblancmirrorimage" || championName == "storm" || championName == "odin" || championName == "crystal")
+                                if (championName == "eagleeye" || championName == "spiderqueen" || championName == "gw" || championName == "bantamsting" || championName == "toxicshot" || championName == "rod" || championName == "pet" || championName == "spell" || championName == "leblancmirrorimage" || championName == "storm" || championName == "odin" || championName == "crystal" || championName == "secondsight" || championName == "recall" || championName == "plantking")
                                     continue;
                                 // Ignore fiddlestick as opposed to fiddlesticks
                                 if (championName == "fiddlestick")
@@ -170,7 +187,7 @@ namespace PartRef
                                 if (championName == "is")
                                     continue;
                                 // Ignore chamion names that were incorrectly created by spellIcon algorithm
-                                else if (championName == "eagleeye" || championName == "spiderqueen" || championName == "gw" || championName == "bantamsting" || championName == "toxicshot" || championName == "rod" || championName == "pet" || championName == "spell" || championName == "leblancmirrorimage" || championName == "storm" || championName == "odin" || championName == "crystal")
+                                else if (championName == "eagleeye" || championName == "spiderqueen" || championName == "gw" || championName == "bantamsting" || championName == "toxicshot" || championName == "rod" || championName == "pet" || championName == "spell" || championName == "leblancmirrorimage" || championName == "storm" || championName == "odin" || championName == "crystal" || championName == "secondsight" || championName == "recall" || championName == "plantking")
                                     continue;
                                 // Ignore fiddle's "paranoia" since it conflicts with nocturne's and fiddle's is extraneous anyways
                                 else if (championName == "fiddlesticks" && iconFileName.Substring(splitIndex, iconFileName.Length - splitIndex).Split('.')[0].ToLower().Replace(" ", "") == "paranoia")
@@ -240,28 +257,72 @@ namespace PartRef
                     if (particleFileName.IndexOf("troybin") != -1)
                     {
                         troybinTotal++; // For debugging purposes
+
+                        // Check if it is an item
+                        if (particleFileName.Contains("_itm"))
+                        {
+                            if (!particleDef["items"]["troybins"].ContainsKey(file))
+                            {
+                                particleDef["items"]["troybins"][file] = new List<String>();
+                            }
+                            continue;
+                        }
+                        else if (particleFileName.Contains("nexus") || particleFileName.Contains("inhib") || particleFileName.Contains("shop") || particleFileName.Contains("turret") || particleFileName.Contains("odin") || particleFileName.Contains("tower") || particleFileName.Contains("capture_point") || particleFileName.Contains("chaos"))
+                        {
+                            if (!particleDef["map"]["troybins"].ContainsKey(file))
+                            {
+                                particleDef["map"]["troybins"][file] = new List<String>();
+                            }
+                            continue;
+                        }
+
                         Boolean matchFound = false;
                         foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in particleDef)
                         {
                             // Alternate name to search by for special cases
                             String altSearchStr = String.Empty;
-                            // Search for alternate spelling of Maokai
-                            if (championKVP.Key == "maokai")
-                                altSearchStr = "maoki";
-                            // Search for alternate spelling of Orianna
-                            else if (championKVP.Key == "orianna")
-                                altSearchStr = "oriana";
-                            // Search for alternate spelling of Xen Xhao
-                            else if (championKVP.Key == "xenzhao")
-                                altSearchStr = "xenziou";
-                            // Search for vlad since all his particle use that istead of his full name
-                            else if (championKVP.Key == "vladimir")
-                                altSearchStr = "vlad";
-                            // Search for cass since Cassiopeia uses that for some of her particles
-                            else if (championKVP.Key == "cassiopeia")
-                                altSearchStr = "cass";
-                            else
-                                altSearchStr = championKVP.Key;
+                            switch(championKVP.Key)
+                            {
+                                // Maoki vs. Maokai
+                                case "maokai":
+                                    altSearchStr = "maoki";
+                                    break;
+                                // Oriana vs. Orianna
+                                case "orianna":
+                                    altSearchStr = "oriana";
+                                    break;
+                                // XenZiou vs. XenZhao
+                                case "xenzhao":
+                                    altSearchStr = "xenziou";
+                                    break;
+                                // Vlad vs. Vladimir
+                                case "vladimir":
+                                    altSearchStr = "vlad";
+                                    break;
+                                // Cass vs. Cassiopeia
+                                case "cassiopeia":
+                                    altSearchStr = "cass";
+                                    break;
+                                // Taric vs. GemKnight
+                                case "gemknight":
+                                    altSearchStr = "taric";
+                                    break;
+                                // Alistar vs. Minotaur
+                                case "minotaur":
+                                    altSearchStr = "alistar";
+                                    break;
+                                // Ashe vs. Bowmaster
+                                case "bowmaster":
+                                    altSearchStr = "ashe";
+                                    break;
+                                // Exile vs. Riven
+                                case "riven":
+                                    altSearchStr = "exile";
+                                    break;
+                                default:
+                                    altSearchStr = championKVP.Key;
+                                    break;
+                            }
                             // Search for the champion's name in the troybin file name
                             if (particleFileName.Replace("_", "").ToLower().IndexOf(championKVP.Key) != -1 || particleFileName.Replace("_", "").ToLower().IndexOf(altSearchStr) != -1)
                             {
@@ -304,6 +365,8 @@ namespace PartRef
                             }
                         }
                     }
+                    if (matchFound)
+                        break;
                 }
                 if (!matchFound)
                     if (!particleDef["other"]["troybins"].ContainsKey(troybin))
