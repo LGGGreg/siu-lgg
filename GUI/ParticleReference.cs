@@ -99,6 +99,10 @@ namespace PartRef
             particleDef["map"] = new Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>();
             particleDef["map"]["troybins"] = new Dictionary<RAFFileListEntry, List<String>>();
 
+            // Create place for summoner spell troybins to live
+            particleDef["summoner spells"] = new Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>();
+            particleDef["summoner spells"]["troybins"] = new Dictionary<RAFFileListEntry, List<String>>();
+
 
             // Reference spellnames to champion names
             foreach ( RAFFileListEntry file in fileList)
@@ -140,7 +144,7 @@ namespace PartRef
                             {
                                 championName = iconFileName.Split('_')[0].ToLower();
                                 // Ignore chamion names that were incorrectly created by spellIcon algorithm
-                                if (championName == "eagleeye" || championName == "spiderqueen" || championName == "gw" || championName == "bantamsting" || championName == "toxicshot" || championName == "rod" || championName == "pet" || championName == "spell" || championName == "leblancmirrorimage" || championName == "storm" || championName == "odin" || championName == "crystal" || championName == "secondsight" || championName == "recall" || championName == "plantking")
+                                if (championName == "eagleeye" || championName == "spiderqueen" || championName == "gw" || championName == "bantamsting" || championName == "toxicshot" || championName == "rod" || championName == "pet" || championName == "spell" || championName == "leblancmirrorimage" || championName == "storm" || championName == "odin" || championName == "crystal" || championName == "secondsight" || championName == "recall" || championName == "plantking" || championName == "summoner" || championName == "teleport")
                                     continue;
                                 // Ignore fiddlestick as opposed to fiddlesticks
                                 if (championName == "fiddlestick")
@@ -155,6 +159,19 @@ namespace PartRef
                                 else if (iconFileName == "Rumble_R.dds")
                                 {
                                     spell = "rumble_ult";
+                                }
+                                // Change Twisted Fate's spell names to prevent accidental matching
+                                else if (championName == "cardmaster" && iconFileName.Split('_')[1].Split('.')[0].ToLower().Replace(" ", "") == "red")
+                                {
+                                    spell = "card_red";
+                                }
+                                else if (championName == "cardmaster" && iconFileName.Split('_')[1].Split('.')[0].ToLower().Replace(" ", "") == "blue")
+                                {
+                                    spell = "card_blue";
+                                }
+                                else if (championName == "cardmaster" && iconFileName.Split('_')[1].Split('.')[0].ToLower().Replace(" ", "") == "gold")
+                                {
+                                    spell = "card_yellow";
                                 }
                                 else
                                 {
@@ -187,7 +204,7 @@ namespace PartRef
                                 if (championName == "is")
                                     continue;
                                 // Ignore chamion names that were incorrectly created by spellIcon algorithm
-                                else if (championName == "eagleeye" || championName == "spiderqueen" || championName == "gw" || championName == "bantamsting" || championName == "toxicshot" || championName == "rod" || championName == "pet" || championName == "spell" || championName == "leblancmirrorimage" || championName == "storm" || championName == "odin" || championName == "crystal" || championName == "secondsight" || championName == "recall" || championName == "plantking")
+                                else if (championName == "eagleeye" || championName == "spiderqueen" || championName == "gw" || championName == "bantamsting" || championName == "toxicshot" || championName == "rod" || championName == "pet" || championName == "spell" || championName == "leblancmirrorimage" || championName == "storm" || championName == "odin" || championName == "crystal" || championName == "secondsight" || championName == "recall" || championName == "plantking" || championName == "summoner" || championName == "teleport")
                                     continue;
                                 // Ignore fiddle's "paranoia" since it conflicts with nocturne's and fiddle's is extraneous anyways
                                 else if (championName == "fiddlesticks" && iconFileName.Substring(splitIndex, iconFileName.Length - splitIndex).Split('.')[0].ToLower().Replace(" ", "") == "paranoia")
@@ -275,6 +292,14 @@ namespace PartRef
                             }
                             continue;
                         }
+                        else if (particleFileName.Contains("summoner_") || particleFileName.Contains("clairvoyance"))
+                        {
+                            if (!particleDef["summoner spells"]["troybins"].ContainsKey(file))
+                            {
+                                particleDef["summoner spells"]["troybins"][file] = new List<String>();
+                            }
+                            continue;
+                        }
 
                         Boolean matchFound = false;
                         foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in particleDef)
@@ -318,6 +343,74 @@ namespace PartRef
                                 // Exile vs. Riven
                                 case "riven":
                                     altSearchStr = "exile";
+                                    break;
+                                // Cho vs. Greenterror
+                                case "greenterror":
+                                    altSearchStr = "cho";
+                                    break;
+                                // Cryo vs. Cryopheonix
+                                case "cryophoenix":
+                                    altSearchStr = "cryo";
+                                    break;
+                                // Tryndamere vs. Darkchampion
+                                case "darkchampion":
+                                    altSearchStr = "tryndamere";
+                                    break;
+                                // Tristanna vs. Tristana
+                                case "tristana":
+                                    altSearchStr = "tristanna";
+                                    break;
+                                // TwistedFate vs. Cardmaster
+                                case "cardmaster":
+                                    altSearchStr = "twistedfate";
+                                    break;
+                                // SteamGolem vs. Blitzcrank
+                                case "blitzcrank":
+                                    altSearchStr = "steamgolem";
+                                    break;
+                                // Rhyze vs. Ryze
+                                case "ryze":
+                                    altSearchStr = "rhyze";
+                                    break;
+                                // Renekhton vs. Renekton
+                                case "renekton":
+                                    altSearchStr = "renekhton";
+                                    break;
+                                // Nassus vs. Nasus
+                                case "nasus":
+                                    altSearchStr = "nassus";
+                                    break;
+                                // Mundo vs. DrMundo
+                                case "drmundo":
+                                    altSearchStr = "mundo";
+                                    break;
+                                // Mordakaiser vs. Mordekaiser
+                                case "mordekaiser":
+                                    altSearchStr = "mordakaiser";
+                                    break;
+                                // Kog vs. Kogmaw
+                                case "kogmaw":
+                                    altSearchStr = "kog";
+                                    break;
+                                // Jax vs. Armsmaster
+                                case "armsmaster":
+                                    altSearchStr = "jax";
+                                    break;
+                                // Jarvan vs. JarvanIV
+                                case "jarvaniv":
+                                    altSearchStr = "jarvan";
+                                    break;
+                                // Gangplank vs. Pirate
+                                case "pirate":
+                                    altSearchStr = "gangplank";
+                                    break;
+                                // Evelyn vs. Evelynn
+                                case "evelynn":
+                                    altSearchStr = "evelyn";
+                                    break;
+                                // Chrono vs. Chronokeeper
+                                case "chronokeeper":
+                                    altSearchStr = "chrono";
                                     break;
                                 default:
                                     altSearchStr = championKVP.Key;
