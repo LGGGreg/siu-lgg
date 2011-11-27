@@ -74,7 +74,7 @@
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.button1);
             this.Name = "ParticleReference";
-            this.Text = "Form1";
+            this.Text = "Particle Reference";
             this.Load += new System.EventHandler(this.ParticleReference_Load);
             this.ResumeLayout(false);
 
