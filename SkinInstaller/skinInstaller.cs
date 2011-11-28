@@ -1604,7 +1604,7 @@ namespace SkinInstaller
                     //fileName = this.FileNameToLocation(brokenUpPathWithFileName[brokenUpPathWithFileName.Length - 1], false,true);
                     if (!namePath.valid)//foldername == null || fileName == null)
                     {
-                        //todo fix names here armodillo_ to rammus folder
+                        //fix names here armodillo_ to rammus folder
                         //String newfullNameAndPath = this.fixRiotv40Name(fullNameAndPath);
                         namePath = this.FileNameToLocation(oldFullNameAndPath, false,namePath.moreOptions);
 
@@ -5522,17 +5522,24 @@ namespace SkinInstaller
                         try
                         {
                             //found!
+                            string foundAt = pair.Value.Replace("\\\\", "\\");
+                            int slash = foundAt.IndexOf("\\") ;
+                            if (slash>= 0 && slash < 2)
+                            {
+                                foundAt = foundAt.Substring(slash+1);
+                            }
                             if (pair.Value.ToLower().Contains(".raf"))
                             {
                                 if (backgroundWorker1.IsBusy) return new Bitmap(2, 2);
             
                                 rafBackup(gameDirectory +
-                                    pair.Value.Substring(2).Replace("\\\\", "\\"), FileName);
+                                    foundAt, FileName);
                             }
                             else
                             {
+                                
                                 copyAndFix(gameDirectory +
-                                    pair.Value.Substring(2).Replace("\\\\", "\\"), FileName);
+                                    foundAt, FileName);
                             }
                             if (File.Exists(FileName))
                                 return LGGDevilLoadImage(FileName);
@@ -8070,8 +8077,9 @@ namespace SkinInstaller
         {
             if (e.Node.Name == "RAF" && e.Node.Nodes.Count < 2)
                 rafTreeBuilderWorker2.RunWorkerAsync();
-            if (e.Node.Name == "Particles" && e.Node.Nodes.Count < 2)
+            if ((e.Node.Name == "Particles") && e.Node.Nodes.Count < 2)
             {
+                e.Node.Text = "Particles (Powered By RichieSams)";
                 PartRef.ParticleReference p = new PartRef.ParticleReference();
                 p.startGettingParticleStructure(this,gameDirectory + "RADS\\projects\\lol_game_client\\filearchives\\");
             }
@@ -8133,9 +8141,33 @@ namespace SkinInstaller
                 {
                     if (checkedNode.FullPath.ToLower().IndexOf("particles") == 0)
                     {
+                        
                         //todo back it up
                         //find tga and dds
                         //watch out for empty folders! (check for extension)
+                        foreach (KeyValuePair<String, String> pairFileName_Path in allFilesList)
+                        {
+                            //NOstring rafTestPath = ((rafTreeDataObject)checkedNode.Tag).fileLocation.ToLower();
+                            string rafTestPath = checkedNode.Name.ToLower();
+                            //rafTestPath=rafTestPath.Substring(rafTestPath.LastIndexOf(".raf"));
+                            string testPath = pairFileName_Path.Key.ToLower();
+                            //remove extensions so we can find .tga files as well and .dds files
+                            //int dotLoc1 = rafTestPath.LastIndexOf("\\");
+                            int dotLoc1 = rafTestPath.LastIndexOf(".");
+                            int dotLoc2 = testPath.LastIndexOf(".");
+                            //if (dotLoc1 >= 0) rafTestPath = rafTestPath.Substring(dotLoc1+1);
+                            if (dotLoc2 >= 0) testPath = testPath.Substring(0, dotLoc2);
+                            //dotLoc1 = rafTestPath.LastIndexOf(".");
+                            if (dotLoc1 >= 0) rafTestPath = rafTestPath.Substring(0,dotLoc1);
+                            
+                            if (testPath == rafTestPath)
+                            {
+                                string fileLoc = gameDirectory + pairFileName_Path.Value.Substring(1).Replace("\\\\","\\");
+                                toBackup.Add(fileLoc);
+                                output += fileLoc + "\r\n";
+                                //dont break; cuz we want it all!
+                            }
+                        }
                     }
                     else
                     {
