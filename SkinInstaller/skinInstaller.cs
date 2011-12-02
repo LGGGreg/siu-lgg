@@ -7831,14 +7831,14 @@ namespace SkinInstaller
                     String charFolder = kv.Key.Substring(0, firstSlash);
                     if (!modelsRootNode.Nodes.ContainsKey(charFolder))
                     {
-                        modelsRootNode.Nodes.Add(charFolder,charFolder);
-                        TreeNode temp = modelsRootNode.Nodes.Find(charFolder, false)[0];
+                        TreeNode temp=modelsRootNode.Nodes.Add(charFolder,charFolder);
+                        //TreeNode temp = modelsRootNode.Nodes.Find(charFolder, false)[0];
                         temp.ToolTipText = charFolder;
                     }
                     String charName = kv.Key.Substring(firstSlash+1); 
                     TreeNode folderNode = modelsRootNode.Nodes.Find(charFolder, false)[0];
-                    folderNode.Nodes.Add(charName, charName);
-                    TreeNode charNode = folderNode.Nodes.Find(charName, false)[0];
+                    TreeNode charNode = folderNode.Nodes.Add(charName, charName);
+                    //TreeNode charNode = folderNode.Nodes.Find(charName, false)[0];
                     charNode.ToolTipText = kv.Key;
                     //charNode.Tag = new rafTreeDataObject(0, "");// kv.Value;
                     //add models and stuff
@@ -8036,8 +8036,8 @@ namespace SkinInstaller
 
                       }
                       //we may need to add some extra logic here if a raf file has duplicate entries across versions
-                      lookIn.Nodes.Add(fileskv.Value, Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(rafFileInfo.Name));
-                      TreeNode addedNode = lookIn.Nodes.Find(fileskv.Value, false)[0];
+                      TreeNode addedNode=lookIn.Nodes.Add(fileskv.Value, Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(rafFileInfo.Name));
+                      //TreeNode addedNode = lookIn.Nodes.Find(fileskv.Value, false)[0];
                       addedNode.ToolTipText = fileskv.Value;
                       rafTreeDataObject tag = new rafTreeDataObject();
                     tag.fileLocation=
@@ -8257,15 +8257,15 @@ namespace SkinInstaller
                         <RAFFileListEntry, List<String>>>>)e.Argument).Count) * 45) + 50;
                 if (prog != lastProg) { lastProg = prog; ParticleTreeWorker2.ReportProgress(prog); }
 
-                particleNode.Nodes.Add(championKVP.Key,Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(championKVP.Key));
-                TreeNode champNode =particleNode.Nodes.Find(championKVP.Key, false)[0];
+                TreeNode champNode= particleNode.Nodes.Add(championKVP.Key,Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(championKVP.Key));
+                //TreeNode champNode =particleNode.Nodes.Find(championKVP.Key, false)[0];
                 int lowestPower = int.MaxValue;
                 foreach (KeyValuePair<RAFFileListEntry, List<String>> troybinKVP in championKVP.Value["troybins"])
                 {
                     FileInfo troyFileInfo = new FileInfo(troybinKVP.Key.FileName);
-                    champNode.Nodes.Add(troybinKVP.Key.FileName, Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(troyFileInfo.Name.Substring(0, troyFileInfo.Name.IndexOf("."))));
+                    TreeNode troybinNode =champNode.Nodes.Add(troybinKVP.Key.FileName, Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(troyFileInfo.Name.Substring(0, troyFileInfo.Name.IndexOf("."))));
 
-                    TreeNode troybinNode = champNode.Nodes.Find(troybinKVP.Key.FileName, false)[0];
+                    //TreeNode troybinNode = champNode.Nodes.Find(troybinKVP.Key.FileName, false)[0];
                     rafTreeDataObject tag = new rafTreeDataObject();
                     
                     //get troy version number
