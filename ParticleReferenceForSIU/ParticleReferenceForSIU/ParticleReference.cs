@@ -242,6 +242,17 @@ namespace PartRef
                             // All passives are named along with their champion name so no troybins should be skipped
                             if (spell == "passive")
                                 continue;
+                            // Don't use these as spell names because they mess up everything
+                            // Damn you Trion for your naming
+                            if (spell == "q" || spell == "w" || spell == "e" || spell == "r")
+                            {
+                                continue;
+                            }
+
+                            if (championName == "voidwalker")
+                            {
+                                championName = "kassadin";
+                            }
 
                             // Create dictionary structure if it doesn't already exist
                             if (!particleDef.ContainsKey(championName))
@@ -468,11 +479,11 @@ namespace PartRef
                                         break;
                                     // Fiddlesticks
                                     case "fiddlesticks":
-                                        searchStrings.Add("party_");
+                                        searchStrings.Add("party");
                                         break;
                                     // Kassadin
                                     case "kassadin":
-                                        searchStrings.Add("null_lance");
+                                        searchStrings.Add("nulllance");
                                         break;
                                 }
                                 // Search for the search strings in the troybin file name
