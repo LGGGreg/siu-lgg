@@ -5,9 +5,11 @@
 // @icon        http://img856.imageshack.us/img856/7456/unled2lq.jpg
 // @description Re-works links in League craft to auto work with SIU+LGG
 // @version     0.5 (29 Sept 2011)
-// @license     GPL 2.0 
+// @license     GPL 2.0
 // @include     http://leaguecraft.com/skins/*
 // @exclude     http://leaguecraft.com/skins/download/*
+// @include     http://www.leaguecraft.com/skins/*
+// @exclude     http://www.leaguecraft.com/skins/download/*
 // ==/UserScript==
 var debug = 0;
 var wait = 200;
