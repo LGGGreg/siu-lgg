@@ -256,7 +256,7 @@ namespace SkinInstaller
         private Panel panel4;
         private Panel panel3;
         private Panel panel5;
-        private BackgroundWorker backgroundWorker1;
+        private BackgroundWorker fileListWorker1;
         private ToolStripMenuItem imagesToolStripMenuItem;
         private ToolStripMenuItem loadToolStripMenuItem;
         private ToolStripMenuItem saveToolStripMenuItem;
@@ -360,6 +360,8 @@ namespace SkinInstaller
         private TextBox textBox3;
         private ToolStripMenuItem openParticleReferenceToolStripMenuItem;
         private BackgroundWorker ParticleTreeWorker2;
+        private Panel progrespanel;
+        private Button buttoncancel;
         PaintEventHandler importantP;
         #endregion
         #region webIntegrate
@@ -2267,7 +2269,7 @@ namespace SkinInstaller
                 if(install ==1)
                 {
                     //Cliver.Message.Inform("not implemented");
-                    if (backgroundWorker1.IsBusy)
+                    if (fileListWorker1.IsBusy)
                     {
                         Cliver.Message.Inform("Oh.. actually..Please wait a moment for this program to finish updating\r\nThe Progress Bar below will show you the status of this");
                         this.tabControl1.SelectedIndex = 1;
@@ -2949,8 +2951,10 @@ namespace SkinInstaller
         #region installing
         private void setInstallButtons(bool state)
         {
-            this.dbInstall.Enabled = this.dbUninstall.Enabled = this.dbDelete.Enabled = this.UpdateFL.Enabled =
+            this.dbInstall.Enabled = this.dbUninstall.Enabled =
+                this.dbDelete.Enabled = this.UpdateFL.Enabled =
                 this.button3repath.Enabled=state;
+            this.buttoncancel.Visible = !state;
         }
         private void dbInstall_Click(object sender, EventArgs e)
         {
@@ -2961,7 +2965,7 @@ namespace SkinInstaller
                 "\"Add New Skin\"");
                 return;
             }
-            if (backgroundWorker1.IsBusy)
+            if (fileListWorker1.IsBusy)
             {
                 Cliver.Message.Inform("Please wait a moment for this program to finish updating\r\nThe Progress Bar below will show you the status of this");
                 return;
@@ -3360,7 +3364,7 @@ namespace SkinInstaller
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(skinInstaller));
-            System.Windows.Forms.TreeNode treeNode2 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
             this.exit = new System.Windows.Forms.Button();
             this.skinFile = new System.Windows.Forms.OpenFileDialog();
             this.helpBar = new System.Windows.Forms.StatusStrip();
@@ -3510,9 +3514,11 @@ namespace SkinInstaller
             this.label5 = new System.Windows.Forms.Label();
             this.pictureBoxCount = new System.Windows.Forms.PictureBox();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.progrespanel = new System.Windows.Forms.Panel();
+            this.buttoncancel = new System.Windows.Forms.Button();
             this.button3startLoL = new System.Windows.Forms.Button();
             this.button3lcintegrate = new System.Windows.Forms.Button();
-            this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.fileListWorker1 = new System.ComponentModel.BackgroundWorker();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.timer1 = new System.Windows.Forms.Timer(this.components);
@@ -3561,6 +3567,7 @@ namespace SkinInstaller
             this.panelGL.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).BeginInit();
             this.panel7.SuspendLayout();
+            this.progrespanel.SuspendLayout();
             this.SuspendLayout();
             // 
             // exit
@@ -4555,11 +4562,11 @@ namespace SkinInstaller
             this.treeView1.ItemHeight = 16;
             this.treeView1.Location = new System.Drawing.Point(0, 0);
             this.treeView1.Name = "treeView1";
-            treeNode2.Name = "Please Wait";
-            treeNode2.Text = "Please wait for the progress bar to finish loading bellow...";
-            treeNode2.ToolTipText = "Please wait...";
+            treeNode1.Name = "Please Wait";
+            treeNode1.Text = "Please wait for the progress bar to finish loading bellow...";
+            treeNode1.ToolTipText = "Please wait...";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode2});
+            treeNode1});
             this.treeView1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.treeView1.ShowNodeToolTips = true;
             this.treeView1.Size = new System.Drawing.Size(776, 283);
@@ -4713,10 +4720,10 @@ namespace SkinInstaller
             // 
             // progressBar1
             // 
-            this.progressBar1.Dock = System.Windows.Forms.DockStyle.Bottom;
-            this.progressBar1.Location = new System.Drawing.Point(0, 31);
+            this.progressBar1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.progressBar1.Location = new System.Drawing.Point(0, 0);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(819, 23);
+            this.progressBar1.Size = new System.Drawing.Size(819, 22);
             this.progressBar1.TabIndex = 40;
             this.progressBar1.Click += new System.EventHandler(this.progressBar1_Click);
             // 
@@ -5031,18 +5038,39 @@ namespace SkinInstaller
             // 
             // panel7
             // 
+            this.panel7.Controls.Add(this.progrespanel);
             this.panel7.Controls.Add(this.button3startLoL);
             this.panel7.Controls.Add(this.button3lcintegrate);
             this.panel7.Controls.Add(this.UpdateFL);
             this.panel7.Controls.Add(this.locateGameClient);
             this.panel7.Controls.Add(this.exit);
             this.panel7.Controls.Add(this.button2);
-            this.panel7.Controls.Add(this.progressBar1);
             this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel7.Location = new System.Drawing.Point(0, 0);
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(819, 54);
             this.panel7.TabIndex = 42;
+            // 
+            // progrespanel
+            // 
+            this.progrespanel.Controls.Add(this.buttoncancel);
+            this.progrespanel.Controls.Add(this.progressBar1);
+            this.progrespanel.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.progrespanel.Location = new System.Drawing.Point(0, 32);
+            this.progrespanel.Name = "progrespanel";
+            this.progrespanel.Size = new System.Drawing.Size(819, 22);
+            this.progrespanel.TabIndex = 44;
+            // 
+            // buttoncancel
+            // 
+            this.buttoncancel.Dock = System.Windows.Forms.DockStyle.Right;
+            this.buttoncancel.Location = new System.Drawing.Point(769, 0);
+            this.buttoncancel.Name = "buttoncancel";
+            this.buttoncancel.Size = new System.Drawing.Size(50, 22);
+            this.buttoncancel.TabIndex = 41;
+            this.buttoncancel.Text = "Cancel";
+            this.buttoncancel.UseVisualStyleBackColor = true;
+            this.buttoncancel.Click += new System.EventHandler(this.buttoncancel_Click);
             // 
             // button3startLoL
             // 
@@ -5064,12 +5092,13 @@ namespace SkinInstaller
             this.button3lcintegrate.UseVisualStyleBackColor = true;
             this.button3lcintegrate.Click += new System.EventHandler(this.button3lcintegrate_Click);
             // 
-            // backgroundWorker1
+            // fileListWorker1
             // 
-            this.backgroundWorker1.WorkerReportsProgress = true;
-            this.backgroundWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.backgroundWorker1_DoWork);
-            this.backgroundWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroudProgress_Changed);
-            this.backgroundWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_Done);
+            this.fileListWorker1.WorkerReportsProgress = true;
+            this.fileListWorker1.WorkerSupportsCancellation = true;
+            this.fileListWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.fileListWorker1_DoWork);
+            this.fileListWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.backgroudProgress_Changed);
+            this.fileListWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.backgroundWorker1_Done);
             // 
             // openFileDialog1
             // 
@@ -5191,6 +5220,7 @@ namespace SkinInstaller
             this.panelGL.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).EndInit();
             this.panel7.ResumeLayout(false);
+            this.progrespanel.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -5299,7 +5329,7 @@ namespace SkinInstaller
                     //fffff
                     //Cliver.Message.Show("VERY BAD PROBLEM!", SystemIcons.Error, "You have your skin installer installed INSIDE of your lol directory!  You cant do that!", 0, "OK ILL FIX IT");
                 //}
-                if (!backgroundWorker1.IsBusy)
+                if (!fileListWorker1.IsBusy)
                 {
                     UpdateFL.Enabled = false;
                     UpdateFL.Text = "Currently Updating :)";
@@ -5309,7 +5339,8 @@ namespace SkinInstaller
                     statusText.Text = "Initializing Program and Scanning LoL Files";
                     setInstallButtons(false);
             
-                    backgroundWorker1.RunWorkerAsync(gameDirectory);
+                    fileListWorker1.RunWorkerAsync(gameDirectory);
+                    
                 }
                 /*
                 ProcessStartInfo startInfo = new ProcessStartInfo();
@@ -5530,7 +5561,7 @@ namespace SkinInstaller
                             }
                             if (pair.Value.ToLower().Contains(".raf"))
                             {
-                                if (backgroundWorker1.IsBusy) return new Bitmap(2, 2);
+                                if (fileListWorker1.IsBusy) return new Bitmap(2, 2);
             
                                 rafBackup(gameDirectory +
                                     foundAt, FileName);
@@ -5665,7 +5696,7 @@ namespace SkinInstaller
         private void dbUninstall_Click(object sender, EventArgs e)
         {
 
-            if (backgroundWorker1.IsBusy)
+            if (fileListWorker1.IsBusy)
             {
                 Cliver.Message.Inform("Please wait a moment for this program to finish updating\r\nThe Progress Bar below will show you the status of this");
                 return;
@@ -6157,7 +6188,7 @@ namespace SkinInstaller
         }
         #endregion
         #region createAllFilesini
-        private void backgroundWorker1_DoWork(object sender, DoWorkEventArgs e)
+        private void fileListWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
             string  argument = e.Argument as string;
 
@@ -6258,7 +6289,6 @@ namespace SkinInstaller
         private bool CreateAllFileListCS(string base2Dir, string fileName, string gameDirectory)
         {
             fileList = new List<string>();
-            TextWriter tw = new StreamWriter(fileName);
             string str = string.Empty;
             //Cliver.Message.Inform("looking in " + gameDirectory + "HeroPak_client.zip");
             //string[] files = Directory.GetFiles(baseDir, "*",SearchOption.AllDirectories);
@@ -6312,7 +6342,7 @@ namespace SkinInstaller
                     }
                 }
             }
-            //just read the zip file.. now we need the actualy other stuff
+            //just read the zip file.. now we need the other stuff
             string[] files = Directory.GetFiles(baseDir, "*", SearchOption.AllDirectories);
             Directory.GetDirectories(baseDir);
             string[] array = files;
@@ -6320,6 +6350,8 @@ namespace SkinInstaller
             int lastpP = 0;
             for (int i = 0; i < array.Length; i++)
             {
+                if (fileListWorker1.CancellationPending)
+                    return false;
                 string text = array[i];
                 FileInfo fileInfo = new FileInfo(text);
 
@@ -6398,7 +6430,7 @@ namespace SkinInstaller
                         {
                             lastpP = percent;
                             //Console.WriteLine("Please wait..." + ((percent / 2) + 0).ToString() + "%");
-                            backgroundWorker1.ReportProgress(percent/2);
+                            fileListWorker1.ReportProgress(percent/2);
                         }
                     }
                 }
@@ -6409,7 +6441,9 @@ namespace SkinInstaller
             foreach (String file in rafFiles)
             {
                 int percent = (int)Math.Floor((double)inc++ / (double)rafFiles.Count * (double)100.0);
-
+                
+                if (fileListWorker1.CancellationPending)
+                    return false;
                 
                 FileInfo rafFile = new FileInfo(file);
                 //time to process the raf files
@@ -6424,11 +6458,14 @@ namespace SkinInstaller
                     int lastP = 0;
                     foreach (RAFFileListEntry entry in filez)
                     {
+                        if (fileListWorker1.CancellationPending)
+                            return false;
+
                         int innerpercent = (int)Math.Floor((double)innerInc++ / (double)filez.Count * (double)100.0);
                         if (lastP != innerpercent)
                         {
                             lastP = innerpercent;
-                            backgroundWorker1.ReportProgress(50 + (percent / 2) + (innerpercent / 10));
+                            fileListWorker1.ReportProgress(50 + (percent / 2) + (innerpercent / 10));
                         }
                         FileInfo innerRafFile = new FileInfo(rafFile.FullName + "\\\\" + entry.FileName);
                         if (!fileExtensions.Contains(innerRafFile.Extension))
@@ -6467,9 +6504,13 @@ namespace SkinInstaller
             }
 
             debugadd("Please wait...Writting to disk");
+            TextWriter tw = new StreamWriter(fileName);
+            
             tw.WriteLine(fileSize.ToString() + "|" + string.Join("|", fileExtensions.ToArray()));
             foreach (string str3 in fileList.ToArray())
             {
+                if (fileListWorker1.CancellationPending)
+                    return false;
                 if (str3 != string.Empty)
                 {
                     tw.WriteLine(str3);
@@ -7727,7 +7768,7 @@ namespace SkinInstaller
         }
         private void previewThisSkinToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (backgroundWorker1.IsBusy)
+            if (fileListWorker1.IsBusy)
             {
                 Cliver.Message.Inform("Please wait till SIU is fully loaded\r\nBefore Previewing a skin\r\n\r\nCheck the progress bar at the bottom for status.");
                 return;
@@ -7758,7 +7799,7 @@ namespace SkinInstaller
         }
         private void loLViewerOpenNotPreviewToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (backgroundWorker1.IsBusy)
+            if (fileListWorker1.IsBusy)
             {
                 Cliver.Message.Inform("Please wait till SIU is fully loaded\r\nBefore Previewing a skin\r\n\r\nCheck the progress bar at the bottom for status.");
                 return;
@@ -8361,6 +8402,12 @@ namespace SkinInstaller
             UpdateProgressSafe(100);
         }
         #endregion
+
+        private void buttoncancel_Click(object sender, EventArgs e)
+        {
+            if (fileListWorker1.IsBusy)
+                fileListWorker1.CancelAsync();
+        }
 
     }
     #region strucks
