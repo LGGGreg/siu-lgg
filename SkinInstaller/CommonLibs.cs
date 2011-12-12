@@ -142,7 +142,7 @@ namespace SkinInstaller
         }
     }
 
-     public class HSLColor
+    public class HSLColor
      {
          // Private data members below are on scale 0-1
          // They are scaled for use externally based on scale
@@ -275,5 +275,31 @@ namespace SkinInstaller
  
  
     }
+
+    public class skinOption
+    {
+        public string skinName;
+        public bool skinSelected;
+        public bool origonalSelected;
+        public skinOptions parent;
+    }
+    public class skinOptions
+    {
+        public List<skinOption> options;
+        public string skinName;
+        public skinsOptions parent;
+        public skinOption getOption(skinOption fakeOption)
+        {
+            return options.Find(thisItem => thisItem.skinName == fakeOption.skinName);
+        }
+    }
+    public class skinsOptions : List<skinOptions> 
+    {
+        public skinOptions getOptions(skinOptions fakeOptions)
+        {
+            return this.Find(thisItem => thisItem.skinName == fakeOptions.skinName);
+        }
+    }
+
 }
 
