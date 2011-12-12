@@ -154,7 +154,7 @@ namespace LOLViewer
         //
         // Return the model name that uses the file name provided
         //
-        string getModelNameFromFileName(string fileName)
+        public string getModelNameFromFileName(string fileName)
         {
             return reader.GetModelNameFromFileName(fileName);
         }
@@ -162,7 +162,7 @@ namespace LOLViewer
         //
         // Return the model that uses some of the files given
         //
-        LOLModel getModelFromFileNames(List<String> fileNames)
+        public LOLModel getModelFromFileNames(List<String> fileNames)
         {
             LOLModel result = null;
             foreach (String fileName in fileNames)
@@ -170,7 +170,7 @@ namespace LOLViewer
                 String modelName = getModelNameFromFileName(fileName);
                 if (modelName != "")
                 {
-                    result= reader.GetModel(modelName);
+                    result = reader.GetModel(modelName);
                     string[] parts = modelName.Split('/');
                     if (parts.Length > 1)
                     {
@@ -184,6 +184,55 @@ namespace LOLViewer
                 }
             }
             return result;
+        }
+
+        //
+        // Return the models that uses some of the files given
+        //
+        public List<String> getModelsFromFileNames(List<String> fileNames)
+        {
+            List<String> result = new List<String>(); 
+            foreach (String fileName in fileNames)
+            {
+                String modelName = getModelNameFromFileName(fileName);
+                if (modelName != "")
+                {
+                    string[] parts = modelName.Split('/');
+                    if (parts.Length > 1)
+                    {
+                        if(!result.Contains(modelName))
+                            result.Add(modelName);
+                    }
+                }
+            }
+            return result;
+        }
+
+        //
+        // Gets a list of alternate skin names 
+        // for the same character the input skin is for
+        //
+        public List<String> getOtherSkinNames(String modelName)
+        {
+            List<String> toReturn= new List<String>();
+            string[] parts = modelName.Split('/');
+            if (parts.Length > 1)
+            {
+                string baseName = parts[0];
+                foreach (KeyValuePair<string, LOLModel> modelkv in reader.models)
+                {
+                    string[] parts2 = modelkv.Key.Split('/');
+                    if (parts2.Length > 1)
+                    {
+                        if (parts2[0] == baseName)
+                        {
+                            toReturn.Add(modelkv.Key);
+                        }
+                    }
+                    
+                }
+            }
+            return toReturn;
         }
 
         //

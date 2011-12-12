@@ -37,6 +37,7 @@ namespace SkinInstaller
             this.checkBox1graifcsGlow.Checked = Properties.Settings.Default.graficsGlow;
             this.checkBox1hideTempDir.Checked = Properties.Settings.Default.hideTempWarningMessage;
             this.checkBox1hideAddedFiles.Checked = Properties.Settings.Default.hideAddedFilesMessage;
+            this.checkBoxShowCharSelection.Checked = Properties.Settings.Default.showCharSelection;
 
             this.trackBar1logostrenth.Value = Properties.Settings.Default.lgglogostrangth;
 
@@ -106,6 +107,8 @@ namespace SkinInstaller
                 this.checkBox1hideTempDir.Checked;
             Properties.Settings.Default.hideAddedFilesMessage =
                 this.checkBox1hideAddedFiles.Checked;
+            Properties.Settings.Default.showCharSelection =
+                this.checkBoxShowCharSelection.Checked;
 
             Properties.Settings.Default.lgglogostrangth =
                 this.trackBar1logostrenth.Value;

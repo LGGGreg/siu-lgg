@@ -64,6 +64,12 @@
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <ItemGroup>
     <Compile Include="guiskinning\USkinSDK.cs" />
+    <Compile Include="GUI\CharacterSelectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\CharacterSelectionForm.Designer.cs">
+      <DependentUpon>CharacterSelectionForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\dxtVersionReader.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -80,6 +86,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="SkinInstaller\CommonLibs.cs" />
     <Compile Include="GUI\EditSkinItemForm1.cs">
@@ -108,6 +119,9 @@
     <Compile Include="GUI\UpdateAvailiableForm1.Designer.cs">
       <DependentUpon>UpdateAvailiableForm1.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="GUI\CharacterSelectionForm.resx">
+      <DependentUpon>CharacterSelectionForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="GUI\dxtVersionReader.resx">
       <DependentUpon>dxtVersionReader.cs</DependentUpon>
     </EmbeddedResource>
@@ -218,6 +232,10 @@
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
     <EmbeddedResource Include="SkinInstaller\skinInstaller.resx">
       <DependentUpon>skinInstaller.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -272,6 +290,7 @@
     <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_7.wav" />
     <None Include="TreeViewImages\small-cube-1.png" />
     <None Include="TreeViewImages\small-cube-2.png" />
+    <Content Include="GUI\downarrow.png" />
     <Content Include="USkin.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

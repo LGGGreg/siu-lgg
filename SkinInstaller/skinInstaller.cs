@@ -50,7 +50,6 @@
 // To make navigation of this code easier, inside msvc
 // press ctrl+M, then ctrl+O to collapse regions.
 
-
 namespace SkinInstaller
 {
     using LOLViewer;
@@ -82,8 +81,7 @@ namespace SkinInstaller
     using OpenTK.Platform;
     using System.Reflection;
     using System.Collections;
-
-
+    
     public class skinInstaller : Form
     {
         #region consts
@@ -3007,29 +3005,30 @@ namespace SkinInstaller
                 String skinPath = Application.StartupPath + @"\skins\" + item.SubItems[1].Text;
                 int fn = 0;
                 string[] files = Directory.GetFiles(skinPath, "*.*", SearchOption.AllDirectories);
-                foreach (string str in files)
+                List<installFileInfo> filteredFileInfo = new List<installFileInfo>(); 
+                foreach (string skinFileName in files)
                 {
                     int percent = (int)Math.Floor(((double)fn++ / (double)files.Length) * 100.0);
-                    installWorker2.ReportProgress(percent, "Installing file " + fn.ToString() + " of " + files.Length.ToString() + " :: " + str);
+                    installWorker2.ReportProgress(percent, "Installing file " + fn.ToString() + " of " + files.Length.ToString() + " :: " + skinFileName);
 
-                    string[] strArray2 = str.Split(new char[] { '\\' });
-                    string str2 = string.Empty;
+                    string[] folderNames = skinFileName.Split(new char[] { '\\' });
+                    string fixedFilePath = string.Empty;
                     bool flag = false;
-                    for (int i = 1; i < (strArray2.Length - 1); i++)
+                    for (int i = 1; i < (folderNames.Length - 1); i++)
                     {
-                        if ((!flag && (strArray2[i - 1] == "skins")) && (strArray2[i] == item.SubItems[1].Text))
+                        if ((!flag && (folderNames[i - 1] == "skins")) && (folderNames[i] == item.SubItems[1].Text))
                         {
                             flag = true;
                         }
                         else if (flag)
                         {
-                            str2 = str2 + strArray2[i] + @"\";
+                            fixedFilePath = fixedFilePath + folderNames[i] + @"\";
                         }
                     }
-                    string str3 = strArray2[strArray2.Length - 1];
-                    if (str2 != null)
+                    string fixedFileName = folderNames[folderNames.Length - 1];
+                    if (fixedFilePath != null)
                     {
-                        if (str2.Contains("formatedsounds"))
+                        if (fixedFilePath.Contains("formatedsounds"))
                         {
                             if (Properties.Settings.Default.sounds)
                             {
@@ -3041,7 +3040,7 @@ namespace SkinInstaller
                                 skipped++;
                             }
                         }
-                        else if (str2.ToLower().Contains("skininfo"))
+                        else if (fixedFilePath.ToLower().Contains("skininfo"))
                         {
                             //ignore these
                         }
@@ -3051,29 +3050,29 @@ namespace SkinInstaller
                             bool noFlag = false;
                             if (!Properties.Settings.Default.chTx &
                                 (
-                                str2.ToLower().Contains("data\\characters")
+                                fixedFilePath.ToLower().Contains("data\\characters")
 
                                 )
                                 &
                                 (
-                                str3.ToLower().Contains(".dds")
+                                fixedFileName.ToLower().Contains(".dds")
                                 ||
-                                str3.ToLower().Contains(".tga")
+                                fixedFileName.ToLower().Contains(".tga")
                                 )
-                                &!str3.ToLower().Contains("load"))
+                                &!fixedFileName.ToLower().Contains("load"))
                             {
                                 noFlag = true;
                             }
                             if (!Properties.Settings.Default.spelliconsinst &
                                 (
-                                str2.ToLower().Contains("spells\\icons2d")
+                                fixedFilePath.ToLower().Contains("spells\\icons2d")
 
                                 )
                                 &
                                 (
-                                str3.ToLower().Contains(".dds")
+                                fixedFileName.ToLower().Contains(".dds")
                                 ||
-                                str3.ToLower().Contains(".tga")
+                                fixedFileName.ToLower().Contains(".tga")
 
                                 ))
                             {
@@ -3081,20 +3080,20 @@ namespace SkinInstaller
                             }
                             if (!Properties.Settings.Default.spelliconsinst &
                                 (
-                                str2.ToLower().Contains("data\\characters")
+                                fixedFilePath.ToLower().Contains("data\\characters")
                                 )
                                 &
                                 (
-                                str2.ToLower().Contains("\\info")
+                                fixedFilePath.ToLower().Contains("\\info")
                                 )
                                 &
                                 (
-                                str3.ToLower().Contains(".dds")
+                                fixedFileName.ToLower().Contains(".dds")
                                 ||
-                                str3.ToLower().Contains(".tga")
+                                fixedFileName.ToLower().Contains(".tga")
                                 )
-                                & !str3.ToLower().Contains("circle")
-                                & !str3.ToLower().Contains("square")
+                                & !fixedFileName.ToLower().Contains("circle")
+                                & !fixedFileName.ToLower().Contains("square")
                                 )
                             {
                                 //data/characters/name/icons/stuff
@@ -3102,21 +3101,21 @@ namespace SkinInstaller
                             }
                             if (!Properties.Settings.Default.iconcharinst &
                                 (
-                                str2.ToLower().Contains("data\\characters")
+                                fixedFilePath.ToLower().Contains("data\\characters")
                                 )
                                 &
                                 (
-                                str2.ToLower().Contains("\\info")
+                                fixedFilePath.ToLower().Contains("\\info")
                                 )
                                 &
                                 (
-                                str3.ToLower().Contains(".dds")
+                                fixedFileName.ToLower().Contains(".dds")
                                 ||
-                                str3.ToLower().Contains(".tga")
+                                fixedFileName.ToLower().Contains(".tga")
                                 )
                                 &
-                                (str3.ToLower().Contains("circle") ||
-                                str3.ToLower().Contains("square"))
+                                (fixedFileName.ToLower().Contains("circle") ||
+                                fixedFileName.ToLower().Contains("square"))
                                 )
                             {
                                 //data/characters/name/icons/stuff with square
@@ -3124,121 +3123,98 @@ namespace SkinInstaller
                             }
                             if (!Properties.Settings.Default.loadscreensinst &
                                 (
-                                str2.ToLower().Contains("data\\characters")
+                                fixedFilePath.ToLower().Contains("data\\characters")
                                 )
                                 &
                                 (
-                                str3.ToLower().Contains(".dds")
+                                fixedFileName.ToLower().Contains(".dds")
                                 ||
-                                str3.ToLower().Contains(".tga")
+                                fixedFileName.ToLower().Contains(".tga")
                                 )
                                 &
-                                (str3.ToLower().Contains("load"))
+                                (fixedFileName.ToLower().Contains("load"))
                                 )
                             {
                                 //data/characters/name/icons/stuff with square
                                 noFlag = true;
                             }
                             if (!Properties.Settings.Default.ch3d &
-                                str2.ToLower().Contains("data\\characters")
-                                & str3.ToLower().Contains(".skn"))
+                                fixedFilePath.ToLower().Contains("data\\characters")
+                                & fixedFileName.ToLower().Contains(".skn"))
                             {
                                 noFlag = true;
                             }
                             if (!Properties.Settings.Default.anims &
-                                str2.ToLower().Contains("data\\characters")
+                                fixedFilePath.ToLower().Contains("data\\characters")
                                 &
                                 (
-                                str3.ToLower().Contains(".anm")
+                                fixedFileName.ToLower().Contains(".anm")
                                 ||
-                                str3.ToLower().Contains(".ini")
+                                fixedFileName.ToLower().Contains(".ini")
                                 ||
-                                str3.ToLower().Contains(".txt")
+                                fixedFileName.ToLower().Contains(".txt")
                                 ||
-                                str3.ToLower().Contains(".skl")
+                                fixedFileName.ToLower().Contains(".skl")
 
                                 ))
                             {
                                 noFlag = true;
                             }
                             if (!Properties.Settings.Default.part3d &
-                                str2.ToLower().Contains("data\\particles")
+                                fixedFilePath.ToLower().Contains("data\\particles")
                                 &
                                 (
-                                str3.ToLower().Contains(".sco")
+                                fixedFileName.ToLower().Contains(".sco")
                                 ||
-                                str3.ToLower().Contains(".scb")
+                                fixedFileName.ToLower().Contains(".scb")
 
                                 ))
                             {
                                 noFlag = true;
                             }
                             if (!Properties.Settings.Default.partTx &
-                                str2.ToLower().Contains("data\\particles")
+                                fixedFilePath.ToLower().Contains("data\\particles")
                                 &
                                 (
-                                str3.ToLower().Contains(".dds")
+                                fixedFileName.ToLower().Contains(".dds")
                                 ||
-                                str3.ToLower().Contains(".tga")
+                                fixedFileName.ToLower().Contains(".tga")
 
                                 ))
                             {
                                 noFlag = true;
                             }
                             if (!Properties.Settings.Default.air &
-                                str2.ToLower().Contains("air\\"))
+                                fixedFilePath.ToLower().Contains("air\\"))
                             {
                                 noFlag = true;
                             }
 
-                            if (!Properties.Settings.Default.text & str2.ToLower().Contains("menu"))
+                            if (!Properties.Settings.Default.text & fixedFilePath.ToLower().Contains("menu"))
                             {
                                 noFlag = true;
                             }
 
                             if (noFlag == false)
                             {
-                                //Cliver.Message.Inform("Copy from \n" +
-                                //   str + "\n to \n" + gameDirectory + str2 + str3);
-                                if (str2.Contains(".raf"))
-                                {
-                                    //handle this one diferent
-                                    debugadd("raf backup " + str);
-                                    rafBackup(gameDirectory + str2 + str3,"");
-                                    debugadd("raf Installing " + str);
-                                    rafInject(str, gameDirectory + str2 + str3);
-                                }
-                                else
-                                {
-                                    debugadd("Backup " + str2 + " to " + str3);
-
-                                    backupFile(str2, str3);
-                                    debugadd("Installing " + str);
-
-                                    this.SIFileOp.FileMove(str, gameDirectory + str2 + str3);
-                                }
-                                //Cliver.Message.Show(this.Icon, "Installing " + str + " to " + gameDirectory + str2 + str3, 0, "OK");
-                                debugadd("Done Installing " + str + " to " + gameDirectory + str2 + str3);
+                                filteredFileInfo.Add(new 
+                                    installFileInfo(skinFileName,fixedFileName,fixedFilePath));
+                                //filteredFiles.Add(fixedFilePath + fixedFileName);                            
                                 num++;
                             }
                             else
                             {
                                 //Cliver.Message.Show(this.Icon, "SKIPPED moving " + str + " to " + gameDirectory + str2 + str3, 0, "OK");
-                                debugadd("SKIPED " + str + " to " + gameDirectory + str2 + str3);
+                                debugadd("SKIPED " + skinFileName + " to " + gameDirectory + fixedFilePath + fixedFileName);
                                 skipped++;
                             }
                         }
                     }
                     else
                     {
-                        Cliver.Message.Inform("Cannot identify the file: " + str3);
+                        Cliver.Message.Inform("Cannot identify the file: " + fixedFileName);
                     }
-                    prettyDate pd = new prettyDate(DateTime.Now);
-                    //item.SubItems[4].Text = pd.ToString();
-                    this.ExecuteQuery("UPDATE skins SET sInstalled=1, dateinstalled=\"" + pd.getStringDate() + "\"" +
-                        " WHERE sName=\"" +
-                        item.SubItems[1].Text +
-                        "\"");
+                    
                 }
                 if (soundflag)
                 {
@@ -3247,6 +3223,15 @@ namespace SkinInstaller
                     this.installWorker2.ReportProgress(5);
                     replaceSounds(skinPath);
                 }
+                chooseCharacterFiles(ref filteredFileInfo);
+                fileCopyFiles(ref filteredFileInfo);
+                num = filteredFileInfo.Count;
+                prettyDate pd = new prettyDate(DateTime.Now);
+                //item.SubItems[4].Text = pd.ToString();
+                this.ExecuteQuery("UPDATE skins SET sInstalled=1, dateinstalled=\"" + pd.getStringDate() + "\"" +
+                    " WHERE sName=\"" +
+                    item.SubItems[1].Text +
+                    "\"");
             }
             if (false)//num == 0)
             {
@@ -3255,7 +3240,7 @@ namespace SkinInstaller
             else
             {
                 this.installWorker2.ReportProgress(100, "Done!");
-
+                
                 InfoForm form = new InfoForm(
                "Installed " + num.ToString() + " files.\r\n" +
                "Skipped " + skipped.ToString() + " files based on your settings.",
@@ -3267,6 +3252,154 @@ namespace SkinInstaller
                 // Cliver.Message.Inform("Installation Complete.\nInstalled " + num + " files.");
             }
 
+        }
+        private void chooseCharacterFiles(ref List<installFileInfo> filteredFileInfo)
+        {
+            if (Properties.Settings.Default.showCharSelection)
+            {
+                skinsOptions mySkinsOptions = new skinsOptions();
+                List<string> fileNames = new List<String>();
+                foreach (installFileInfo installInfo in filteredFileInfo)
+                {
+                    fileNames.Add(installInfo.getFileNamePath());
+                }
+                List<String> models = previewWindow.getModelsFromFileNames(fileNames);
+                foreach (String modelName in models)
+                {
+                    skinOptions mySkinOptions = new skinOptions();
+                    mySkinOptions.options = new List<skinOption>();
+                    mySkinOptions.skinName = modelName;
+                    mySkinOptions.parent = mySkinsOptions;
+                    List<string> otherSkins = previewWindow.getOtherSkinNames(modelName);
+                    foreach (String otherSkin in otherSkins)
+                    {
+                        skinOption myOption = new skinOption();
+                        myOption.skinName = otherSkin;
+                        myOption.skinSelected = myOption.origonalSelected = (otherSkin == modelName);
+                        myOption.parent = mySkinOptions;
+                        mySkinOptions.options.Add(myOption);
+                    }
+                    mySkinsOptions.Add(mySkinOptions);
+                }
+                CharacterSelectionForm form = new CharacterSelectionForm(mySkinsOptions);
+                form.StartPosition = FormStartPosition.CenterParent;
+                form.CustShowDialog(this);
+                mySkinsOptions = form.mySkinsOptions;
+                //now the fun part, seeing what files to add and remove and rename..
+                foreach (skinOptions mySkinOptions in mySkinsOptions)
+                {
+                    //first lets get the origonal skin that prompted this mess
+                    skinOption origonalOption = null;
+                    foreach (skinOption option in mySkinOptions.options)
+                    {
+                        if (option.origonalSelected) origonalOption = option;
+                    }
+                    if (origonalOption != null)
+                    {
+                        LOLViewer.IO.LOLModel origonalModel = previewWindow.reader.GetModel(origonalOption.skinName);
+
+                        List<installFileInfo> newFileInfos = new List<installFileInfo>();
+                        foreach (skinOption option in mySkinOptions.options)
+                        {
+                            if (option.skinSelected)
+                            {
+                                //we gota skin we need to .. change
+                                LOLViewer.IO.LOLModel targetModel = previewWindow.reader.GetModel(option.skinName);
+                                foreach (installFileInfo installInfo in filteredFileInfo)
+                                {
+                                    FileInfo newLoc = null;
+                                    if (installInfo.origonal.ToLower().Replace("\\","/").Contains(origonalModel.skl.FileName.ToLower()))
+                                    {
+                                        newLoc = new FileInfo(targetModel.skl.RAFArchive.RAFFilePath +
+                                            targetModel.skl.FileName);
+                                        
+                                    }
+                                    if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.skn.FileName.ToLower()))
+                                    {
+                                        newLoc = new FileInfo(targetModel.skn.RAFArchive.RAFFilePath +
+                                            targetModel.skn.FileName);
+                                        
+                                    }
+                                    if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.texture.FileName.ToLower()))
+                                    {
+                                        newLoc = new FileInfo(targetModel.texture.RAFArchive.RAFFilePath +
+                                            targetModel.texture.FileName);
+                                        
+
+                                    }
+                                    if(newLoc!=null)
+                                    {
+                                        newFileInfos.Add(new installFileInfo(installInfo.origonal,
+                                        newLoc.Name,
+                                        newLoc.Directory.FullName.ToLower()
+                                        .Replace(gameDirectory.ToLower(), "")));
+                                        
+                                        debugadd("We are moving a skin to a new skin, old is "+installInfo.origonal+" new is "
+                                            +newLoc.Name);
+                                    }
+                                    
+                                    
+                                }
+
+                            }
+                        }
+
+                        List<installFileInfo> toRemove=new List<installFileInfo>();
+                        if (!origonalOption.skinSelected)
+                        {
+                            //todo we need to remove the origonal files
+                            foreach (installFileInfo installInfo in filteredFileInfo)
+                            {
+                                if (
+                                (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.skl.FileName.ToLower()))||
+                                (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.skn.FileName.ToLower()))||
+                                (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.texture.FileName.ToLower()))
+                                )
+                                {
+                                    debugadd("We are removing " + installInfo.origonal + " from the install because it was not selected before");
+                                    toRemove.Add(installInfo);
+                                }
+                            }                                        
+                        }
+                        foreach (installFileInfo toRemoveInfo in toRemove)
+                        {
+                            filteredFileInfo.Remove(toRemoveInfo);
+                        }
+
+
+                        filteredFileInfo.AddRange(newFileInfos);
+                    }
+
+                }
+            }
+        }
+        private void fileCopyFiles(ref List<installFileInfo> filteredFileInfo)
+        {
+            foreach (installFileInfo installInfo in filteredFileInfo)
+            {
+
+                if (installInfo.getFileNamePath().Contains(".raf"))
+                {
+                    //handle this one different
+                    debugadd("raf backup " + installInfo.origonal);
+                    rafBackup(gameDirectory + installInfo.getFileNamePath(), "");
+                    debugadd("raf Installing " + installInfo.origonal);
+                    rafInject(installInfo.origonal, gameDirectory + installInfo.getFileNamePath());
+                }
+                else
+                {
+                    debugadd("Backup " + installInfo.getFileNamePath());
+
+                    backupFile(installInfo.fileName, installInfo.filePath);
+                    debugadd("Installing " + installInfo.origonal);
+
+                    this.SIFileOp.FileMove(installInfo.origonal,
+                        gameDirectory + installInfo.getFileNamePath());
+                }
+                //Cliver.Message.Show(this.Icon, "Installing " + str + " to " + gameDirectory + str2 + str3, 0, "OK");
+                debugadd("Done Installing " + installInfo.origonal + " to " 
+                    + gameDirectory + installInfo.getFileNamePath());
+            }                 
         }
         private void installProgress(object sender, ProgressChangedEventArgs e)
         {
@@ -6459,7 +6592,10 @@ namespace SkinInstaller
                     foreach (RAFFileListEntry entry in filez)
                     {
                         if (fileListWorker1.CancellationPending)
+                        {
+                            fStream.Close();
                             return false;
+                        }
 
                         int innerpercent = (int)Math.Floor((double)innerInc++ / (double)filez.Count * (double)100.0);
                         if (lastP != innerpercent)
@@ -6503,14 +6639,18 @@ namespace SkinInstaller
                 }
             }
 
-            debugadd("Please wait...Writting to disk");
+            debugadd("Please wait...writing to disk");
             TextWriter tw = new StreamWriter(fileName);
             
             tw.WriteLine(fileSize.ToString() + "|" + string.Join("|", fileExtensions.ToArray()));
             foreach (string str3 in fileList.ToArray())
             {
                 if (fileListWorker1.CancellationPending)
+                {
+                    tw.Dispose();
+                    tw.Close();
                     return false;
+                }
                 if (str3 != string.Empty)
                 {
                     tw.WriteLine(str3);
@@ -8443,6 +8583,23 @@ namespace SkinInstaller
         }
         public int rafPower;
         public string fileLocation;
+    }
+    public struct installFileInfo
+    {
+        public string origonal;
+        public string fileName;
+        public string filePath;
+        public string getFileNamePath()
+        {
+            return filePath+fileName;
+        }
+        public installFileInfo(string _orig, string _fn, string _fp)
+        {
+            origonal = _orig;
+            fileName = _fn;
+            filePath = _fp;
+        }
+        
     }
     public class NodeSorter : IComparer
     {

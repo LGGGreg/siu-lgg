@@ -620,5 +620,18 @@ namespace SkinInstaller.Properties {
                 this["lastSelectedTab"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(SkinInstaller.PortableSettingsProvider))]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool showCharSelection {
+            get {
+                return ((bool)(this["showCharSelection"]));
+            }
+            set {
+                this["showCharSelection"] = value;
+            }
+        }
     }
 }
