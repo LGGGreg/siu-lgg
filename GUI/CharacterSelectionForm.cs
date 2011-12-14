@@ -47,7 +47,7 @@ namespace SkinInstaller
                 }
                 input += "\r\n";
             }
-            textBox1.Text = input;
+            textBox2.Text = input;
 
             // ok make the form look right
             tableLayoutPanel1.ColumnCount = mySkinsOptions.Count;
