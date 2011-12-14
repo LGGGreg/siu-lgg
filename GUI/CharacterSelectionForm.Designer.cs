@@ -224,12 +224,12 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(6, 6);
+            this.label2.Location = new System.Drawing.Point(3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(440, 13);
+            this.label2.Size = new System.Drawing.Size(229, 26);
             this.label2.TabIndex = 0;
-            this.label2.Text = "Please remeber this is experimental.  Particles, load screens, and air files will" +
-    " not be affected.";
+            this.label2.Text = "Please remeber this is experimental.  \r\nParticles, load screens, etc will not be " +
+    "affected.";
             // 
             // CharacterSelectionForm
             // 

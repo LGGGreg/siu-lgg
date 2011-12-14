@@ -1035,7 +1035,7 @@ namespace SkinInstaller
 //desitnation is
 //C:\Riot Games\League of Legends - Copy\rads\projects\lol_game_client\filearchives\0.0.0.25\archive_84986336.raf\data\particles\anniebasicattack03.dds
             String rafLocation = destination.Substring(0, destination.IndexOf(".raf")+4);
-            String rafInnerLocation = origonal.Substring(origonal.IndexOf(".raf") + 5).Replace("\\","/");
+            String rafInnerLocation = destination.Substring(destination.IndexOf(".raf") + 5).Replace("\\","/");
             string infos = "THIS IS A RAF FILE\r\n\r\nOrigonal is\r\n" + origonal +
               "\r\ndesitnation is\r\n" + destination + "\r\n raf file is\r\n" + rafLocation
              + "\r\ninner location is\r\n" + rafInnerLocation;
@@ -3391,9 +3391,9 @@ namespace SkinInstaller
                 if (installInfo.getFileNamePath().Contains(".raf"))
                 {
                     //handle this one different
-                    debugadd("raf backup " + installInfo.origonal);
+                    debugadd("raf backup " + installInfo.getFileNamePath());
                     rafBackup(gameDirectory + installInfo.getFileNamePath(), "");
-                    debugadd("raf Installing " + installInfo.origonal);
+                    debugadd("raf Installing " + installInfo.getFileNamePath());
                     rafInject(installInfo.origonal, gameDirectory + installInfo.getFileNamePath());
                 }
                 else
@@ -5030,14 +5030,14 @@ namespace SkinInstaller
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -5850,8 +5850,11 @@ namespace SkinInstaller
 
             foreach (ListViewItem item in this.listView1.CheckedItems)
             {
+
+                List<string> charsToUninstall = new List<string>();
                 if (true)//item.SubItems[4].Text == "Yes")
                 {
+
                     foreach (string str in Directory.GetFiles(Application.StartupPath + @"\skins\" + item.SubItems[1].Text, "*.*", SearchOption.AllDirectories))
                     {
                         string[] strArray2 = str.Split(new char[] { '\\' });
@@ -5870,6 +5873,7 @@ namespace SkinInstaller
                         }
                         string fileName = strArray2[strArray2.Length - 1];
                         //Cliver.Message.Inform("str2 is " + str2 + " str3 is " + str3);
+                        
                         int airIndex = path.ToLower().IndexOf("\\lol_air_client\\releases\\");
                         //path must exist, unless its a air silly thing, in which case we need to check new version    
                         if ((path != null) && (File.Exists(gameDirectory + path + fileName) || (airIndex > 0)))
@@ -5939,6 +5943,7 @@ namespace SkinInstaller
                         }
                         else if (path.Contains(".raf"))
                         {
+                            
                             //handle this one different
 
                             //check and see if we have a backup to restore
@@ -5953,6 +5958,14 @@ namespace SkinInstaller
 
 
                         }
+
+                        int pathIndex = path.ToLower().IndexOf("characters");
+                        if (pathIndex>-1)
+                        {
+                            string character = path.Substring(pathIndex+11).Replace("\\","");
+                            if (!charsToUninstall.Contains(character))
+                                charsToUninstall.Add(character);
+                        }
                         if (path.Contains("formatedsounds"))
                         {
                             soundsflag = true;
@@ -5962,6 +5975,29 @@ namespace SkinInstaller
                 if (soundsflag)
                 {
                     restoreSounds();
+                }
+                if (charsToUninstall.Count > 0)
+                {
+                    foreach(String character in charsToUninstall)
+                    {
+                        // un install all files of a character to account for modifications during char selection
+                        string backupFolder = Application.StartupPath + @"\backup\";
+                        string lookFor = ".raf\\data\\characters\\" + character.ToLower() + "\\"; 
+                        
+                        string[] allBackupFiles = Directory.GetFiles(backupFolder, "*.*", SearchOption.AllDirectories);
+                        foreach (string abackupFile in allBackupFiles)
+                        {
+                            if (abackupFile.ToLower().Contains(lookFor))
+                            {
+                                string rafDestination = gameDirectory+abackupFile.ToLower().Replace(backupFolder.ToLower(), "");
+                                string TheRaf = rafDestination.Substring(0, rafDestination.IndexOf(".raf")+4);
+                                if(File.Exists(TheRaf))//make sure we don't restore a ancient backup that cant be
+                                    rafInject(abackupFile,rafDestination);
+                            }
+
+                        }                       
+                        
+                    }
                 }
                 item.SubItems[4].Text = "No";
                 this.ExecuteQuery("UPDATE skins SET sInstalled=0, dateinstalled=\"" + "-" + "\"" +
