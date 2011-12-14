@@ -229,10 +229,10 @@
             this.label2.AutoSize = true;
             this.label2.Location = new System.Drawing.Point(3, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(229, 26);
+            this.label2.Size = new System.Drawing.Size(201, 26);
             this.label2.TabIndex = 0;
-            this.label2.Text = "Please remeber this is experimental.  \r\nParticles, load screens, etc will not be " +
-    "affected.";
+            this.label2.Text = "Please remeber this is experimental.  \r\nParticles, air files, etc will not be aff" +
+    "ected.";
             // 
             // textBox2
             // 
