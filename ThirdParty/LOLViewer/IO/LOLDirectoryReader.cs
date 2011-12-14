@@ -235,6 +235,15 @@ namespace LOLViewer.IO
                 return false;
             }
 
+            // Find the load screen
+            string loadScreenName = def.anmListKey.ToLower() + "loadscreen_" + (def.skin - 1).ToString();
+            if (def.skin <= 1) loadScreenName = loadScreenName.Substring(0, loadScreenName.Length - 2);
+            loadScreenName+=".dds";
+            if (textures.ContainsKey(loadScreenName))
+            {
+                model.loadScreen = textures[loadScreenName];
+            }
+
             return true;
         }
 
@@ -573,10 +582,7 @@ namespace LOLViewer.IO
                 foreach (RAFFileListEntry e in files)
                 {
                     // Try to parse out unwanted textures.
-                    if (e.FileName.Contains("LoadScreen") == false &&
-                        e.FileName.Contains("Loadscreen") == false &&
-                        e.FileName.Contains("loadscreen") == false &&
-                        e.FileName.Contains("circle") == false &&
+                    if (e.FileName.Contains("circle") == false &&
                         e.FileName.Contains("square") == false &&
                         e.FileName.Contains("DATA") == true &&
                         e.FileName.Contains("Characters") == true)
