@@ -3317,7 +3317,14 @@ namespace SkinInstaller
                                 {
                                     debugadd("We might be removing " + installInfo.origonal + " from the install because it was not selected before");
                                     toRemove.Add(installInfo);
-                                }
+                                }else
+                                if(origonalModel.loadScreen!=null)
+                                    if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.loadScreen.FileName.ToLower()))
+                                    {
+                                        debugadd("We might be removing " + installInfo.origonal + " from the install because it was not selected before");
+                                        toRemove.Add(installInfo);
+                                    }
+                                
                             }
                         }
 
@@ -3334,21 +3341,24 @@ namespace SkinInstaller
                                     {
                                         newLoc = new FileInfo(targetModel.skl.RAFArchive.RAFFilePath +"\\"+
                                             targetModel.skl.FileName);
-                                        
                                     }
                                     if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.skn.FileName.ToLower()))
                                     {
                                         newLoc = new FileInfo(targetModel.skn.RAFArchive.RAFFilePath + "\\" +
                                             targetModel.skn.FileName);
-                                        
                                     }
                                     if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.texture.FileName.ToLower()))
                                     {
                                         newLoc = new FileInfo(targetModel.texture.RAFArchive.RAFFilePath + "\\" +
                                             targetModel.texture.FileName);
-                                        
-
                                     }
+                                    if (origonalModel.loadScreen != null)
+                                        if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.loadScreen.FileName.ToLower()))
+                                        {
+                                            if(targetModel.loadScreen!=null)
+                                                newLoc = new FileInfo(targetModel.loadScreen.RAFArchive.RAFFilePath + "\\" +
+                                                    targetModel.loadScreen.FileName);
+                                        }
                                     if(newLoc!=null)
                                     {
                                         newFileInfos.Add(new installFileInfo(installInfo.origonal,
