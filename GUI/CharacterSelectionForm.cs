@@ -61,7 +61,9 @@ namespace SkinInstaller
             // setup rows
             int maxRows = 0;
             foreach (skinOptions mySkinOptions in mySkinsOptions)
-                if (mySkinOptions.options.Count > maxRows) maxRows = mySkinOptions.options.Count;            
+                if (mySkinOptions.options.Count > maxRows) maxRows = mySkinOptions.options.Count;
+            int sizeNeeded = 50 * maxRows + 240;
+            this.Size = new Size( (560 / 3) * mySkinsOptions.Count+100,sizeNeeded);
             float titleSize = 20;
             tableLayoutPanel1.RowCount = maxRows;
             tableLayoutPanel1.Controls.Clear();
