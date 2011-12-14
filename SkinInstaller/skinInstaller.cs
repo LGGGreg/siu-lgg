@@ -3264,6 +3264,7 @@ namespace SkinInstaller
                     fileNames.Add(installInfo.getFileNamePath());
                 }
                 List<String> models = previewWindow.getModelsFromFileNames(fileNames);
+                if (models.Count < 1) return;
                 foreach (String modelName in models)
                 {
                     skinOptions mySkinOptions = new skinOptions();
@@ -3286,6 +3287,11 @@ namespace SkinInstaller
                 form.CustShowDialog(this);
                 mySkinsOptions = form.mySkinsOptions;
                 //now the fun part, seeing what files to add and remove and rename..
+
+
+                List<installFileInfo> toRemove = new List<installFileInfo>();
+                List<installFileInfo> newFileInfos = new List<installFileInfo>();
+                        
                 foreach (skinOptions mySkinOptions in mySkinsOptions)
                 {
                     //first lets get the origonal skin that prompted this mess
@@ -3298,7 +3304,23 @@ namespace SkinInstaller
                     {
                         LOLViewer.IO.LOLModel origonalModel = previewWindow.reader.GetModel(origonalOption.skinName);
 
-                        List<installFileInfo> newFileInfos = new List<installFileInfo>();
+                        if (true)//!origonalOption.skinSelected)
+                        {
+                            //todo we need to remove the origonal files (we will add them again below if needed)
+                            foreach (installFileInfo installInfo in filteredFileInfo)
+                            {
+                                if (
+                                (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.skl.FileName.ToLower())) ||
+                                (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.skn.FileName.ToLower())) ||
+                                (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.texture.FileName.ToLower()))
+                                )
+                                {
+                                    debugadd("We might be removing " + installInfo.origonal + " from the install because it was not selected before");
+                                    toRemove.Add(installInfo);
+                                }
+                            }
+                        }
+
                         foreach (skinOption option in mySkinOptions.options)
                         {
                             if (option.skinSelected)
@@ -3310,19 +3332,19 @@ namespace SkinInstaller
                                     FileInfo newLoc = null;
                                     if (installInfo.origonal.ToLower().Replace("\\","/").Contains(origonalModel.skl.FileName.ToLower()))
                                     {
-                                        newLoc = new FileInfo(targetModel.skl.RAFArchive.RAFFilePath +
+                                        newLoc = new FileInfo(targetModel.skl.RAFArchive.RAFFilePath +"\\"+
                                             targetModel.skl.FileName);
                                         
                                     }
                                     if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.skn.FileName.ToLower()))
                                     {
-                                        newLoc = new FileInfo(targetModel.skn.RAFArchive.RAFFilePath +
+                                        newLoc = new FileInfo(targetModel.skn.RAFArchive.RAFFilePath + "\\" +
                                             targetModel.skn.FileName);
                                         
                                     }
                                     if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.texture.FileName.ToLower()))
                                     {
-                                        newLoc = new FileInfo(targetModel.texture.RAFArchive.RAFFilePath +
+                                        newLoc = new FileInfo(targetModel.texture.RAFArchive.RAFFilePath + "\\" +
                                             targetModel.texture.FileName);
                                         
 
@@ -3332,7 +3354,7 @@ namespace SkinInstaller
                                         newFileInfos.Add(new installFileInfo(installInfo.origonal,
                                         newLoc.Name,
                                         newLoc.Directory.FullName.ToLower()
-                                        .Replace(gameDirectory.ToLower(), "")));
+                                        .Replace(gameDirectory.ToLower(), "")+"\\"));
                                         
                                         debugadd("We are moving a skin to a new skin, old is "+installInfo.origonal+" new is "
                                             +newLoc.Name);
@@ -3343,35 +3365,23 @@ namespace SkinInstaller
 
                             }
                         }
-
-                        List<installFileInfo> toRemove=new List<installFileInfo>();
-                        if (!origonalOption.skinSelected)
-                        {
-                            //todo we need to remove the origonal files
-                            foreach (installFileInfo installInfo in filteredFileInfo)
-                            {
-                                if (
-                                (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.skl.FileName.ToLower()))||
-                                (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.skn.FileName.ToLower()))||
-                                (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.texture.FileName.ToLower()))
-                                )
-                                {
-                                    debugadd("We are removing " + installInfo.origonal + " from the install because it was not selected before");
-                                    toRemove.Add(installInfo);
-                                }
-                            }                                        
-                        }
-                        foreach (installFileInfo toRemoveInfo in toRemove)
-                        {
-                            filteredFileInfo.Remove(toRemoveInfo);
-                        }
-
-
-                        filteredFileInfo.AddRange(newFileInfos);
                     }
-
+                }
+                foreach (installFileInfo toAddInfo in newFileInfos)
+                {
+                    filteredFileInfo.Add(toAddInfo);
+                }
+                foreach (installFileInfo toRemoveInfo in toRemove)
+                {
+                    filteredFileInfo.Remove(toRemoveInfo);
                 }
             }
+            debugadd("After char selection we have");
+            foreach (installFileInfo fileInfo in filteredFileInfo)
+            {
+                debugadd(fileInfo.getFileNamePath());
+            }
+            debugadd("fin");
         }
         private void fileCopyFiles(ref List<installFileInfo> filteredFileInfo)
         {
