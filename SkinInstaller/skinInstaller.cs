@@ -3202,7 +3202,7 @@ namespace SkinInstaller
                                 filteredFileInfo.Add(new 
                                     installFileInfo(skinFileName,fixedFileName,fixedFilePath));
                                 //filteredFiles.Add(fixedFilePath + fixedFileName);                            
-                                num++;
+                                //num++;
                             }
                             else
                             {
@@ -3227,7 +3227,7 @@ namespace SkinInstaller
                 }
                 chooseCharacterFiles(ref filteredFileInfo);
                 fileCopyFiles(ref filteredFileInfo);
-                num = filteredFileInfo.Count;
+                num +=filteredFileInfo.Count;
                 prettyDate pd = new prettyDate(DateTime.Now);
                 //item.SubItems[4].Text = pd.ToString();
                 this.ExecuteQuery("UPDATE skins SET sInstalled=1, dateinstalled=\"" + pd.getStringDate() + "\"" +
