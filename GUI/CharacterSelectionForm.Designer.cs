@@ -37,12 +37,12 @@
             this.panel2 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
             this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.label2 = new System.Windows.Forms.Label();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.textBox2 = new System.Windows.Forms.TextBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.button1Done = new System.Windows.Forms.Button();
             this.checkBox1ShowAgain = new System.Windows.Forms.CheckBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -177,6 +177,16 @@
             this.pictureBox1.TabIndex = 2;
             this.pictureBox1.TabStop = false;
             // 
+            // label2
+            // 
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 0);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(201, 26);
+            this.label2.TabIndex = 0;
+            this.label2.Text = "Please remeber this is experimental.  \r\nParticles, air files, etc will not be aff" +
+    "ected.";
+            // 
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.textBox2);
@@ -187,6 +197,16 @@
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Debug";
             this.tabPage2.UseVisualStyleBackColor = true;
+            // 
+            // textBox2
+            // 
+            this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox2.Location = new System.Drawing.Point(3, 3);
+            this.textBox2.Multiline = true;
+            this.textBox2.Name = "textBox2";
+            this.textBox2.ReadOnly = true;
+            this.textBox2.Size = new System.Drawing.Size(730, 344);
+            this.textBox2.TabIndex = 0;
             // 
             // textBox1
             // 
@@ -223,26 +243,6 @@
             this.checkBox1ShowAgain.Text = "Show This Screen Again";
             this.checkBox1ShowAgain.UseVisualStyleBackColor = true;
             this.checkBox1ShowAgain.CheckedChanged += new System.EventHandler(this.checkBox1ShowAgain_CheckedChanged);
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 0);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(201, 26);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Please remeber this is experimental.  \r\nParticles, air files, etc will not be aff" +
-    "ected.";
-            // 
-            // textBox2
-            // 
-            this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox2.Location = new System.Drawing.Point(3, 3);
-            this.textBox2.Multiline = true;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(730, 344);
-            this.textBox2.TabIndex = 0;
             // 
             // CharacterSelectionForm
             // 
