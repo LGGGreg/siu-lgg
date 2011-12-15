@@ -360,6 +360,11 @@ namespace SkinInstaller
         private BackgroundWorker ParticleTreeWorker2;
         private Panel progrespanel;
         private Button buttoncancel;
+        private ContextMenuStrip treeMenuStripSkin1;
+        private ToolStripMenuItem toolStripMenuItem1;
+        private ToolStripMenuItem toolStripMenuItem2;
+        private ToolStripMenuItem toolStripMenuItem3;
+        private ToolStripMenuItem makeSimpleSkinFromThisRiotSkinToolStripMenuItem;
         PaintEventHandler importantP;
         #endregion
         #region webIntegrate
@@ -3686,6 +3691,11 @@ namespace SkinInstaller
             this.rafTreeBuilderWorker2 = new System.ComponentModel.BackgroundWorker();
             this.exportFolderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.ParticleTreeWorker2 = new System.ComponentModel.BackgroundWorker();
+            this.treeMenuStripSkin1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
+            this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -3723,6 +3733,7 @@ namespace SkinInstaller
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).BeginInit();
             this.panel7.SuspendLayout();
             this.progrespanel.SuspendLayout();
+            this.treeMenuStripSkin1.SuspendLayout();
             this.SuspendLayout();
             // 
             // exit
@@ -4709,7 +4720,6 @@ namespace SkinInstaller
             // 
             this.treeView1.BackColor = System.Drawing.Color.Black;
             this.treeView1.CheckBoxes = true;
-            this.treeView1.ContextMenuStrip = this.treeViewMenuStrip1;
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView1.ForeColor = System.Drawing.Color.Red;
             this.treeView1.FullRowSelect = true;
@@ -4730,6 +4740,7 @@ namespace SkinInstaller
             this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
             this.treeView1.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterExpand);
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
+            this.treeView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseUp);
             // 
             // treeViewMenuStrip1
             // 
@@ -5042,14 +5053,14 @@ namespace SkinInstaller
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
@@ -5308,6 +5319,43 @@ namespace SkinInstaller
             this.ParticleTreeWorker2.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ParticleTreeWorker2_ProgressChanged);
             this.ParticleTreeWorker2.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.ParticleTreeWorker2_RunWorkerCompleted);
             // 
+            // treeMenuStripSkin1
+            // 
+            this.treeMenuStripSkin1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripMenuItem1,
+            this.toolStripMenuItem2,
+            this.toolStripMenuItem3,
+            this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem});
+            this.treeMenuStripSkin1.Name = "treeViewMenuStrip1";
+            this.treeMenuStripSkin1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.treeMenuStripSkin1.Size = new System.Drawing.Size(262, 114);
+            this.treeMenuStripSkin1.Opening += new System.ComponentModel.CancelEventHandler(this.treeMenuStripSkin1_Opening);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem1.Text = "Export Selected Files";
+            // 
+            // toolStripMenuItem2
+            // 
+            this.toolStripMenuItem2.Name = "toolStripMenuItem2";
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem2.Text = "Deselect All Files";
+            // 
+            // toolStripMenuItem3
+            // 
+            this.toolStripMenuItem3.Name = "toolStripMenuItem3";
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(180, 22);
+            this.toolStripMenuItem3.Text = "Help!";
+            // 
+            // makeSimpleSkinFromThisRiotSkinToolStripMenuItem
+            // 
+            this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Name = "makeSimpleSkinFromThisRiotSkinToolStripMenuItem";
+            this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Text = "Make Simple Skin from this Riot Skin";
+            this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Click += new System.EventHandler(this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem_Click);
+            // 
             // skinInstaller
             // 
             this.AllowDrop = true;
@@ -5376,6 +5424,7 @@ namespace SkinInstaller
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).EndInit();
             this.panel7.ResumeLayout(false);
             this.progrespanel.ResumeLayout(false);
+            this.treeMenuStripSkin1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -6282,7 +6331,7 @@ namespace SkinInstaller
         {
             if (updateWorker2.IsBusy)
             {
-                Cliver.Message.Inform("Please wait untill the update is finished (progress bar bellow)");
+                Cliver.Message.Inform("Please wait until the update is finished (progress bar bellow)");
             }
             else
                 if (Directory.Exists(Application.StartupPath + "\\icons"))
@@ -8086,6 +8135,9 @@ namespace SkinInstaller
                     TreeNode charNode = folderNode.Nodes.Add(charName, charName);
                     //TreeNode charNode = folderNode.Nodes.Find(charName, false)[0];
                     charNode.ToolTipText = kv.Key;
+                    rafTreeDataObject ctag = new rafTreeDataObject();
+                    ctag.fileLocation = "Skin";
+                    charNode.Tag = ctag;
                     //charNode.Tag = new rafTreeDataObject(0, "");// kv.Value;
                     //add models and stuff
                     if (kv.Value.animations.Count > 0)
@@ -8203,6 +8255,10 @@ namespace SkinInstaller
                      int nodesPower=-1;
                     if (innerNode.Tag != null)                    
                     {
+                        if (((rafTreeDataObject)innerNode.Tag).fileLocation == "Skin")
+                        {
+                            nodesPower = colorizeFolder(innerNode);
+                        }else
                         nodesPower = ((rafTreeDataObject)innerNode.Tag).rafPower;
                         
                     }else
@@ -8218,9 +8274,12 @@ namespace SkinInstaller
                 {
                     rafTreeDataObject tag = new rafTreeDataObject();
                     tag.fileLocation = "";
+                    if (folder.Tag != null) tag.fileLocation = ((rafTreeDataObject)folder.Tag).fileLocation;
                     tag.rafPower = lowestRafPower;
                     folder.Tag = tag;
-                    folder.ForeColor = colorFromRafPower(tag.rafPower);
+                    Color test = colorFromRafPower(tag.rafPower);
+                    //if (test.Equals(Color.Black)) test = Color.Lime;
+                    folder.ForeColor = test;
                     toReturn = tag.rafPower;
                 }
             }
@@ -8606,6 +8665,43 @@ namespace SkinInstaller
             treeView1.Sort();
             UpdateProgressSafe(100);
         }
+        private TreeNode m_OldSelectNode;
+        private void treeView1_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+        {
+            // Show menu only if the right mouse button is clicked.
+            if (e.Button == MouseButtons.Right)
+            {
+
+                // Point where the mouse is clicked.
+                Point p = new Point(e.X, e.Y);
+
+                // Get the node that the user has clicked.
+                TreeNode node = treeView1.GetNodeAt(p);
+                if (node != null)
+                {
+
+                    // Select the node the user has clicked.
+                    // The node appears selected until the menu is displayed on the screen.
+                    m_OldSelectNode = treeView1.SelectedNode;
+                    treeView1.SelectedNode = node;
+
+                    //Find the appropriate ContextMenu depending on the selected node.
+                    if (node.Tag != null)
+                    {
+                        rafTreeDataObject tagObj = ((rafTreeDataObject)node.Tag);
+                        if (tagObj.fileLocation == "Skin")
+                            treeMenuStripSkin1.Show(treeView1, p);
+                        else
+                            treeViewMenuStrip1.Show(treeView1, p);
+                    }
+
+                    // Highlight the selected node.
+                    treeView1.SelectedNode = m_OldSelectNode;
+                    m_OldSelectNode = null;
+                }
+            }
+        }
+
         #endregion
 
         private void buttoncancel_Click(object sender, EventArgs e)
@@ -8614,6 +8710,17 @@ namespace SkinInstaller
                 fileListWorker1.CancelAsync();
         }
 
+        private void treeMenuStripSkin1_Opening(object sender, CancelEventArgs e)
+        {
+
+        }
+
+        private void makeSimpleSkinFromThisRiotSkinToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        
     }
     #region strucks
     public class LogTextWriter : TextWriter

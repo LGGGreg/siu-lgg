@@ -360,7 +360,7 @@ namespace LOLViewer.IO
             // US Client: "League of Legends"
             // EU Client: "League of Legends EU"
             // etc.
-            if (dir.Name.Contains("League of Legends") == true)
+            if (dir.Name.ToLower().Contains("league of legends") == true)
             {
                 result = OpenDirectory(dir);
             }
@@ -369,10 +369,10 @@ namespace LOLViewer.IO
                 //
                 // Standard Case
                 //
-
-                switch (dir.Name)
+                
+                switch (dir.Name.ToLower())
                 {
-                    case "RADS":
+                    case "rads":
                         {
                             result = OpenDirectory(dir);
                             break;

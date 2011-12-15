@@ -47,7 +47,7 @@ namespace LOLViewer
         public LOLDirectoryReader reader;
 
         public LoadingModelsWindow()
-        {
+        {            
             result = DialogResult.OK;
 
             InitializeComponent();
@@ -83,6 +83,7 @@ namespace LOLViewer
 
         private void OnWorkerDoWork(object sender, DoWorkEventArgs e)
         {
+            
             bool readResult = reader.Read();
             if (readResult == true)
             {
@@ -93,6 +94,7 @@ namespace LOLViewer
             {
                 result = DialogResult.Abort;
             }
+            
         }
 
         private void OnWorkerWorkCompleted(object sender, RunWorkerCompletedEventArgs e)
