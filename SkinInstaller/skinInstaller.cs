@@ -468,8 +468,8 @@ namespace SkinInstaller
                             if (para[0].ToLower() == "info")
                             {
                                 this.tabControl1.SelectedIndex = 0;
-                                        
-                                String theInfo = "skin info: "+Uri.UnescapeDataString(para[1]).Trim().Replace("\r\n","[New Line]").Replace("\r","[New Line]").Replace("\n","[New Line]");
+
+                                String theInfo = "skin info: " + Uri.UnescapeDataString(para[1]).Trim().Replace("\r\n", "[New Line]").Replace("\r", "[New Line]").Replace("\n", "[New Line]").Replace(":", "[Colon]");
                                 //Cliver.Message.Inform(theInfo);
                                 TextWriter tw = new StreamWriter(dir+"SIUInfo.txt");
                                 tw.WriteLine(theInfo);
@@ -7721,7 +7721,7 @@ namespace SkinInstaller
             TextWriter writer = new StreamWriter(infoPath+"\\SIUInfo.txt");
             writer.WriteLine("skin name: "+skinName);
             writer.WriteLine("skin author: "+skinAuthor);
-            writer.WriteLine("skin info: " + skinInfo.Replace("\r\n","[New Line]"));
+            writer.WriteLine("skin info: " + skinInfo.Replace("\r\n", "[New Line]").Replace(":","[Colon]"));
             writer.Close();
             UpdateListView();
         }

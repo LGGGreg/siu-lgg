@@ -63,7 +63,11 @@ namespace SkinInstaller
             foreach (skinOptions mySkinOptions in mySkinsOptions)
                 if (mySkinOptions.options.Count > maxRows) maxRows = mySkinOptions.options.Count;
             int sizeNeeded = 50 * maxRows + 240;
-            this.Size = new Size( (560 / 3) * mySkinsOptions.Count+100,sizeNeeded);
+            if (sizeNeeded < (50 * 4 + 230)) sizeNeeded = (50 * 4 + 230);
+            int widthNeeded = (560 / 3) * mySkinsOptions.Count + 100;
+            if (widthNeeded < ((560 / 3) * 1.5 + 100)) widthNeeded = (int)((560f / 3f) * 1.5f) + 100;
+
+            this.Size = new Size( widthNeeded,sizeNeeded);
             float titleSize = 20;
             tableLayoutPanel1.RowCount = maxRows;
             tableLayoutPanel1.Controls.Clear();
