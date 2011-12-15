@@ -30,6 +30,10 @@
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.dateTimePicker1added = new System.Windows.Forms.DateTimePicker();
+            this.label6 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.dateTimePicker1installed = new System.Windows.Forms.DateTimePicker();
             this.textBox3filecount = new System.Windows.Forms.TextBox();
             this.textBox2name = new System.Windows.Forms.TextBox();
             this.textBox1author = new System.Windows.Forms.TextBox();
@@ -46,10 +50,6 @@
             this.button1close = new System.Windows.Forms.Button();
             this.button1save = new System.Windows.Forms.Button();
             this.ofd = new System.Windows.Forms.OpenFileDialog();
-            this.dateTimePicker1installed = new System.Windows.Forms.DateTimePicker();
-            this.label5 = new System.Windows.Forms.Label();
-            this.label6 = new System.Windows.Forms.Label();
-            this.dateTimePicker1added = new System.Windows.Forms.DateTimePicker();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -108,6 +108,38 @@
             this.splitContainer2.Size = new System.Drawing.Size(444, 314);
             this.splitContainer2.SplitterDistance = 223;
             this.splitContainer2.TabIndex = 0;
+            // 
+            // dateTimePicker1added
+            // 
+            this.dateTimePicker1added.Location = new System.Drawing.Point(12, 237);
+            this.dateTimePicker1added.Name = "dateTimePicker1added";
+            this.dateTimePicker1added.Size = new System.Drawing.Size(200, 20);
+            this.dateTimePicker1added.TabIndex = 11;
+            // 
+            // label6
+            // 
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(12, 216);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(64, 13);
+            this.label6.TabIndex = 10;
+            this.label6.Text = "Date Added";
+            // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(12, 165);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(72, 13);
+            this.label5.TabIndex = 9;
+            this.label5.Text = "Date Installed";
+            // 
+            // dateTimePicker1installed
+            // 
+            this.dateTimePicker1installed.Location = new System.Drawing.Point(12, 184);
+            this.dateTimePicker1installed.Name = "dateTimePicker1installed";
+            this.dateTimePicker1installed.Size = new System.Drawing.Size(200, 20);
+            this.dateTimePicker1installed.TabIndex = 8;
             // 
             // textBox3filecount
             // 
@@ -264,38 +296,6 @@
             // ofd
             // 
             this.ofd.FileName = "openFileDialog1";
-            // 
-            // dateTimePicker1installed
-            // 
-            this.dateTimePicker1installed.Location = new System.Drawing.Point(12, 184);
-            this.dateTimePicker1installed.Name = "dateTimePicker1installed";
-            this.dateTimePicker1installed.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePicker1installed.TabIndex = 8;
-            // 
-            // label5
-            // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(12, 165);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(72, 13);
-            this.label5.TabIndex = 9;
-            this.label5.Text = "Date Installed";
-            // 
-            // label6
-            // 
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 216);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(64, 13);
-            this.label6.TabIndex = 10;
-            this.label6.Text = "Date Added";
-            // 
-            // dateTimePicker1added
-            // 
-            this.dateTimePicker1added.Location = new System.Drawing.Point(12, 237);
-            this.dateTimePicker1added.Name = "dateTimePicker1added";
-            this.dateTimePicker1added.Size = new System.Drawing.Size(200, 20);
-            this.dateTimePicker1added.TabIndex = 11;
             // 
             // EditSkinItemForm1
             // 
