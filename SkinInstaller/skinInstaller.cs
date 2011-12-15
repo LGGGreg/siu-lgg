@@ -2864,7 +2864,9 @@ namespace SkinInstaller
 
             //this.statusText.Text = "Installing ... Repacking soundbank...";
             installWorker2.ReportProgress(80, "Installing ... Repacking soundbank...");
-            runthis("fsbext.exe", "-s rebuild.dat -d sounds -r rebuiltSounds.fsb", fsbDir,false);
+
+            runthis(fsbDir + "reb.bat", "", tempFSB, false);            
+            //runthis("fsbext.exe", "-s rebuild.dat -d sounds -r rebuiltSounds.fsb", fsbDir,false);
             //RunWait(@ScriptDir & "\fsbext\fsbext -s rebuild.dat -d sounds -r VOBank_en_US.fsb", @ScriptDir & "\fsbext", @SW_HIDE)
 
             installWorker2.ReportProgress(80, "Installing ... Copying soundbank...");
@@ -5858,6 +5860,7 @@ namespace SkinInstaller
 
             bool soundsflag = false;
 
+            string msgs = "";
             foreach (ListViewItem item in this.listView1.CheckedItems)
             {
 
@@ -5904,6 +5907,7 @@ namespace SkinInstaller
                                 //debugadd("air file restore dir :"+airbackupDir.FullName);
                                 string lowestVersion = "";
                                 if (airRestoreDir.Exists)
+                                {
                                     foreach (DirectoryInfo dir in airRestoreDir.GetDirectories())
                                     {
                                         if (lowestVersion == "") lowestVersion = dir.Name;
@@ -5919,25 +5923,26 @@ namespace SkinInstaller
                                             }
                                         }
                                     }
-                                bf = airRestoreDir + lowestVersion + remainingPath + fileName;
-                                //ok we have the correct backup, now we have to find 
-                                DirectoryInfo airWorkingDir = new DirectoryInfo(gameDirectory + path.Substring(0, airIndex + 25));
-                                foreach (DirectoryInfo dir in airWorkingDir.GetDirectories())
-                                {
-                                    //make sure we pick the highest version
-                                    
-                                    string[] versions = dir.Name.Split('.');
-                                    string[] lowestversions = lowestVersion.Split('.');
-                                    for (int i = versions.Length - 1; i >= 0; i--)
+                                    bf = airRestoreDir + lowestVersion + remainingPath + fileName;
+                                    //ok we have the correct backup, now we have to find 
+                                    DirectoryInfo airWorkingDir = new DirectoryInfo(gameDirectory + path.Substring(0, airIndex + 25));
+                                    foreach (DirectoryInfo dir in airWorkingDir.GetDirectories())
                                     {
-                                        int vA = int.Parse(versions[i].Trim());
-                                        int lvA = int.Parse(lowestversions[i].Trim());
-                                        //tacky but im re-using this var name to mean "highest dir"
-                                        if (vA > lvA) lowestVersion = dir.Name;
-                                        
+                                        //make sure we pick the highest version
+
+                                        string[] versions = dir.Name.Split('.');
+                                        string[] lowestversions = lowestVersion.Split('.');
+                                        for (int i = versions.Length - 1; i >= 0; i--)
+                                        {
+                                            int vA = int.Parse(versions[i].Trim());
+                                            int lvA = int.Parse(lowestversions[i].Trim());
+                                            //tacky but im re-using this var name to mean "highest dir"
+                                            if (vA > lvA) lowestVersion = dir.Name;
+
+                                        }
                                     }
+                                    path = path.Substring(0, airIndex + 25) + lowestVersion + remainingPath;
                                 }
-                                path = path.Substring(0, airIndex + 25) + lowestVersion+remainingPath;
                                 
                             }
                             if (File.Exists(bf))
@@ -6014,8 +6019,11 @@ namespace SkinInstaller
                     " WHERE sName=\"" +
                    item.SubItems[1].Text + "\"");
                 this.SIFileOp.FileDelete(Application.StartupPath + @"\skins\" + item.SubItems[1].Text + @"\installed");
-                Cliver.Message.Inform("Successfuly uninstalled " + item.SubItems[1].Text);
+                msgs += "Successfully un-installed " + item.SubItems[1].Text+
+                    "\r\n";
+                //Cliver.Message.Inform("Successfuly uninstalled " + item.SubItems[1].Text);
             }
+            Cliver.Message.Inform(msgs);
             this.UpdateListView();
 
             this.dbInstall.Enabled = this.dbUninstall.Enabled = this.dbDelete.Enabled = this.UpdateFL.Enabled = true;
@@ -6445,9 +6453,9 @@ namespace SkinInstaller
                 statusText.Text = "Ready!";
                 b_IAddFiles.Enabled = true;
                 b_IAddDirectory.Enabled = true;
-                UpdateListView();
+                //UpdateListView();
 
-                rebuildTree();
+                
 
             }
             else
@@ -6463,6 +6471,7 @@ namespace SkinInstaller
                     //Application.Exit();
                 }
             }
+            rebuildTree();
            
            //Cliver.Message.Inform("work is "+result);
             

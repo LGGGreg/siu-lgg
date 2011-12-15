@@ -245,6 +245,12 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="fsb\map.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="fsb\reb.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
     <None Include="guiskinning\ClearLooks.msstyles">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
@@ -290,6 +296,26 @@
     <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_7.wav" />
     <None Include="TreeViewImages\small-cube-1.png" />
     <None Include="TreeViewImages\small-cube-2.png" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_10.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_2.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_3.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_4.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_5.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_6.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_7.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_8.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_9.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.ultimateeff_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.ultimateeff_2.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.ultimateeff_3.wav" />
+    <EmbeddedResource Include="fixs\soundfix\HyenaWarwick.spellcasteffort2_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\HyenaWarwick.spellcasteffort2_2.wav" />
+    <EmbeddedResource Include="fixs\soundfix\HyenaWarwick.spellcasteffort2_3.wav" />
+    <EmbeddedResource Include="fixs\soundfix\HyenaWarwick.spellcasteffort2_4.wav" />
+    <Content Include="fsb\fsbext.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="GUI\downarrow.png" />
     <Content Include="USkin.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
