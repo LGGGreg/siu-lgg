@@ -73,14 +73,26 @@ namespace LOLViewer
             isGLLoaded = false;
             timer = new Stopwatch();
 
-            camera = new GLCamera();
-            camera.SetViewParameters(new Vector3(0.0f, 0.0f, 300.0f), Vector3.Zero);
-            renderer = new GLRenderer();
-
             reader = new LOLDirectoryReader();
             reader.SetRoot(rootPath);
 
+            // Animation Controller
+            animationController = new AnimationController();
+
+            OnReadModels(null, null);
+
             InitializeComponent();
+            try
+            {
+                int b = 2;
+                int a = 1 / (b-2);
+            camera = new GLCamera();
+            camera.SetViewParameters(new Vector3(0.0f, 0.0f, 300.0f), Vector3.Zero);
+            renderer = new GLRenderer();
+                      
+
+
+           // InitializeComponent();
             modelScaleTrackbar.Value = (int) (GLRenderer.DEFAULT_MODEL_SCALE * DEFAULT_SCALE_TRACKBAR);
             yOffsetTrackbar.Value = -GLRenderer.DEFAULT_MODEL_YOFFSET;
 
@@ -115,9 +127,7 @@ namespace LOLViewer
             resetCameraButton.Click += new EventHandler(OnResetCameraButtonClick);
             backgroundColorButton.Click += new EventHandler(OnBackgroundColorButtonClick);
 
-            // Animation Controller
-            animationController = new AnimationController();
-
+            
             // Set references
             animationController.enableAnimationCheckBox = enableAnimationCheckBox;
             animationController.currentAnimationComboBox = currentAnimationComboBox;
@@ -137,8 +147,12 @@ namespace LOLViewer
 
             animationController.DisableAnimation();
             //renderer.SetClearColor(System.Drawing.Color.LightGray);
+            }
+            catch (System.Exception ex)
+            {
 
-            OnReadModels(null,null);
+            }  
+
         }
 
         //
@@ -425,10 +439,20 @@ namespace LOLViewer
 
         void OnReadModels(object sender, EventArgs e)
         {
-            renderer.DestroyCurrentModels();
-            glControlMain.Invalidate();
+
+            try
+            {
+                renderer.DestroyCurrentModels();
+                glControlMain.Invalidate();
+            }
+            catch (System.Exception ex)
+            {
+                
+            }
+            
 
             LoadingModelsWindow loader = new LoadingModelsWindow();
+            
             loader.reader = reader;
             loader.ShowDialog();
 
