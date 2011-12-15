@@ -87,6 +87,7 @@ namespace SkinInstaller
         #region consts
         const String c_TEMP_DIR_NAME_FIXED_SKIN_FILES = "fx";
         const String c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL = "sti";
+        const String c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_OPTIONS = "hlp";
         
         #endregion
         #region vars
@@ -656,11 +657,15 @@ namespace SkinInstaller
                 Properties.Settings.Default.hideTempWarningMessage = hideTempWarningMessage;
                 Properties.Settings.Default.Save();
                 
-            }    
+            }
 
             if (Directory.Exists(Application.StartupPath + @"\st\"))
             {
                 this.SIFileOp.DirectoryDelete(Application.StartupPath + @"\st\", true);
+            }
+            if (Directory.Exists(Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_OPTIONS+"\\"))
+            {
+                this.SIFileOp.DirectoryDelete(Application.StartupPath + @"\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_OPTIONS+"\\", true);
             }
             if (Directory.Exists(Application.StartupPath + "\\"+c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL+"\\"))
             {
@@ -3257,11 +3262,19 @@ namespace SkinInstaller
                 form.CustShowDialog(this);
                 //form.ShowDialog();
                 // Cliver.Message.Inform("Installation Complete.\nInstalled " + num + " files.");
+                String extraRafFolder = Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_OPTIONS + "\\";
+                if (Directory.Exists(extraRafFolder)) SIFileOp.DirectoryDelete(extraRafFolder, true);
+            
             }
 
         }
         private void chooseCharacterFiles(ref List<installFileInfo> filteredFileInfo)
         {
+            //remove stuff from last time, just in case
+            String extraRafFolder = Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_OPTIONS + "\\";
+            if (Directory.Exists(extraRafFolder)) SIFileOp.DirectoryDelete(extraRafFolder,true);
+            Directory.CreateDirectory(extraRafFolder);
+
             if (Properties.Settings.Default.showCharSelection)
             {
                 skinsOptions mySkinsOptions = new skinsOptions();
@@ -3339,6 +3352,9 @@ namespace SkinInstaller
                         {
                             if (option.skinSelected)
                             {
+                                bool gotSKL; bool gotSKN; bool gotTXT; bool gotLOD;
+                                gotTXT = gotSKN = gotSKL = gotLOD=false;
+                                if (option.origonalSelected) gotTXT = gotSKN = gotSKL = gotLOD = true;//srsly
                                 //we gota skin we need to .. change
                                 LOLViewer.IO.LOLModel targetModel = previewWindow.reader.GetModel(option.skinName);
                                 foreach (installFileInfo installInfo in filteredFileInfo)
@@ -3348,24 +3364,38 @@ namespace SkinInstaller
                                     {
                                         newLoc = new FileInfo(targetModel.skl.RAFArchive.RAFFilePath +"\\"+
                                             targetModel.skl.FileName);
+                                        gotSKL = true;
                                     }
                                     if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.skn.FileName.ToLower()))
                                     {
                                         newLoc = new FileInfo(targetModel.skn.RAFArchive.RAFFilePath + "\\" +
                                             targetModel.skn.FileName);
+                                        gotSKN = true;
                                     }
                                     if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.texture.FileName.ToLower()))
                                     {
                                         newLoc = new FileInfo(targetModel.texture.RAFArchive.RAFFilePath + "\\" +
                                             targetModel.texture.FileName);
+                                        gotTXT = true;
                                     }
                                     if (origonalModel.loadScreen != null)
+                                    {
                                         if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.loadScreen.FileName.ToLower()))
                                         {
-                                            if(targetModel.loadScreen!=null)
+                                            if (targetModel.loadScreen != null)
                                                 newLoc = new FileInfo(targetModel.loadScreen.RAFArchive.RAFFilePath + "\\" +
                                                     targetModel.loadScreen.FileName);
+                                            else gotLOD = true;//don't try and get it later
                                         }
+                                        else
+                                        {
+
+                                        }
+                                    }
+                                    else
+                                    {
+                                        gotLOD = true;//don't try and get it later
+                                    }
                                     if(newLoc!=null)
                                     {
                                         newFileInfos.Add(new installFileInfo(installInfo.origonal,
@@ -3379,7 +3409,71 @@ namespace SkinInstaller
                                     
                                     
                                 }
+                                //check for skn and skl files that may not have been included
+                                if (!gotSKL)
+                                {
+                                    FileInfo targetLoc = new FileInfo(targetModel.skl.RAFArchive.RAFFilePath + "\\" +
+                                                    targetModel.skl.FileName);
 
+                                    debugadd("we need to get \r\n" +
+                                         origonalModel.skl.RAFArchive.RAFFilePath + "\\" +
+                                                    origonalModel.skl.FileName
+                                        + "\r\nTo replace \r\n" +
+                                        targetModel.skl.RAFArchive.RAFFilePath + "\\" +
+                                                    targetModel.skl.FileName);
+
+                                    if (!Directory.Exists(extraRafFolder))
+                                        Directory.CreateDirectory(extraRafFolder);
+
+                                    rafBackup(origonalModel.skl.RAFArchive.RAFFilePath + "\\" + origonalModel.skl.FileName,
+                                    extraRafFolder + "\\" + targetLoc.Name, false);
+
+                                    newFileInfos.Add(new installFileInfo(
+                                        extraRafFolder + "\\" + targetLoc.Name,
+                                       targetLoc.Name,
+                                        targetLoc.Directory.FullName.ToLower()
+                                        .Replace(gameDirectory.ToLower(), "") + "\\"));
+
+                                }
+                                if (!gotSKN)
+                                {
+                                    FileInfo targetLoc = new FileInfo(targetModel.skn.RAFArchive.RAFFilePath + "\\" + targetModel.skn.FileName);
+                                    debugadd("we need to get \r\n" + origonalModel.skn.RAFArchive.RAFFilePath + "\\" + origonalModel.skn.FileName + "\r\nTo replace \r\n" + targetModel.skn.RAFArchive.RAFFilePath + "\\" + targetModel.skn.FileName);
+
+                                    if (!Directory.Exists(extraRafFolder)) Directory.CreateDirectory(extraRafFolder);
+
+                                    rafBackup(origonalModel.skn.RAFArchive.RAFFilePath + "\\" + origonalModel.skn.FileName, extraRafFolder + "\\" + targetLoc.Name, false);
+
+                                    newFileInfos.Add(new installFileInfo(extraRafFolder + "\\" + targetLoc.Name,
+                                       targetLoc.Name, targetLoc.Directory.FullName.ToLower()
+                                        .Replace(gameDirectory.ToLower(), "") + "\\"));
+                                }
+                                if (!gotTXT)
+                                {
+                                    FileInfo targetLoc = new FileInfo(targetModel.texture.RAFArchive.RAFFilePath + "\\" + targetModel.texture.FileName);
+                                    debugadd("we need to get \r\n" + origonalModel.texture.RAFArchive.RAFFilePath + "\\" + origonalModel.texture.FileName + "\r\nTo replace \r\n" + targetModel.texture.RAFArchive.RAFFilePath + "\\" + targetModel.texture.FileName);
+
+                                    if (!Directory.Exists(extraRafFolder)) Directory.CreateDirectory(extraRafFolder);
+
+                                    rafBackup(origonalModel.texture.RAFArchive.RAFFilePath + "\\" + origonalModel.texture.FileName, extraRafFolder + "\\" + targetLoc.Name, false);
+
+                                    newFileInfos.Add(new installFileInfo(extraRafFolder + "\\" + targetLoc.Name,
+                                       targetLoc.Name, targetLoc.Directory.FullName.ToLower()
+                                        .Replace(gameDirectory.ToLower(), "") + "\\"));
+                                }
+                                if (!gotLOD)
+                                {
+                                    FileInfo targetLoc = new FileInfo(targetModel.loadScreen.RAFArchive.RAFFilePath + "\\" + targetModel.loadScreen.FileName);
+                                    debugadd("we need to get \r\n" + origonalModel.loadScreen.RAFArchive.RAFFilePath + "\\" + origonalModel.loadScreen.FileName + "\r\nTo replace \r\n" + targetModel.loadScreen.RAFArchive.RAFFilePath + "\\" + targetModel.loadScreen.FileName);
+
+                                    if (!Directory.Exists(extraRafFolder)) Directory.CreateDirectory(extraRafFolder);
+
+                                    rafBackup(origonalModel.loadScreen.RAFArchive.RAFFilePath + "\\" + origonalModel.loadScreen.FileName, extraRafFolder + "\\" + targetLoc.Name, false);
+
+                                    newFileInfos.Add(new installFileInfo(extraRafFolder + "\\" + targetLoc.Name,
+                                       targetLoc.Name, targetLoc.Directory.FullName.ToLower()
+                                        .Replace(gameDirectory.ToLower(), "") + "\\"));
+                                }
                             }
                         }
                     }
@@ -8508,7 +8602,7 @@ namespace SkinInstaller
                 Cliver.Message.Show("Success", SystemIcons.Application, "Successfully processed:\r\n" + output, 0, new string[] { "Yay!" });
             else
             {
-               if( Cliver.Message.Show("Success", SystemIcons.Application, "Successfully saved "+extraFolder+":\r\n\r\nTo: " +path
+               if( Cliver.Message.Show("Success", SystemIcons.Application, "Successfully saved "+extraFolder+"\r\n\r\nTo: " +path
                     , 0, new string[] { "Yay!", "Please start adding this skin now" }) == 1)
                {
                    string[] strArray3 = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);

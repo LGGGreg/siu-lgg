@@ -84,8 +84,6 @@ namespace LOLViewer
             InitializeComponent();
             try
             {
-                int b = 2;
-                int a = 1 / (b-2);
             camera = new GLCamera();
             camera.SetViewParameters(new Vector3(0.0f, 0.0f, 300.0f), Vector3.Zero);
             renderer = new GLRenderer();
