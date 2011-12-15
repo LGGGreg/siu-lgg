@@ -63,7 +63,7 @@ namespace SkinInstaller
             foreach (skinOptions mySkinOptions in mySkinsOptions)
                 if (mySkinOptions.options.Count > maxRows) maxRows = mySkinOptions.options.Count;
             int sizeNeeded = 50 * maxRows + 240;
-            if (sizeNeeded < (50 * 4 + 230)) sizeNeeded = (50 * 4 + 230);
+            if (sizeNeeded < (50 * 4 + 250)) sizeNeeded = (50 * 4 + 250);
             int widthNeeded = (560 / 3) * mySkinsOptions.Count + 100;
             if (widthNeeded < ((560 / 3) * 1.5 + 100)) widthNeeded = (int)((560f / 3f) * 1.5f) + 100;
 
