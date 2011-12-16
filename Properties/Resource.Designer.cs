@@ -88,6 +88,13 @@ namespace SkinInstaller.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap loadscreenicon {
+            get {
+                object obj = ResourceManager.GetObject("loadscreenicon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap skin {
             get {
                 object obj = ResourceManager.GetObject("skin", resourceCulture);

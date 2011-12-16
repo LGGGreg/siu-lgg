@@ -317,6 +317,7 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="GUI\downarrow.png" />
+    <Content Include="TreeViewImages\loadscreenicon.png" />
     <Content Include="USkin.dll">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

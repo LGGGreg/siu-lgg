@@ -121,7 +121,6 @@
   <data name="Dee_dee" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\TreeViewImages\Dee-dee.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
   <data name="downarrow" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\GUI\downarrow.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -130,6 +129,10 @@
   </data>
   <data name="lemon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\TreeViewImages\lemon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="loadscreenicon" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\TreeViewImages\loadscreenicon.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="skin" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\TreeViewImages\skin.png;System.Drawing.Bitmap, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>

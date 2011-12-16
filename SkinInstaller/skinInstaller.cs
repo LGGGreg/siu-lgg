@@ -8210,7 +8210,8 @@ namespace SkinInstaller
             treeView1.ImageList.Images.Add(Properties.Resource.tex_2);
             treeView1.ImageList.Images.Add(Properties.Resource.lemon);
             treeView1.ImageList.Images.Add(Properties.Resource.small_cube_1);
-            treeView1.ImageList.Images.Add(Properties.Resource.small_cube_2);            
+            treeView1.ImageList.Images.Add(Properties.Resource.small_cube_2);
+            treeView1.ImageList.Images.Add(Properties.Resource.loadscreenicon);
             treeView1.TreeViewNodeSorter = new NodeSorter();
             #region modelsTreeBuild
             TreeNode modelsRootNode = new TreeNode("Models");
@@ -8268,7 +8269,7 @@ namespace SkinInstaller
                     skntag.rafPower = getRafPowerFromVersion(skntag.fileLocation);
                     sknNode.Tag = skntag;
                     sknNode.ForeColor = colorFromRafPower(skntag.rafPower);
-                            
+
                     charNode.Nodes.Add(sknNode);
                     //skl
                     FileInfo sklInfo = new FileInfo(kv.Value.skl.FileName);
@@ -8283,6 +8284,23 @@ namespace SkinInstaller
                             
                     sklNode.ImageIndex = sklNode.SelectedImageIndex = 1;
                     charNode.Nodes.Add(sklNode);
+                    //load screen
+                    if (kv.Value.loadScreen != null)
+                    {
+
+                        FileInfo lodInfo = new FileInfo(kv.Value.loadScreen.FileName);
+                        TreeNode lodNode = new TreeNode(lodInfo.Name.Substring(0, lodInfo.Name.IndexOf(".")));
+                        lodNode.ToolTipText = kv.Value.loadScreen.FileName;
+                        rafTreeDataObject lodtag = new rafTreeDataObject();
+                        lodtag.fileLocation = kv.Value.loadScreen.RAFArchive.RAFFilePath + "\\" +
+                        kv.Value.loadScreen.FileName.Replace("/", "\\");
+                        lodtag.rafPower = getRafPowerFromVersion(lodtag.fileLocation);
+                        lodNode.Tag = lodtag;
+                        lodNode.ForeColor = colorFromRafPower(lodtag.rafPower);
+
+                        lodNode.ImageIndex = lodNode.SelectedImageIndex = 8;
+                        charNode.Nodes.Add(lodNode);
+                    }
                     //texture
                     FileInfo txtInfo = new FileInfo(kv.Value.texture.FileName);
                     TreeNode txtNode = new TreeNode(txtInfo.Name.Substring(0, txtInfo.Name.IndexOf(".")));
@@ -8460,6 +8478,11 @@ namespace SkinInstaller
                           case ".scb": imageIndex = 7; break;
                           default: imageIndex = 5; break;
                       }
+                      if (imageIndex == 4)
+                      {
+                          if(rafFileInfo.Name.ToLower().Contains("loadscreen"))
+                            imageIndex = 8;
+                        }
                       addedNode.ImageIndex = addedNode.SelectedImageIndex = imageIndex;
                       addedNode.ForeColor = colorFromRafPower(tag.rafPower);
                
