@@ -25,7 +25,7 @@ namespace PartRef
                 <String, Dictionary
                     <String, Dictionary
                         <RAFFileListEntry, List<String>>>> { }
-        public skinInstaller mySkinInstaller = null;
+        public SkinInstaller.skinInstaller mySkinInstaller = null;
         public int lastProgress = 0;
 
         String lolDirectory = "C:\\Riot Games\\League of Legends";

@@ -20,6 +20,12 @@ namespace SIURegistry_Installer
         {
             if (args.Length > 0)
             {
+                if (args[0] == "lolishreg")
+                {
+
+                    doLoLishRegistryStuff();
+                    return;
+                }
                 String allArgs = "";
                 foreach (string a in args)
                 {
@@ -55,6 +61,7 @@ namespace SIURegistry_Installer
                 return;
             }
             doRegistryStuff();
+            doLoLishRegistryStuff();
             //Application.EnableVisualStyles();
             //Application.SetCompatibleTextRenderingDefault(false);
             //Application.Run(new Form1());
@@ -86,6 +93,37 @@ namespace SIURegistry_Installer
             shellkey = key.CreateSubKey("shell\\open\\command");
             //shellkey.SetValue("","\""+Application.ExecutablePath+"\" --url \"%1\"");
             shellkey.SetValue("","\""+Application.StartupPath+"\\Skin Installer Ultimate.exe"+"\" --url \"%1\"");
+            shellkey.Close();
+            //dikey.Close();
+
+            key.Close();
+        }
+        static void doLoLishRegistryStuff()
+        {
+            //first delete any old keys (portable fix)               
+            try
+            {
+                Microsoft.Win32.Registry.LocalMachine.DeleteSubKeyTree(
+               "SOFTWARE\\Classes\\lolsh");
+            }
+            catch// (Exception ex)
+            {
+                //debugadd("Got expected error trying to delete reg key");
+                //Cliver.Message.Inform("Its ok, but \n"+ex.ToString());
+            }
+
+            //try to register my key
+            Microsoft.Win32.RegistryKey key;
+            //Microsoft.Win32.RegistryKey dikey;
+            Microsoft.Win32.RegistryKey shellkey;
+            key = Microsoft.Win32.Registry.LocalMachine.CreateSubKey("SOFTWARE\\Classes\\lolsh");
+            key.SetValue("", "URL:LoL Skin Installer LC LGG");
+            key.SetValue("URL Protocol", "");
+            //dikey = key.CreateSubKey("DefaultIcon");
+            //dikey.SetValue("",""+Application.ExecutablePath+",0");
+            shellkey = key.CreateSubKey("shell\\open\\command");
+            //shellkey.SetValue("","\""+Application.ExecutablePath+"\" --url \"%1\"");
+            shellkey.SetValue("", "\"" + Application.StartupPath + "\\Skin Installer Ultimate.exe" + "\" --url \"%1\"");
             shellkey.Close();
             //dikey.Close();
 
