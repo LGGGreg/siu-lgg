@@ -1493,7 +1493,8 @@ namespace SkinInstaller
             }
             foreach (string origonalFile in origonalInputFiles)
             {
-                if (origonalFile.Trim().ToLower().EndsWith(".zip"))
+                if ((origonalFile.Trim().ToLower().EndsWith(".zip")) ||
+                    (origonalFile.Trim().ToLower().EndsWith(".u9lolpatch")))
                 {
                     ZipUtil.UnZipFiles(origonalFile, Application.StartupPath + "\\"+c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL, "", false);
                 }
@@ -1547,6 +1548,7 @@ namespace SkinInstaller
                 string[] archiveFiles = Directory.GetFiles(Application.StartupPath + "\\"+c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL, "*.*",
                         SearchOption.AllDirectories).Where(s =>
                            s.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) ||
+                           s.EndsWith(".u9lolpatch", StringComparison.OrdinalIgnoreCase) ||                           
                            s.EndsWith(".rar", StringComparison.OrdinalIgnoreCase) ||
                            s.EndsWith(".bzip2", StringComparison.OrdinalIgnoreCase) ||
                            s.EndsWith(".gzip", StringComparison.OrdinalIgnoreCase) ||
@@ -1682,6 +1684,7 @@ namespace SkinInstaller
                         if ((!toTest.Contains("animations.")) &&
                             (!toTest.Contains("thumbs.db")) &&
                             (!toTest.Contains(".zip")) &&
+                            (!toTest.Contains(".u9lolpatch")) &&
                             (!toTest.Contains(".rar")) &&
                             (!toTest.Contains(".7z")) &&
                             (!toTest.Contains(".bzip2")) &&
