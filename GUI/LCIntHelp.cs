@@ -25,6 +25,8 @@ namespace SkinInstaller
             process.StartInfo.WorkingDirectory = Application.StartupPath;
             process.Start();
             process.WaitForExit();
+
+            
         }
         public string getUserScriptName()
         {
