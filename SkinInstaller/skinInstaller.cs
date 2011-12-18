@@ -7646,7 +7646,7 @@ namespace SkinInstaller
 
                 if (Char.IsNumber(c))
                 {
-                    r = Convert.ToUInt16(c);
+                    r = Convert.ToUInt16(c.ToString());
                 }
             }
             return r;
@@ -7705,7 +7705,7 @@ namespace SkinInstaller
                     if (fi.Name.Contains("loadscreen"))
                     {
                         //pick the one with the shortest name
-                        int mygoodness = 500 + getNumberWorth(fi.Name, 0) * 10 + fi.Name.Length;
+                        int mygoodness = 500 +( getNumberWorth(fi.Name, 0) * 10 )+ fi.Name.Length;
                         if (goodness > mygoodness) { bestOption = fi.FullName; goodness = mygoodness; }
 
                     }
