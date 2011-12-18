@@ -3352,7 +3352,9 @@ namespace SkinInstaller
                                 if (
                                 (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.skl.FileName.ToLower())) ||
                                 (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.skn.FileName.ToLower())) ||
-                                (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.texture.FileName.ToLower()))
+                                (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.texture.FileName.ToLower()))||
+                                (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.champSplash.ToLower()))||
+                                (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.champPic.ToLower()))
                                 )
                                 {
                                     debugadd("We might be removing " + installInfo.origonal + " from the install because it was not selected before");
@@ -3364,6 +3366,7 @@ namespace SkinInstaller
                                         debugadd("We might be removing " + installInfo.origonal + " from the install because it was not selected before");
                                         toRemove.Add(installInfo);
                                     }
+
                                 
                             }
                         }
@@ -3372,14 +3375,34 @@ namespace SkinInstaller
                         {
                             if (option.skinSelected)
                             {
-                                bool gotSKL; bool gotSKN; bool gotTXT; bool gotLOD;
-                                gotTXT = gotSKN = gotSKL = gotLOD=false;
-                                if (option.origonalSelected) gotTXT = gotSKN = gotSKL = gotLOD = true;//srsly
+                                bool gotSKL; bool gotSKN; bool gotTXT; bool gotLOD; bool gotAirSplash; bool gotAirPic;
+                                gotTXT = gotSKN = gotSKL = gotLOD= gotAirSplash = gotAirPic = false;
+                                if (option.origonalSelected) gotTXT = gotSKN = gotSKL = gotLOD = gotAirSplash = gotAirPic = true;//srsly
                                 //we gota skin we need to .. change
                                 LOLViewer.IO.LOLModel targetModel = previewWindow.reader.GetModel(option.skinName);
                                 foreach (installFileInfo installInfo in filteredFileInfo)
                                 {
                                     FileInfo newLoc = null;
+                                    if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.champPic.ToLower()))
+                                    {
+                                        KeyValuePair<string, string> isfound = allFilesList.FirstOrDefault(m => m.Key.ToLower().Contains(targetModel.champPic.ToLower()));
+                                        if (isfound.Key != null)
+                                        {
+                                            string whereFrom = gameDirectory + isfound.Value;
+                                            newLoc = new FileInfo(whereFrom);
+                                            gotAirPic = true;
+                                        }
+                                    }
+                                    if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.champSplash.ToLower()))
+                                    {
+                                        KeyValuePair<string, string> isfound = allFilesList.FirstOrDefault(m => m.Key.ToLower().Contains(targetModel.champSplash.ToLower()));
+                                        if (isfound.Key != null)
+                                        {
+                                            string whereFrom = gameDirectory + isfound.Value;
+                                            newLoc = new FileInfo(whereFrom);
+                                            gotAirSplash= true;
+                                        }
+                                    }
                                     if (installInfo.origonal.ToLower().Replace("\\","/").Contains(origonalModel.skl.FileName.ToLower()))
                                     {
                                         newLoc = new FileInfo(targetModel.skl.RAFArchive.RAFFilePath +"\\"+
@@ -3493,6 +3516,50 @@ namespace SkinInstaller
                                     newFileInfos.Add(new installFileInfo(extraRafFolder + "\\" + targetLoc.Name,
                                        targetLoc.Name, targetLoc.Directory.FullName.ToLower()
                                         .Replace(gameDirectory.ToLower(), "") + "\\"));
+                                }
+                                if (!gotAirPic)
+                                {
+                                    KeyValuePair<string, string> targetfound =
+                                        allFilesList.FirstOrDefault(m => m.Key.ToLower().
+                                            Contains(targetModel.champPic.ToLower()));
+                                    KeyValuePair<string, string> origonalfound =
+                                        allFilesList.FirstOrDefault(m => m.Key.ToLower().
+                                            Contains(origonalModel.champPic.ToLower()));
+                                    if (targetfound.Key != null && origonalfound.Key != null)
+                                    {
+                                        FileInfo targetLoc = new FileInfo(gameDirectory + targetfound.Value);
+                                        debugadd("we need to get \r\n" + gameDirectory + origonalfound.Value + "\r\nTo replace \r\n" + gameDirectory + targetfound.Value);
+
+                                        if (!Directory.Exists(extraRafFolder)) Directory.CreateDirectory(extraRafFolder);
+
+                                        SIFileOp.FileCopy(gameDirectory + origonalfound.Value, extraRafFolder + "\\" + targetLoc.Name);
+
+                                        newFileInfos.Add(new installFileInfo(extraRafFolder + "\\" + targetLoc.Name,
+                                           targetLoc.Name, targetLoc.Directory.FullName.ToLower()
+                                            .Replace(gameDirectory.ToLower(), "") + "\\"));
+                                    }
+                                }
+                                if (!gotAirSplash)
+                                {
+                                    KeyValuePair<string, string> targetfound =
+                                        allFilesList.FirstOrDefault(m => m.Key.ToLower().
+                                            Contains(targetModel.champSplash.ToLower()));
+                                    KeyValuePair<string, string> origonalfound =
+                                        allFilesList.FirstOrDefault(m => m.Key.ToLower().
+                                            Contains(origonalModel.champSplash.ToLower()));
+                                    if (targetfound.Key != null && origonalfound.Key != null)
+                                    {
+                                        FileInfo targetLoc = new FileInfo(gameDirectory + targetfound.Value);
+                                        debugadd("we need to get \r\n" + gameDirectory + origonalfound.Value + "\r\nTo replace \r\n" + gameDirectory + targetfound.Value);
+
+                                        if (!Directory.Exists(extraRafFolder)) Directory.CreateDirectory(extraRafFolder);
+
+                                        SIFileOp.FileCopy(gameDirectory + origonalfound.Value, extraRafFolder + "\\" + targetLoc.Name);
+
+                                        newFileInfos.Add(new installFileInfo(extraRafFolder + "\\" + targetLoc.Name,
+                                           targetLoc.Name, targetLoc.Directory.FullName.ToLower()
+                                            .Replace(gameDirectory.ToLower(), "") + "\\"));
+                                    }
                                 }
                             }
                         }
@@ -8277,6 +8344,8 @@ namespace SkinInstaller
                         }
                         charNode.Nodes.Add(animationsNode);
                     }
+                                       
+                    
                     //skn
                     FileInfo sknInfo = new FileInfo(kv.Value.skn.FileName);
                     TreeNode sknNode = new TreeNode(sknInfo.Name.Substring(0, sknInfo.Name.IndexOf(".")));
@@ -8291,6 +8360,39 @@ namespace SkinInstaller
                     sknNode.ForeColor = colorFromRafPower(skntag.rafPower);
 
                     charNode.Nodes.Add(sknNode);
+
+                    //air files
+                    if (kv.Value.champPic != null && kv.Value.champPic != null)
+                    {
+                        TreeNode airNode = new TreeNode("Champion Selection");
+                        airNode.ToolTipText = "List of images used by this model when selecting their skin before a game.";
+
+                        TreeNode airSNode = new TreeNode(kv.Value.champPic);
+                        rafTreeDataObject airStag = new rafTreeDataObject();
+                        airStag.fileLocation = kv.Value.champPic;
+                        airStag.rafPower = skntag.rafPower;//getRafPowerFromVersion(airStag.fileLocation);
+                        airSNode.Tag = airStag;
+                        airSNode.ForeColor = colorFromRafPower(airStag.rafPower);
+                        airSNode.ToolTipText = airStag.fileLocation;
+                        airSNode.ImageIndex = airSNode.SelectedImageIndex = 8;
+                        airNode.Nodes.Add(airSNode);
+
+                        TreeNode airCNode = new TreeNode(kv.Value.champSplash);
+                        rafTreeDataObject airCtag = new rafTreeDataObject();
+                        airCtag.fileLocation = kv.Value.champSplash;
+                        airCtag.rafPower = skntag.rafPower;//getRafPowerFromVersion(airStag.fileLocation);
+                        airCNode.Tag = airCtag;
+                        airCNode.ForeColor = colorFromRafPower(airCtag.rafPower);
+                        airCNode.ToolTipText = airCtag.fileLocation;
+                        airCNode.ImageIndex = airCNode.SelectedImageIndex = 8;
+                        airNode.Nodes.Add(airCNode);
+
+
+
+
+                        charNode.Nodes.Add(airNode);
+                    }
+
                     //skl
                     FileInfo sklInfo = new FileInfo(kv.Value.skl.FileName);
                     TreeNode sklNode = new TreeNode(sklInfo.Name.Substring(0, sklInfo.Name.IndexOf(".")));
@@ -8638,7 +8740,20 @@ namespace SkinInstaller
                 if (extraFolder != "") path += extraFolder + "\\";
                 foreach (String rafFile in toBackup)
                 {
-                    rafBackup(rafFile, path, true);
+                    if(rafFile.ToLower().Contains(".raf"))
+                        rafBackup(rafFile, path, true);
+                    else
+                    {
+                        // find it, save it, go!
+                        KeyValuePair<string, string> isfound = allFilesList.FirstOrDefault(m => m.Key.ToLower().Contains(rafFile.ToLower()));
+                        if (isfound.Key != null)
+                        {
+                            string whereFrom = gameDirectory + isfound.Value;
+                            string whereTo = path +"air\\"+ isfound.Key;
+                            this.SIFileOp.FileCopy(whereFrom,whereTo);
+                        }
+
+                    }
                 }
             }
             if(extraFolder=="")

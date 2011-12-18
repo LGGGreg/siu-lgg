@@ -243,6 +243,13 @@ namespace LOLViewer.IO
             {
                 model.loadScreen = textures[loadScreenName];
             }
+            // Find the air files
+            model.champSplash = //"\\deploy\\assets\\images\\champions\\" +
+                def.anmListKey +
+                "_Splash_" + (def.skin - 1).ToString()+".jpg";
+            model.champPic = //"\\deploy\\assets\\images\\champions\\" + 
+                def.anmListKey +
+                "_" + (def.skin - 1).ToString() + ".jpg";
 
             return true;
         }

@@ -46,6 +46,8 @@ namespace LOLViewer.IO
         public RAFFileListEntry skl;
         public RAFFileListEntry texture;
         public RAFFileListEntry loadScreen;
+        public String champPic;
+        public String champSplash;
 
         public int skinNumber; // used for animating
         public String animationList;
@@ -57,6 +59,8 @@ namespace LOLViewer.IO
             skl = null;
             texture = null;
             loadScreen = null;
+            champPic = "";
+            champSplash = "";
 
             animationList = String.Empty;
             animations = new Dictionary<String, RAFFileListEntry>();
