@@ -3385,54 +3385,71 @@ namespace SkinInstaller
                                     FileInfo newLoc = null;
                                     if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.champPic.ToLower()))
                                     {
-                                        KeyValuePair<string, string> isfound = allFilesList.FirstOrDefault(m => m.Key.ToLower().Contains(targetModel.champPic.ToLower()));
-                                        if (isfound.Key != null)
+                                        if (Properties.Settings.Default.air)
                                         {
-                                            string whereFrom = gameDirectory + isfound.Value;
-                                            newLoc = new FileInfo(whereFrom);
-                                            gotAirPic = true;
+                                            KeyValuePair<string, string> isfound = allFilesList.FirstOrDefault(m => m.Key.ToLower().Contains(targetModel.champPic.ToLower()));
+                                            if (isfound.Key != null)
+                                            {
+                                                string whereFrom = gameDirectory + isfound.Value;
+                                                newLoc = new FileInfo(whereFrom);
+                                                gotAirPic = true;
+                                            }
                                         }
                                     }
                                     if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.champSplash.ToLower()))
                                     {
-                                        KeyValuePair<string, string> isfound = allFilesList.FirstOrDefault(m => m.Key.ToLower().Contains(targetModel.champSplash.ToLower()));
-                                        if (isfound.Key != null)
+                                        if (Properties.Settings.Default.air)
                                         {
-                                            string whereFrom = gameDirectory + isfound.Value;
-                                            newLoc = new FileInfo(whereFrom);
-                                            gotAirSplash= true;
+                                            KeyValuePair<string, string> isfound = allFilesList.FirstOrDefault(m => m.Key.ToLower().Contains(targetModel.champSplash.ToLower()));
+                                            if (isfound.Key != null)
+                                            {
+                                                string whereFrom = gameDirectory + isfound.Value;
+                                                newLoc = new FileInfo(whereFrom);
+                                                gotAirSplash = true;
+                                            }
                                         }
                                     }
                                     if (installInfo.origonal.ToLower().Replace("\\","/").Contains(origonalModel.skl.FileName.ToLower()))
                                     {
-                                        newLoc = new FileInfo(targetModel.skl.RAFArchive.RAFFilePath +"\\"+
-                                            targetModel.skl.FileName);
-                                        gotSKL = true;
+                                        if (Properties.Settings.Default.ch3d)
+                                        {
+                                            newLoc = new FileInfo(targetModel.skl.RAFArchive.RAFFilePath + "\\" +
+                                                targetModel.skl.FileName);
+                                            gotSKL = true;
+                                        }
                                     }
                                     if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.skn.FileName.ToLower()))
                                     {
-                                        newLoc = new FileInfo(targetModel.skn.RAFArchive.RAFFilePath + "\\" +
-                                            targetModel.skn.FileName);
-                                        gotSKN = true;
+                                        if (Properties.Settings.Default.ch3d)
+                                        {
+                                            newLoc = new FileInfo(targetModel.skn.RAFArchive.RAFFilePath + "\\" +
+                                                targetModel.skn.FileName);
+                                            gotSKN = true;
+                                        }
                                     }
                                     if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.texture.FileName.ToLower()))
                                     {
-                                        newLoc = new FileInfo(targetModel.texture.RAFArchive.RAFFilePath + "\\" +
-                                            targetModel.texture.FileName);
-                                        gotTXT = true;
+                                        if (Properties.Settings.Default.chTx)
+                                        {
+                                            newLoc = new FileInfo(targetModel.texture.RAFArchive.RAFFilePath + "\\" +
+                                                targetModel.texture.FileName);
+                                            gotTXT = true;
+                                        }
                                     }
                                     if (origonalModel.loadScreen != null)
                                     {
-                                        if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.loadScreen.FileName.ToLower()))
+                                        if (Properties.Settings.Default.loadscreensinst)
                                         {
-                                            if (targetModel.loadScreen != null)
-                                                newLoc = new FileInfo(targetModel.loadScreen.RAFArchive.RAFFilePath + "\\" +
-                                                    targetModel.loadScreen.FileName);
-                                            else gotLOD = true;//don't try and get it later
-                                        }
-                                        else
-                                        {
-
+                                            if (installInfo.origonal.ToLower().Replace("\\", "/").Contains(origonalModel.loadScreen.FileName.ToLower()))
+                                            {
+                                                if (targetModel.loadScreen != null)
+                                                    newLoc = new FileInfo(targetModel.loadScreen.RAFArchive.RAFFilePath + "\\" +
+                                                        targetModel.loadScreen.FileName);
+                                                else gotLOD = true;//don't try and get it later
+                                            }
+                                            else
+                                            {
+                                            }
                                         }
                                     }
                                     else
@@ -3453,7 +3470,7 @@ namespace SkinInstaller
                                     
                                 }
                                 //check for skn and skl files that may not have been included
-                                if (!gotSKL)
+                                if (!gotSKL && Properties.Settings.Default.ch3d)
                                 {
                                     FileInfo targetLoc = new FileInfo(targetModel.skl.RAFArchive.RAFFilePath + "\\" +
                                                     targetModel.skl.FileName);
@@ -3478,7 +3495,7 @@ namespace SkinInstaller
                                         .Replace(gameDirectory.ToLower(), "") + "\\"));
 
                                 }
-                                if (!gotSKN)
+                                if (!gotSKN && Properties.Settings.Default.ch3d)
                                 {
                                     FileInfo targetLoc = new FileInfo(targetModel.skn.RAFArchive.RAFFilePath + "\\" + targetModel.skn.FileName);
                                     debugadd("we need to get \r\n" + origonalModel.skn.RAFArchive.RAFFilePath + "\\" + origonalModel.skn.FileName + "\r\nTo replace \r\n" + targetModel.skn.RAFArchive.RAFFilePath + "\\" + targetModel.skn.FileName);
@@ -3491,7 +3508,7 @@ namespace SkinInstaller
                                        targetLoc.Name, targetLoc.Directory.FullName.ToLower()
                                         .Replace(gameDirectory.ToLower(), "") + "\\"));
                                 }
-                                if (!gotTXT)
+                                if (!gotTXT && Properties.Settings.Default.chTx)
                                 {
                                     FileInfo targetLoc = new FileInfo(targetModel.texture.RAFArchive.RAFFilePath + "\\" + targetModel.texture.FileName);
                                     debugadd("we need to get \r\n" + origonalModel.texture.RAFArchive.RAFFilePath + "\\" + origonalModel.texture.FileName + "\r\nTo replace \r\n" + targetModel.texture.RAFArchive.RAFFilePath + "\\" + targetModel.texture.FileName);
@@ -3504,7 +3521,7 @@ namespace SkinInstaller
                                        targetLoc.Name, targetLoc.Directory.FullName.ToLower()
                                         .Replace(gameDirectory.ToLower(), "") + "\\"));
                                 }
-                                if (!gotLOD)
+                                if (!gotLOD && Properties.Settings.Default.loadscreensinst)
                                 {
                                     FileInfo targetLoc = new FileInfo(targetModel.loadScreen.RAFArchive.RAFFilePath + "\\" + targetModel.loadScreen.FileName);
                                     debugadd("we need to get \r\n" + origonalModel.loadScreen.RAFArchive.RAFFilePath + "\\" + origonalModel.loadScreen.FileName + "\r\nTo replace \r\n" + targetModel.loadScreen.RAFArchive.RAFFilePath + "\\" + targetModel.loadScreen.FileName);
@@ -3517,7 +3534,7 @@ namespace SkinInstaller
                                        targetLoc.Name, targetLoc.Directory.FullName.ToLower()
                                         .Replace(gameDirectory.ToLower(), "") + "\\"));
                                 }
-                                if (!gotAirPic)
+                                if (!gotAirPic && Properties.Settings.Default.air)
                                 {
                                     KeyValuePair<string, string> targetfound =
                                         allFilesList.FirstOrDefault(m => m.Key.ToLower().
@@ -3539,7 +3556,7 @@ namespace SkinInstaller
                                             .Replace(gameDirectory.ToLower(), "") + "\\"));
                                     }
                                 }
-                                if (!gotAirSplash)
+                                if (!gotAirSplash && Properties.Settings.Default.air)
                                 {
                                     KeyValuePair<string, string> targetfound =
                                         allFilesList.FirstOrDefault(m => m.Key.ToLower().
