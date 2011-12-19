@@ -366,6 +366,7 @@ namespace SkinInstaller
         private ToolStripMenuItem toolStripMenuItem2;
         private ToolStripMenuItem toolStripMenuItem3;
         private ToolStripMenuItem makeSimpleSkinFromThisRiotSkinToolStripMenuItem;
+        private ToolStripMenuItem showMenuFileLocationToolStripMenuItem;
         PaintEventHandler importantP;
         #endregion
         #region webIntegrate
@@ -3894,6 +3895,7 @@ namespace SkinInstaller
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showMenuFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -5206,7 +5208,8 @@ namespace SkinInstaller
             this.testReadResFilesToolStripMenuItem,
             this.unpackSoundsToolStripMenuItem,
             this.loLViewerOpenNotPreviewToolStripMenuItem,
-            this.openParticleReferenceToolStripMenuItem});
+            this.openParticleReferenceToolStripMenuItem,
+            this.showMenuFileLocationToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
             this.debugToolStripMenuItem.Text = "Debug";
@@ -5556,6 +5559,13 @@ namespace SkinInstaller
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Text = "Make Simple Skin from this Riot Skin";
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Click += new System.EventHandler(this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem_Click);
+            // 
+            // showMenuFileLocationToolStripMenuItem
+            // 
+            this.showMenuFileLocationToolStripMenuItem.Name = "showMenuFileLocationToolStripMenuItem";
+            this.showMenuFileLocationToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.showMenuFileLocationToolStripMenuItem.Text = "Show Menu File Location";
+            this.showMenuFileLocationToolStripMenuItem.Click += new System.EventHandler(this.showMenuFileLocationToolStripMenuItem_Click);
             // 
             // skinInstaller
             // 
@@ -9023,8 +9033,26 @@ namespace SkinInstaller
             if (fileListWorker1.IsBusy)
                 fileListWorker1.CancelAsync();
         }
+        #region MenuFileStuff
+        public string getMenuFilePath()
+        {
+            KeyValuePair<string, string> isfound = 
+                allFilesList.FirstOrDefault(m => m.Key.ToLower().Contains("fontconfig_en_us.txt"));
+            if (isfound.Key != null)
+            {
+                return gameDirectory+isfound.Value.Replace("\\\\","\\").Substring(1);
+            }
+            return "";
+        }
+        private void showMenuFileLocationToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cliver.Message.Inform("Menu File is at\r\n" + getMenuFilePath());
+        }
+        #endregion
 
-       
+        
+
+
     }
     #region strucks
     public class LogTextWriter : TextWriter
