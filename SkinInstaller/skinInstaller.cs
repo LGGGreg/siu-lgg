@@ -370,6 +370,7 @@ namespace SkinInstaller
         private ToolStripMenuItem showMenuFileLocationToolStripMenuItem;
         private ToolStripMenuItem openTextTreeEditorToolStripMenuItem;
         private BackgroundWorker exportTreeViewWorker1;
+        private Button button3reinstallText;
         PaintEventHandler importantP;
         #endregion
         #region webIntegrate
@@ -2363,6 +2364,10 @@ namespace SkinInstaller
                    this.textBoxauthor.Text = info[1];
                 return new fileLocReturn("\\\\skinInfo\\\\",fileName);
             }
+            if (fileName.ToLower().Contains("customtext.txt"))
+            {
+                return new fileLocReturn("\\\\textmods\\\\", fileName);
+            }
             if (fileName.ToLower().Contains("siupreview"))
             {
                 return new fileLocReturn( "\\\\skinInfo\\\\", fileName);
@@ -3080,6 +3085,16 @@ namespace SkinInstaller
                         {
                             //ignore these
                         }
+                        else if (fixedFilePath.ToLower().Contains("textmods"))
+                        {
+                            //
+                            if (Properties.Settings.Default.text)
+                            {
+                                num++;
+                                installTextMod(skinFileName);
+                            }
+
+                        }
                         else
                         {
                             //bool yesFlag = false;
@@ -3660,6 +3675,206 @@ namespace SkinInstaller
             if(Properties.Settings.Default.sendStats)
                 webPinger.RunWorkerAsync("http://c.statcounter.com/6898201/0/e70b18ab/0/");
         }
+        private void installTextMod(string textModLocation)
+        {
+            String backupDir = Application.StartupPath + @"\backup\";
+            //Cliver.Message.Inform("Going to install text from "+ textModLocation);
+            ted.installText(getMenuFilePath(), textModLocation, backupDir);
+        }
+        #endregion
+        #region Uninstalling
+
+        private void dbUninstall_Click(object sender, EventArgs e)
+        {
+
+            if (fileListWorker1.IsBusy)
+            {
+                Cliver.Message.Inform("Please wait a moment for this program to finish updating\r\nThe Progress Bar below will show you the status of this");
+                return;
+            }
+            this.dbInstall.Enabled = this.dbUninstall.Enabled = this.dbDelete.Enabled = this.UpdateFL.Enabled = false;
+
+            bool soundsflag = false;
+
+            string msgs = "";
+            foreach (ListViewItem item in this.listView1.CheckedItems)
+            {
+
+                List<string> charsToUninstall = new List<string>();
+                if (true)//item.SubItems[4].Text == "Yes")
+                {
+
+                    foreach (string str in Directory.GetFiles(Application.StartupPath + @"\skins\" + item.SubItems[1].Text, "*.*", SearchOption.AllDirectories))
+                    {
+                        string[] strArray2 = str.Split(new char[] { '\\' });
+                        string path = string.Empty;
+                        bool flag = false;
+                        for (int i = 1; i < (strArray2.Length - 1); i++)
+                        {
+                            if ((!flag && (strArray2[i - 1] == "skins")) && (strArray2[i] == item.SubItems[1].Text))
+                            {
+                                flag = true;
+                            }
+                            else if (flag)
+                            {
+                                path = path + strArray2[i] + @"\";
+                            }
+                        }
+                        string fileName = strArray2[strArray2.Length - 1];
+                        //Cliver.Message.Inform("str2 is " + str2 + " str3 is " + str3);
+
+                        int airIndex = path.ToLower().IndexOf("\\lol_air_client\\releases\\");
+                        //path must exist, unless its a air silly thing, in which case we need to check new version    
+                        if ((path != null) && (File.Exists(gameDirectory + path + fileName) || (airIndex > 0)))
+                        {
+                            //check and see if we have a backup to restore
+                            String backupDir = Application.StartupPath + @"\backup\";
+
+                            debugadd("Uninstalling " + gameDirectory + path + fileName + " looking for backup in " + backupDir + path + fileName);
+                            String bf = backupDir + path + fileName;
+                            //we need to add a fancy check about air files here
+                            //make sure we use the older version backup we have so legacy backups still work
+                            //we need to also make sure we re-install the backup to the new air location
+                            if (airIndex > 0)
+                            {
+                                //oh boy it is a air file
+                                DirectoryInfo airRestoreDir = new DirectoryInfo(backupDir + path.Substring(0, airIndex + 25));
+                                string remainingPath = path.Substring(path.Substring(airIndex + 25).IndexOf("\\") + airIndex + 25);
+                                //debugadd("air file restore dir :"+airbackupDir.FullName);
+                                string lowestVersion = "";
+                                if (airRestoreDir.Exists)
+                                {
+                                    foreach (DirectoryInfo dir in airRestoreDir.GetDirectories())
+                                    {
+                                        if (lowestVersion == "") lowestVersion = dir.Name;
+                                        else
+                                        {
+                                            string[] versions = dir.Name.Split('.');
+                                            string[] lowestversions = lowestVersion.Split('.');
+                                            for (int i = versions.Length - 1; i >= 0; i--)
+                                            {
+                                                int vA = int.Parse(versions[i].Trim());
+                                                int lvA = int.Parse(lowestversions[i].Trim());
+                                                if (vA < lvA) lowestVersion = dir.Name;
+                                            }
+                                        }
+                                    }
+                                    bf = airRestoreDir + lowestVersion + remainingPath + fileName;
+                                    //ok we have the correct backup, now we have to find 
+                                    DirectoryInfo airWorkingDir = new DirectoryInfo(gameDirectory + path.Substring(0, airIndex + 25));
+                                    foreach (DirectoryInfo dir in airWorkingDir.GetDirectories())
+                                    {
+                                        //make sure we pick the highest version
+
+                                        string[] versions = dir.Name.Split('.');
+                                        string[] lowestversions = lowestVersion.Split('.');
+                                        for (int i = versions.Length - 1; i >= 0; i--)
+                                        {
+                                            int vA = int.Parse(versions[i].Trim());
+                                            int lvA = int.Parse(lowestversions[i].Trim());
+                                            //tacky but im re-using this var name to mean "highest dir"
+                                            if (vA > lvA) lowestVersion = dir.Name;
+
+                                        }
+                                    }
+                                    path = path.Substring(0, airIndex + 25) + lowestVersion + remainingPath;
+                                }
+
+                            }
+                            if (File.Exists(bf))
+                            {
+                                this.SIFileOp.FileDelete(gameDirectory + path + fileName);
+
+                                this.SIFileOp.FileCopy(bf, gameDirectory + path + fileName);
+                            }
+                            else
+                            {
+                                debugadd("Missing backup for " + path + " and " + fileName + ", this probably means it was skipped during install");
+                            }
+                        }
+                        else if (path.Contains(".raf"))
+                        {
+
+                            //handle this one different
+
+                            //check and see if we have a backup to restore
+                            String backupDir = Application.StartupPath + @"\backup\";
+                            debugadd("Uninstalling " + gameDirectory + path + fileName + " looking for backup in " + backupDir + path + fileName);
+                            String bf = backupDir + path + fileName;
+                            if (File.Exists(bf))
+                            {
+                                //this.SIFileOp.FileCopy(bf, gameDirectory + str2 + str3);
+                                rafInject(bf, gameDirectory + path + fileName);
+                            }
+
+
+                        }
+
+                        int pathIndex = path.ToLower().IndexOf("characters");
+                        if (pathIndex > -1)
+                        {
+                            string character = path.Substring(pathIndex + 11).Replace("\\", "");
+                            if (!charsToUninstall.Contains(character))
+                                charsToUninstall.Add(character);
+                        }
+                        if (path.Contains("formatedsounds"))
+                        {
+                            soundsflag = true;
+                        }
+                        if (path.Contains("textmods"))
+                        {
+                            uninstallTextMod(str);
+                        }
+                    }
+                }
+                if (soundsflag)
+                {
+                    restoreSounds();
+                }
+                if (charsToUninstall.Count > 0)
+                {
+                    foreach (String character in charsToUninstall)
+                    {
+                        // un install all files of a character to account for modifications during char selection
+                        string backupFolder = Application.StartupPath + @"\backup\";
+                        string lookFor = ".raf\\data\\characters\\" + character.ToLower() + "\\";
+
+                        string[] allBackupFiles = Directory.GetFiles(backupFolder, "*.*", SearchOption.AllDirectories);
+                        foreach (string abackupFile in allBackupFiles)
+                        {
+                            if (abackupFile.ToLower().Contains(lookFor))
+                            {
+                                string rafDestination = gameDirectory + abackupFile.ToLower().Replace(backupFolder.ToLower(), "");
+                                string TheRaf = rafDestination.Substring(0, rafDestination.IndexOf(".raf") + 4);
+                                if (File.Exists(TheRaf))//make sure we don't restore a ancient backup that cant be
+                                    rafInject(abackupFile, rafDestination);
+                            }
+
+                        }
+
+                    }
+                }
+                item.SubItems[4].Text = "No";
+                this.ExecuteQuery("UPDATE skins SET sInstalled=0, dateinstalled=\"" + "-" + "\"" +
+                    " WHERE sName=\"" +
+                   item.SubItems[1].Text + "\"");
+                this.SIFileOp.FileDelete(Application.StartupPath + @"\skins\" + item.SubItems[1].Text + @"\installed");
+                msgs += "Successfully un-installed " + item.SubItems[1].Text +
+                    "\r\n";
+                //Cliver.Message.Inform("Successfuly uninstalled " + item.SubItems[1].Text);
+            }
+            Cliver.Message.Inform(msgs);
+            this.UpdateListView();
+
+            this.dbInstall.Enabled = this.dbUninstall.Enabled = this.dbDelete.Enabled = this.UpdateFL.Enabled = true;
+        }
+        private void uninstallTextMod(string textModPath)
+        {
+            String backupDir = Application.StartupPath + @"\backup\";
+
+            //Cliver.Message.Inform("Going to uninstall text from " + textModPath);
+            ted.uninstallText(getMenuFilePath(), textModPath, backupDir);
+        }
         #endregion
         protected override void Dispose(bool disposing)
         {
@@ -3901,6 +4116,7 @@ namespace SkinInstaller
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportTreeViewWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.button3reinstallText = new System.Windows.Forms.Button();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -4808,6 +5024,7 @@ namespace SkinInstaller
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button3reinstallText);
             this.panel1.Controls.Add(this.dbDelete);
             this.panel1.Controls.Add(this.dbInstall);
             this.panel1.Controls.Add(this.dbUninstall);
@@ -4821,7 +5038,7 @@ namespace SkinInstaller
             // 
             // dbDelete
             // 
-            this.dbDelete.Location = new System.Drawing.Point(384, 3);
+            this.dbDelete.Location = new System.Drawing.Point(498, 3);
             this.dbDelete.Name = "dbDelete";
             this.dbDelete.Size = new System.Drawing.Size(75, 23);
             this.dbDelete.TabIndex = 3;
@@ -4857,7 +5074,7 @@ namespace SkinInstaller
             // 
             // createZip
             // 
-            this.createZip.Location = new System.Drawing.Point(166, 3);
+            this.createZip.Location = new System.Drawing.Point(289, 3);
             this.createZip.Name = "createZip";
             this.createZip.Size = new System.Drawing.Size(75, 23);
             this.createZip.TabIndex = 4;
@@ -4869,7 +5086,7 @@ namespace SkinInstaller
             // 
             // button3repath
             // 
-            this.button3repath.Location = new System.Drawing.Point(264, 3);
+            this.button3repath.Location = new System.Drawing.Point(378, 3);
             this.button3repath.Name = "button3repath";
             this.button3repath.Size = new System.Drawing.Size(114, 23);
             this.button3repath.TabIndex = 5;
@@ -5587,6 +5804,16 @@ namespace SkinInstaller
             this.exportTreeViewWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.exportTreeViewWorker1_ProgressChanged);
             this.exportTreeViewWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.exportTreeViewWorker1_RunWorkerCompleted);
             // 
+            // button3reinstallText
+            // 
+            this.button3reinstallText.Location = new System.Drawing.Point(166, 3);
+            this.button3reinstallText.Name = "button3reinstallText";
+            this.button3reinstallText.Size = new System.Drawing.Size(117, 23);
+            this.button3reinstallText.TabIndex = 6;
+            this.button3reinstallText.Text = "Re-install Text Mods";
+            this.button3reinstallText.UseVisualStyleBackColor = true;
+            this.button3reinstallText.Click += new System.EventHandler(this.button3reinstallText_Click);
+            // 
             // skinInstaller
             // 
             this.AllowDrop = true;
@@ -6128,186 +6355,6 @@ namespace SkinInstaller
                 this.listView1.Items.Remove(item);
             }
             this.UpdateListView();
-        }
-        private void dbUninstall_Click(object sender, EventArgs e)
-        {
-
-            if (fileListWorker1.IsBusy)
-            {
-                Cliver.Message.Inform("Please wait a moment for this program to finish updating\r\nThe Progress Bar below will show you the status of this");
-                return;
-            }
-            this.dbInstall.Enabled = this.dbUninstall.Enabled = this.dbDelete.Enabled = this.UpdateFL.Enabled = false;
-
-            bool soundsflag = false;
-
-            string msgs = "";
-            foreach (ListViewItem item in this.listView1.CheckedItems)
-            {
-
-                List<string> charsToUninstall = new List<string>();
-                if (true)//item.SubItems[4].Text == "Yes")
-                {
-
-                    foreach (string str in Directory.GetFiles(Application.StartupPath + @"\skins\" + item.SubItems[1].Text, "*.*", SearchOption.AllDirectories))
-                    {
-                        string[] strArray2 = str.Split(new char[] { '\\' });
-                        string path = string.Empty;
-                        bool flag = false;
-                        for (int i = 1; i < (strArray2.Length - 1); i++)
-                        {
-                            if ((!flag && (strArray2[i - 1] == "skins")) && (strArray2[i] == item.SubItems[1].Text))
-                            {
-                                flag = true;
-                            }
-                            else if (flag)
-                            {
-                                path = path + strArray2[i] + @"\";
-                            }
-                        }
-                        string fileName = strArray2[strArray2.Length - 1];
-                        //Cliver.Message.Inform("str2 is " + str2 + " str3 is " + str3);
-                        
-                        int airIndex = path.ToLower().IndexOf("\\lol_air_client\\releases\\");
-                        //path must exist, unless its a air silly thing, in which case we need to check new version    
-                        if ((path != null) && (File.Exists(gameDirectory + path + fileName) || (airIndex > 0)))
-                        {
-                            //check and see if we have a backup to restore
-                            String backupDir = Application.StartupPath + @"\backup\";
-
-                            debugadd("Uninstalling " + gameDirectory + path + fileName + " looking for backup in " + backupDir + path + fileName);
-                            String bf = backupDir + path + fileName;
-                            //we need to add a fancy check about air files here
-                            //make sure we use the older version backup we have so legacy backups still work
-                            //we need to also make sure we re-install the backup to the new air location
-                            if (airIndex > 0)
-                            {
-                                //oh boy it is a air file
-                                DirectoryInfo airRestoreDir = new DirectoryInfo(backupDir + path.Substring(0, airIndex + 25));
-                                string remainingPath = path.Substring(path.Substring(airIndex + 25).IndexOf("\\") + airIndex + 25);
-                                //debugadd("air file restore dir :"+airbackupDir.FullName);
-                                string lowestVersion = "";
-                                if (airRestoreDir.Exists)
-                                {
-                                    foreach (DirectoryInfo dir in airRestoreDir.GetDirectories())
-                                    {
-                                        if (lowestVersion == "") lowestVersion = dir.Name;
-                                        else
-                                        {
-                                            string[] versions = dir.Name.Split('.');
-                                            string[] lowestversions = lowestVersion.Split('.');
-                                            for (int i = versions.Length - 1; i >= 0; i--)
-                                            {
-                                                int vA = int.Parse(versions[i].Trim());
-                                                int lvA = int.Parse(lowestversions[i].Trim());
-                                                if (vA < lvA) lowestVersion = dir.Name;
-                                            }
-                                        }
-                                    }
-                                    bf = airRestoreDir + lowestVersion + remainingPath + fileName;
-                                    //ok we have the correct backup, now we have to find 
-                                    DirectoryInfo airWorkingDir = new DirectoryInfo(gameDirectory + path.Substring(0, airIndex + 25));
-                                    foreach (DirectoryInfo dir in airWorkingDir.GetDirectories())
-                                    {
-                                        //make sure we pick the highest version
-
-                                        string[] versions = dir.Name.Split('.');
-                                        string[] lowestversions = lowestVersion.Split('.');
-                                        for (int i = versions.Length - 1; i >= 0; i--)
-                                        {
-                                            int vA = int.Parse(versions[i].Trim());
-                                            int lvA = int.Parse(lowestversions[i].Trim());
-                                            //tacky but im re-using this var name to mean "highest dir"
-                                            if (vA > lvA) lowestVersion = dir.Name;
-
-                                        }
-                                    }
-                                    path = path.Substring(0, airIndex + 25) + lowestVersion + remainingPath;
-                                }
-                                
-                            }
-                            if (File.Exists(bf))
-                            {
-                                this.SIFileOp.FileDelete(gameDirectory + path + fileName);
-
-                                this.SIFileOp.FileCopy(bf, gameDirectory + path + fileName);
-                            }
-                            else
-                            {
-                                debugadd("Missing backup for " + path + " and " + fileName + ", this probably means it was skipped during install");
-                            }
-                        }
-                        else if (path.Contains(".raf"))
-                        {
-                            
-                            //handle this one different
-
-                            //check and see if we have a backup to restore
-                            String backupDir = Application.StartupPath + @"\backup\";
-                            debugadd("Uninstalling " + gameDirectory + path + fileName + " looking for backup in " + backupDir + path + fileName);
-                            String bf = backupDir + path + fileName;
-                            if (File.Exists(bf))
-                            {
-                                //this.SIFileOp.FileCopy(bf, gameDirectory + str2 + str3);
-                                rafInject(bf, gameDirectory + path + fileName);
-                            }
-
-
-                        }
-
-                        int pathIndex = path.ToLower().IndexOf("characters");
-                        if (pathIndex>-1)
-                        {
-                            string character = path.Substring(pathIndex+11).Replace("\\","");
-                            if (!charsToUninstall.Contains(character))
-                                charsToUninstall.Add(character);
-                        }
-                        if (path.Contains("formatedsounds"))
-                        {
-                            soundsflag = true;
-                        }
-                    }
-                }
-                if (soundsflag)
-                {
-                    restoreSounds();
-                }
-                if (charsToUninstall.Count > 0)
-                {
-                    foreach(String character in charsToUninstall)
-                    {
-                        // un install all files of a character to account for modifications during char selection
-                        string backupFolder = Application.StartupPath + @"\backup\";
-                        string lookFor = ".raf\\data\\characters\\" + character.ToLower() + "\\"; 
-                        
-                        string[] allBackupFiles = Directory.GetFiles(backupFolder, "*.*", SearchOption.AllDirectories);
-                        foreach (string abackupFile in allBackupFiles)
-                        {
-                            if (abackupFile.ToLower().Contains(lookFor))
-                            {
-                                string rafDestination = gameDirectory+abackupFile.ToLower().Replace(backupFolder.ToLower(), "");
-                                string TheRaf = rafDestination.Substring(0, rafDestination.IndexOf(".raf")+4);
-                                if(File.Exists(TheRaf))//make sure we don't restore a ancient backup that cant be
-                                    rafInject(abackupFile,rafDestination);
-                            }
-
-                        }                       
-                        
-                    }
-                }
-                item.SubItems[4].Text = "No";
-                this.ExecuteQuery("UPDATE skins SET sInstalled=0, dateinstalled=\"" + "-" + "\"" +
-                    " WHERE sName=\"" +
-                   item.SubItems[1].Text + "\"");
-                this.SIFileOp.FileDelete(Application.StartupPath + @"\skins\" + item.SubItems[1].Text + @"\installed");
-                msgs += "Successfully un-installed " + item.SubItems[1].Text+
-                    "\r\n";
-                //Cliver.Message.Inform("Successfuly uninstalled " + item.SubItems[1].Text);
-            }
-            Cliver.Message.Inform(msgs);
-            this.UpdateListView();
-
-            this.dbInstall.Enabled = this.dbUninstall.Enabled = this.dbDelete.Enabled = this.UpdateFL.Enabled = true;
         }
         private void exit_Click(object sender, EventArgs e)
         {
@@ -9138,8 +9185,11 @@ namespace SkinInstaller
         }
         #endregion
 
-       
-       
+        private void button3reinstallText_Click(object sender, EventArgs e)
+        {
+
+        }
+
     }
     #region strucks
     public class LogTextWriter : TextWriter
