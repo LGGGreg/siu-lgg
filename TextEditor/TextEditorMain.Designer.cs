@@ -34,6 +34,9 @@
             this.treeView2 = new System.Windows.Forms.TreeView();
             this.textUninstallButton = new System.Windows.Forms.Button();
             this.importButton = new System.Windows.Forms.Button();
+            this.filter_txt = new System.Windows.Forms.TextBox();
+            this.filterButton = new System.Windows.Forms.Button();
+            this.editedTextClearButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textInstallButton
@@ -49,7 +52,7 @@
             // exportButton
             // 
             this.exportButton.Enabled = false;
-            this.exportButton.Location = new System.Drawing.Point(298, 29);
+            this.exportButton.Location = new System.Drawing.Point(234, 29);
             this.exportButton.Name = "exportButton";
             this.exportButton.Size = new System.Drawing.Size(110, 36);
             this.exportButton.TabIndex = 1;
@@ -75,7 +78,7 @@
             // 
             // textUninstallButton
             // 
-            this.textUninstallButton.Location = new System.Drawing.Point(165, 29);
+            this.textUninstallButton.Location = new System.Drawing.Point(133, 29);
             this.textUninstallButton.Name = "textUninstallButton";
             this.textUninstallButton.Size = new System.Drawing.Size(95, 36);
             this.textUninstallButton.TabIndex = 4;
@@ -85,8 +88,7 @@
             // 
             // importButton
             // 
-            this.importButton.Enabled = false;
-            this.importButton.Location = new System.Drawing.Point(446, 29);
+            this.importButton.Location = new System.Drawing.Point(350, 29);
             this.importButton.Name = "importButton";
             this.importButton.Size = new System.Drawing.Size(110, 36);
             this.importButton.TabIndex = 5;
@@ -94,11 +96,42 @@
             this.importButton.UseVisualStyleBackColor = true;
             this.importButton.Click += new System.EventHandler(this.importButton_Click);
             // 
+            // filter_txt
+            // 
+            this.filter_txt.Location = new System.Drawing.Point(484, 38);
+            this.filter_txt.Name = "filter_txt";
+            this.filter_txt.Size = new System.Drawing.Size(124, 20);
+            this.filter_txt.TabIndex = 6;
+            this.filter_txt.KeyDown += new System.Windows.Forms.KeyEventHandler(this.filter_txt_KeyDown);
+            // 
+            // filterButton
+            // 
+            this.filterButton.Location = new System.Drawing.Point(614, 35);
+            this.filterButton.Name = "filterButton";
+            this.filterButton.Size = new System.Drawing.Size(47, 24);
+            this.filterButton.TabIndex = 7;
+            this.filterButton.Text = "Filter";
+            this.filterButton.UseVisualStyleBackColor = true;
+            this.filterButton.Click += new System.EventHandler(this.filterButton_Click);
+            // 
+            // editedTextClearButton
+            // 
+            this.editedTextClearButton.Location = new System.Drawing.Point(570, 68);
+            this.editedTextClearButton.Name = "editedTextClearButton";
+            this.editedTextClearButton.Size = new System.Drawing.Size(91, 23);
+            this.editedTextClearButton.TabIndex = 8;
+            this.editedTextClearButton.Text = "Clear changes";
+            this.editedTextClearButton.UseVisualStyleBackColor = true;
+            this.editedTextClearButton.Click += new System.EventHandler(this.editedTextClearButton_Click);
+            // 
             // TextEditorMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(673, 553);
+            this.Controls.Add(this.editedTextClearButton);
+            this.Controls.Add(this.filterButton);
+            this.Controls.Add(this.filter_txt);
             this.Controls.Add(this.importButton);
             this.Controls.Add(this.textUninstallButton);
             this.Controls.Add(this.treeView2);
@@ -109,6 +142,7 @@
             this.Text = "Text Editor";
             this.Load += new System.EventHandler(this.TextEditorMain_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -120,6 +154,9 @@
         private System.Windows.Forms.TreeView treeView2;
         private System.Windows.Forms.Button textUninstallButton;
         private System.Windows.Forms.Button importButton;
+        private System.Windows.Forms.TextBox filter_txt;
+        private System.Windows.Forms.Button filterButton;
+        private System.Windows.Forms.Button editedTextClearButton;
     }
 }
 
