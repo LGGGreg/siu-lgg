@@ -212,9 +212,7 @@ namespace TextEditor
                 }
                 treeView1.Nodes.Clear();
                 treeView1.Nodes.Add(origRootNode);
-                treeView1.Sort();
-                treeView1.Nodes[0].Expand();
-                treeView1.Focus();
+                
             }
             else
             {
@@ -230,10 +228,11 @@ namespace TextEditor
                 }
                 treeView1.Nodes.Clear();
                 treeView1.Nodes.Add(origRootNode);
-                treeView1.Sort();
-                treeView1.Nodes[0].Expand();
-                treeView1.Focus();
             }
+
+            treeView1.Sort();
+            treeView1.Nodes[0].Expand();
+            treeView1.Focus();
         }
 
         private void editedTextClear()
