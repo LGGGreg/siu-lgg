@@ -72,7 +72,9 @@ namespace TextEditor
                         // Parse off the name of the object
                         name = parts[0].Substring(startIndex, parts[0].Length - startIndex - 2);
                         // Get the text that describes the object
-                        text = parts[1].Substring(2, parts[1].Length - 3);
+                        for (int i = 1; i < parts.Length; i++)
+                            text += parts[i]+"=";
+                        text = text.Substring(2, text.Length - 4);
                         // Add it to the main dictionary
                         if (!origTextStruct.ContainsKey(type))
                             origTextStruct[type] = blankDict;
