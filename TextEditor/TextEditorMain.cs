@@ -194,27 +194,46 @@ namespace TextEditor
 
         private void filter()
         {
-            if (filter_txt.Text == "")
-                return;
-            TreeNode origRootNode = new TreeNode("Original Text");
-            foreach (KeyValuePair<String, Dictionary<String, String>> typeKVP in origTextStruct)
+            if (filter_txt.Text != "")
             {
-                TreeNode origTypeNode = origRootNode.Nodes.Add(typeKVP.Key);
-                foreach (KeyValuePair<String, String> nameKVP in origTextStruct[typeKVP.Key])
+                TreeNode origRootNode = new TreeNode("Original Text");
+                foreach (KeyValuePair<String, Dictionary<String, String>> typeKVP in origTextStruct)
                 {
-                    if (nameKVP.Key.ToLower().Contains(filter_txt.Text.ToLower()))
+                    TreeNode origTypeNode = origRootNode.Nodes.Add(typeKVP.Key);
+                    foreach (KeyValuePair<String, String> nameKVP in origTextStruct[typeKVP.Key])
+                    {
+                        if (nameKVP.Key.ToLower().Contains(filter_txt.Text.ToLower()))
+                        {
+                            origTypeNode.Nodes.Add(nameKVP.Key);
+                        }
+                    }
+                    if (!(origTypeNode.Nodes.Count > 0))
+                        origTypeNode.Remove();
+                }
+                treeView1.Nodes.Clear();
+                treeView1.Nodes.Add(origRootNode);
+                treeView1.Sort();
+                treeView1.Nodes[0].Expand();
+                treeView1.Focus();
+            }
+            else
+            {
+                // Create original text TreeView
+                TreeNode origRootNode = new TreeNode("Original Text");
+                foreach (KeyValuePair<String, Dictionary<String, String>> typeKVP in origTextStruct)
+                {
+                    TreeNode origTypeNode = origRootNode.Nodes.Add(typeKVP.Key);
+                    foreach (KeyValuePair<String, String> nameKVP in origTextStruct[typeKVP.Key])
                     {
                         origTypeNode.Nodes.Add(nameKVP.Key);
                     }
                 }
-                if (!(origTypeNode.Nodes.Count > 0))
-                    origTypeNode.Remove();
+                treeView1.Nodes.Clear();
+                treeView1.Nodes.Add(origRootNode);
+                treeView1.Sort();
+                treeView1.Nodes[0].Expand();
+                treeView1.Focus();
             }
-            treeView1.Nodes.Clear();
-            treeView1.Nodes.Add(origRootNode);
-            treeView1.Sort();
-            treeView1.Nodes[0].Expand();
-            treeView1.Focus();
         }
 
         private void editedTextClear()
