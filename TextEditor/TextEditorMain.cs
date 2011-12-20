@@ -240,13 +240,20 @@ namespace TextEditor
 
         private void exportButton_Click(object sender, EventArgs e)
         {
-            exportTextFile(editedTextStruct, "C:\\League of Legends Mods");
-            MessageBox.Show("Success creating customText.txt");
+            if (folderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                exportTextFile(editedTextStruct, folderBrowserDialog1.SelectedPath);
+                MessageBox.Show("Success creating customText.txt");
+            }
         }
 
         private void importButton_Click(object sender, EventArgs e)
         {
-            importTextFile("C:\\League of Legends Mods\\customText.txt");
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                foreach(string file in openFileDialog1.FileNames)
+                    importTextFile(file);
+            }
         }
 
         private void filterButton_Click(object sender, EventArgs e)
@@ -519,6 +526,16 @@ namespace TextEditor
         private void editedTextClearButton_Click(object sender, EventArgs e)
         {
             editedTextClear();
+        }
+
+        private void filter_txt_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void treeView2_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
         }
 
 

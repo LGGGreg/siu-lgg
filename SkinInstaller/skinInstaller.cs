@@ -8788,26 +8788,24 @@ namespace SkinInstaller
                     }
                 }
             }
-
-            path = exportFolderBrowserDialog1.SelectedPath + "\\";
-                if (extraFolder != "") path += extraFolder + "\\";
-                foreach (String rafFile in toBackup)
+            
+            if (extraFolder != "") path += extraFolder + "\\";
+            foreach (String rafFile in toBackup)
+            {
+                if (rafFile.ToLower().Contains(".raf"))
+                    rafBackup(rafFile, path, true);
+                else
                 {
-                    if (rafFile.ToLower().Contains(".raf"))
-                        rafBackup(rafFile, path, true);
-                    else
+                    // find it, save it, go!
+                    KeyValuePair<string, string> isfound = allFilesList.FirstOrDefault(m => m.Key.ToLower().Contains(rafFile.ToLower()));
+                    if (isfound.Key != null)
                     {
-                        // find it, save it, go!
-                        KeyValuePair<string, string> isfound = allFilesList.FirstOrDefault(m => m.Key.ToLower().Contains(rafFile.ToLower()));
-                        if (isfound.Key != null)
-                        {
-                            string whereFrom = gameDirectory + isfound.Value;
-                            string whereTo = path + "air\\" + isfound.Key;
-                            this.SIFileOp.FileCopy(whereFrom, whereTo);
-                        }
-
+                        string whereFrom = gameDirectory + isfound.Value;
+                        string whereTo = path + "air\\" + isfound.Key;
+                        this.SIFileOp.FileCopy(whereFrom, whereTo);
                     }
                 }
+            }
             
             treeExportResut result;
             result.output = output;
