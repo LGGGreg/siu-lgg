@@ -29,10 +29,11 @@
         private void InitializeComponent()
         {
             this.textInstallButton = new System.Windows.Forms.Button();
-            this.createTextEditButton = new System.Windows.Forms.Button();
+            this.exportButton = new System.Windows.Forms.Button();
             this.treeView1 = new System.Windows.Forms.TreeView();
             this.treeView2 = new System.Windows.Forms.TreeView();
             this.textUninstallButton = new System.Windows.Forms.Button();
+            this.importButton = new System.Windows.Forms.Button();
             this.SuspendLayout();
             // 
             // textInstallButton
@@ -45,16 +46,16 @@
             this.textInstallButton.UseVisualStyleBackColor = true;
             this.textInstallButton.Click += new System.EventHandler(this.textInstallButton_Click);
             // 
-            // createTextEditButton
+            // exportButton
             // 
-            this.createTextEditButton.Enabled = false;
-            this.createTextEditButton.Location = new System.Drawing.Point(298, 29);
-            this.createTextEditButton.Name = "createTextEditButton";
-            this.createTextEditButton.Size = new System.Drawing.Size(110, 36);
-            this.createTextEditButton.TabIndex = 1;
-            this.createTextEditButton.Text = "Create Custom Text";
-            this.createTextEditButton.UseVisualStyleBackColor = true;
-            this.createTextEditButton.Click += new System.EventHandler(this.createTextEditButton_Click);
+            this.exportButton.Enabled = false;
+            this.exportButton.Location = new System.Drawing.Point(298, 29);
+            this.exportButton.Name = "exportButton";
+            this.exportButton.Size = new System.Drawing.Size(110, 36);
+            this.exportButton.TabIndex = 1;
+            this.exportButton.Text = "Export Changes";
+            this.exportButton.UseVisualStyleBackColor = true;
+            this.exportButton.Click += new System.EventHandler(this.exportButton_Click);
             // 
             // treeView1
             // 
@@ -82,15 +83,27 @@
             this.textUninstallButton.UseVisualStyleBackColor = true;
             this.textUninstallButton.Click += new System.EventHandler(this.textUninstallButton_Click);
             // 
+            // importButton
+            // 
+            this.importButton.Enabled = false;
+            this.importButton.Location = new System.Drawing.Point(446, 29);
+            this.importButton.Name = "importButton";
+            this.importButton.Size = new System.Drawing.Size(110, 36);
+            this.importButton.TabIndex = 5;
+            this.importButton.Text = "Import Changes";
+            this.importButton.UseVisualStyleBackColor = true;
+            this.importButton.Click += new System.EventHandler(this.importButton_Click);
+            // 
             // TextEditorMain
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(673, 553);
+            this.Controls.Add(this.importButton);
             this.Controls.Add(this.textUninstallButton);
             this.Controls.Add(this.treeView2);
             this.Controls.Add(this.treeView1);
-            this.Controls.Add(this.createTextEditButton);
+            this.Controls.Add(this.exportButton);
             this.Controls.Add(this.textInstallButton);
             this.Name = "TextEditorMain";
             this.Text = "Text Editor";
@@ -102,10 +115,11 @@
         #endregion
 
         private System.Windows.Forms.Button textInstallButton;
-        private System.Windows.Forms.Button createTextEditButton;
+        private System.Windows.Forms.Button exportButton;
         private System.Windows.Forms.TreeView treeView1;
         private System.Windows.Forms.TreeView treeView2;
         private System.Windows.Forms.Button textUninstallButton;
+        private System.Windows.Forms.Button importButton;
     }
 }
 

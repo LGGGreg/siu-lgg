@@ -130,7 +130,7 @@ namespace TextEditor
                         treeView2.Sort();
                         treeView2.ExpandAll();
                         // Allow customText.txt to be created
-                        createTextEditButton.Enabled = true;
+                        exportButton.Enabled = true;
                     }
                 }
             }
@@ -176,7 +176,7 @@ namespace TextEditor
                         treeView2.Sort();
                         treeView2.ExpandAll();
                         // Allow customText.txt to be created
-                        createTextEditButton.Enabled = true;
+                        exportButton.Enabled = true;
                     }
                 }
             }
@@ -196,10 +196,15 @@ namespace TextEditor
 
         }
 
-        private void createTextEditButton_Click(object sender, EventArgs e)
+        private void exportButton_Click(object sender, EventArgs e)
         {
             createCustomTextFile(editedTextStruct, "C:\\League of Legends Mods");
             MessageBox.Show("Success creating customText.txt");
+        }
+
+        private void importButton_Click(object sender, EventArgs e)
+        {
+
         }
 
         #endregion // Buttons
@@ -251,7 +256,16 @@ namespace TextEditor
                 String[] parts = editLine.Split(new string[] { "=>" }, StringSplitOptions.RemoveEmptyEntries);
                 edit.Add(parts[0], parts[1]);
             }
-            
+
+            FileStream fs = new FileStream(fontConfigPath, FileMode.Open, FileAccess.Read);
+            StreamReader reader = new StreamReader(fs);
+
+            String line = string.Empty;
+            while ((line = reader.ReadLine()) != null)
+            {
+
+            }
+
         }
 
         #endregion // Work Functions
