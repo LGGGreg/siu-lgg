@@ -371,7 +371,7 @@ namespace TextEditor
             exportButton.Enabled = true;
         }
 
-        private void installText(String fontConfigPath, String customEditPath, String backupDir)
+        public void installText(String fontConfigPath, String customEditPath, String backupDir)
         {
             Dictionary<String, String> backup = new Dictionary<String, String>();
             Dictionary<String, String> edit = new Dictionary<String, String>();
@@ -485,7 +485,7 @@ namespace TextEditor
             File.Move(backupDir + "\\fontConfigOutput.txt", fontConfigPath);
         }
 
-        private void uninstallText(String fontConfigPath, String customEditPath, String backupDir)
+        public void uninstallText(String fontConfigPath, String customEditPath, String backupDir)
         {
             Dictionary<String, String> backup = new Dictionary<String, String>();
             Dictionary<String, String> edit = new Dictionary<String, String>();
@@ -571,10 +571,12 @@ namespace TextEditor
                     {
                         if (line.Contains(editedTextKVP.Key))
                         {
-                            // Write original line from backup
-                            dataWriter.WriteLine("tr \"" + editedTextKVP.Key + "\" = \"" + backup[editedTextKVP.Key] + "\"");
-                            matched = true;
-                            backup.Remove(editedTextKVP.Key);
+                            if (backup.ContainsKey(editedTextKVP.Key))
+                            {
+                                dataWriter.WriteLine("tr \"" + editedTextKVP.Key + "\" = \"" + backup[editedTextKVP.Key] + "\"");
+                                backup.Remove(editedTextKVP.Key);
+                            }
+                            matched = true;//this mod must have already been removed.
                             break;
                         }
                     }
