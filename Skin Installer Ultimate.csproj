@@ -419,6 +419,10 @@
       <Project>{93628B92-AB46-4BDB-B70E-B158CA861C34}</Project>
       <Name>SIURegistry Installer</Name>
     </ProjectReference>
+    <ProjectReference Include="TextEditor\TextEditor.csproj">
+      <Project>{6087D6FE-BA69-43AF-86FF-D375D28AC980}</Project>
+      <Name>TextEditor</Name>
+    </ProjectReference>
     <ProjectReference Include="ThirdParty\Be.Windows.Forms.HexBox\Be.Windows.Forms.HexBox.csproj">
       <Project>{26C5F25F-B450-4CAF-AD8B-B8D11AE73457}</Project>
       <Name>Be.Windows.Forms.HexBox</Name>
