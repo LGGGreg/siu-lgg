@@ -316,30 +316,37 @@ namespace TextEditor
             String line = string.Empty;
             while ((line = reader.ReadLine()) != null)
             {
-                String[] parts = line.Split(new string[] { "=>" }, StringSplitOptions.RemoveEmptyEntries);
-                String name = String.Empty;
-                String text = String.Empty;
-
-                // Make sure the dictionary is actually blank
-                blankDict = new Dictionary<String, String>();
-
-                // Interate through the list to find a match
-                foreach (String type in usableTextLines)
+                try
                 {
-                    if (parts[0].Contains(type))
+                    String[] parts = line.Split(new string[] { "=>" }, StringSplitOptions.RemoveEmptyEntries);
+                    String name = String.Empty;
+                    String text = String.Empty;
+
+                    // Make sure the dictionary is actually blank
+                    blankDict = new Dictionary<String, String>();
+
+                    // Interate through the list to find a match
+                    foreach (String type in usableTextLines)
                     {
-                        int startIndex = type.Length + 1;
-                        // Parse off the name of the object
-                        name = parts[0].Substring(startIndex);
-                        // Get the text that describes the object
-                        text = parts[1];
-                        // Add it to the main dictionary
-                        if (!editedTextStruct.ContainsKey(type))
-                            editedTextStruct[type] = blankDict;
-                        editedTextStruct[type][name] = text;
-                        // Break to save processing time
-                        break;
+                        if (parts[0].Contains(type))
+                        {
+                            int startIndex = type.Length + 1;
+                            // Parse off the name of the object
+                            name = parts[0].Substring(startIndex);
+                            // Get the text that describes the object
+                            text = parts[1];
+                            // Add it to the main dictionary
+                            if (!editedTextStruct.ContainsKey(type))
+                                editedTextStruct[type] = blankDict;
+                            editedTextStruct[type][name] = text;
+                            // Break to save processing time
+                            break;
+                        }
                     }
+                }
+                catch
+                {
+                    MessageBox.Show("customText.txt file is corrupted or edited incorrectly", "File import error");
                 }
             }
 
@@ -375,11 +382,21 @@ namespace TextEditor
                 FileStream bakFS = new FileStream(backupDir + "\\backupText.txt", FileMode.Open, FileAccess.Read);
                 StreamReader bakReader = new StreamReader(bakFS);
 
-                String bakLine = String.Empty;
-                while ((bakLine = bakReader.ReadLine()) != null)
+                try
                 {
-                    String[] parts = bakLine.Split(new string[] { "=>" }, StringSplitOptions.RemoveEmptyEntries);
-                    backup.Add(parts[0], parts[1]);
+                    String bakLine = String.Empty;
+                    while ((bakLine = bakReader.ReadLine()) != null)
+                    {
+                        String[] parts = bakLine.Split(new string[] { "=>" }, StringSplitOptions.RemoveEmptyEntries);
+                        backup.Add(parts[0], parts[1]);
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Backup file is corrupted or had been edited. Please browse to SIU\\backups and delete the backupText.txt file. Then delete your skin and reinstall it.", "Backup file is corrupted");
+                    bakReader.Close();
+                    bakFS.Close();
+                    return;
                 }
 
                 bakReader.Close();
@@ -390,11 +407,21 @@ namespace TextEditor
             FileStream editFS = new FileStream(customEditPath, FileMode.Open, FileAccess.Read);
             StreamReader editReader = new StreamReader(editFS);
 
-            String editLine = String.Empty;
-            while ((editLine = editReader.ReadLine()) != null)
+            try
             {
-                String[] parts = editLine.Split(new string[] { "=>" }, StringSplitOptions.RemoveEmptyEntries);
-                edit.Add(parts[0], parts[1]);
+                String editLine = String.Empty;
+                while ((editLine = editReader.ReadLine()) != null)
+                {
+                    String[] parts = editLine.Split(new string[] { "=>" }, StringSplitOptions.RemoveEmptyEntries);
+                    edit.Add(parts[0], parts[1]);
+                }
+            }
+            catch
+            {
+                MessageBox.Show("customText.txt file is corrupted or had been edited incorrectly.", "customText.txt file is corrupted");
+                editReader.Close();
+                editFS.Close();
+                return;
             }
 
             editReader.Close();
@@ -405,28 +432,39 @@ namespace TextEditor
             FileStream fs = new FileStream(fontConfigPath, FileMode.Open, FileAccess.Read);
             StreamReader reader = new StreamReader(fs);
 
-            String line = string.Empty;
-            while ((line = reader.ReadLine()) != null)
+            try
             {
-                Boolean matched = false;
-                foreach (KeyValuePair<String, String> editedTextKVP in edit)
+                String line = string.Empty;
+                while ((line = reader.ReadLine()) != null)
                 {
-                    if (line.Contains(editedTextKVP.Key))
+                    Boolean matched = false;
+                    foreach (KeyValuePair<String, String> editedTextKVP in edit)
                     {
-                        String[] parts = line.Split(new string[] { "\" = \"" }, StringSplitOptions.RemoveEmptyEntries);
-                        String key = parts[0].Substring(4);
-                        String value = parts[1].Substring(0, parts[1].Length - 1);
-                        // Create backup
-                        if(!backup.ContainsKey(key))
-                            backup.Add(key, value);
-                        // Write edited line
-                        dataWriter.WriteLine("tr \"" + editedTextKVP.Key + "\" = \"" + editedTextKVP.Value + "\"");
-                        matched = true;
-                        break;
-                    } 
+                        if (line.Contains(editedTextKVP.Key))
+                        {
+                            String[] parts = line.Split(new string[] { "\" = \"" }, StringSplitOptions.RemoveEmptyEntries);
+                            String key = parts[0].Substring(4);
+                            String value = parts[1].Substring(0, parts[1].Length - 1);
+                            // Create backup
+                            if (!backup.ContainsKey(key))
+                                backup.Add(key, value);
+                            // Write edited line
+                            dataWriter.WriteLine("tr \"" + editedTextKVP.Key + "\" = \"" + editedTextKVP.Value + "\"");
+                            matched = true;
+                            break;
+                        }
+                    }
+                    if (!matched)
+                        dataWriter.WriteLine(line);
                 }
-                if (!matched)
-                    dataWriter.WriteLine(line);
+            }
+            catch
+            {
+                MessageBox.Show("fontconfig_en_US.txt file is corrupted or had been edited incorrectly. Please repair your LoL", "fontconfig_en_US.txt file is corrupted");
+                dataWriter.Close();
+                reader.Close();
+                fs.Close();
+                return;
             }
 
             dataWriter.Close();
@@ -458,11 +496,21 @@ namespace TextEditor
                 FileStream bakFS = new FileStream(backupDir + "\\backupText.txt", FileMode.Open, FileAccess.Read);
                 StreamReader bakReader = new StreamReader(bakFS);
 
-                String bakLine = String.Empty;
-                while ((bakLine = bakReader.ReadLine()) != null)
+                try
                 {
-                    String[] parts = bakLine.Split(new string[] { "=>" }, StringSplitOptions.RemoveEmptyEntries);
-                    backup.Add(parts[0], parts[1]);
+                    String bakLine = String.Empty;
+                    while ((bakLine = bakReader.ReadLine()) != null)
+                    {
+                        String[] parts = bakLine.Split(new string[] { "=>" }, StringSplitOptions.RemoveEmptyEntries);
+                        backup.Add(parts[0], parts[1]);
+                    }
+                }
+                catch
+                {
+                    MessageBox.Show("Backup file is corrupted or had been edited. Please browse to SIU\\backups and delete the backupText.txt file. Then delete your skin and reinstall it.", "Backup file is corrupted");
+                    bakReader.Close();
+                    bakFS.Close();
+                    return;
                 }
 
                 bakReader.Close();
@@ -488,11 +536,21 @@ namespace TextEditor
             FileStream editFS = new FileStream(customEditPath, FileMode.Open, FileAccess.Read);
             StreamReader editReader = new StreamReader(editFS);
 
-            String editLine = String.Empty;
-            while ((editLine = editReader.ReadLine()) != null)
+            try
             {
-                String[] parts = editLine.Split(new string[] { "=>" }, StringSplitOptions.RemoveEmptyEntries);
-                edit.Add(parts[0], parts[1]);
+                String editLine = String.Empty;
+                while ((editLine = editReader.ReadLine()) != null)
+                {
+                    String[] parts = editLine.Split(new string[] { "=>" }, StringSplitOptions.RemoveEmptyEntries);
+                    edit.Add(parts[0], parts[1]);
+                }
+            }
+            catch
+            {
+                MessageBox.Show("customText.txt file is corrupted or had been edited incorrectly.", "customText.txt file is corrupted");
+                editReader.Close();
+                editFS.Close();
+                return;
             }
 
             editReader.Close();
@@ -503,23 +561,34 @@ namespace TextEditor
             FileStream fs = new FileStream(fontConfigPath, FileMode.Open, FileAccess.Read);
             StreamReader reader = new StreamReader(fs);
 
-            String line = string.Empty;
-            while ((line = reader.ReadLine()) != null)
+            try
             {
-                Boolean matched = false;
-                foreach (KeyValuePair<String, String> editedTextKVP in edit)
+                String line = string.Empty;
+                while ((line = reader.ReadLine()) != null)
                 {
-                    if (line.Contains(editedTextKVP.Key))
+                    Boolean matched = false;
+                    foreach (KeyValuePair<String, String> editedTextKVP in edit)
                     {
-                        // Write original line from backup
-                        dataWriter.WriteLine("tr \"" + editedTextKVP.Key + "\" = \"" + backup[editedTextKVP.Key] + "\"");
-                        matched = true;
-                        backup.Remove(editedTextKVP.Key);
-                        break;
+                        if (line.Contains(editedTextKVP.Key))
+                        {
+                            // Write original line from backup
+                            dataWriter.WriteLine("tr \"" + editedTextKVP.Key + "\" = \"" + backup[editedTextKVP.Key] + "\"");
+                            matched = true;
+                            backup.Remove(editedTextKVP.Key);
+                            break;
+                        }
                     }
+                    if (!matched)
+                        dataWriter.WriteLine(line);
                 }
-                if (!matched)
-                    dataWriter.WriteLine(line);
+            }
+            catch
+            {
+                MessageBox.Show("fontconfig_en_US.txt file is corrupted or had been edited incorrectly. Please repair your LoL", "fontconfig_en_US.txt file is corrupted");
+                dataWriter.Close();
+                reader.Close();
+                fs.Close();
+                return;
             }
 
             dataWriter.Close();
