@@ -3868,6 +3868,7 @@ namespace SkinInstaller
             this.unpackSoundsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.loLViewerOpenNotPreviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openParticleReferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.showMenuFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panelGL = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
@@ -3895,7 +3896,6 @@ namespace SkinInstaller
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.showMenuFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -4231,7 +4231,7 @@ namespace SkinInstaller
             this.saveToDb.CheckState = System.Windows.Forms.CheckState.Checked;
             this.saveToDb.Location = new System.Drawing.Point(11, 332);
             this.saveToDb.Name = "saveToDb";
-            this.saveToDb.Size = new System.Drawing.Size(111, 17);
+            this.saveToDb.Size = new System.Drawing.Size(112, 17);
             this.saveToDb.TabIndex = 33;
             this.saveToDb.Text = "Save to Database";
             this.saveToDb.UseVisualStyleBackColor = false;
@@ -4632,7 +4632,7 @@ namespace SkinInstaller
             this.checkBox1dispCharacter.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispCharacter.Location = new System.Drawing.Point(507, 1);
             this.checkBox1dispCharacter.Name = "checkBox1dispCharacter";
-            this.checkBox1dispCharacter.Size = new System.Drawing.Size(71, 17);
+            this.checkBox1dispCharacter.Size = new System.Drawing.Size(72, 17);
             this.checkBox1dispCharacter.TabIndex = 8;
             this.checkBox1dispCharacter.Text = "Character";
             this.checkBox1dispCharacter.UseVisualStyleBackColor = true;
@@ -4645,7 +4645,7 @@ namespace SkinInstaller
             this.checkBox1dispDateInstalledFull.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispDateInstalledFull.Location = new System.Drawing.Point(420, 1);
             this.checkBox1dispDateInstalledFull.Name = "checkBox1dispDateInstalledFull";
-            this.checkBox1dispDateInstalledFull.Size = new System.Drawing.Size(90, 17);
+            this.checkBox1dispDateInstalledFull.Size = new System.Drawing.Size(91, 17);
             this.checkBox1dispDateInstalledFull.TabIndex = 7;
             this.checkBox1dispDateInstalledFull.Text = "Time Installed";
             this.checkBox1dispDateInstalledFull.UseVisualStyleBackColor = true;
@@ -4658,7 +4658,7 @@ namespace SkinInstaller
             this.checkBox1dispDateAddedFull.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispDateAddedFull.Location = new System.Drawing.Point(342, 1);
             this.checkBox1dispDateAddedFull.Name = "checkBox1dispDateAddedFull";
-            this.checkBox1dispDateAddedFull.Size = new System.Drawing.Size(82, 17);
+            this.checkBox1dispDateAddedFull.Size = new System.Drawing.Size(83, 17);
             this.checkBox1dispDateAddedFull.TabIndex = 6;
             this.checkBox1dispDateAddedFull.Text = "Time Added";
             this.checkBox1dispDateAddedFull.UseVisualStyleBackColor = true;
@@ -4671,7 +4671,7 @@ namespace SkinInstaller
             this.checkBox1dispDateAdded.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispDateAdded.Location = new System.Drawing.Point(265, 1);
             this.checkBox1dispDateAdded.Name = "checkBox1dispDateAdded";
-            this.checkBox1dispDateAdded.Size = new System.Drawing.Size(82, 17);
+            this.checkBox1dispDateAdded.Size = new System.Drawing.Size(83, 17);
             this.checkBox1dispDateAdded.TabIndex = 5;
             this.checkBox1dispDateAdded.Text = "Date Added";
             this.checkBox1dispDateAdded.UseVisualStyleBackColor = true;
@@ -4684,7 +4684,7 @@ namespace SkinInstaller
             this.checkBox1dispInstalled.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispInstalled.Location = new System.Drawing.Point(204, 1);
             this.checkBox1dispInstalled.Name = "checkBox1dispInstalled";
-            this.checkBox1dispInstalled.Size = new System.Drawing.Size(64, 17);
+            this.checkBox1dispInstalled.Size = new System.Drawing.Size(65, 17);
             this.checkBox1dispInstalled.TabIndex = 4;
             this.checkBox1dispInstalled.Text = "Installed";
             this.checkBox1dispInstalled.UseVisualStyleBackColor = true;
@@ -4697,7 +4697,7 @@ namespace SkinInstaller
             this.checkBox1dispFileCount.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispFileCount.Location = new System.Drawing.Point(134, 1);
             this.checkBox1dispFileCount.Name = "checkBox1dispFileCount";
-            this.checkBox1dispFileCount.Size = new System.Drawing.Size(72, 17);
+            this.checkBox1dispFileCount.Size = new System.Drawing.Size(73, 17);
             this.checkBox1dispFileCount.TabIndex = 3;
             this.checkBox1dispFileCount.Text = "File Count";
             this.checkBox1dispFileCount.UseVisualStyleBackColor = true;
@@ -4710,7 +4710,7 @@ namespace SkinInstaller
             this.checkBox1dispAuthor.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispAuthor.Location = new System.Drawing.Point(78, 1);
             this.checkBox1dispAuthor.Name = "checkBox1dispAuthor";
-            this.checkBox1dispAuthor.Size = new System.Drawing.Size(56, 17);
+            this.checkBox1dispAuthor.Size = new System.Drawing.Size(57, 17);
             this.checkBox1dispAuthor.TabIndex = 2;
             this.checkBox1dispAuthor.Text = "Author";
             this.checkBox1dispAuthor.UseVisualStyleBackColor = true;
@@ -4723,7 +4723,7 @@ namespace SkinInstaller
             this.checkBox1dispTitle.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispTitle.Location = new System.Drawing.Point(36, 1);
             this.checkBox1dispTitle.Name = "checkBox1dispTitle";
-            this.checkBox1dispTitle.Size = new System.Drawing.Size(45, 17);
+            this.checkBox1dispTitle.Size = new System.Drawing.Size(46, 17);
             this.checkBox1dispTitle.TabIndex = 1;
             this.checkBox1dispTitle.Text = "Title";
             this.checkBox1dispTitle.UseVisualStyleBackColor = true;
@@ -5121,14 +5121,14 @@ namespace SkinInstaller
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
@@ -5142,49 +5142,49 @@ namespace SkinInstaller
             this.checkForUpdateToolStripMenuItem,
             this.registerAppForWebUrlsToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
             // editInstallPreferencesToolStripMenuItem
             // 
             this.editInstallPreferencesToolStripMenuItem.Name = "editInstallPreferencesToolStripMenuItem";
-            this.editInstallPreferencesToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.editInstallPreferencesToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.editInstallPreferencesToolStripMenuItem.Text = "Edit Install Preferences";
             this.editInstallPreferencesToolStripMenuItem.Click += new System.EventHandler(this.editInstallPreferencesToolStripMenuItem_Click);
             // 
             // changeGameClientLocationToolStripMenuItem
             // 
             this.changeGameClientLocationToolStripMenuItem.Name = "changeGameClientLocationToolStripMenuItem";
-            this.changeGameClientLocationToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.changeGameClientLocationToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.changeGameClientLocationToolStripMenuItem.Text = "Change Game Client Location";
             this.changeGameClientLocationToolStripMenuItem.Click += new System.EventHandler(this.changeGameClientLocationToolStripMenuItem_Click);
             // 
             // updateFileListToolStripMenuItem
             // 
             this.updateFileListToolStripMenuItem.Name = "updateFileListToolStripMenuItem";
-            this.updateFileListToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.updateFileListToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.updateFileListToolStripMenuItem.Text = "Update File List";
             this.updateFileListToolStripMenuItem.Click += new System.EventHandler(this.updateFileListToolStripMenuItem_Click);
             // 
             // editAllPreferencesToolStripMenuItem
             // 
             this.editAllPreferencesToolStripMenuItem.Name = "editAllPreferencesToolStripMenuItem";
-            this.editAllPreferencesToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.editAllPreferencesToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.editAllPreferencesToolStripMenuItem.Text = "Edit All Preferences";
             this.editAllPreferencesToolStripMenuItem.Click += new System.EventHandler(this.editAllPreferencesToolStripMenuItem_Click);
             // 
             // checkForUpdateToolStripMenuItem
             // 
             this.checkForUpdateToolStripMenuItem.Name = "checkForUpdateToolStripMenuItem";
-            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.checkForUpdateToolStripMenuItem.Text = "Check For Update";
             this.checkForUpdateToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdateToolStripMenuItem_Click);
             // 
             // registerAppForWebUrlsToolStripMenuItem
             // 
             this.registerAppForWebUrlsToolStripMenuItem.Name = "registerAppForWebUrlsToolStripMenuItem";
-            this.registerAppForWebUrlsToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.registerAppForWebUrlsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.registerAppForWebUrlsToolStripMenuItem.Text = "Register App For WebUrls";
             this.registerAppForWebUrlsToolStripMenuItem.Click += new System.EventHandler(this.registerAppForWebUrlsToolStripMenuItem_Click);
             // 
@@ -5211,34 +5211,34 @@ namespace SkinInstaller
             this.openParticleReferenceToolStripMenuItem,
             this.showMenuFileLocationToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.debugToolStripMenuItem.Text = "Debug";
             // 
             // soundFileLocationToolStripMenuItem
             // 
             this.soundFileLocationToolStripMenuItem.Name = "soundFileLocationToolStripMenuItem";
-            this.soundFileLocationToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.soundFileLocationToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.soundFileLocationToolStripMenuItem.Text = "Sound File Location";
             this.soundFileLocationToolStripMenuItem.Click += new System.EventHandler(this.soundFileLocationToolStripMenuItem_Click);
             // 
             // clientLocationToolStripMenuItem
             // 
             this.clientLocationToolStripMenuItem.Name = "clientLocationToolStripMenuItem";
-            this.clientLocationToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.clientLocationToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.clientLocationToolStripMenuItem.Text = "Client Location";
             this.clientLocationToolStripMenuItem.Click += new System.EventHandler(this.clientLocationToolStripMenuItem_Click);
             // 
             // repathAllFilesToolStripMenuItem
             // 
             this.repathAllFilesToolStripMenuItem.Name = "repathAllFilesToolStripMenuItem";
-            this.repathAllFilesToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.repathAllFilesToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.repathAllFilesToolStripMenuItem.Text = "Repath All Files";
             this.repathAllFilesToolStripMenuItem.Click += new System.EventHandler(this.repathAllFilesToolStripMenuItem_Click);
             // 
             // showDebugToolStripMenuItem
             // 
             this.showDebugToolStripMenuItem.Name = "showDebugToolStripMenuItem";
-            this.showDebugToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.showDebugToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.showDebugToolStripMenuItem.Text = "Show Debug";
             this.showDebugToolStripMenuItem.Click += new System.EventHandler(this.showDebugToolStripMenuItem_Click);
             // 
@@ -5248,113 +5248,120 @@ namespace SkinInstaller
             this.loadToolStripMenuItem,
             this.saveToolStripMenuItem});
             this.imagesToolStripMenuItem.Name = "imagesToolStripMenuItem";
-            this.imagesToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.imagesToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.imagesToolStripMenuItem.Text = "Images";
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // iAmLGGToolStripMenuItem
             // 
             this.iAmLGGToolStripMenuItem.Name = "iAmLGGToolStripMenuItem";
-            this.iAmLGGToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.iAmLGGToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.iAmLGGToolStripMenuItem.Text = "I am LGG";
             this.iAmLGGToolStripMenuItem.Click += new System.EventHandler(this.iAmLGGToolStripMenuItem_Click);
             // 
             // iCantStandLGGToolStripMenuItem
             // 
             this.iCantStandLGGToolStripMenuItem.Name = "iCantStandLGGToolStripMenuItem";
-            this.iCantStandLGGToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.iCantStandLGGToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.iCantStandLGGToolStripMenuItem.Text = "I can\'t stand LGG";
             this.iCantStandLGGToolStripMenuItem.Click += new System.EventHandler(this.iCantStandLGGToolStripMenuItem_Click);
             // 
             // pingToolStripMenuItem
             // 
             this.pingToolStripMenuItem.Name = "pingToolStripMenuItem";
-            this.pingToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.pingToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.pingToolStripMenuItem.Text = "Ping";
             this.pingToolStripMenuItem.Click += new System.EventHandler(this.pingToolStripMenuItem_Click);
             // 
             // viewStatsToolStripMenuItem
             // 
             this.viewStatsToolStripMenuItem.Name = "viewStatsToolStripMenuItem";
-            this.viewStatsToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.viewStatsToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.viewStatsToolStripMenuItem.Text = "View Stats";
             this.viewStatsToolStripMenuItem.Click += new System.EventHandler(this.viewStatsToolStripMenuItem_Click);
             // 
             // wtfRainbowsToolStripMenuItem
             // 
             this.wtfRainbowsToolStripMenuItem.Name = "wtfRainbowsToolStripMenuItem";
-            this.wtfRainbowsToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.wtfRainbowsToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.wtfRainbowsToolStripMenuItem.Text = "wtf rainbows";
             this.wtfRainbowsToolStripMenuItem.Click += new System.EventHandler(this.wtfRainbowsToolStripMenuItem_Click);
             // 
             // setSoundFileLocationToolStripMenuItem
             // 
             this.setSoundFileLocationToolStripMenuItem.Name = "setSoundFileLocationToolStripMenuItem";
-            this.setSoundFileLocationToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.setSoundFileLocationToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.setSoundFileLocationToolStripMenuItem.Text = "Set Sound File Location";
             this.setSoundFileLocationToolStripMenuItem.Click += new System.EventHandler(this.setSoundFileLocationToolStripMenuItem_Click);
             // 
             // getProgramLocationToolStripMenuItem
             // 
             this.getProgramLocationToolStripMenuItem.Name = "getProgramLocationToolStripMenuItem";
-            this.getProgramLocationToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.getProgramLocationToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.getProgramLocationToolStripMenuItem.Text = "Get Program Location";
             this.getProgramLocationToolStripMenuItem.Click += new System.EventHandler(this.getProgramLocationToolStripMenuItem_Click);
             // 
             // resetCharacterIconsCacheToolStripMenuItem
             // 
             this.resetCharacterIconsCacheToolStripMenuItem.Name = "resetCharacterIconsCacheToolStripMenuItem";
-            this.resetCharacterIconsCacheToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.resetCharacterIconsCacheToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.resetCharacterIconsCacheToolStripMenuItem.Text = "Reset Character Icons Cache";
             this.resetCharacterIconsCacheToolStripMenuItem.Click += new System.EventHandler(this.resetCharacterIconsCacheToolStripMenuItem_Click);
             // 
             // useDDSVersionReaderToolStripMenuItem
             // 
             this.useDDSVersionReaderToolStripMenuItem.Name = "useDDSVersionReaderToolStripMenuItem";
-            this.useDDSVersionReaderToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.useDDSVersionReaderToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.useDDSVersionReaderToolStripMenuItem.Text = "Use DDS Version Reader";
             this.useDDSVersionReaderToolStripMenuItem.Click += new System.EventHandler(this.useDDSVersionReaderToolStripMenuItem_Click);
             // 
             // testReadResFilesToolStripMenuItem
             // 
             this.testReadResFilesToolStripMenuItem.Name = "testReadResFilesToolStripMenuItem";
-            this.testReadResFilesToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.testReadResFilesToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.testReadResFilesToolStripMenuItem.Text = "Test Read Res Files";
             this.testReadResFilesToolStripMenuItem.Click += new System.EventHandler(this.testReadResFilesToolStripMenuItem_Click);
             // 
             // unpackSoundsToolStripMenuItem
             // 
             this.unpackSoundsToolStripMenuItem.Name = "unpackSoundsToolStripMenuItem";
-            this.unpackSoundsToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.unpackSoundsToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.unpackSoundsToolStripMenuItem.Text = "unpack sounds";
             this.unpackSoundsToolStripMenuItem.Click += new System.EventHandler(this.unpackSoundsToolStripMenuItem_Click);
             // 
             // loLViewerOpenNotPreviewToolStripMenuItem
             // 
             this.loLViewerOpenNotPreviewToolStripMenuItem.Name = "loLViewerOpenNotPreviewToolStripMenuItem";
-            this.loLViewerOpenNotPreviewToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.loLViewerOpenNotPreviewToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.loLViewerOpenNotPreviewToolStripMenuItem.Text = "LoLViewer Open (Not Preview)";
             this.loLViewerOpenNotPreviewToolStripMenuItem.Click += new System.EventHandler(this.loLViewerOpenNotPreviewToolStripMenuItem_Click);
             // 
             // openParticleReferenceToolStripMenuItem
             // 
             this.openParticleReferenceToolStripMenuItem.Name = "openParticleReferenceToolStripMenuItem";
-            this.openParticleReferenceToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.openParticleReferenceToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.openParticleReferenceToolStripMenuItem.Text = "Open Particle Reference";
             this.openParticleReferenceToolStripMenuItem.Click += new System.EventHandler(this.openParticleReferenceToolStripMenuItem_Click);
+            // 
+            // showMenuFileLocationToolStripMenuItem
+            // 
+            this.showMenuFileLocationToolStripMenuItem.Name = "showMenuFileLocationToolStripMenuItem";
+            this.showMenuFileLocationToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
+            this.showMenuFileLocationToolStripMenuItem.Text = "Show Menu File Location";
+            this.showMenuFileLocationToolStripMenuItem.Click += new System.EventHandler(this.showMenuFileLocationToolStripMenuItem_Click);
             // 
             // panel2
             // 
@@ -5559,13 +5566,6 @@ namespace SkinInstaller
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Text = "Make Simple Skin from this Riot Skin";
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Click += new System.EventHandler(this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem_Click);
-            // 
-            // showMenuFileLocationToolStripMenuItem
-            // 
-            this.showMenuFileLocationToolStripMenuItem.Name = "showMenuFileLocationToolStripMenuItem";
-            this.showMenuFileLocationToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
-            this.showMenuFileLocationToolStripMenuItem.Text = "Show Menu File Location";
-            this.showMenuFileLocationToolStripMenuItem.Click += new System.EventHandler(this.showMenuFileLocationToolStripMenuItem_Click);
             // 
             // skinInstaller
             // 

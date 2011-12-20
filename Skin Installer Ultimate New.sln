@@ -21,6 +21,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LOLViewer", "ThirdParty\LOL
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParticleReferenceForSIU", "ParticleReferenceForSIU\ParticleReferenceForSIU\ParticleReferenceForSIU.csproj", "{7C9BC81B-5AF8-4F48-B059-98543A088758}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TextEditor", "TextEditor\TextEditor.csproj", "{6087D6FE-BA69-43AF-86FF-D375D28AC980}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		ClientProfileRelease|Any CPU = ClientProfileRelease|Any CPU
@@ -237,6 +239,26 @@ Global
 		{7C9BC81B-5AF8-4F48-B059-98543A088758}.Release|Mixed Platforms.Build.0 = Release|x86
 		{7C9BC81B-5AF8-4F48-B059-98543A088758}.Release|x86.ActiveCfg = Release|x86
 		{7C9BC81B-5AF8-4F48-B059-98543A088758}.Release|x86.Build.0 = Release|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.ClientProfileRelease|Any CPU.ActiveCfg = Release|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.ClientProfileRelease|Mixed Platforms.ActiveCfg = Release|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.ClientProfileRelease|Mixed Platforms.Build.0 = Release|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.ClientProfileRelease|x86.ActiveCfg = Release|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.ClientProfileRelease|x86.Build.0 = Release|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Debug_Nightly|Any CPU.ActiveCfg = Debug|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Debug_Nightly|Mixed Platforms.ActiveCfg = Debug|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Debug_Nightly|Mixed Platforms.Build.0 = Debug|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Debug_Nightly|x86.ActiveCfg = Debug|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Debug_Nightly|x86.Build.0 = Debug|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Debug|x86.ActiveCfg = Debug|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Debug|x86.Build.0 = Debug|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Release|Any CPU.ActiveCfg = Release|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Release|Mixed Platforms.Build.0 = Release|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Release|x86.ActiveCfg = Release|x86
+		{6087D6FE-BA69-43AF-86FF-D375D28AC980}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
