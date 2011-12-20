@@ -12,8 +12,14 @@ namespace TextEditor
 {
     public partial class TextEditorMain : Form
     {
+        public string menuFile = "C:\\League of Legends Mods\\fontconfig_en_US.txt";
         public TextEditorMain()
         {
+            InitializeComponent();
+        }
+        public TextEditorMain(string _menuFile)
+        {
+            menuFile = _menuFile;
             InitializeComponent();
         }
 
@@ -31,7 +37,7 @@ namespace TextEditor
 
         private void TextEditorMain_Load(object sender, EventArgs e)
         {
-            createOrigTextTreeView("C:\\League of Legends Mods\\fontconfig_en_US.txt");
+            createOrigTextTreeView(menuFile);
         }
 
         private void createOrigTextTreeView (String fontConfigPath)
