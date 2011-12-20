@@ -47,6 +47,7 @@ namespace TextEditor
 
         private void createOrigTextTreeView (String fontConfigPath)
         {
+            if (treeView1.Nodes.Count > 0) return;
             // Open fontConfig file
             FileStream fs = new FileStream(fontConfigPath, FileMode.Open, FileAccess.Read);
             StreamReader reader = new StreamReader(fs);

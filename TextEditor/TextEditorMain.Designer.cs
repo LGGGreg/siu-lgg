@@ -78,7 +78,7 @@
             this.treeView1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView1.Location = new System.Drawing.Point(0, 23);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(315, 485);
+            this.treeView1.Size = new System.Drawing.Size(337, 485);
             this.treeView1.TabIndex = 2;
             this.treeView1.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.OrigNodeMouseDoubleClick);
             // 
@@ -87,7 +87,7 @@
             this.treeView2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.treeView2.Location = new System.Drawing.Point(0, 23);
             this.treeView2.Name = "treeView2";
-            this.treeView2.Size = new System.Drawing.Size(350, 485);
+            this.treeView2.Size = new System.Drawing.Size(328, 485);
             this.treeView2.TabIndex = 3;
             this.treeView2.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView2_AfterSelect);
             this.treeView2.NodeMouseDoubleClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.EditedNodeMouseDoubleClick);
@@ -136,7 +136,7 @@
             // editedTextClearButton
             // 
             this.editedTextClearButton.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
-            this.editedTextClearButton.Location = new System.Drawing.Point(256, 0);
+            this.editedTextClearButton.Location = new System.Drawing.Point(234, 0);
             this.editedTextClearButton.Name = "editedTextClearButton";
             this.editedTextClearButton.Size = new System.Drawing.Size(91, 23);
             this.editedTextClearButton.TabIndex = 8;
@@ -175,7 +175,7 @@
             this.splitContainer1.Panel2.Controls.Add(this.treeView2);
             this.splitContainer1.Panel2.Controls.Add(this.panel2);
             this.splitContainer1.Size = new System.Drawing.Size(673, 510);
-            this.splitContainer1.SplitterDistance = 317;
+            this.splitContainer1.SplitterDistance = 339;
             this.splitContainer1.TabIndex = 10;
             // 
             // panel3
@@ -183,7 +183,7 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel3.Location = new System.Drawing.Point(0, 0);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(315, 23);
+            this.panel3.Size = new System.Drawing.Size(337, 23);
             this.panel3.TabIndex = 0;
             // 
             // panel2
@@ -192,12 +192,12 @@
             this.panel2.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel2.Location = new System.Drawing.Point(0, 0);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(350, 23);
+            this.panel2.Size = new System.Drawing.Size(328, 23);
             this.panel2.TabIndex = 0;
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.FileName = "openFileDialog1";
+            this.openFileDialog1.FileName = "customText.txt";
             // 
             // TextEditorMain
             // 
