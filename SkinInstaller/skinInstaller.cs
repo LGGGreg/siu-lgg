@@ -368,6 +368,7 @@ namespace SkinInstaller
         private ToolStripMenuItem makeSimpleSkinFromThisRiotSkinToolStripMenuItem;
         private ToolStripMenuItem showMenuFileLocationToolStripMenuItem;
         private ToolStripMenuItem openTextTreeEditorToolStripMenuItem;
+        private BackgroundWorker exportTreeViewWorker1;
         PaintEventHandler importantP;
         #endregion
         #region webIntegrate
@@ -3778,6 +3779,16 @@ namespace SkinInstaller
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.listView1 = new SkinInstaller.ListViewItemHover();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.dataBaseListMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripSelectUninstalled = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSelectAllInstalled = new System.Windows.Forms.ToolStripMenuItem();
@@ -3860,6 +3871,7 @@ namespace SkinInstaller
             this.loLViewerOpenNotPreviewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openParticleReferenceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showMenuFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openTextTreeEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panelGL = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
@@ -3887,17 +3899,7 @@ namespace SkinInstaller
             this.toolStripMenuItem2 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.listView1 = new SkinInstaller.ListViewItemHover();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.openTextTreeEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.exportTreeViewWorker1 = new System.ComponentModel.BackgroundWorker();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -4435,6 +4437,81 @@ namespace SkinInstaller
             this.splitContainer2.Size = new System.Drawing.Size(805, 281);
             this.splitContainer2.SplitterDistance = 615;
             this.splitContainer2.TabIndex = 7;
+            // 
+            // listView1
+            // 
+            this.listView1.AutoArrange = false;
+            this.listView1.CheckBoxes = true;
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader5,
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader6,
+            this.columnHeader8,
+            this.columnHeader9,
+            this.columnHeader7});
+            this.listView1.ContextMenuStrip = this.dataBaseListMenuStrip1;
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.GridLines = true;
+            this.listView1.LargeImageList = this.imageList1;
+            this.listView1.Location = new System.Drawing.Point(18, 15);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(597, 266);
+            this.listView1.SmallImageList = this.imageList1;
+            this.listView1.TabIndex = 0;
+            this.listView1.TileSize = new System.Drawing.Size(2, 2);
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ItemHover += new SkinInstaller.ListViewItemHover.ItemHoverEventHandler(this.listView1_ItemMouseHover);
+            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
+            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = " ";
+            this.columnHeader1.Width = 43;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Skin Title";
+            this.columnHeader2.Width = 190;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Author";
+            this.columnHeader5.Width = 100;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "File Count";
+            this.columnHeader3.Width = 69;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Installed";
+            this.columnHeader4.Width = 53;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Added";
+            this.columnHeader6.Width = 67;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "Date and Time Added";
+            this.columnHeader8.Width = 0;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "Date and Time Installed";
+            this.columnHeader9.Width = 0;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "Character";
+            this.columnHeader7.Width = 90;
             // 
             // dataBaseListMenuStrip1
             // 
@@ -5291,6 +5368,13 @@ namespace SkinInstaller
             this.showMenuFileLocationToolStripMenuItem.Text = "Show Menu File Location";
             this.showMenuFileLocationToolStripMenuItem.Click += new System.EventHandler(this.showMenuFileLocationToolStripMenuItem_Click);
             // 
+            // openTextTreeEditorToolStripMenuItem
+            // 
+            this.openTextTreeEditorToolStripMenuItem.Name = "openTextTreeEditorToolStripMenuItem";
+            this.openTextTreeEditorToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.openTextTreeEditorToolStripMenuItem.Text = "Open Text Tree Editor";
+            this.openTextTreeEditorToolStripMenuItem.Click += new System.EventHandler(this.openTextTreeEditorToolStripMenuItem_Click);
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.panelGL);
@@ -5495,87 +5579,12 @@ namespace SkinInstaller
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Text = "Make Simple Skin from this Riot Skin";
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Click += new System.EventHandler(this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem_Click);
             // 
-            // listView1
+            // exportTreeViewWorker1
             // 
-            this.listView1.AutoArrange = false;
-            this.listView1.CheckBoxes = true;
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader5,
-            this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader6,
-            this.columnHeader8,
-            this.columnHeader9,
-            this.columnHeader7});
-            this.listView1.ContextMenuStrip = this.dataBaseListMenuStrip1;
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.GridLines = true;
-            this.listView1.LargeImageList = this.imageList1;
-            this.listView1.Location = new System.Drawing.Point(18, 15);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(597, 266);
-            this.listView1.SmallImageList = this.imageList1;
-            this.listView1.TabIndex = 0;
-            this.listView1.TileSize = new System.Drawing.Size(2, 2);
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.ItemHover += new SkinInstaller.ListViewItemHover.ItemHoverEventHandler(this.listView1_ItemMouseHover);
-            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
-            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = " ";
-            this.columnHeader1.Width = 43;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Skin Title";
-            this.columnHeader2.Width = 190;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Author";
-            this.columnHeader5.Width = 100;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "File Count";
-            this.columnHeader3.Width = 69;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Installed";
-            this.columnHeader4.Width = 53;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "Added";
-            this.columnHeader6.Width = 67;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "Date and Time Added";
-            this.columnHeader8.Width = 0;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "Date and Time Installed";
-            this.columnHeader9.Width = 0;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "Character";
-            this.columnHeader7.Width = 90;
-            // 
-            // openTextTreeEditorToolStripMenuItem
-            // 
-            this.openTextTreeEditorToolStripMenuItem.Name = "openTextTreeEditorToolStripMenuItem";
-            this.openTextTreeEditorToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
-            this.openTextTreeEditorToolStripMenuItem.Text = "Open Text Tree Editor";
-            this.openTextTreeEditorToolStripMenuItem.Click += new System.EventHandler(this.openTextTreeEditorToolStripMenuItem_Click);
+            this.exportTreeViewWorker1.WorkerReportsProgress = true;
+            this.exportTreeViewWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.exportTreeViewWorker1_DoWork);
+            this.exportTreeViewWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.exportTreeViewWorker1_ProgressChanged);
+            this.exportTreeViewWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.exportTreeViewWorker1_RunWorkerCompleted);
             // 
             // skinInstaller
             // 
@@ -7175,10 +7184,7 @@ namespace SkinInstaller
             {
                 this.SIFileOp.FileCopy(str3, o);
             }
-
-            File.SetAttributes(o, FileAttributes.Normal);
-
-                                    
+            File.SetAttributes(o, FileAttributes.Normal);                                    
         }
         #region GLPaint
         void glControl1_Resize(object sender, EventArgs e)
@@ -8712,9 +8718,13 @@ namespace SkinInstaller
             }
             exportNodes(checkedNodes);
         }
-        private void exportNodes(List<TreeNode> checkedNodes, string extraFolder = "")
+        private void exportTreeViewWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-
+            exportTreeViewWorker1.ReportProgress(1);
+            exportNodeDataStruct ends = (exportNodeDataStruct)e.Argument;
+            List<TreeNode> checkedNodes=ends.checkedNodes;
+            string extraFolder = ends.extraFolder;
+            string path = ends.path;
             string output = "";
             List<String> toBackup = new List<String>();
             if (checkedNodes.Count == 0)
@@ -8724,8 +8734,17 @@ namespace SkinInstaller
                     0, new String[] { "Ok" });
                 return;
             }
+            int i = 0;
+            int last = 0;
             foreach (TreeNode checkedNode in checkedNodes)
             {
+                int prog =(int)( ((float)i / (float)checkedNodes.Count) * 100.0f);
+                if (prog != last)
+                {
+                    last = prog;
+                    exportTreeViewWorker1.ReportProgress(prog);
+                }
+                i++;
                 if (checkedNode.Nodes.Count == 0)//no folders
                 {
                     if (checkedNode.FullPath.ToLower().IndexOf("particles") == 0)
@@ -8769,15 +8788,12 @@ namespace SkinInstaller
                     }
                 }
             }
-            string path="";
-                
-            if (exportFolderBrowserDialog1.ShowDialog() == DialogResult.OK)
-            {
-                path = exportFolderBrowserDialog1.SelectedPath + "\\";                
+
+            path = exportFolderBrowserDialog1.SelectedPath + "\\";
                 if (extraFolder != "") path += extraFolder + "\\";
                 foreach (String rafFile in toBackup)
                 {
-                    if(rafFile.ToLower().Contains(".raf"))
+                    if (rafFile.ToLower().Contains(".raf"))
                         rafBackup(rafFile, path, true);
                     else
                     {
@@ -8786,26 +8802,71 @@ namespace SkinInstaller
                         if (isfound.Key != null)
                         {
                             string whereFrom = gameDirectory + isfound.Value;
-                            string whereTo = path +"air\\"+ isfound.Key;
-                            this.SIFileOp.FileCopy(whereFrom,whereTo);
+                            string whereTo = path + "air\\" + isfound.Key;
+                            this.SIFileOp.FileCopy(whereFrom, whereTo);
                         }
 
                     }
                 }
-            }
-            if(extraFolder=="")
+            
+            treeExportResut result;
+            result.output = output;
+            result.path = path;
+            result.extraFolder = extraFolder;
+            e.Result = result;
+            exportTreeViewWorker1.ReportProgress(0);
+            
+        }
+        private void exportTreeViewWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            UpdateProgressSafe(e.ProgressPercentage);
+        }
+        struct treeExportResut
+        {
+            public string extraFolder;
+            public string path;
+            public string output;
+        }
+        private void exportTreeViewWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            treeExportResut myResult = (treeExportResut)e.Result;
+            string output = myResult.output;
+            string path = myResult.path;
+            string extraFolder = myResult.extraFolder;
+            if (extraFolder == "")
                 Cliver.Message.Show("Success", SystemIcons.Application, "Successfully processed:\r\n" + output, 0, new string[] { "Yay!" });
             else
             {
-               if( Cliver.Message.Show("Success", SystemIcons.Application, "Successfully saved "+extraFolder+"\r\n\r\nTo: " +path
-                    , 0, new string[] { "Yay!", "Please start adding this skin now" }) == 1)
-               {
-                   string[] strArray3 = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
-                   
-                   processNewDirectory(strArray3);
-                   this.tabControl1.SelectedIndex = 0;
-               }
+                if (Cliver.Message.Show("Success", SystemIcons.Application, "Successfully saved " + extraFolder + "\r\n\r\nTo: " + path
+                     , 0, new string[] { "Yay!", "Please start adding this skin now" }) == 1)
+                {
+                    string[] strArray3 = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
+
+                    processNewDirectory(strArray3);
+                    this.tabControl1.SelectedIndex = 0;
+                }
             }
+            deselectAllFilesToolStripMenuItem_Click(sender, e);
+
+        }
+
+        private void exportNodes(List<TreeNode> checkedNodes, string extraFolder = "")
+        {
+            exportNodeDataStruct ends;
+            ends.checkedNodes = checkedNodes;
+            ends.extraFolder = extraFolder;
+            if (exportFolderBrowserDialog1.ShowDialog() == DialogResult.OK)
+            {
+                ends.path = exportFolderBrowserDialog1.SelectedPath;
+                exportTreeViewWorker1.RunWorkerAsync(ends);
+            }
+        }
+        struct exportNodeDataStruct
+        {
+            //so lazy >.>
+            public List<TreeNode> checkedNodes;
+            public string extraFolder;
+            public string path;
         }
         private void deselectAllFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -9037,7 +9098,6 @@ namespace SkinInstaller
             }
         }
         #endregion
-
         private void buttoncancel_Click(object sender, EventArgs e)
         {
             if (fileListWorker1.IsBusy)
@@ -9058,19 +9118,16 @@ namespace SkinInstaller
         {
             Cliver.Message.Inform("Menu File is at\r\n" + getMenuFilePath());
         }
-        #endregion
-
         private void openTextTreeEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
             TextEditor.TextEditorMain ted = new TextEditor.TextEditorMain(getMenuFilePath());
             //hi ted
             ted.ShowDialog();
-
         }
+        #endregion
 
-        
-
-
+       
+       
     }
     #region strucks
     public class LogTextWriter : TextWriter
