@@ -91,6 +91,7 @@ namespace SkinInstaller
         
         #endregion
         #region vars
+        TextEditor.TextEditorMain ted;            
         TreeNode newRafNode=new TreeNode("RAF");
         PreviewWindow previewWindow;
         Dictionary<String, String> charFixs = new Dictionary<String, String>();
@@ -5726,6 +5727,7 @@ namespace SkinInstaller
                 Cliver.Message.Inform("The file list, allfiles.ini, could not be found or created.\nPlease restart Skin Installer Ultimate again to attempt to correct the issue.");
             }
             setInstallButtons(true);
+            ted = new TextEditor.TextEditorMain(getMenuFilePath());      
 
         }
         private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
@@ -8322,7 +8324,10 @@ namespace SkinInstaller
         }
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
-
+            if (e.Node.Name == "Text" && e.Node.Nodes.Count < 2)
+            {
+                ted.ShowDialog();
+            }
         }
         private void buttonRebuildTree_Click(object sender, EventArgs e)
         {
@@ -8510,10 +8515,14 @@ namespace SkinInstaller
             //modelsRootNode.Expand();
             colorizeFolders();
             #endregion
-            treeView1.Nodes.Add("RAF","RAF");
+            treeView1.Nodes.Add("RAF", "RAF");
             TreeNode rafNode = treeView1.Nodes.Find("RAF", false)[0];
             rafNode.Name = "RAF";
             rafNode.Nodes.Add("Loading...(Watch Progress bar at bottom)");
+            treeView1.Nodes.Add("Text", "Text");
+            TreeNode textNode = treeView1.Nodes.Find("Text", false)[0];
+            textNode.Name = "Text";
+            textNode.Nodes.Add("Loading...");
             treeView1.Nodes.Add("Particles", "Particles");
             TreeNode particleNode = treeView1.Nodes.Find("Particles", false)[0];
             particleNode.Name = "Particles";
@@ -8667,6 +8676,11 @@ namespace SkinInstaller
         {
             if (e.Node.Name == "RAF" && e.Node.Nodes.Count < 2)
                 rafTreeBuilderWorker2.RunWorkerAsync();
+            if (e.Node.Name == "Text" && e.Node.Nodes.Count < 2)
+            {
+                ted.ShowDialog();
+                e.Node.Collapse();
+            }
             if ((e.Node.Name == "Particles") && e.Node.Nodes.Count < 2)
             {
                 e.Node.Text = "Particles (Powered By RichieSams)";
@@ -8847,7 +8861,6 @@ namespace SkinInstaller
             deselectAllFilesToolStripMenuItem_Click(sender, e);
 
         }
-
         private void exportNodes(List<TreeNode> checkedNodes, string extraFolder = "")
         {
             exportNodeDataStruct ends;
@@ -9087,12 +9100,14 @@ namespace SkinInstaller
                             treeMenuStripSkin1.Show(treeView1, p);
                         else
                             treeViewMenuStrip1.Show(treeView1, p);
-                    }
+                    }else
+                        treeViewMenuStrip1.Show(treeView1, p);
 
                     // Highlight the selected node.
                     //treeView1.SelectedNode = m_OldSelectNode;
                     //m_OldSelectNode = null;
                 }
+                else treeViewMenuStrip1.Show(treeView1, p);
             }
         }
         #endregion
@@ -9118,7 +9133,6 @@ namespace SkinInstaller
         }
         private void openTextTreeEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            TextEditor.TextEditorMain ted = new TextEditor.TextEditorMain(getMenuFilePath());
             //hi ted
             ted.ShowDialog();
         }
