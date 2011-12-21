@@ -49,6 +49,7 @@
             this.tabPage2 = new System.Windows.Forms.TabPage();
             this.button2allowAutoUpdate = new System.Windows.Forms.Button();
             this.autoupdateWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -268,11 +269,22 @@
             this.autoupdateWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.autoupdateWorker1_DoWork);
             this.autoupdateWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.autoupdateWorker1_RunWorkerCompleted);
             // 
+            // progressBar1
+            // 
+            this.progressBar1.Location = new System.Drawing.Point(12, 411);
+            this.progressBar1.MarqueeAnimationSpeed = 50;
+            this.progressBar1.Name = "progressBar1";
+            this.progressBar1.Size = new System.Drawing.Size(333, 23);
+            this.progressBar1.Style = System.Windows.Forms.ProgressBarStyle.Marquee;
+            this.progressBar1.TabIndex = 14;
+            this.progressBar1.Visible = false;
+            // 
             // UpdateAvailiableForm1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(457, 480);
+            this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.button4ignore);
             this.Controls.Add(this.textBox2updateurl);
@@ -321,5 +333,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Change;
         private System.Windows.Forms.Button button2allowAutoUpdate;
         private System.ComponentModel.BackgroundWorker autoupdateWorker1;
+        private System.Windows.Forms.ProgressBar progressBar1;
     }
 }

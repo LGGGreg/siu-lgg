@@ -6,6 +6,8 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Threading;
+using System.Globalization;
 
 namespace TextEditor
 {
@@ -13,6 +15,8 @@ namespace TextEditor
     {
         public TextEditingBox(String textToEdit)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
             InitializeComponent();
             richTextBox.Text = textToEdit;
         }

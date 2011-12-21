@@ -60,7 +60,8 @@ namespace LOLViewer.IO
 
         public Dictionary<String, RAFFileListEntry> skls;
         public Dictionary<String, RAFFileListEntry> skns;
-        public Dictionary<String, RAFFileListEntry> textures;
+        //public Dictionary<String, RAFFileListEntry> textures;
+        public List<KeyValuePair<String,RAFFileListEntry>> textures;
 
         public List<RAFFileListEntry> inibins;
         public Dictionary<String, RAFFileListEntry> animationLists;
@@ -81,7 +82,7 @@ namespace LOLViewer.IO
             
             skls = new Dictionary<String, RAFFileListEntry>();
             skns = new Dictionary<String, RAFFileListEntry>();
-            textures = new Dictionary<String, RAFFileListEntry>();
+            textures = new List<KeyValuePair<string, RAFFileListEntry>>();
 
             models = new Dictionary<String,LOLModel>();
         }
@@ -204,7 +205,7 @@ namespace LOLViewer.IO
             model = new LOLModel();
             model.skinNumber = def.skin;
             model.animationList = def.anmListKey.ToLower();
-
+            
             // Find the skn.
             if (skns.ContainsKey(def.skn))
             {
@@ -226,9 +227,17 @@ namespace LOLViewer.IO
             }
 
             // Find the texture.
-            if (textures.ContainsKey(def.tex))
+            KeyValuePair<String, RAFFileListEntry> match =
+                textures.FirstOrDefault(m => m.Value.FileName.ToLower()
+                    .Contains(def.anmListKey.ToLower() + "/" + def.tex.ToLower()));
+            if (match.Value == null)
             {
-                model.texture = textures[def.tex];
+                match = textures.FirstOrDefault(m => m.Value.FileName.ToLower()
+                    .Contains(def.tex.ToLower()));
+            }            
+            if (match.Value != null)
+            {
+                model.texture = match.Value;
             }
             else
             {
@@ -238,10 +247,13 @@ namespace LOLViewer.IO
             // Find the load screen
             string loadScreenName = def.anmListKey.ToLower() + "loadscreen_" + (def.skin - 1).ToString();
             if (def.skin <= 1) loadScreenName = loadScreenName.Substring(0, loadScreenName.Length - 2);
-            loadScreenName+=".dds";
-            if (textures.ContainsKey(loadScreenName))
+            loadScreenName += ".dds";
+            KeyValuePair<String, RAFFileListEntry> lodmatch =
+                textures.FirstOrDefault(m => m.Key.ToLower()
+                    .Contains(loadScreenName.ToLower()));
+            if (lodmatch.Value != null)
             {
-                model.loadScreen = textures[loadScreenName];
+                model.loadScreen = match.Value;
             }
             // Find the air files
             model.champSplash = //"\\deploy\\assets\\images\\champions\\" +
@@ -599,8 +611,9 @@ namespace LOLViewer.IO
                         name = name.Substring(pos + 1);
                         name = name.ToLower();
 
-                        if (textures.ContainsKey(name) == false)
-                            textures.Add(name, e);
+                        //if (textures.ContainsKey(name) == false)
+                          //  textures.Add(name, e);
+                        textures.Add(new KeyValuePair<string, RAFFileListEntry>(name, e));
                     }
                 }
 
@@ -796,8 +809,9 @@ namespace LOLViewer.IO
                                 String name = f.Name;
                                 name = name.ToLower();
 
-                                if (textures.ContainsKey(name) == false)
-                                    textures.Add(name, fileEntry);
+                                //if (textures.ContainsKey(name) == false)
+                                  //  textures.Add(name, fileEntry);
+                                textures.Add(new KeyValuePair<string, RAFFileListEntry>(name, fileEntry));
                             }
                         }
                         break;

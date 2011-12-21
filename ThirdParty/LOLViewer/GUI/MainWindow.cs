@@ -75,7 +75,7 @@ namespace LOLViewer
         public MainWindow()
         {
             Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
-            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
             
             isGLLoaded = false;
             timer = new Stopwatch();
