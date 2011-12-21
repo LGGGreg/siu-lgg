@@ -2368,6 +2368,11 @@ namespace SkinInstaller
             {
                 return new fileLocReturn("\\\\textmods\\\\", fileName);
             }
+            if (fileName.ToLower().Contains("fontconfig_en_us"))
+            {
+                // this is guna break stuff, dont do it!
+                return new fileLocReturn(moreOptions);
+            }
             if (fileName.ToLower().Contains("siupreview"))
             {
                 return new fileLocReturn( "\\\\skinInfo\\\\", fileName);
@@ -3465,6 +3470,8 @@ namespace SkinInstaller
                                                     newLoc = new FileInfo(targetModel.loadScreen.RAFArchive.RAFFilePath + "\\" +
                                                         targetModel.loadScreen.FileName);
                                                 else gotLOD = true;//don't try and get it later
+
+                                                gotLOD = true;
                                             }
                                             else
                                             {
