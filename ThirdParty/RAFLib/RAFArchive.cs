@@ -8,6 +8,8 @@ using System.IO;
 using ItzWarty;
 
 using zlib = ComponentAce.Compression.Libs.zlib;
+using System.Threading;
+using System.Globalization;
 
 namespace RAFLib
 {
@@ -19,6 +21,9 @@ namespace RAFLib
         private string[] nocompress = null;
         public RAFArchive(string rafPath)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            
             nocompress = RAFLib.Properties.Resources.nocompress.Split("\n");
             for (int i = 0; i < nocompress.Length; i++)
                 nocompress[i] = nocompress[i].ToLower();

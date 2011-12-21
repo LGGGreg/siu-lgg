@@ -39,6 +39,7 @@ using System.Windows.Forms;
 
 using OpenTK;
 using LOLViewer.IO;
+using System.Threading;
 
 namespace LOLViewer
 {
@@ -73,6 +74,9 @@ namespace LOLViewer
        
         public MainWindow()
         {
+            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            
             isGLLoaded = false;
             timer = new Stopwatch();
 

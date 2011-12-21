@@ -6,6 +6,9 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.Net;
+using System.IO;
+
 
 namespace SkinInstaller
 {
@@ -15,9 +18,12 @@ namespace SkinInstaller
         {
             InitializeComponent();
         }
+        private string downloadURL="";
+        private skinInstaller parent=null;
         public void setData(string link, string info, Double version, Double myVersion)
         {
-            textBox2updateurl.Text = link;
+            
+            textBox2updateurl.Text = downloadURL = link;
             textBox1updateinfo.Text = info;
             
             string[] changes = info.Split('\n');
@@ -43,6 +49,7 @@ namespace SkinInstaller
                     dataGridView1.Rows.Add(new object[] { installed, parts[1] });
                     DataGridViewCellStyle tempS = new DataGridViewCellStyle();
                     tempS.ForeColor=installed?Color.Green:Color.Red;
+                    button2_autoUpdate.Enabled = !installed;
                     if(important)tempS.Font= new Font(this.dataGridView1.DefaultCellStyle.Font,FontStyle.Bold);
                     dataGridView1.Rows[dataGridView1.Rows.Count-2].DefaultCellStyle = tempS;
                     
@@ -69,16 +76,17 @@ namespace SkinInstaller
             }
             this.dataGridView1.AllowUserToResizeRows = false;
         }
-        private delegate DialogResult InvokeDelegate(skinInstaller parent);
-        public DialogResult CustShowDialog(skinInstaller parent)
+        private delegate DialogResult InvokeDelegate(skinInstaller _parent);
+        public DialogResult CustShowDialog(skinInstaller _parent)
         {
+            parent = _parent;
             InvokeDelegate d = new InvokeDelegate(CustShowDialog);
-            object[] o = new object[] { parent };
+            object[] o = new object[] { _parent };
             if (parent.InvokeRequired)
             {
-                return (DialogResult)parent.Invoke(d, o);
+                return (DialogResult)_parent.Invoke(d, o);
             }
-            return this.ShowDialog(parent);
+            return this.ShowDialog(_parent);
         }
 
         private void button1_Click(object sender, EventArgs e)
@@ -128,6 +136,45 @@ namespace SkinInstaller
         private void textBox2updateurl_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void button2_autoUpdate_Click(object sender, EventArgs e)
+        {
+            this.button2_autoUpdate.Text = "Updating..please wait";
+            autoupdateWorker1.RunWorkerAsync();
+        }
+
+        private void button2allowAutoUpdate_Click(object sender, EventArgs e)
+        {
+            this.button2_autoUpdate.Enabled = !this.button2_autoUpdate.Enabled;
+        }
+
+        private void autoupdateWorker1_DoWork(object sender, DoWorkEventArgs e)
+        {
+            System.Net.WebClient client = new WebClient();
+            try
+            {
+                string dlDir = Application.StartupPath + "\\nextVersion\\";
+                if (Directory.Exists(dlDir))
+                {
+                    FileHandler SIFileOp = new FileHandler();
+                    SIFileOp.DirectoryDelete(dlDir, true);
+                }
+                Directory.CreateDirectory(dlDir);
+                string unzipPath = dlDir + "unzipped\\";
+                string zipFile = dlDir + "downloaded.zip";
+                client.DownloadFile(downloadURL, zipFile);
+                ZipUtil.UnZipFiles(zipFile, unzipPath, "", false);
+                //todo update updater
+
+            }
+            catch { }
+        }
+
+        private void autoupdateWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (parent != null)
+                parent.Close();
         }
     }
 }
