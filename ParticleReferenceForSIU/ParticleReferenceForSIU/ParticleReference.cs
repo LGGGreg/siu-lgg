@@ -11,6 +11,7 @@ using RAFLib;
 using System.Text.RegularExpressions;
 using SkinInstaller;
 using System.Globalization;
+using System.Threading;
 
 namespace PartRef
 {
@@ -18,6 +19,9 @@ namespace PartRef
     {
         public ParticleReference()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            
             InitializeComponent();
         }
 

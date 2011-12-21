@@ -81,6 +81,7 @@ namespace SkinInstaller
     using OpenTK.Platform;
     using System.Reflection;
     using System.Collections;
+    using System.Globalization;
     
     public class skinInstaller : Form
     {
@@ -573,6 +574,8 @@ namespace SkinInstaller
         #endregion
         public skinInstaller(string incname, string version, string args)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
             myCurrentVersion = version;
             //one time or die
             Tao.DevIl.Il.ilInit();

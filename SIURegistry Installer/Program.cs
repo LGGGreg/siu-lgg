@@ -7,6 +7,8 @@ using System.Text;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
+using System.Threading;
+using System.Globalization;
 
 namespace SIURegistry_Installer
 {
@@ -18,6 +20,9 @@ namespace SIURegistry_Installer
         [STAThread]
         static void Main(string [] args)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            
             if (args.Length > 0)
             {
                 if (args[0] == "lolishreg")

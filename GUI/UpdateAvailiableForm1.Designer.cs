@@ -29,7 +29,7 @@
         private void InitializeComponent()
         {
             this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.button2_autoUpdate = new System.Windows.Forms.Button();
             this.button3 = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
@@ -47,6 +47,8 @@
             this.Installed = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.Change = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabPage2 = new System.Windows.Forms.TabPage();
+            this.button2allowAutoUpdate = new System.Windows.Forms.Button();
+            this.autoupdateWorker1 = new System.ComponentModel.BackgroundWorker();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
@@ -55,30 +57,31 @@
             // 
             // button1
             // 
-            this.button1.Location = new System.Drawing.Point(9, 413);
+            this.button1.Location = new System.Drawing.Point(351, 384);
             this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(122, 23);
+            this.button1.Size = new System.Drawing.Size(105, 23);
             this.button1.TabIndex = 0;
             this.button1.Text = "Manual Download";
             this.button1.UseVisualStyleBackColor = true;
             this.button1.Click += new System.EventHandler(this.button1_Click);
             // 
-            // button2
+            // button2_autoUpdate
             // 
-            this.button2.Enabled = false;
-            this.button2.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.button2.Location = new System.Drawing.Point(246, 413);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(118, 23);
-            this.button2.TabIndex = 1;
-            this.button2.Text = "Automatic Update";
-            this.button2.UseVisualStyleBackColor = true;
+            this.button2_autoUpdate.Font = new System.Drawing.Font("Microsoft Sans Serif", 14F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.button2_autoUpdate.ForeColor = System.Drawing.SystemColors.ControlText;
+            this.button2_autoUpdate.Location = new System.Drawing.Point(12, 435);
+            this.button2_autoUpdate.Name = "button2_autoUpdate";
+            this.button2_autoUpdate.Size = new System.Drawing.Size(438, 40);
+            this.button2_autoUpdate.TabIndex = 1;
+            this.button2_autoUpdate.Text = "Automatic Update";
+            this.button2_autoUpdate.UseVisualStyleBackColor = true;
+            this.button2_autoUpdate.Click += new System.EventHandler(this.button2_autoUpdate_Click);
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(137, 413);
+            this.button3.Location = new System.Drawing.Point(351, 406);
             this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(103, 23);
+            this.button3.Size = new System.Drawing.Size(106, 23);
             this.button3.TabIndex = 2;
             this.button3.Text = "? How To Update";
             this.button3.UseVisualStyleBackColor = true;
@@ -124,7 +127,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(13, 394);
+            this.label5.Location = new System.Drawing.Point(14, 388);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(78, 13);
             this.label5.TabIndex = 7;
@@ -160,7 +163,7 @@
             this.textBox1updateinfo.Multiline = true;
             this.textBox1updateinfo.Name = "textBox1updateinfo";
             this.textBox1updateinfo.ScrollBars = System.Windows.Forms.ScrollBars.Vertical;
-            this.textBox1updateinfo.Size = new System.Drawing.Size(283, 189);
+            this.textBox1updateinfo.Size = new System.Drawing.Size(431, 209);
             this.textBox1updateinfo.TabIndex = 10;
             this.textBox1updateinfo.Text = "Not Provided";
             this.textBox1updateinfo.KeyDown += new System.Windows.Forms.KeyEventHandler(this.key);
@@ -169,9 +172,9 @@
             // textBox2updateurl
             // 
             this.textBox2updateurl.ForeColor = System.Drawing.SystemColors.HotTrack;
-            this.textBox2updateurl.Location = new System.Drawing.Point(98, 388);
+            this.textBox2updateurl.Location = new System.Drawing.Point(95, 385);
             this.textBox2updateurl.Name = "textBox2updateurl";
-            this.textBox2updateurl.Size = new System.Drawing.Size(264, 20);
+            this.textBox2updateurl.Size = new System.Drawing.Size(255, 20);
             this.textBox2updateurl.TabIndex = 11;
             this.textBox2updateurl.Text = "http://www.google.com";
             this.textBox2updateurl.MouseClick += new System.Windows.Forms.MouseEventHandler(this.textBox2updateurl_MouseClick);
@@ -241,6 +244,7 @@
             // tabPage2
             // 
             this.tabPage2.Controls.Add(this.textBox1updateinfo);
+            this.tabPage2.Controls.Add(this.button2allowAutoUpdate);
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
@@ -249,11 +253,26 @@
             this.tabPage2.Text = "Raw Text Change Log";
             this.tabPage2.UseVisualStyleBackColor = true;
             // 
+            // button2allowAutoUpdate
+            // 
+            this.button2allowAutoUpdate.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.button2allowAutoUpdate.Location = new System.Drawing.Point(3, 212);
+            this.button2allowAutoUpdate.Name = "button2allowAutoUpdate";
+            this.button2allowAutoUpdate.Size = new System.Drawing.Size(431, 10);
+            this.button2allowAutoUpdate.TabIndex = 11;
+            this.button2allowAutoUpdate.UseVisualStyleBackColor = true;
+            this.button2allowAutoUpdate.Click += new System.EventHandler(this.button2allowAutoUpdate_Click);
+            // 
+            // autoupdateWorker1
+            // 
+            this.autoupdateWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.autoupdateWorker1_DoWork);
+            this.autoupdateWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.autoupdateWorker1_RunWorkerCompleted);
+            // 
             // UpdateAvailiableForm1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(457, 446);
+            this.ClientSize = new System.Drawing.Size(457, 480);
             this.Controls.Add(this.tabControl1);
             this.Controls.Add(this.button4ignore);
             this.Controls.Add(this.textBox2updateurl);
@@ -265,7 +284,7 @@
             this.Controls.Add(this.label2);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
+            this.Controls.Add(this.button2_autoUpdate);
             this.Controls.Add(this.button1);
             this.Name = "UpdateAvailiableForm1";
             this.Text = "Update Availiable!";
@@ -282,7 +301,7 @@
         #endregion
 
         private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
+        private System.Windows.Forms.Button button2_autoUpdate;
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label label2;
@@ -300,5 +319,7 @@
         private System.Windows.Forms.DataGridView dataGridView1;
         private System.Windows.Forms.DataGridViewCheckBoxColumn Installed;
         private System.Windows.Forms.DataGridViewTextBoxColumn Change;
+        private System.Windows.Forms.Button button2allowAutoUpdate;
+        private System.ComponentModel.BackgroundWorker autoupdateWorker1;
     }
 }
