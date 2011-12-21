@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 using System.IO;
+using System.Threading;
+using System.Globalization;
 
 namespace TextEditor
 {
@@ -16,10 +18,14 @@ namespace TextEditor
 
         public TextEditorMain()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
             InitializeComponent();
         }
         public TextEditorMain(string _menuFile)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
             menuFile = _menuFile;
             InitializeComponent();
         }

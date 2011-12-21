@@ -8,6 +8,7 @@ using System.Text;
 using System.Windows.Forms;
 using System.Net;
 using System.IO;
+using System.Diagnostics;
 
 
 namespace SkinInstaller
@@ -140,8 +141,12 @@ namespace SkinInstaller
 
         private void button2_autoUpdate_Click(object sender, EventArgs e)
         {
+            this.progressBar1.Visible = true;
             this.button2_autoUpdate.Text = "Updating..please wait";
-            autoupdateWorker1.RunWorkerAsync();
+            int i = (int)new Random().Next(5);
+            for (; i < 5; i++) this.button2_autoUpdate.Text += ".";
+            if (!autoupdateWorker1.IsBusy)
+               autoupdateWorker1.RunWorkerAsync();
         }
 
         private void button2allowAutoUpdate_Click(object sender, EventArgs e)
@@ -154,10 +159,11 @@ namespace SkinInstaller
             System.Net.WebClient client = new WebClient();
             try
             {
+                FileHandler SIFileOp = new FileHandler();
+                    
                 string dlDir = Application.StartupPath + "\\nextVersion\\";
                 if (Directory.Exists(dlDir))
                 {
-                    FileHandler SIFileOp = new FileHandler();
                     SIFileOp.DirectoryDelete(dlDir, true);
                 }
                 Directory.CreateDirectory(dlDir);
@@ -165,7 +171,15 @@ namespace SkinInstaller
                 string zipFile = dlDir + "downloaded.zip";
                 client.DownloadFile(downloadURL, zipFile);
                 ZipUtil.UnZipFiles(zipFile, unzipPath, "", false);
-                //todo update updater
+                string[] files = Directory.GetFiles(unzipPath, "*.*", SearchOption.AllDirectories);
+                string updaterFile = files.FirstOrDefault(m => m.ToLower() == "siu-updater.exe");
+                //string updaterFile = unzipPath + "SIU-Updater.exe";
+                if (File.Exists(updaterFile))
+                {
+                    //update updater first
+                    SIFileOp.FileMove(updaterFile, Application.StartupPath + "\\SIU-Updater.exe");
+                }
+
 
             }
             catch { }
@@ -173,8 +187,14 @@ namespace SkinInstaller
 
         private void autoupdateWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            if (parent != null)
-                parent.Close();
+            string updater = Application.StartupPath + "\\SIU-Updater.exe";
+            if (File.Exists(updater))
+            {
+                Process.Start(updater);
+                if (parent != null)
+                    parent.Close();
+            }
+
         }
     }
 }
