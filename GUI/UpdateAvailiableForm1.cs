@@ -50,7 +50,6 @@ namespace SkinInstaller
                     dataGridView1.Rows.Add(new object[] { installed, parts[1] });
                     DataGridViewCellStyle tempS = new DataGridViewCellStyle();
                     tempS.ForeColor=installed?Color.Green:Color.Red;
-                    button2_autoUpdate.Enabled = !installed;
                     if(important)tempS.Font= new Font(this.dataGridView1.DefaultCellStyle.Font,FontStyle.Bold);
                     dataGridView1.Rows[dataGridView1.Rows.Count-2].DefaultCellStyle = tempS;
                     
@@ -62,11 +61,13 @@ namespace SkinInstaller
             if (myVersion <latestChangeVersion )
             {
                 if(myVersion<version)
-                    label1.Text = this.Text = "A New Update Is Availiable!";
-                else label1.Text = this.Text = "Update Is Availiable! (Optional)";
+                    label1.Text = this.Text = "A New Update Is Available!";
+                else label1.Text = this.Text = "Update Is Available! (Optional)";
 
                 textBox1currentVersion.ForeColor = Color.Red;
-                
+
+
+                button2_autoUpdate.Enabled = true;           
 
 
             }
@@ -74,6 +75,7 @@ namespace SkinInstaller
             {
                 textBox1currentVersion.ForeColor = Color.Green;
                 label1.Text = this.Text = "You have the current version!";
+                button2_autoUpdate.Enabled = false;
             }
             this.dataGridView1.AllowUserToResizeRows = false;
         }
