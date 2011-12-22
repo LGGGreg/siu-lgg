@@ -2380,6 +2380,12 @@ namespace SkinInstaller
             {
                 return new fileLocReturn( "\\\\skinInfo\\\\", fileName);
             }
+            if (fileName.ToLower().Contains("animations.list") || fileName.ToLower().Contains("animations.ini"))
+            {
+                // this is guna break stuff, dont do it!
+                return new fileLocReturn(moreOptions);
+            }
+            
             //Cliver.Message.Inform("filename is " + fileName + " and bool is " + trueForDirFalseForFile.ToString());
             List<string> options = new List<string>();
             string directoryWODirPath = foldernamewFileName;
@@ -3644,7 +3650,7 @@ namespace SkinInstaller
                 {
                     debugadd("Backup " + installInfo.getFileNamePath());
 
-                    backupFile(installInfo.fileName, installInfo.filePath);
+                    backupFile( installInfo.filePath,installInfo.fileName);
                     debugadd("Installing " + installInfo.origonal);
 
                     this.SIFileOp.FileMove(installInfo.origonal,
