@@ -162,7 +162,7 @@ namespace SkinInstaller
             try
             {
                 FileHandler SIFileOp = new FileHandler();
-                    
+
                 string dlDir = Application.StartupPath + "\\nextVersion\\";
                 if (Directory.Exists(dlDir))
                 {
@@ -174,10 +174,12 @@ namespace SkinInstaller
                 client.DownloadFile(downloadURL, zipFile);
                 ZipUtil.UnZipFiles(zipFile, unzipPath, "", false);
                 string[] files = Directory.GetFiles(unzipPath, "*.*", SearchOption.AllDirectories);
-                string updaterFile = files.FirstOrDefault(m => m.ToLower() == "siu-updater.exe");
+                string updaterFile = files.FirstOrDefault(m => m.ToLower().Contains("siu-updater.exe"));
                 //string updaterFile = unzipPath + "SIU-Updater.exe";
                 if (File.Exists(updaterFile))
                 {
+                    //Cliver.Message.Inform("Moving from " + updaterFile+"\r\n\r\n"+
+                     //   "TO "+Application.StartupPath + "\\SIU-Updater.exe");
                     //update updater first
                     SIFileOp.FileMove(updaterFile, Application.StartupPath + "\\SIU-Updater.exe");
                 }

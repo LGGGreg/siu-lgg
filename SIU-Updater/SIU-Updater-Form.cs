@@ -45,6 +45,7 @@ namespace SIU_Updater
         }
         protected virtual bool IsFileLocked(FileInfo file)
         {
+            if (!File.Exists(file.FullName)) return false;
             FileStream stream = null;
 
             try
@@ -80,7 +81,7 @@ namespace SIU_Updater
         {
             if (waitTillSIUClosed() == false)
             {
-                debugadd("Error, unable to get acces to program , please close it");
+                debugadd("Error, unable to get access to program , please close it");
                 return;
             }
             //SkinInstaller.FileHandler SIFileOp = new SkinInstaller.FileHandler();

@@ -415,6 +415,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="Global Info\Global Info.csproj">
+      <Project>{07450611-C310-4368-92EA-E662680CD79A}</Project>
+      <Name>Global Info</Name>
+    </ProjectReference>
     <ProjectReference Include="SIURegistry Installer\SIURegistry Installer.csproj">
       <Project>{93628B92-AB46-4BDB-B70E-B158CA861C34}</Project>
       <Name>SIURegistry Installer</Name>
