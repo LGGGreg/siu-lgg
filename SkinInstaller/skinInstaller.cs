@@ -8965,7 +8965,7 @@ namespace SkinInstaller
             ends.extraFolder = extraFolder;
             if (exportFolderBrowserDialog1.ShowDialog() == DialogResult.OK)
             {
-                ends.path = exportFolderBrowserDialog1.SelectedPath;
+                ends.path = exportFolderBrowserDialog1.SelectedPath+"\\";
                 exportTreeViewWorker1.RunWorkerAsync(ends);
             }
         }
