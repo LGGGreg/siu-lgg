@@ -373,6 +373,7 @@ namespace SkinInstaller
         private ToolStripMenuItem openTextTreeEditorToolStripMenuItem;
         private BackgroundWorker exportTreeViewWorker1;
         private Button button3reinstallText;
+        private ToolStripMenuItem openPublisherToolStripMenuItem;
         PaintEventHandler importantP;
         #endregion
         #region webIntegrate
@@ -3991,8 +3992,8 @@ namespace SkinInstaller
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(skinInstaller));
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
             this.exit = new System.Windows.Forms.Button();
             this.skinFile = new System.Windows.Forms.OpenFileDialog();
             this.helpBar = new System.Windows.Forms.StatusStrip();
@@ -4045,6 +4046,17 @@ namespace SkinInstaller
             this.selectChampion = new System.Windows.Forms.ComboBox();
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.listView1 = new SkinInstaller.ListViewItemHover();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.dataBaseListMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripSelectUninstalled = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSelectAllInstalled = new System.Windows.Forms.ToolStripMenuItem();
@@ -4053,7 +4065,24 @@ namespace SkinInstaller
             this.editThisSkinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.previewThisSkinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imageList1 = new System.Windows.Forms.ImageList(this.components);
+            this.panel9 = new System.Windows.Forms.Panel();
+            this.colorSlider1 = new MB.Controls.ColorSlider();
+            this.panel8 = new System.Windows.Forms.Panel();
+            this.checkBox1dispCharacter = new System.Windows.Forms.CheckBox();
+            this.checkBox1dispDateInstalledFull = new System.Windows.Forms.CheckBox();
+            this.checkBox1dispDateAddedFull = new System.Windows.Forms.CheckBox();
+            this.checkBox1dispDateAdded = new System.Windows.Forms.CheckBox();
+            this.checkBox1dispInstalled = new System.Windows.Forms.CheckBox();
+            this.checkBox1dispFileCount = new System.Windows.Forms.CheckBox();
+            this.checkBox1dispAuthor = new System.Windows.Forms.CheckBox();
+            this.checkBox1dispTitle = new System.Windows.Forms.CheckBox();
+            this.label9 = new System.Windows.Forms.Label();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.labelSkinName = new System.Windows.Forms.Label();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button3reinstallText = new System.Windows.Forms.Button();
             this.dbDelete = new System.Windows.Forms.Button();
             this.dbInstall = new System.Windows.Forms.Button();
             this.dbUninstall = new System.Windows.Forms.Button();
@@ -4140,34 +4169,7 @@ namespace SkinInstaller
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportTreeViewWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.button3reinstallText = new System.Windows.Forms.Button();
-            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.listView1 = new SkinInstaller.ListViewItemHover();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.panel9 = new System.Windows.Forms.Panel();
-            this.colorSlider1 = new MB.Controls.ColorSlider();
-            this.panel8 = new System.Windows.Forms.Panel();
-            this.checkBox1dispCharacter = new System.Windows.Forms.CheckBox();
-            this.checkBox1dispDateInstalledFull = new System.Windows.Forms.CheckBox();
-            this.checkBox1dispDateAddedFull = new System.Windows.Forms.CheckBox();
-            this.checkBox1dispDateAdded = new System.Windows.Forms.CheckBox();
-            this.checkBox1dispInstalled = new System.Windows.Forms.CheckBox();
-            this.checkBox1dispFileCount = new System.Windows.Forms.CheckBox();
-            this.checkBox1dispAuthor = new System.Windows.Forms.CheckBox();
-            this.checkBox1dispTitle = new System.Windows.Forms.CheckBox();
-            this.label9 = new System.Windows.Forms.Label();
-            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
-            this.textBox2 = new System.Windows.Forms.TextBox();
-            this.labelSkinName = new System.Windows.Forms.Label();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.openPublisherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -4176,7 +4178,16 @@ namespace SkinInstaller
             this.addFilesPanel.SuspendLayout();
             this.tabControl1.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
             this.dataBaseListMenuStrip1.SuspendLayout();
+            this.panel9.SuspendLayout();
+            this.panel8.SuspendLayout();
+            this.splitContainer3.Panel1.SuspendLayout();
+            this.splitContainer3.Panel2.SuspendLayout();
+            this.splitContainer3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.splitContainer4.Panel1.SuspendLayout();
@@ -4197,15 +4208,6 @@ namespace SkinInstaller
             this.panel7.SuspendLayout();
             this.progrespanel.SuspendLayout();
             this.treeMenuStripSkin1.SuspendLayout();
-            this.splitContainer2.Panel1.SuspendLayout();
-            this.splitContainer2.Panel2.SuspendLayout();
-            this.splitContainer2.SuspendLayout();
-            this.panel9.SuspendLayout();
-            this.panel8.SuspendLayout();
-            this.splitContainer3.Panel1.SuspendLayout();
-            this.splitContainer3.Panel2.SuspendLayout();
-            this.splitContainer3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.SuspendLayout();
             // 
             // exit
@@ -4687,6 +4689,100 @@ namespace SkinInstaller
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "==Install Existing Skin==";
             // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer2.Name = "splitContainer2";
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.listView1);
+            this.splitContainer2.Panel1.Controls.Add(this.panel9);
+            this.splitContainer2.Panel1.Controls.Add(this.panel8);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
+            this.splitContainer2.Size = new System.Drawing.Size(805, 281);
+            this.splitContainer2.SplitterDistance = 615;
+            this.splitContainer2.TabIndex = 7;
+            // 
+            // listView1
+            // 
+            this.listView1.AutoArrange = false;
+            this.listView1.CheckBoxes = true;
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader5,
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader6,
+            this.columnHeader8,
+            this.columnHeader9,
+            this.columnHeader7});
+            this.listView1.ContextMenuStrip = this.dataBaseListMenuStrip1;
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.GridLines = true;
+            this.listView1.LargeImageList = this.imageList1;
+            this.listView1.Location = new System.Drawing.Point(18, 15);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(597, 266);
+            this.listView1.SmallImageList = this.imageList1;
+            this.listView1.TabIndex = 0;
+            this.listView1.TileSize = new System.Drawing.Size(2, 2);
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ItemHover += new SkinInstaller.ListViewItemHover.ItemHoverEventHandler(this.listView1_ItemMouseHover);
+            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
+            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = " ";
+            this.columnHeader1.Width = 43;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Skin Title";
+            this.columnHeader2.Width = 190;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Author";
+            this.columnHeader5.Width = 100;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "File Count";
+            this.columnHeader3.Width = 69;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Installed";
+            this.columnHeader4.Width = 53;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Added";
+            this.columnHeader6.Width = 67;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "Date and Time Added";
+            this.columnHeader8.Width = 0;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "Date and Time Installed";
+            this.columnHeader9.Width = 0;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "Character";
+            this.columnHeader7.Width = 90;
+            // 
             // dataBaseListMenuStrip1
             // 
             this.dataBaseListMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -4751,6 +4847,234 @@ namespace SkinInstaller
             this.imageList1.ImageSize = new System.Drawing.Size(16, 16);
             this.imageList1.TransparentColor = System.Drawing.Color.Transparent;
             // 
+            // panel9
+            // 
+            this.panel9.Controls.Add(this.colorSlider1);
+            this.panel9.Dock = System.Windows.Forms.DockStyle.Left;
+            this.panel9.Location = new System.Drawing.Point(0, 15);
+            this.panel9.Name = "panel9";
+            this.panel9.Size = new System.Drawing.Size(18, 266);
+            this.panel9.TabIndex = 2;
+            // 
+            // colorSlider1
+            // 
+            this.colorSlider1.BackColor = System.Drawing.Color.Transparent;
+            this.colorSlider1.BarInnerColor = System.Drawing.Color.Red;
+            this.colorSlider1.BarOuterColor = System.Drawing.Color.Black;
+            this.colorSlider1.BarPenColor = System.Drawing.Color.Black;
+            this.colorSlider1.BorderRoundRectSize = new System.Drawing.Size(8, 8);
+            this.colorSlider1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.colorSlider1.ElapsedInnerColor = System.Drawing.Color.Black;
+            this.colorSlider1.ElapsedOuterColor = System.Drawing.Color.DarkRed;
+            this.colorSlider1.LargeChange = ((uint)(5u));
+            this.colorSlider1.Location = new System.Drawing.Point(0, 0);
+            this.colorSlider1.MouseEffects = false;
+            this.colorSlider1.Name = "colorSlider1";
+            this.colorSlider1.Orientation = System.Windows.Forms.Orientation.Vertical;
+            this.colorSlider1.Size = new System.Drawing.Size(18, 266);
+            this.colorSlider1.SmallChange = ((uint)(1u));
+            this.colorSlider1.TabIndex = 0;
+            this.colorSlider1.Text = "colorSlider1";
+            this.colorSlider1.ThumbInnerColor = System.Drawing.Color.OrangeRed;
+            this.colorSlider1.ThumbOuterColor = System.Drawing.Color.Gold;
+            this.colorSlider1.ThumbPenColor = System.Drawing.Color.Black;
+            this.colorSlider1.ThumbRoundRectSize = new System.Drawing.Size(4, 14);
+            this.colorSlider1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.colorSlider1_Scroll);
+            this.colorSlider1.MouseEnter += new System.EventHandler(this.colorSlider1_MouseEnter);
+            // 
+            // panel8
+            // 
+            this.panel8.Controls.Add(this.checkBox1dispCharacter);
+            this.panel8.Controls.Add(this.checkBox1dispDateInstalledFull);
+            this.panel8.Controls.Add(this.checkBox1dispDateAddedFull);
+            this.panel8.Controls.Add(this.checkBox1dispDateAdded);
+            this.panel8.Controls.Add(this.checkBox1dispInstalled);
+            this.panel8.Controls.Add(this.checkBox1dispFileCount);
+            this.panel8.Controls.Add(this.checkBox1dispAuthor);
+            this.panel8.Controls.Add(this.checkBox1dispTitle);
+            this.panel8.Controls.Add(this.label9);
+            this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
+            this.panel8.Location = new System.Drawing.Point(0, 0);
+            this.panel8.Name = "panel8";
+            this.panel8.Size = new System.Drawing.Size(615, 15);
+            this.panel8.TabIndex = 1;
+            // 
+            // checkBox1dispCharacter
+            // 
+            this.checkBox1dispCharacter.AutoSize = true;
+            this.checkBox1dispCharacter.Checked = true;
+            this.checkBox1dispCharacter.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1dispCharacter.Location = new System.Drawing.Point(507, 1);
+            this.checkBox1dispCharacter.Name = "checkBox1dispCharacter";
+            this.checkBox1dispCharacter.Size = new System.Drawing.Size(71, 17);
+            this.checkBox1dispCharacter.TabIndex = 8;
+            this.checkBox1dispCharacter.Text = "Character";
+            this.checkBox1dispCharacter.UseVisualStyleBackColor = true;
+            this.checkBox1dispCharacter.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
+            // 
+            // checkBox1dispDateInstalledFull
+            // 
+            this.checkBox1dispDateInstalledFull.AutoSize = true;
+            this.checkBox1dispDateInstalledFull.Checked = true;
+            this.checkBox1dispDateInstalledFull.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1dispDateInstalledFull.Location = new System.Drawing.Point(420, 1);
+            this.checkBox1dispDateInstalledFull.Name = "checkBox1dispDateInstalledFull";
+            this.checkBox1dispDateInstalledFull.Size = new System.Drawing.Size(90, 17);
+            this.checkBox1dispDateInstalledFull.TabIndex = 7;
+            this.checkBox1dispDateInstalledFull.Text = "Time Installed";
+            this.checkBox1dispDateInstalledFull.UseVisualStyleBackColor = true;
+            this.checkBox1dispDateInstalledFull.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
+            // 
+            // checkBox1dispDateAddedFull
+            // 
+            this.checkBox1dispDateAddedFull.AutoSize = true;
+            this.checkBox1dispDateAddedFull.Checked = true;
+            this.checkBox1dispDateAddedFull.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1dispDateAddedFull.Location = new System.Drawing.Point(342, 1);
+            this.checkBox1dispDateAddedFull.Name = "checkBox1dispDateAddedFull";
+            this.checkBox1dispDateAddedFull.Size = new System.Drawing.Size(82, 17);
+            this.checkBox1dispDateAddedFull.TabIndex = 6;
+            this.checkBox1dispDateAddedFull.Text = "Time Added";
+            this.checkBox1dispDateAddedFull.UseVisualStyleBackColor = true;
+            this.checkBox1dispDateAddedFull.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
+            // 
+            // checkBox1dispDateAdded
+            // 
+            this.checkBox1dispDateAdded.AutoSize = true;
+            this.checkBox1dispDateAdded.Checked = true;
+            this.checkBox1dispDateAdded.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1dispDateAdded.Location = new System.Drawing.Point(265, 1);
+            this.checkBox1dispDateAdded.Name = "checkBox1dispDateAdded";
+            this.checkBox1dispDateAdded.Size = new System.Drawing.Size(82, 17);
+            this.checkBox1dispDateAdded.TabIndex = 5;
+            this.checkBox1dispDateAdded.Text = "Date Added";
+            this.checkBox1dispDateAdded.UseVisualStyleBackColor = true;
+            this.checkBox1dispDateAdded.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
+            // 
+            // checkBox1dispInstalled
+            // 
+            this.checkBox1dispInstalled.AutoSize = true;
+            this.checkBox1dispInstalled.Checked = true;
+            this.checkBox1dispInstalled.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1dispInstalled.Location = new System.Drawing.Point(204, 1);
+            this.checkBox1dispInstalled.Name = "checkBox1dispInstalled";
+            this.checkBox1dispInstalled.Size = new System.Drawing.Size(64, 17);
+            this.checkBox1dispInstalled.TabIndex = 4;
+            this.checkBox1dispInstalled.Text = "Installed";
+            this.checkBox1dispInstalled.UseVisualStyleBackColor = true;
+            this.checkBox1dispInstalled.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
+            // 
+            // checkBox1dispFileCount
+            // 
+            this.checkBox1dispFileCount.AutoSize = true;
+            this.checkBox1dispFileCount.Checked = true;
+            this.checkBox1dispFileCount.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1dispFileCount.Location = new System.Drawing.Point(134, 1);
+            this.checkBox1dispFileCount.Name = "checkBox1dispFileCount";
+            this.checkBox1dispFileCount.Size = new System.Drawing.Size(72, 17);
+            this.checkBox1dispFileCount.TabIndex = 3;
+            this.checkBox1dispFileCount.Text = "File Count";
+            this.checkBox1dispFileCount.UseVisualStyleBackColor = true;
+            this.checkBox1dispFileCount.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
+            // 
+            // checkBox1dispAuthor
+            // 
+            this.checkBox1dispAuthor.AutoSize = true;
+            this.checkBox1dispAuthor.Checked = true;
+            this.checkBox1dispAuthor.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1dispAuthor.Location = new System.Drawing.Point(78, 1);
+            this.checkBox1dispAuthor.Name = "checkBox1dispAuthor";
+            this.checkBox1dispAuthor.Size = new System.Drawing.Size(56, 17);
+            this.checkBox1dispAuthor.TabIndex = 2;
+            this.checkBox1dispAuthor.Text = "Author";
+            this.checkBox1dispAuthor.UseVisualStyleBackColor = true;
+            this.checkBox1dispAuthor.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
+            // 
+            // checkBox1dispTitle
+            // 
+            this.checkBox1dispTitle.AutoSize = true;
+            this.checkBox1dispTitle.Checked = true;
+            this.checkBox1dispTitle.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.checkBox1dispTitle.Location = new System.Drawing.Point(36, 1);
+            this.checkBox1dispTitle.Name = "checkBox1dispTitle";
+            this.checkBox1dispTitle.Size = new System.Drawing.Size(45, 17);
+            this.checkBox1dispTitle.TabIndex = 1;
+            this.checkBox1dispTitle.Text = "Title";
+            this.checkBox1dispTitle.UseVisualStyleBackColor = true;
+            this.checkBox1dispTitle.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
+            // 
+            // label9
+            // 
+            this.label9.AutoSize = true;
+            this.label9.Location = new System.Drawing.Point(0, 1);
+            this.label9.Name = "label9";
+            this.label9.Size = new System.Drawing.Size(37, 13);
+            this.label9.TabIndex = 0;
+            this.label9.Text = "Show:";
+            // 
+            // splitContainer3
+            // 
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer3.Name = "splitContainer3";
+            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.textBox2);
+            this.splitContainer3.Panel1.Controls.Add(this.labelSkinName);
+            this.splitContainer3.Panel1.Cursor = System.Windows.Forms.Cursors.Cross;
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.pictureBox2);
+            this.splitContainer3.Size = new System.Drawing.Size(186, 281);
+            this.splitContainer3.SplitterDistance = 89;
+            this.splitContainer3.TabIndex = 0;
+            // 
+            // textBox2
+            // 
+            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.textBox2.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox2.Font = new System.Drawing.Font("Arial", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.textBox2.Location = new System.Drawing.Point(0, 21);
+            this.textBox2.Multiline = true;
+            this.textBox2.Name = "textBox2";
+            this.textBox2.ReadOnly = true;
+            this.textBox2.Size = new System.Drawing.Size(186, 68);
+            this.textBox2.TabIndex = 1;
+            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
+            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
+            // 
+            // labelSkinName
+            // 
+            this.labelSkinName.AutoSize = true;
+            this.labelSkinName.Cursor = System.Windows.Forms.Cursors.Cross;
+            this.labelSkinName.Dock = System.Windows.Forms.DockStyle.Top;
+            this.labelSkinName.Font = new System.Drawing.Font("Palatino Linotype", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.labelSkinName.Location = new System.Drawing.Point(0, 0);
+            this.labelSkinName.Name = "labelSkinName";
+            this.labelSkinName.Size = new System.Drawing.Size(100, 21);
+            this.labelSkinName.TabIndex = 0;
+            this.labelSkinName.Text = "Click a Skin!";
+            // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.SizeAll;
+            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox2.ErrorImage = null;
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.InitialImage = null;
+            this.pictureBox2.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(186, 188);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 0;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.button3reinstallText);
@@ -4764,6 +5088,16 @@ namespace SkinInstaller
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(805, 31);
             this.panel1.TabIndex = 6;
+            // 
+            // button3reinstallText
+            // 
+            this.button3reinstallText.Location = new System.Drawing.Point(166, 3);
+            this.button3reinstallText.Name = "button3reinstallText";
+            this.button3reinstallText.Size = new System.Drawing.Size(117, 23);
+            this.button3reinstallText.TabIndex = 6;
+            this.button3reinstallText.Text = "Re-install Text Mods";
+            this.button3reinstallText.UseVisualStyleBackColor = true;
+            this.button3reinstallText.Click += new System.EventHandler(this.button3reinstallText_Click);
             // 
             // dbDelete
             // 
@@ -5161,7 +5495,8 @@ namespace SkinInstaller
             this.loLViewerOpenNotPreviewToolStripMenuItem,
             this.openParticleReferenceToolStripMenuItem,
             this.showMenuFileLocationToolStripMenuItem,
-            this.openTextTreeEditorToolStripMenuItem});
+            this.openTextTreeEditorToolStripMenuItem,
+            this.openPublisherToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
             this.debugToolStripMenuItem.Text = "Debug";
@@ -5533,337 +5868,12 @@ namespace SkinInstaller
             this.exportTreeViewWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.exportTreeViewWorker1_ProgressChanged);
             this.exportTreeViewWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.exportTreeViewWorker1_RunWorkerCompleted);
             // 
-            // button3reinstallText
+            // openPublisherToolStripMenuItem
             // 
-            this.button3reinstallText.Location = new System.Drawing.Point(166, 3);
-            this.button3reinstallText.Name = "button3reinstallText";
-            this.button3reinstallText.Size = new System.Drawing.Size(117, 23);
-            this.button3reinstallText.TabIndex = 6;
-            this.button3reinstallText.Text = "Re-install Text Mods";
-            this.button3reinstallText.UseVisualStyleBackColor = true;
-            this.button3reinstallText.Click += new System.EventHandler(this.button3reinstallText_Click);
-            // 
-            // splitContainer2
-            // 
-            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer2.Location = new System.Drawing.Point(3, 3);
-            this.splitContainer2.Name = "splitContainer2";
-            // 
-            // splitContainer2.Panel1
-            // 
-            this.splitContainer2.Panel1.Controls.Add(this.listView1);
-            this.splitContainer2.Panel1.Controls.Add(this.panel9);
-            this.splitContainer2.Panel1.Controls.Add(this.panel8);
-            // 
-            // splitContainer2.Panel2
-            // 
-            this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer2.Size = new System.Drawing.Size(805, 281);
-            this.splitContainer2.SplitterDistance = 615;
-            this.splitContainer2.TabIndex = 7;
-            // 
-            // listView1
-            // 
-            this.listView1.AutoArrange = false;
-            this.listView1.CheckBoxes = true;
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader5,
-            this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader6,
-            this.columnHeader8,
-            this.columnHeader9,
-            this.columnHeader7});
-            this.listView1.ContextMenuStrip = this.dataBaseListMenuStrip1;
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.GridLines = true;
-            this.listView1.LargeImageList = this.imageList1;
-            this.listView1.Location = new System.Drawing.Point(18, 15);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(597, 266);
-            this.listView1.SmallImageList = this.imageList1;
-            this.listView1.TabIndex = 0;
-            this.listView1.TileSize = new System.Drawing.Size(2, 2);
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.ItemHover += new SkinInstaller.ListViewItemHover.ItemHoverEventHandler(this.listView1_ItemMouseHover);
-            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
-            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = " ";
-            this.columnHeader1.Width = 43;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Skin Title";
-            this.columnHeader2.Width = 190;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Author";
-            this.columnHeader5.Width = 100;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "File Count";
-            this.columnHeader3.Width = 69;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Installed";
-            this.columnHeader4.Width = 53;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "Added";
-            this.columnHeader6.Width = 67;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "Date and Time Added";
-            this.columnHeader8.Width = 0;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "Date and Time Installed";
-            this.columnHeader9.Width = 0;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "Character";
-            this.columnHeader7.Width = 90;
-            // 
-            // panel9
-            // 
-            this.panel9.Controls.Add(this.colorSlider1);
-            this.panel9.Dock = System.Windows.Forms.DockStyle.Left;
-            this.panel9.Location = new System.Drawing.Point(0, 15);
-            this.panel9.Name = "panel9";
-            this.panel9.Size = new System.Drawing.Size(18, 266);
-            this.panel9.TabIndex = 2;
-            // 
-            // colorSlider1
-            // 
-            this.colorSlider1.BackColor = System.Drawing.Color.Transparent;
-            this.colorSlider1.BarInnerColor = System.Drawing.Color.Red;
-            this.colorSlider1.BarOuterColor = System.Drawing.Color.Black;
-            this.colorSlider1.BarPenColor = System.Drawing.Color.Black;
-            this.colorSlider1.BorderRoundRectSize = new System.Drawing.Size(8, 8);
-            this.colorSlider1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.colorSlider1.ElapsedInnerColor = System.Drawing.Color.Black;
-            this.colorSlider1.ElapsedOuterColor = System.Drawing.Color.DarkRed;
-            this.colorSlider1.LargeChange = ((uint)(5u));
-            this.colorSlider1.Location = new System.Drawing.Point(0, 0);
-            this.colorSlider1.MouseEffects = false;
-            this.colorSlider1.Name = "colorSlider1";
-            this.colorSlider1.Orientation = System.Windows.Forms.Orientation.Vertical;
-            this.colorSlider1.Size = new System.Drawing.Size(18, 266);
-            this.colorSlider1.SmallChange = ((uint)(1u));
-            this.colorSlider1.TabIndex = 0;
-            this.colorSlider1.Text = "colorSlider1";
-            this.colorSlider1.ThumbInnerColor = System.Drawing.Color.OrangeRed;
-            this.colorSlider1.ThumbOuterColor = System.Drawing.Color.Gold;
-            this.colorSlider1.ThumbPenColor = System.Drawing.Color.Black;
-            this.colorSlider1.ThumbRoundRectSize = new System.Drawing.Size(4, 14);
-            this.colorSlider1.Scroll += new System.Windows.Forms.ScrollEventHandler(this.colorSlider1_Scroll);
-            this.colorSlider1.MouseEnter += new System.EventHandler(this.colorSlider1_MouseEnter);
-            // 
-            // panel8
-            // 
-            this.panel8.Controls.Add(this.checkBox1dispCharacter);
-            this.panel8.Controls.Add(this.checkBox1dispDateInstalledFull);
-            this.panel8.Controls.Add(this.checkBox1dispDateAddedFull);
-            this.panel8.Controls.Add(this.checkBox1dispDateAdded);
-            this.panel8.Controls.Add(this.checkBox1dispInstalled);
-            this.panel8.Controls.Add(this.checkBox1dispFileCount);
-            this.panel8.Controls.Add(this.checkBox1dispAuthor);
-            this.panel8.Controls.Add(this.checkBox1dispTitle);
-            this.panel8.Controls.Add(this.label9);
-            this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
-            this.panel8.Location = new System.Drawing.Point(0, 0);
-            this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(615, 15);
-            this.panel8.TabIndex = 1;
-            // 
-            // checkBox1dispCharacter
-            // 
-            this.checkBox1dispCharacter.AutoSize = true;
-            this.checkBox1dispCharacter.Checked = true;
-            this.checkBox1dispCharacter.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1dispCharacter.Location = new System.Drawing.Point(507, 1);
-            this.checkBox1dispCharacter.Name = "checkBox1dispCharacter";
-            this.checkBox1dispCharacter.Size = new System.Drawing.Size(71, 17);
-            this.checkBox1dispCharacter.TabIndex = 8;
-            this.checkBox1dispCharacter.Text = "Character";
-            this.checkBox1dispCharacter.UseVisualStyleBackColor = true;
-            this.checkBox1dispCharacter.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
-            // 
-            // checkBox1dispDateInstalledFull
-            // 
-            this.checkBox1dispDateInstalledFull.AutoSize = true;
-            this.checkBox1dispDateInstalledFull.Checked = true;
-            this.checkBox1dispDateInstalledFull.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1dispDateInstalledFull.Location = new System.Drawing.Point(420, 1);
-            this.checkBox1dispDateInstalledFull.Name = "checkBox1dispDateInstalledFull";
-            this.checkBox1dispDateInstalledFull.Size = new System.Drawing.Size(90, 17);
-            this.checkBox1dispDateInstalledFull.TabIndex = 7;
-            this.checkBox1dispDateInstalledFull.Text = "Time Installed";
-            this.checkBox1dispDateInstalledFull.UseVisualStyleBackColor = true;
-            this.checkBox1dispDateInstalledFull.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
-            // 
-            // checkBox1dispDateAddedFull
-            // 
-            this.checkBox1dispDateAddedFull.AutoSize = true;
-            this.checkBox1dispDateAddedFull.Checked = true;
-            this.checkBox1dispDateAddedFull.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1dispDateAddedFull.Location = new System.Drawing.Point(342, 1);
-            this.checkBox1dispDateAddedFull.Name = "checkBox1dispDateAddedFull";
-            this.checkBox1dispDateAddedFull.Size = new System.Drawing.Size(82, 17);
-            this.checkBox1dispDateAddedFull.TabIndex = 6;
-            this.checkBox1dispDateAddedFull.Text = "Time Added";
-            this.checkBox1dispDateAddedFull.UseVisualStyleBackColor = true;
-            this.checkBox1dispDateAddedFull.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
-            // 
-            // checkBox1dispDateAdded
-            // 
-            this.checkBox1dispDateAdded.AutoSize = true;
-            this.checkBox1dispDateAdded.Checked = true;
-            this.checkBox1dispDateAdded.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1dispDateAdded.Location = new System.Drawing.Point(265, 1);
-            this.checkBox1dispDateAdded.Name = "checkBox1dispDateAdded";
-            this.checkBox1dispDateAdded.Size = new System.Drawing.Size(82, 17);
-            this.checkBox1dispDateAdded.TabIndex = 5;
-            this.checkBox1dispDateAdded.Text = "Date Added";
-            this.checkBox1dispDateAdded.UseVisualStyleBackColor = true;
-            this.checkBox1dispDateAdded.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
-            // 
-            // checkBox1dispInstalled
-            // 
-            this.checkBox1dispInstalled.AutoSize = true;
-            this.checkBox1dispInstalled.Checked = true;
-            this.checkBox1dispInstalled.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1dispInstalled.Location = new System.Drawing.Point(204, 1);
-            this.checkBox1dispInstalled.Name = "checkBox1dispInstalled";
-            this.checkBox1dispInstalled.Size = new System.Drawing.Size(64, 17);
-            this.checkBox1dispInstalled.TabIndex = 4;
-            this.checkBox1dispInstalled.Text = "Installed";
-            this.checkBox1dispInstalled.UseVisualStyleBackColor = true;
-            this.checkBox1dispInstalled.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
-            // 
-            // checkBox1dispFileCount
-            // 
-            this.checkBox1dispFileCount.AutoSize = true;
-            this.checkBox1dispFileCount.Checked = true;
-            this.checkBox1dispFileCount.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1dispFileCount.Location = new System.Drawing.Point(134, 1);
-            this.checkBox1dispFileCount.Name = "checkBox1dispFileCount";
-            this.checkBox1dispFileCount.Size = new System.Drawing.Size(72, 17);
-            this.checkBox1dispFileCount.TabIndex = 3;
-            this.checkBox1dispFileCount.Text = "File Count";
-            this.checkBox1dispFileCount.UseVisualStyleBackColor = true;
-            this.checkBox1dispFileCount.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
-            // 
-            // checkBox1dispAuthor
-            // 
-            this.checkBox1dispAuthor.AutoSize = true;
-            this.checkBox1dispAuthor.Checked = true;
-            this.checkBox1dispAuthor.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1dispAuthor.Location = new System.Drawing.Point(78, 1);
-            this.checkBox1dispAuthor.Name = "checkBox1dispAuthor";
-            this.checkBox1dispAuthor.Size = new System.Drawing.Size(56, 17);
-            this.checkBox1dispAuthor.TabIndex = 2;
-            this.checkBox1dispAuthor.Text = "Author";
-            this.checkBox1dispAuthor.UseVisualStyleBackColor = true;
-            this.checkBox1dispAuthor.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
-            // 
-            // checkBox1dispTitle
-            // 
-            this.checkBox1dispTitle.AutoSize = true;
-            this.checkBox1dispTitle.Checked = true;
-            this.checkBox1dispTitle.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBox1dispTitle.Location = new System.Drawing.Point(36, 1);
-            this.checkBox1dispTitle.Name = "checkBox1dispTitle";
-            this.checkBox1dispTitle.Size = new System.Drawing.Size(45, 17);
-            this.checkBox1dispTitle.TabIndex = 1;
-            this.checkBox1dispTitle.Text = "Title";
-            this.checkBox1dispTitle.UseVisualStyleBackColor = true;
-            this.checkBox1dispTitle.CheckedChanged += new System.EventHandler(this.dispCheckChanged);
-            // 
-            // label9
-            // 
-            this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(0, 1);
-            this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(37, 13);
-            this.label9.TabIndex = 0;
-            this.label9.Text = "Show:";
-            // 
-            // splitContainer3
-            // 
-            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainer3.Location = new System.Drawing.Point(0, 0);
-            this.splitContainer3.Name = "splitContainer3";
-            this.splitContainer3.Orientation = System.Windows.Forms.Orientation.Horizontal;
-            // 
-            // splitContainer3.Panel1
-            // 
-            this.splitContainer3.Panel1.Controls.Add(this.textBox2);
-            this.splitContainer3.Panel1.Controls.Add(this.labelSkinName);
-            this.splitContainer3.Panel1.Cursor = System.Windows.Forms.Cursors.Cross;
-            // 
-            // splitContainer3.Panel2
-            // 
-            this.splitContainer3.Panel2.Controls.Add(this.pictureBox2);
-            this.splitContainer3.Size = new System.Drawing.Size(186, 281);
-            this.splitContainer3.SplitterDistance = 89;
-            this.splitContainer3.TabIndex = 0;
-            // 
-            // textBox2
-            // 
-            this.textBox2.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.textBox2.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.textBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.textBox2.Font = new System.Drawing.Font("Arial", 6.75F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.textBox2.Location = new System.Drawing.Point(0, 21);
-            this.textBox2.Multiline = true;
-            this.textBox2.Name = "textBox2";
-            this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(186, 68);
-            this.textBox2.TabIndex = 1;
-            this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
-            this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
-            // 
-            // labelSkinName
-            // 
-            this.labelSkinName.AutoSize = true;
-            this.labelSkinName.Cursor = System.Windows.Forms.Cursors.Cross;
-            this.labelSkinName.Dock = System.Windows.Forms.DockStyle.Top;
-            this.labelSkinName.Font = new System.Drawing.Font("Palatino Linotype", 11.25F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.labelSkinName.Location = new System.Drawing.Point(0, 0);
-            this.labelSkinName.Name = "labelSkinName";
-            this.labelSkinName.Size = new System.Drawing.Size(100, 21);
-            this.labelSkinName.TabIndex = 0;
-            this.labelSkinName.Text = "Click a Skin!";
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.SizeAll;
-            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox2.ErrorImage = null;
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.InitialImage = null;
-            this.pictureBox2.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(186, 188);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 0;
-            this.pictureBox2.TabStop = false;
-            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
+            this.openPublisherToolStripMenuItem.Name = "openPublisherToolStripMenuItem";
+            this.openPublisherToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.openPublisherToolStripMenuItem.Text = "Open Publisher";
+            this.openPublisherToolStripMenuItem.Click += new System.EventHandler(this.openPublisherToolStripMenuItem_Click);
             // 
             // skinInstaller
             // 
@@ -5898,7 +5908,18 @@ namespace SkinInstaller
             this.addFilesPanel.PerformLayout();
             this.tabControl1.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            this.splitContainer2.ResumeLayout(false);
             this.dataBaseListMenuStrip1.ResumeLayout(false);
+            this.panel9.ResumeLayout(false);
+            this.panel8.ResumeLayout(false);
+            this.panel8.PerformLayout();
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel1.PerformLayout();
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            this.splitContainer3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.splitContainer4.Panel1.ResumeLayout(false);
@@ -5923,17 +5944,6 @@ namespace SkinInstaller
             this.panel7.ResumeLayout(false);
             this.progrespanel.ResumeLayout(false);
             this.treeMenuStripSkin1.ResumeLayout(false);
-            this.splitContainer2.Panel1.ResumeLayout(false);
-            this.splitContainer2.Panel2.ResumeLayout(false);
-            this.splitContainer2.ResumeLayout(false);
-            this.panel9.ResumeLayout(false);
-            this.panel8.ResumeLayout(false);
-            this.panel8.PerformLayout();
-            this.splitContainer3.Panel1.ResumeLayout(false);
-            this.splitContainer3.Panel1.PerformLayout();
-            this.splitContainer3.Panel2.ResumeLayout(false);
-            this.splitContainer3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -6368,6 +6378,14 @@ namespace SkinInstaller
 
             runthis(fsbDir + "fsbext.exe", "-R -d sounds " + "\"" + gameDirectory +
                findSoundsFSBLocation() + "\"", fsbDir, false);
+        }
+        private void openPublisherToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string updater = Application.StartupPath + "\\SIU-Publish.exe";
+            if (File.Exists(updater))
+            {
+                Process.Start(updater);
+            }
         }
         private void createZip_Click(object sender, EventArgs e)
         {
@@ -9235,6 +9253,8 @@ namespace SkinInstaller
             ted.ShowDialog();
         }
         #endregion
+
+        
 
         
     }

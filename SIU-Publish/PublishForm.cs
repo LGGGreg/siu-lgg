@@ -58,6 +58,8 @@ namespace SIU_Publish
             Properties.Settings.Default.Save();
             button1Stop.Enabled = true;
             button1Start.Enabled = false;
+            label1Result.ForeColor = label1Done.ForeColor = label1StateCopyNew.ForeColor =
+                label1stateDelete.ForeColor = label1StateUpload.ForeColor = Color.Red;
             label1StateCopyNew.ForeColor = Color.Yellow;
             debugAdd("====Started Publish====");
             workerCopyFiles.RunWorkerAsync();
@@ -87,100 +89,9 @@ namespace SIU_Publish
             webURL = textBox1WebURL.Text="http://siu-lgg.googlecode.com/files/" + fileName.Replace(" ", "%20") + ".zip";
             debugAdd("====Generated Startup Info====");            
         }
-        public static void ForceDeleteDirectory(string path)
-        {
-            DirectoryInfo root;
-            Stack<DirectoryInfo> fols;
-            DirectoryInfo fol;
-            fols = new Stack<DirectoryInfo>();
-            root = new DirectoryInfo(path);
-            fols.Push(root);
-            while (fols.Count > 0)
-            {
-                fol = fols.Pop();
-                fol.Attributes = fol.Attributes & ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
-                foreach (DirectoryInfo d in fol.GetDirectories())
-                {
-                    fols.Push(d);
-                }
-                foreach (FileInfo f in fol.GetFiles())
-                {
-                    f.Attributes = f.Attributes & ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
-                    f.Delete();
-                }
-            }
-            root.Delete(true);
-        }
         private void textBox1Location_TextChanged(object sender, EventArgs e)
         {
             regenStart();
-        }
-        private void workerCopyFiles_DoWork(object sender, DoWorkEventArgs e)
-        {
-            workerCopyFiles.ReportProgress(0, "Starting Copy File State.");
-            if (Directory.Exists(outDir))
-            {
-                workerCopyFiles.ReportProgress(1, "Directory existed, deleting..");
-                ForceDeleteDirectory(outDir);
-            }
-            Directory.CreateDirectory(outDir);
-            Directory.CreateDirectory(outDir + "fsb");
-            workerCopyFiles.ReportProgress(2, "Output Directory created.");
-
-
-            workerCopyFiles.ReportProgress(2, "Looking for files in " + basePath);
-
-            workerCopyFiles.ReportProgress(2, "To Copy to " + outDir);
-
-
-            String[] files = Directory.GetFiles(basePath, "*.*", SearchOption.AllDirectories);
-            //String programFile = files.FirstOrDefault(m => m.ToLower().Contains("skin installer ultimate.exe"));
-            int i = 0;
-            foreach (String file in files)
-            {
-                i++;
-                int prog = ((int)(((float)i / (float)files.Length) * 58)) + 2;
-                workerCopyFiles.ReportProgress(prog, "Copying Base File " + file);
-                try
-                {
-                    //FileInfo fileToCopy = new FileInfo(file);
-                    string dest = file.Replace(basePath, outDir);
-                    File.Copy(file, dest, true);
-                }
-                catch (System.Exception ex)
-                {
-                    workerCopyFiles.ReportProgress(prog, "Error" + ex.ToString());
-                }
-            }
-
-            workerCopyFiles.ReportProgress(60, "====Done Copying Base Files==== ");
-
-            List<string> newFiles = filesIWantToBeNew();
-            i = 0;
-            foreach (string fileName in newFiles)
-            {
-                i++;
-                int prog = ((int)(((float)i / (float)files.Length) * 40)) + 60;
-                workerCopyFiles.ReportProgress(prog, "Copying New File " + fileName);
-                try
-                {
-                    string fileSource = Application.StartupPath +"\\"+ fileName;
-                    //FileInfo fileToCopy = new FileInfo(file);
-                    string dest = fileSource.Replace(Application.StartupPath, outDir);
-                    File.Copy(fileSource, dest, true);
-                }
-                catch (System.Exception ex)
-                {
-                    workerCopyFiles.ReportProgress(prog, "Error" + ex.ToString());
-                }
-
-            }
-            
-
-
-
-
-            workerCopyFiles.ReportProgress(100, "Done With Copy File State.");
         }
         private List<String> filesIWantToBeNew()
         {
@@ -237,6 +148,7 @@ namespace SIU_Publish
             toReturn.Add("zlib.net.dll");
             return toReturn;
         }
+        #region completedWorkers
         private void progressChanged(object sender, ProgressChangedEventArgs e)
         {
             if(e.ProgressPercentage!=progressBar1.Value)
@@ -247,23 +159,36 @@ namespace SIU_Publish
 
         private void workerCopyFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            label1StateCopyNew.ForeColor = Color.LimeGreen;
-            label1stateDelete.ForeColor = Color.Yellow;
-            workerDeleteFiles.RunWorkerAsync();
+            if ((bool)e.Result)
+            {
+                label1StateCopyNew.ForeColor = Color.LimeGreen;
+            
+                label1stateDelete.ForeColor = Color.Yellow;
+
+                workerDeleteFiles.RunWorkerAsync();
+            }
         }
 
         private void workerDeleteFiles_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            label1stateDelete.ForeColor = Color.LimeGreen;
-            label1CreateZip.ForeColor = Color.Yellow;
-            workerCreateZip.RunWorkerAsync();
+            if ((bool)e.Result)
+            {
+                label1stateDelete.ForeColor = Color.LimeGreen;
+            
+                label1CreateZip.ForeColor = Color.Yellow;
+                workerCreateZip.RunWorkerAsync();
+            }
         }
 
         private void workerCreateZip_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            label1CreateZip.ForeColor = Color.LimeGreen;
-            label1StateUpload.ForeColor = Color.Yellow;
-            workerUpload.RunWorkerAsync();
+            if ((bool)e.Result)
+            {
+                label1CreateZip.ForeColor = Color.LimeGreen;
+            
+                label1StateUpload.ForeColor = Color.Yellow;
+                workerUpload.RunWorkerAsync();
+            }
         }
 
         private void workerUpload_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
@@ -274,67 +199,96 @@ namespace SIU_Publish
             button1Start.Enabled = true;
 
             debugAdd("====Finished Publish====");
-        }
 
+            button1TestWebURL_Click(sender, e);
+        }
+        #endregion
+        #region workingWorkers
         private void workerDeleteFiles_DoWork(object sender, DoWorkEventArgs e)
         {
             workerDeleteFiles.ReportProgress(0, "Starting Delete File State.");
-
+            if (workerDeleteFiles.CancellationPending)
+            {
+                e.Result = false; return;
+            }
             workerDeleteFiles.ReportProgress(100, "Done With Delete File State.");
-            
+            e.Result = true;
+
         }
-        private ArrayList GenerateFileList(string Dir)
+        private void workerCopyFiles_DoWork(object sender, DoWorkEventArgs e)
         {
-            ArrayList list = new ArrayList();
-            bool flag = true;
-            foreach (string str in Directory.GetFiles(Dir))
+            workerCopyFiles.ReportProgress(0, "Starting Copy File State.");
+            if (Directory.Exists(outDir))
             {
-                list.Add(str);
-                flag = false;
+                workerCopyFiles.ReportProgress(1, "Directory existed, deleting..");
+                ForceDeleteDirectory(outDir);
             }
-            if (flag && (Directory.GetDirectories(Dir).Length == 0))
-            {
-                list.Add(Dir + "/");
-            }
-            foreach (string str2 in Directory.GetDirectories(Dir))
-            {
-                foreach (object obj2 in GenerateFileList(str2))
-                {
-                    list.Add(obj2);
-                }
-            }
-            workerCreateZip.ReportProgress(10, "Zip List Generated.");
-            
-            return list;
-        }
-        public void ZipFiles(string inputFolderPath, string outputPathAndFile, string password)
-        {
-            ArrayList list = GenerateFileList(inputFolderPath);
-            int count = Directory.GetParent(inputFolderPath).ToString().Length + 1;
-            ZipOutputStream stream2 = new ZipOutputStream(File.Create(outputPathAndFile));
-            if ((password != null) && (password != string.Empty))
-            {
-                stream2.Password = password;
-            }
-            stream2.SetLevel(9);
+            Directory.CreateDirectory(outDir);
+            Directory.CreateDirectory(outDir + "fsb");
+            workerCopyFiles.ReportProgress(2, "Output Directory created.");
+
+
+            workerCopyFiles.ReportProgress(2, "Looking for files in " + basePath);
+
+            workerCopyFiles.ReportProgress(2, "To Copy to " + outDir);
+
+
+            String[] files = Directory.GetFiles(basePath, "*.*", SearchOption.AllDirectories);
+            //String programFile = files.FirstOrDefault(m => m.ToLower().Contains("skin installer ultimate.exe"));
             int i = 0;
-            foreach (string str2 in list)
+            foreach (String file in files)
             {
-                int prog = ((int)(((float)i++ / (float)list.Count) * 85)) + 10;
-                workerCreateZip.ReportProgress(prog, "Compressing "+str2);
-                ZipEntry entry = new ZipEntry(str2.Remove(0, count));
-                stream2.PutNextEntry(entry);
-                if (!str2.EndsWith("/"))
+                if (workerCopyFiles.CancellationPending)
                 {
-                    FileStream stream = File.OpenRead(str2);
-                    byte[] buffer = new byte[stream.Length];
-                    stream.Read(buffer, 0, buffer.Length);
-                    stream2.Write(buffer, 0, buffer.Length);
-                    stream.Close();
+                    e.Result = false; return;
+                }
+                i++;
+                int prog = ((int)(((float)i / (float)files.Length) * 58)) + 2;
+                workerCopyFiles.ReportProgress(prog, "Copying Base File " + file);
+                try
+                {
+                    //FileInfo fileToCopy = new FileInfo(file);
+                    string dest = file.Replace(basePath, outDir);
+                    File.Copy(file, dest, true);
+                }
+                catch (System.Exception ex)
+                {
+                    workerCopyFiles.ReportProgress(prog, "Error" + ex.ToString());
                 }
             }
-            stream2.Finish();
-            stream2.Close();
+
+            workerCopyFiles.ReportProgress(60, "====Done Copying Base Files==== ");
+
+            List<string> newFiles = filesIWantToBeNew();
+            i = 0;
+            foreach (string fileName in newFiles)
+            {
+                if (workerCopyFiles.CancellationPending)
+                {
+                    e.Result = false; return;
+                }
+                i++;
+                int prog = ((int)(((float)i / (float)files.Length) * 40)) + 60;
+                workerCopyFiles.ReportProgress(prog, "Copying New File " + fileName);
+                try
+                {
+                    string fileSource = Application.StartupPath + "\\" + fileName;
+                    //FileInfo fileToCopy = new FileInfo(file);
+                    string dest = fileSource.Replace(Application.StartupPath, outDir);
+                    File.Copy(fileSource, dest, true);
+                }
+                catch (System.Exception ex)
+                {
+                    workerCopyFiles.ReportProgress(prog, "Error" + ex.ToString());
+                }
+
+            }
+            workerCopyFiles.ReportProgress(100, "Done With Copy File State.");
+            if (workerCopyFiles.CancellationPending)
+            {
+                e.Result = false; return;
+            }
+            e.Result = true;
         }
 
         private void workerCreateZip_DoWork(object sender, DoWorkEventArgs e)
@@ -346,8 +300,14 @@ namespace SIU_Publish
                 workerCreateZip.ReportProgress(1, "Zip already found, deleting.");
                 File.Delete(zipPathandName);
             }
-            ZipFiles(outDir, zipPathandName, "");
+            bool success = ZipFiles(outDir, zipPathandName, "");
+            if (workerCreateZip.CancellationPending || !success)
+            {
+                e.Result = false; return;
+            }
             workerCreateZip.ReportProgress(100, "Done With Create Zip State.");
+
+            e.Result = true;
         }
 
         private void workerUpload_DoWork(object sender, DoWorkEventArgs e)
@@ -369,14 +329,110 @@ namespace SIU_Publish
             {
                 workerUpload.ReportProgress(50, "Error:" + ee.ToString());
             }
-            
-            workerUpload.ReportProgress(100, "Done With Upload State.");            
+
+            workerUpload.ReportProgress(100, "Done With Upload State.");
+            if (workerUpload.CancellationPending)
+            {
+                e.Result = false; return;
+            }
+            e.Result = true;
         }
 
+        #endregion
+        #region helpers
+        public static void ForceDeleteDirectory(string path)
+        {
+            DirectoryInfo root;
+            Stack<DirectoryInfo> fols;
+            DirectoryInfo fol;
+            fols = new Stack<DirectoryInfo>();
+            root = new DirectoryInfo(path);
+            fols.Push(root);
+            while (fols.Count > 0)
+            {
+                fol = fols.Pop();
+                fol.Attributes = fol.Attributes & ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
+                foreach (DirectoryInfo d in fol.GetDirectories())
+                {
+                    fols.Push(d);
+                }
+                foreach (FileInfo f in fol.GetFiles())
+                {
+                    f.Attributes = f.Attributes & ~(FileAttributes.Archive | FileAttributes.ReadOnly | FileAttributes.Hidden);
+                    f.Delete();
+                }
+            }
+            root.Delete(true);
+        }
+
+        private ArrayList GenerateFileList(string Dir)
+        {
+            ArrayList list = new ArrayList();
+            bool flag = true;
+            foreach (string str in Directory.GetFiles(Dir))
+            {
+                list.Add(str);
+                flag = false;
+            }
+            if (flag && (Directory.GetDirectories(Dir).Length == 0))
+            {
+                list.Add(Dir + "/");
+            }
+            foreach (string str2 in Directory.GetDirectories(Dir))
+            {
+                foreach (object obj2 in GenerateFileList(str2))
+                {
+                    list.Add(obj2);
+                }
+            }
+            workerCreateZip.ReportProgress(10, "Zip List Generated.");
+
+            return list;
+        }
+        public bool ZipFiles(string inputFolderPath, string outputPathAndFile, string password)
+        {
+            ArrayList list = GenerateFileList(inputFolderPath);
+            int count = Directory.GetParent(inputFolderPath).ToString().Length + 1;
+            ZipOutputStream stream2 = new ZipOutputStream(File.Create(outputPathAndFile));
+            if ((password != null) && (password != string.Empty))
+            {
+                stream2.Password = password;
+            }
+            stream2.SetLevel(9);
+            int i = 0;
+            foreach (string str2 in list)
+            {
+                int prog = ((int)(((float)i++ / (float)list.Count) * 85)) + 10;
+                workerCreateZip.ReportProgress(prog, "Compressing " + str2);
+                if (workerCreateZip.CancellationPending)
+                {
+
+                    stream2.Finish();
+                    stream2.Close();
+                    return false;
+                    
+                }
+                ZipEntry entry = new ZipEntry(str2.Remove(0, count));
+                stream2.PutNextEntry(entry);
+                if (!str2.EndsWith("/"))
+                {
+                    FileStream stream = File.OpenRead(str2);
+                    byte[] buffer = new byte[stream.Length];
+                    stream.Read(buffer, 0, buffer.Length);
+                    stream2.Write(buffer, 0, buffer.Length);
+                    stream.Close();
+                }
+            }
+            stream2.Finish();
+            stream2.Close();
+            return true;
+        }
+
+        #endregion
         private void button1TestWebURL_Click(object sender, EventArgs e)
         {
             System.Net.WebClient client = new WebClient();
-            string testDl = Application.StartupPath + "\\test.zip";
+            string testDl = zipLocation + "test.zip";
             bool yes = false;
             try
             {
