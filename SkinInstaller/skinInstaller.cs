@@ -92,6 +92,7 @@ namespace SkinInstaller
         
         #endregion
         #region vars
+        string dlURL = "https://sites.google.com/site/siuupdates/version.txt";
         TextEditor.TextEditorMain ted;            
         TreeNode newRafNode=new TreeNode("RAF");
         PreviewWindow previewWindow;
@@ -450,7 +451,7 @@ namespace SkinInstaller
                                     client.DownloadFile(theURL, dir+"downloaded.zip");
                                     files.Add(dir + "downloaded.zip");
                                     addItFlag = true;
-                                    //string response = client.DownloadString("https://sites.google.com/site/siuupdates/version.txt").Trim();
+                                    //string response = client.DownloadString(dlURL).Trim();
                                 }
                                 catch (Exception ex1)
                                 {
@@ -7535,7 +7536,7 @@ namespace SkinInstaller
             System.Net.WebClient client = new WebClient();
             try
             {
-                string response = client.DownloadString("https://sites.google.com/site/siuupdates/version.txt").Trim();
+                string response = client.DownloadString(dlURL).Trim();
                 string[] responceParts = response.Split('|');
                 Double version = Double.Parse(responceParts[0], System.Globalization.NumberFormatInfo.InvariantInfo);
                 string link = responceParts[1];
