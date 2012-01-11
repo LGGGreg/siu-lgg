@@ -253,7 +253,7 @@ namespace LOLViewer.IO
                     .Contains(loadScreenName.ToLower()));
             if (lodmatch.Value != null)
             {
-                model.loadScreen = match.Value;
+                model.loadScreen = lodmatch.Value;
             }
             // Find the air files
             model.champSplash = //"\\deploy\\assets\\images\\champions\\" +
