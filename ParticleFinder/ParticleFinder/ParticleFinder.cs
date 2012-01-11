@@ -217,10 +217,10 @@ namespace ParticleFinder
 
                                         // Search troybins for .dds, .sco, .scb, etc.
                                         // Create a new archive
-                                        rafArchive = new RAFArchive(file.RAFArchive.RAFFilePath);
+                                        rafArchive = new RAFArchive(troyEntry.RAFArchive.RAFFilePath);
 
                                         // Get the data from the archive
-                                        myInput = new MemoryStream(rafArchive.GetDirectoryFile().GetFileList().GetFileEntry(file.FileName).GetContent());
+                                        myInput = new MemoryStream(rafArchive.GetDirectoryFile().GetFileList().GetFileEntry(troyEntry.FileName).GetContent());
                                         reader = new StreamReader(myInput);
                                         result = reader.ReadToEnd();
                                         reader.Close();
