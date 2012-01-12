@@ -2755,8 +2755,7 @@ namespace SkinInstaller
             return toReturn;
         }
         #endregion
-        #endregion
-       
+        #endregion       
         private void CreateEasyInstallFile(string zipFileName)
         {
             TextWriter writer = new StreamWriter((Application.StartupPath + @"\skins\" + zipFileName + @"\") + @"\Read Me.txt");
@@ -8926,7 +8925,7 @@ namespace SkinInstaller
             int last = 0;
             foreach (TreeNode checkedNode in checkedNodes)
             {
-                int prog =(int)( ((float)i / (float)checkedNodes.Count) * 100.0f);
+                int prog =(int)( ((float)i / (float)checkedNodes.Count) * 50.0f);
                 if (prog != last)
                 {
                     last = prog;
@@ -8978,8 +8977,17 @@ namespace SkinInstaller
             }
             
             if (extraFolder != "") path += extraFolder + "\\";
+            i = 0;
             foreach (String rafFile in toBackup)
             {
+                int prog = ((int)(((float)i / (float)toBackup.Count) * 50.0f))+50;
+                if (prog != last)
+                {
+                    last = prog;
+                    exportTreeViewWorker1.ReportProgress(prog);
+                }
+                i++;
+
                 if (rafFile.ToLower().Contains(".raf"))
                     rafBackup(rafFile, path, true);
                 else
