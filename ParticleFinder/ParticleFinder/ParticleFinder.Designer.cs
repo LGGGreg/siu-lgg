@@ -28,11 +28,11 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.components = new System.ComponentModel.Container();
             this.findParticles = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
             this.treeView1 = new System.Windows.Forms.TreeView();
-            this.timer1 = new System.Windows.Forms.Timer(this.components);
+            this.ParticleReferenceWorker = new System.ComponentModel.BackgroundWorker();
+            this.progress_lbl = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // findParticles
@@ -59,11 +59,28 @@
             this.treeView1.Size = new System.Drawing.Size(626, 418);
             this.treeView1.TabIndex = 2;
             // 
+            // ParticleReferenceWorker
+            // 
+            this.ParticleReferenceWorker.WorkerReportsProgress = true;
+            this.ParticleReferenceWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.ParticleReferenceWorker_DoWork);
+            this.ParticleReferenceWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ParticleReferenceWorker_ProgressChanged);
+            this.ParticleReferenceWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.ParticleReferenceWorker_RunWorkerCompleted);
+            // 
+            // progress_lbl
+            // 
+            this.progress_lbl.AutoSize = true;
+            this.progress_lbl.Location = new System.Drawing.Point(152, 66);
+            this.progress_lbl.Name = "progress_lbl";
+            this.progress_lbl.Size = new System.Drawing.Size(19, 13);
+            this.progress_lbl.TabIndex = 3;
+            this.progress_lbl.Text = "00";
+            // 
             // ParticleFinder
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(700, 535);
+            this.Controls.Add(this.progress_lbl);
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.findParticles);
@@ -71,6 +88,7 @@
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.ParticleFinder_Load);
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -79,7 +97,8 @@
         private System.Windows.Forms.Button findParticles;
         private System.Windows.Forms.ProgressBar progressBar1;
         private System.Windows.Forms.TreeView treeView1;
-        private System.Windows.Forms.Timer timer1;
+        private System.ComponentModel.BackgroundWorker ParticleReferenceWorker;
+        private System.Windows.Forms.Label progress_lbl;
     }
 }
 
