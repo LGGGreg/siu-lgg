@@ -47,7 +47,7 @@
             // 
             // progressBar1
             // 
-            this.progressBar1.Location = new System.Drawing.Point(175, 25);
+            this.progressBar1.Location = new System.Drawing.Point(174, 25);
             this.progressBar1.Name = "progressBar1";
             this.progressBar1.Size = new System.Drawing.Size(486, 32);
             this.progressBar1.TabIndex = 1;
@@ -69,7 +69,7 @@
             // progress_lbl
             // 
             this.progress_lbl.AutoSize = true;
-            this.progress_lbl.Location = new System.Drawing.Point(152, 66);
+            this.progress_lbl.Location = new System.Drawing.Point(408, 35);
             this.progress_lbl.Name = "progress_lbl";
             this.progress_lbl.Size = new System.Drawing.Size(19, 13);
             this.progress_lbl.TabIndex = 3;
@@ -85,7 +85,7 @@
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.findParticles);
             this.Name = "ParticleFinder";
-            this.Text = "Form1";
+            this.Text = "Particle Finder";
             this.Load += new System.EventHandler(this.ParticleFinder_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
