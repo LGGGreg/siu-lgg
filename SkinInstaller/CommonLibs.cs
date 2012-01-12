@@ -38,10 +38,10 @@ namespace SkinInstaller
     }
     public class fileLocReturn
     {
-        public string folderName{get; set;}
-        public string fileName{get; set;}
-        public bool valid{get; set;}
-        public List<string> moreOptions{get; set;}
+        public string folderName { get; set; }
+        public string fileName { get; set; }
+        public bool valid { get; set; }
+        public List<string> moreOptions { get; set; }
         public fileLocReturn(string folder, string file, bool ok, List<string> extraOptions)
         {
             folderName = folder;
@@ -293,13 +293,138 @@ namespace SkinInstaller
             return options.Find(thisItem => thisItem.skinName == fakeOption.skinName);
         }
     }
-    public class skinsOptions : List<skinOptions> 
+    public class skinsOptions : List<skinOptions>
     {
         public skinOptions getOptions(skinOptions fakeOptions)
         {
             return this.Find(thisItem => thisItem.skinName == fakeOptions.skinName);
         }
     }
+    class riotVersions
+    {
+        public riotVersion LoLClientNewVersion = new riotVersion();
+        public riotVersion LoLClientOldVersion = new riotVersion();
+        public riotVersion LoLAirClientNewVersion = new riotVersion();
+        public riotVersion LoLAirClientOldVersion = new riotVersion();
+        public override string ToString()
+        {
+            return "LoL Client Newest Version:\t" + LoLClientNewVersion.ToString() +
+                "\r\nLol Air Client Newest Version:\t" + LoLAirClientNewVersion.ToString() +
+                "\r\nLoL Client Oldest Version:\t" + LoLClientOldVersion.ToString() +
+                "\r\nLol Air Client Oldest Version:\t" + LoLAirClientOldVersion.ToString();
+        }
+        public string toCSVString()
+        {
+            return LoLClientNewVersion.ToString() +
+                "," + LoLAirClientNewVersion.ToString() +
+                "," + LoLClientOldVersion.ToString() +
+                "," + LoLAirClientOldVersion.ToString();
+        }
+        public void fromCSVString(string input)
+        {
+            string[] parts = input.Split(',');
+            if (parts.Length < 4) return;
+            LoLClientNewVersion.fromString(parts[0]);
+            LoLAirClientNewVersion.fromString(parts[1]);
+            LoLClientOldVersion.fromString(parts[2]);
+            LoLAirClientOldVersion.fromString(parts[3]);
+        }
+        public override bool Equals(object obj)
+        {
+            // If parameter is null return false.
+            if (obj == null)
+            {
+                return false;
+            }
 
+            // If parameter cannot be cast to Point return false.
+            riotVersions rvs = obj as riotVersions;
+            if ((System.Object)rvs == null)
+            {
+                return false;
+            }
+
+            return rvs.LoLAirClientNewVersion.Equals(LoLAirClientNewVersion) &&
+                rvs.LoLClientNewVersion.Equals(LoLClientNewVersion) &&
+                rvs.LoLAirClientOldVersion.Equals(LoLAirClientOldVersion) &&
+                rvs.LoLClientOldVersion.Equals(LoLClientOldVersion);
+
+        }
+        public override int GetHashCode()
+        {
+            return LoLAirClientNewVersion.GetHashCode();
+        }
+        public void setFromVersionFile(string versionFilePath)
+        {
+            BinaryReader r = new BinaryReader(new FileStream(versionFilePath, FileMode.Open));
+            this.LoLClientNewVersion.D = (int)r.ReadByte();
+            this.LoLClientNewVersion.C = (int)r.ReadByte();
+            this.LoLClientNewVersion.B = (int)r.ReadByte();
+            this.LoLClientNewVersion.A = (int)r.ReadByte();
+
+            this.LoLAirClientNewVersion.D = (int)r.ReadByte();
+            this.LoLAirClientNewVersion.C = (int)r.ReadByte();
+            this.LoLAirClientNewVersion.B = (int)r.ReadByte();
+            this.LoLAirClientNewVersion.A = (int)r.ReadByte();
+
+            this.LoLClientOldVersion.D = (int)r.ReadByte();
+            this.LoLClientOldVersion.C = (int)r.ReadByte();
+            this.LoLClientOldVersion.B = (int)r.ReadByte();
+            this.LoLClientOldVersion.A = (int)r.ReadByte();
+
+            this.LoLAirClientOldVersion.D = (int)r.ReadByte();
+            this.LoLAirClientOldVersion.C = (int)r.ReadByte();
+            this.LoLAirClientOldVersion.B = (int)r.ReadByte();
+            this.LoLAirClientOldVersion.A = (int)r.ReadByte();
+            r.Close();
+        }
+        public riotVersions() { }
+        public riotVersions(string versionFilePath)
+        {
+            setFromVersionFile(versionFilePath);
+        }
+    }
+    class riotVersion
+    {
+        public int A;
+        public int B;
+        public int C;
+        public int D;
+        public riotVersion() { A = B = C = D = 0; }
+        public override string ToString()
+        {
+            return A.ToString() + "." + B.ToString() + "." + C.ToString() + "." + D.ToString();
+        }
+        public override bool Equals(object obj)
+        {
+            // If parameter is null return false.
+            if (obj == null)
+            {
+                return false;
+            }
+
+            // If parameter cannot be cast to Point return false.
+            riotVersion rv = obj as riotVersion;
+            if ((System.Object)rv == null)
+            {
+                return false;
+            }
+
+            return rv.A.Equals(A) && rv.B.Equals(B) && rv.C.Equals(C) && rv.D.Equals(D);
+        }
+        public override int GetHashCode()
+        {
+            return D.GetHashCode();
+        }
+        public void fromString(string input)
+        {
+            string[] parts = input.Split('.');
+            if (parts.Length != 4) return;
+            A = int.Parse(parts[0]);
+            B = int.Parse(parts[1]);
+            C = int.Parse(parts[2]);
+            D = int.Parse(parts[3]);
+        }
+    }
 }
 
