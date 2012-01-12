@@ -377,6 +377,7 @@ namespace SkinInstaller
         private ToolStripMenuItem moreDebugToolStripMenuItem;
         private ToolStripMenuItem getVersionFilePathToolStripMenuItem;
         private ToolStripMenuItem readVersionsToolStripMenuItem;
+        private Label label2Percent;
         PaintEventHandler importantP;
         #endregion
         #region webIntegrate
@@ -661,6 +662,7 @@ namespace SkinInstaller
                 USkinSDK.USkinLoadSkin(skinUPath);
 #endif
             loadNameReplacements();
+            UpdateProgressSafe(0);
             if (Application.StartupPath.Length > 63)
             {
                 Cliver.Message.Inform("The path that this program is running from\n\"" +
@@ -969,6 +971,7 @@ namespace SkinInstaller
         {
             if (value > this.progressBar1.Maximum) value = this.progressBar1.Maximum;
             this.progressBar1.Value = value;
+            this.label2Percent.Text = ((value!=0)?value.ToString() + "%":"");
             this.progressBar1.Refresh();
         }
         private void Log(string s)
@@ -4091,6 +4094,8 @@ namespace SkinInstaller
             this.registerAppForWebUrlsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moreDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getVersionFilePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.readVersionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.soundFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clientLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.repathAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -4142,7 +4147,7 @@ namespace SkinInstaller
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportTreeViewWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.getVersionFilePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.label2Percent = new System.Windows.Forms.Label();
             this.listView1 = new SkinInstaller.ListViewItemHover();
             this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
@@ -4153,7 +4158,6 @@ namespace SkinInstaller
             this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.readVersionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -5420,6 +5424,20 @@ namespace SkinInstaller
             this.moreDebugToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
             this.moreDebugToolStripMenuItem.Text = "More Debug";
             // 
+            // getVersionFilePathToolStripMenuItem
+            // 
+            this.getVersionFilePathToolStripMenuItem.Name = "getVersionFilePathToolStripMenuItem";
+            this.getVersionFilePathToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.getVersionFilePathToolStripMenuItem.Text = "Get Version File Path";
+            this.getVersionFilePathToolStripMenuItem.Click += new System.EventHandler(this.getVersionFilePathToolStripMenuItem_Click);
+            // 
+            // readVersionsToolStripMenuItem
+            // 
+            this.readVersionsToolStripMenuItem.Name = "readVersionsToolStripMenuItem";
+            this.readVersionsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.readVersionsToolStripMenuItem.Text = "Read Versions";
+            this.readVersionsToolStripMenuItem.Click += new System.EventHandler(this.readVersionsToolStripMenuItem_Click);
+            // 
             // soundFileLocationToolStripMenuItem
             // 
             this.soundFileLocationToolStripMenuItem.Name = "soundFileLocationToolStripMenuItem";
@@ -5647,8 +5665,9 @@ namespace SkinInstaller
             // 
             // progrespanel
             // 
-            this.progrespanel.Controls.Add(this.buttoncancel);
+            this.progrespanel.Controls.Add(this.label2Percent);
             this.progrespanel.Controls.Add(this.progressBar1);
+            this.progrespanel.Controls.Add(this.buttoncancel);
             this.progrespanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.progrespanel.Location = new System.Drawing.Point(0, 32);
             this.progrespanel.Name = "progrespanel";
@@ -5794,12 +5813,14 @@ namespace SkinInstaller
             this.exportTreeViewWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.exportTreeViewWorker1_ProgressChanged);
             this.exportTreeViewWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.exportTreeViewWorker1_RunWorkerCompleted);
             // 
-            // getVersionFilePathToolStripMenuItem
+            // label2Percent
             // 
-            this.getVersionFilePathToolStripMenuItem.Name = "getVersionFilePathToolStripMenuItem";
-            this.getVersionFilePathToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.getVersionFilePathToolStripMenuItem.Text = "Get Version File Path";
-            this.getVersionFilePathToolStripMenuItem.Click += new System.EventHandler(this.getVersionFilePathToolStripMenuItem_Click);
+            this.label2Percent.AutoSize = true;
+            this.label2Percent.Location = new System.Drawing.Point(29, 5);
+            this.label2Percent.Name = "label2Percent";
+            this.label2Percent.Size = new System.Drawing.Size(44, 13);
+            this.label2Percent.TabIndex = 42;
+            this.label2Percent.Text = "Percent";
             // 
             // listView1
             // 
@@ -5876,13 +5897,6 @@ namespace SkinInstaller
             this.columnHeader7.Text = "Character";
             this.columnHeader7.Width = 90;
             // 
-            // readVersionsToolStripMenuItem
-            // 
-            this.readVersionsToolStripMenuItem.Name = "readVersionsToolStripMenuItem";
-            this.readVersionsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.readVersionsToolStripMenuItem.Text = "Read Versions";
-            this.readVersionsToolStripMenuItem.Click += new System.EventHandler(this.readVersionsToolStripMenuItem_Click);
-            // 
             // skinInstaller
             // 
             this.AllowDrop = true;
@@ -5951,6 +5965,7 @@ namespace SkinInstaller
             ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).EndInit();
             this.panel7.ResumeLayout(false);
             this.progrespanel.ResumeLayout(false);
+            this.progrespanel.PerformLayout();
             this.treeMenuStripSkin1.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
@@ -7078,7 +7093,7 @@ namespace SkinInstaller
                               
             foreach (String file in rafFiles)
             {
-                int percent = (int)Math.Floor((double)inc++ / (double)rafFiles.Count * (double)100.0);
+                int percent = (int)Math.Floor((double)inc++ / (double)(rafFiles.Count+1) * (double)100.0);
                 
                 if (fileListWorker1.CancellationPending)
                     return false;
@@ -7102,11 +7117,11 @@ namespace SkinInstaller
                             return false;
                         }
 
-                        int innerpercent = (int)Math.Floor((double)innerInc++ / (double)filez.Count * (double)100.0);
+                        int innerpercent = (int)Math.Floor((double)innerInc++ / (double)filez.Count * (double)(50.0/(double)rafFiles.Count)/*100.0*/);
                         if (lastP != innerpercent)
                         {
                             lastP = innerpercent;
-                            fileListWorker1.ReportProgress(50 + (percent / 2) + (innerpercent / 10));
+                            fileListWorker1.ReportProgress(50 + (percent / 2) + (innerpercent / 1));
                         }
                         FileInfo innerRafFile = new FileInfo(rafFile.FullName + "\\\\" + entry.FileName);
                         if (!fileExtensions.Contains(innerRafFile.Extension))
