@@ -2931,7 +2931,8 @@ namespace SkinInstaller
                 //we might need to back this up!
                 //check if its in char or particles or one of the zip..
                 //edit this is only if this type of install has a zip!
-                if(int.Parse(allFilesExtensions[0])!=0)
+                //edit removed for now, we need another way to determine if this is a .zip legacy lol
+                /*if(int.Parse(allFilesExtensions[0])!=0)
                 {
                     if(
                        path.ToLower().Contains("data\\characters")
@@ -2952,7 +2953,7 @@ namespace SkinInstaller
                         //ignore
                         return;
                     }
-                }
+                }*/
                 String backupDir = Application.StartupPath+@"\backup\";
                 if(!Directory.Exists(backupDir))Directory.CreateDirectory(backupDir);
                 // We need to do some crazy path changing for air files
