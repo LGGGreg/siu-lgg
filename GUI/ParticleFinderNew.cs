@@ -11,6 +11,7 @@ using System.IO;
 using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Diagnostics;
+using System.Threading;
 
 namespace ParticleFinder
 {
@@ -18,6 +19,9 @@ namespace ParticleFinder
     {
         public ParticleFinderNew()
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            
             InitializeComponent();
         }
 
