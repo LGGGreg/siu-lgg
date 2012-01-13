@@ -15,7 +15,7 @@ namespace ParticleFinder
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new ParticleFinder());
+            Application.Run(new ParticleFinderNew());
         }
     }
 }

@@ -96,6 +96,7 @@ namespace LOLViewer
             this.loadingCancelButton.TabIndex = 3;
             this.loadingCancelButton.Text = "Cancel";
             this.loadingCancelButton.UseVisualStyleBackColor = true;
+            this.loadingCancelButton.Visible = false;
             // 
             // LoadingModelsWindow
             // 

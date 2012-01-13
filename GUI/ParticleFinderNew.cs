@@ -14,9 +14,9 @@ using System.Diagnostics;
 
 namespace ParticleFinder
 {
-    public partial class ParticleFinder : Form
+    public partial class ParticleFinderNew : Form
     {
-        public ParticleFinder()
+        public ParticleFinderNew()
         {
             InitializeComponent();
         }
@@ -25,6 +25,8 @@ namespace ParticleFinder
                     <String, Dictionary
                         <String, Dictionary
                             <RAFFileListEntry, List<String>>>> { }
+
+        public SkinInstaller.skinInstaller mySkinInstaller = null;
         public int lastProgress = 0;
 
         String lolDirectory = "C:\\Riot Games\\League of Legends";
@@ -1053,6 +1055,12 @@ namespace ParticleFinder
             ParticleReferenceWorker.RunWorkerAsync(lolDirectory + "\\RADS\\projects\\lol_game_client\\filearchives\\");
         }
 
+        public void startGettingParticleStructure(SkinInstaller.skinInstaller source, string rafDirPath)
+        {
+            mySkinInstaller = source;
+            ParticleReferenceWorker.RunWorkerAsync(rafDirPath);
+        }
+
         private void ParticleReferenceWorker_DoWork(object sender, DoWorkEventArgs e)
         {
             e.Result = getParticleStructure(e.Argument.ToString());
@@ -1060,42 +1068,58 @@ namespace ParticleFinder
 
         private void ParticleReferenceWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
         {
-            if (e.ProgressPercentage != progressBar1.Value)
+            if (mySkinInstaller != null)
             {
-                progressBar1.Value = e.ProgressPercentage;
-                progress_lbl.Text = e.ProgressPercentage.ToString();
+                mySkinInstaller.recieveParticleProgress(e.ProgressPercentage);
+            }
+            if (this.Visible)
+            {
+                if (e.ProgressPercentage != progressBar1.Value)
+                {
+                    progressBar1.Value = e.ProgressPercentage;
+                    progress_lbl.Text = e.ProgressPercentage.ToString();
+                }
             }
         }
 
         private void ParticleReferenceWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            progressBar1.Value = 0;
-            // Creates a TextInfo based on the "en-US" culture.
-            TextInfo usTxtInfo = new CultureInfo("en-US", false).TextInfo;
-
             PStruct particleDef = (PStruct)e.Result;
-
-            TreeNode rootNode = new TreeNode("root");
-            // Display particleDef for debugging purposes
-            foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in particleDef)
+            if (this.Visible)
             {
-                TreeNode champNode = rootNode.Nodes.Add(usTxtInfo.ToTitleCase(championKVP.Key));
-                foreach (KeyValuePair<String, Dictionary<RAFFileListEntry, List<String>>> abilityKVP in championKVP.Value)
+                progressBar1.Value = 0;
+
+                // Creates a TextInfo based on the "en-US" culture.
+                TextInfo usTxtInfo = new CultureInfo("en-US", false).TextInfo;
+
+
+                TreeNode rootNode = new TreeNode("root");
+                // Display particleDef for debugging purposes
+                foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in particleDef)
                 {
-                    TreeNode abilityNode = champNode.Nodes.Add(abilityKVP.Key);
-                    foreach (KeyValuePair<RAFFileListEntry, List<String>> troybinKVP in abilityKVP.Value)
+                    TreeNode champNode = rootNode.Nodes.Add(usTxtInfo.ToTitleCase(championKVP.Key));
+                    foreach (KeyValuePair<String, Dictionary<RAFFileListEntry, List<String>>> abilityKVP in championKVP.Value)
                     {
-                        Match match = Regex.Match(troybinKVP.Key.FileName, "/(.+).troybin", RegexOptions.IgnoreCase);
-                        TreeNode troybinNode = abilityNode.Nodes.Add(match.Groups[1].Value.Split('/')[1]);
-                        foreach (String fileEntry in troybinKVP.Value)
+                        TreeNode abilityNode = champNode.Nodes.Add(abilityKVP.Key);
+                        foreach (KeyValuePair<RAFFileListEntry, List<String>> troybinKVP in abilityKVP.Value)
                         {
-                            troybinNode.Nodes.Add(fileEntry);
+                            Match match = Regex.Match(troybinKVP.Key.FileName, "/(.+).troybin", RegexOptions.IgnoreCase);
+                            TreeNode troybinNode = abilityNode.Nodes.Add(match.Groups[1].Value.Split('/')[1]);
+                            foreach (String fileEntry in troybinKVP.Value)
+                            {
+                                troybinNode.Nodes.Add(fileEntry);
+                            }
                         }
                     }
                 }
+                treeView1.Nodes.Add(rootNode);
+                treeView1.Sort();
             }
-            treeView1.Nodes.Add(rootNode);
-            treeView1.Sort();
+
+            if (mySkinInstaller != null)
+            {
+                mySkinInstaller.recieveNewParticleInformation(particleDef);
+            }
         }
 
 
