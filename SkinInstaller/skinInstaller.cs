@@ -792,7 +792,7 @@ namespace SkinInstaller
             else if (File.Exists(Application.StartupPath + "\\allfiles.ini"))
             {
                 this.ReadFilelistINI();
-                //this.CheckForUpdate(false);
+                this.CheckForUpdate(false);//remove this later
             }
             setImageValue(Properties.Settings.Default.iconSize,true);
             //lgg open db
@@ -6039,7 +6039,7 @@ namespace SkinInstaller
                 {
                     allFilesCt--;
                 }*/
-                this.CheckForUpdate(false);
+                //remove this laterthis.CheckForUpdate(false);
             }
             else
             {
@@ -6825,14 +6825,15 @@ namespace SkinInstaller
                 rvs.fromCSVString(allFilesExtensions[0]);
                 if (rvs.Equals(currentVersions)) needsUpdate = false;
             }
-
-            //Cliver.Message.Inform("size in ini is " + fileSizeFromINI.ToString() + "\n and from file is " + length.ToString());
-
+            needsUpdate = true;//remove this later
+            
             if (
                 ((force) || (!File.Exists(Application.StartupPath + "\\allfiles.ini") || (needsUpdate)))
-                && (
-                Cliver.Message.Show("Update Required", SystemIcons.Information, "Program data appears to be out of date, would you like to update now?\nThis process will take several minutes.\nBut will allow the program to have a better knowledge for where each file name belongs.", 0,
-                new string[2] { "Yes", "No" }) == 0))
+                && 
+                /*(Cliver.Message.Show("Update Required", SystemIcons.Information, "Program data appears to be out of date, would you like to update now?\nThis process will take several minutes.\nBut will allow the program to have a better knowledge for where each file name belongs.", 0,
+                new string[2] { "Yes", "No" }) == 0)*/
+                (true)//remove this later
+                )
             {
                 this.UpdateFileList();
             }
