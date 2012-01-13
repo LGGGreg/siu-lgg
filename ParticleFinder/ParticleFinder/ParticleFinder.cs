@@ -109,21 +109,7 @@ namespace ParticleFinder
                     rafReference.Add(fileName, entry);
                 }
             }
-            reportProgress(25);
-
-            // Create place for unreferenced troybins to live
-            particleDef["other"] = new Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>();
-
-            // Create place for item troybins to live
-            particleDef["items"] = new Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>();
-
-            // Create place for map troybins to live
-            particleDef["map"] = new Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>();
-
-            // Create place for summoner spell troybins to live
-            particleDef["summoner spells"] = new Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>();
-
-            
+            reportProgress(25);            
 
             totalTime.Start();
 
@@ -209,6 +195,91 @@ namespace ParticleFinder
                             case "enhanced":
                             case "equipment":
                             case "doran":
+                            case "executioners":
+                            case "expiration":
+                            case "facing":
+                            case "feast_internal":
+                            case "feel":
+                            case "fiendish":
+                            case "fireofthe":
+                            case "flashfrost":
+                            case "fleetof":
+                            case "flurry":
+                            case "focus":
+                            case "forceof":
+                            case "forcepulsechaos":
+                            case "fortify":
+                            case "from":
+                            case "gemcraft":
+                            case "h":
+                            case "hardening":
+                            case "haunting":
+                            case "heart":
+                            case "heightened":
+                            case "hunter":
+                            case "if":
+                            case "individual":
+                            case "infinity":
+                            case "insta":
+                            case "internal_15":
+                            case "internal_20":
+                            case "internal_30":
+                            case "internal_35":
+                            case "internal_40":
+                            case "internal_50":
+                            case "invulnerability":
+                            case "ionian":
+                            case "is":
+                            case "jarvin":
+                            case "kages":
+                            case "kindlegem":
+                            case "last":
+                            case "lifesteal":
+                            case "m":
+                            case "madreds":
+                            case "malady":
+                            case "malice_marker":
+                            case "malice_markertwo":
+                            case "marker":
+                            case "mejais":
+                            case "mercury":
+                            case "minion":
+                            case "nashors":
+                            case "near":
+                            case "negative":
+                            case "nevershade":
+                            case "nimbleness":
+                            case "no":
+                            case "non":
+                            case "offensive":
+                            case "passions":
+                            case "personal":
+                            case "philosophers":
+                            case "positive":
+                            case "potion_":
+                            case "powerball":
+                            case "promote":
+                            case "puncturing":
+                            case "pyromania":
+                            case "pyromania_marker":
+                            case "rageblade":
+                            case "reinforce":
+                            case "remove":
+                            case "renewal":
+                            case "resistant":
+                            case "respawn":
+                            case "revive":
+                            case "ritual":
+                            case "root":
+                            case "rylais":
+                            case "second":
+                            case "set":
+                            case "share":
+                            case "shared":
+                            case "shell":
+                            case "silent":
+                            case "sleep":
+                            case "smite":
                                 championName = "";
                                 break;
                             // Nunu
@@ -227,6 +298,33 @@ namespace ParticleFinder
                             case "deathfire":
                             case "emblem":
                             case "entropy":
+                            case "frozen":
+                            case "guardian":
+                            case "hexdrinker":
+                            case "hextech":
+                            case "innervating":
+                            case "leviathan":
+                            case "lich":
+                            case "lightning":
+                            case "lightstriker":
+                            case "manamune":
+                            case "mourning":
+                            case "muramasa":
+                            case "odyns":
+                            case "oracle":
+                            case "pendantof":
+                            case "potion":
+                            case "pride":
+                            case "purple":
+                            case "quicksilver":
+                            case "rallying":
+                            case "randuins":
+                            case "refresh":
+                            case "rod":
+                            case "sheen":
+                            case "shurelyas":
+                            case "sight":
+                            case "soulsteal":
                                 championName = "items";
                                 break;
                             // Malzahar
@@ -236,6 +334,10 @@ namespace ParticleFinder
                             // Master Yi
                             case "alpha":
                             case "double":
+                            case "haste":
+                            case "highlander":
+                            case "master":
+                            case "meditate":
                                 championName = "masteryi";
                                 break;
                             // Map
@@ -249,17 +351,38 @@ namespace ParticleFinder
                             case "crestof":
                             case "crestofthe":
                             case "dragon":
+                            case "exalted":
+                            case "ghast":
+                            case "giant":
+                            case "golem":
+                            case "golembuff":
+                            case "haloween":
+                            case "lesser":
+                            case "lizard":
+                            case "lizardbuff":
+                            case "monster":
+                            case "odin":
+                            case "odin_":
+                            case "order":
+                            case "order_":
+                            case "red_":
+                            case "skeleton_":
+                            case "small":
                                 championName = "map";
                                 break;
                             // Ryze
                             case "arcane":
                             case "desperate":
+                            case "overload":
+                            case "rune":
                                 championName = "ryze";
                                 break;
                             // Jax
                             case "armsmaster":
                             case "counter":
                             case "empower":
+                            case "leap":
+                            case "relentless":
                                 championName = "jax";
                                 break;
                             // Rammus
@@ -270,36 +393,41 @@ namespace ParticleFinder
                             // Nidalee
                             case "aspect":
                             case "bushwhack":
+                            case "javelin":
+                            case "nidalee_":
+                            case "pounce":
+                            case "primal":
+                            case "prowl":
                                 championName = "nidalee";
                                 break;
                             // Soraka
                             case "astral":
                             case "consecration":
+                            case "infuse":
                                 championName = "soraka";
                                 break;
                             // Amumu
                             case "auraof":
                             case "bandage":
                             case "curseofthe":
+                            case "sad":
                                 championName = "amumu";
                                 break;
                             // Teemo
                             case "bantam":
                             case "blinding":
+                            case "move":
+                            case "sow":
                                 championName = "teemo";
-                                break;
-                            // Gankplank
-                            case "bilgewater":
-                                championName = "gankplank";
                                 break;
                             // Black disambiguation
                             case "black":
-                                if (shortFileName.Contains("cleaver"))
+                                if (shortFileName.ToLower().Contains("cleaver"))
                                 {
                                     championName = "items";
                                     break;
                                 }
-                                else if (shortFileName.Contains("omen"))
+                                else if (shortFileName.ToLower().Contains("omen"))
                                 {
                                     championName = "";
                                     break;
@@ -308,11 +436,12 @@ namespace ParticleFinder
                                 break;
                             // Lee Sin
                             case "blind":
+                            case "lee":
                                 championName = "leesin";
                                 break;
                             // Blood disambiguation
                             case "blood":
-                                if (shortFileName.Contains("boil"))
+                                if (shortFileName.ToLower().Contains("boil"))
                                 {
                                     championName = "nunu";
                                     break;
@@ -321,11 +450,12 @@ namespace ParticleFinder
                                 break;
                             // Tryndamere
                             case "bloodlust":
+                            case "mocking":
                                 championName = "tryndamere";
                                 break;
                             // Blue disambiguation
                             case "blue":
-                                if (shortFileName.Contains("card"))
+                                if (shortFileName.ToLower().Contains("card"))
                                 {
                                     championName = "twistedfate";
                                     break;
@@ -334,16 +464,17 @@ namespace ParticleFinder
                                 break;
                             // Katarina
                             case "bouncing":
+                            case "killer":
                                 championName = "katarina";
                                 break;
                             // Burning disambiguation
                             case "burning":
-                                if (shortFileName.Contains("agony"))
+                                if (shortFileName.ToLower().Contains("agony"))
                                 {
                                     championName = "drmundo";
                                     break;
                                 }
-                                else if (shortFileName.Contains("embers"))
+                                else if (shortFileName.ToLower().Contains("embers"))
                                 {
                                     championName = "";
                                     break;
@@ -353,10 +484,13 @@ namespace ParticleFinder
                             // Tristana
                             case "buster":
                             case "detonating":
+                            case "rapid":
                                 championName = "tristana";
                                 break;
                             // Heimerdinger
                             case "c":
+                            case "h28":
+                            case "heimer":
                                 championName = "heimerdinger";
                                 break;
                             // Sion
@@ -368,7 +502,7 @@ namespace ParticleFinder
                                 break;
                             // Cannon disambiguation
                             case "cannon":
-                                if (shortFileName.Contains("barrage"))
+                                if (shortFileName.ToLower().Contains("barrage"))
                                 {
                                     championName = "gangplank";
                                     break;
@@ -379,41 +513,83 @@ namespace ParticleFinder
                             case "card":
                             case "cardmaster":
                             case "destiny":
+                            case "gate":
+                            case "gold":
+                            case "goldcardattack":
+                            case "instagate":
+                            case "pick":
+                            case "pink":
+                            case "red":
+                            case "seal":
                                 championName = "twistedfate";
                                 break;
                             // Cho'Gath
                             case "carnivore":
+                            case "feast":
+                            case "feral":
+                            case "rupture":
                                 championName = "chogath";
                                 break;
                             // Corki
-                            case "carpet":
+                            case "g":
+                            case "gatling":
+                            case "missle":
+                            case "phosphorus":
                                 championName = "corki";
                                 break;
                             // Global buffs/debuffs
                             case "chilled":
+                            case "exhaust":
+                            case "flask":
+                            case "full":
+                            case "grievous":
+                            case "hamstring":
+                            case "has":
+                            case "ignore":
+                            case "innate":
+                            case "item":
+                            case "landslide":
+                            case "net":
+                            case "obduracy":
+                            case "pacified":
+                            case "physical":
+                            case "prilisas":
+                            case "propel":
+                            case "raise":
+                            case "recall":
+                            case "reveal":
+                            case "silence":
+                            case "slow":
                                 championName = "global";
                                 break;
                             // Zilean
                             case "chrono":
+                            case "rewind":
                                 championName = "zilean";
                                 break;
                             // Fiddlesticks
                             case "crowstorm":
                             case "drain":
+                            case "fear":
+                            case "fearmonger_marker":
+                            case "fiddle":
                                 championName = "fiddlesticks";
                                 break;
                             // Ashe
                             case "crystallize":
                             case "enchanted":
+                            case "frost":
+                            case "scouts":
                                 championName = "ashe";
                                 break;
                             // Rumble
+                            case "carpet":
                             case "danger":
                                 championName = "rumble";
                                 break;
                             // Dark disambiguation
                             case "dark":
-                                if (shortFileName.Contains("binding"))
+                                if (shortFileName.ToLower().Contains("binding"))
                                 {
                                     championName = "morgana";
                                     break;
@@ -422,21 +598,26 @@ namespace ParticleFinder
                                 break;
                             // Taric
                             case "dazzle":
+                            case "imbue":
+                            case "radiance":
+                            case "shatter":
                                 championName = "taric";
                                 break;
                             // Twitch
                             case "deadly":
                             case "debilitating":
+                            case "expunge":
+                            case "hide":
                                 championName = "twitch";
                                 break;
                             // Death disambiguation
                             case "death":
-                                if (shortFileName.Contains("craze"))
+                                if (shortFileName.ToLower().Contains("craze"))
                                 {
                                     championName = "";
                                     break;
                                 }
-                                else if (shortFileName.Contains("defied"))
+                                else if (shortFileName.ToLower().Contains("defied"))
                                 {
                                     championName = "karthus";
                                     break;
@@ -445,18 +626,27 @@ namespace ParticleFinder
                                 break;
                             // Shaco
                             case "deceive":
+                            case "hallucinate":
+                            case "jack":
                                 championName = "shaco";
                                 break;
                             // Karthus
                             case "defile":
+                            case "lay":
                                 championName = "karthus";
                                 break;
                             // Annie
                             case "disintegrate":
+                            case "incinerate":
+                            case "infernal":
+                            case "molten":
                                 championName = "annie";
                                 break;
                             // Dr Mundo
                             case "dr":
+                            case "infected":
+                            case "masochism":
+                            case "sadism":
                                 championName = "drmundo";
                                 break;
                             // Morgana
@@ -465,9 +655,180 @@ namespace ParticleFinder
                                 break;
                             // Warwick
                             case "eternal":
+                            case "hungering":
+                            case "hunters":
+                            case "infinite":
+                            case "rabid":
                                 championName = "warwick";
                                 break;
-                            // 
+                            // Explosive disambiguation
+                            case "explosive":
+                                if (shortFileName.ToLower().Contains("cartridges"))
+                                {
+                                    championName = "heimerdinger";
+                                    break;
+                                }
+                                championName = "";
+                                break;
+                            // Janna 
+                            case "eye":
+                            case "howling":
+                            case "reap":
+                                championName = "janna";
+                                break;
+                            // Alistar
+                            case "ferocious":
+                            case "headbutt":
+                            case "pulverize":
+                            case "slash":
+                                championName = "alistar";
+                                break;
+                            // Anivia
+                            case "flash":
+                            case "frostbite":
+                            case "glacial":
+                            case "rebirth":
+                                championName = "anivia";
+                                break;
+                            // Singed
+                            case "fling":
+                            case "insanity":
+                            case "mega":
+                            case "poison":
+                                championName = "singed";
+                                break;
+                            // Force disamiguation
+                            case "force":
+                                if (shortFileName.ToLower().Contains("pulse"))
+                                {
+                                    championName = "kassadin";
+                                    break;
+                                }
+                                championName = "";
+                                break;
+                            // Gangplank
+                            case "bilgewater":
+                            case "parley":
+                            case "pirate":
+                            case "scurvy":
+                                championName = "gangplank";
+                                break;
+                            // Nasus
+                            case "godof":
+                                championName = "nasus";
+                                break;
+                            // Evelynn
+                            case "hate":
+                            case "maliceand":
+                            case "maniacal":
+                            case "ravage":
+                                championName = "evelynn";
+                                break;
+                            // Ice disambiguation
+                            case "ice":
+                                if (shortFileName.ToLower().Contains("blast"))
+                                {
+                                    championName = "nunu";
+                                    break;
+                                }
+                                championName = "anivia";
+                                break;
+                            // Kayle
+                            case "judicator":
+                                championName = "kayle";
+                                break;
+                            // Pantheon
+                            case "katsudions":
+                            case "kriggers":
+                            case "pantheon_":
+                                championName = "pantheon";
+                                break;
+                            // Kogmaw
+                            case "kog":
+                                championName = "kogmaw";
+                                break;
+                            // Mana disambiguation
+                            case "mana":
+                                if (shortFileName.ToLower().Contains("barrier"))
+                                {
+                                    championName = "blitzcrank";
+                                    break;
+                                }
+                                championName = "items";
+                                break;
+                            // Miss Fortune
+                            case "miss":
+                                championName = "missfortune";
+                                break;
+                            // Wukong
+                            case "monkey":
+                                championName = "wukong";
+                                break;
+                            // Kassadin
+                            case "nether":
+                            case "null":
+                            case "rift":
+                                championName = "kassadin";
+                                break;
+                            // Sivir
+                            case "on":
+                            case "ricochet":
+                                championName = "sivir";
+                                break;
+                            // Orianna
+                            case "oriana":
+                                championName = "orianna";
+                                break;
+                            // Blitzcrank
+                            case "overdrive":
+                            case "rocket":
+                                championName = "blitzcrank";
+                                break;
+                            // Nocturne
+                            case "paranoia":
+                                championName = "nocturne";
+                                break;
+                            // Power disambiguation
+                                if (shortFileName.ToLower().Contains("ball"))
+                                {
+                                    championName = "rammus";
+                                    break;
+                                }
+                                championName = "blitzcrank";
+                                break;
+                            // Brand
+                            case "pyromania_particle":
+                                championName = "brand";
+                                break;
+                            // Regeneration disambiguation
+                            case "regeneration":
+                                if (shortFileName.ToLower().Contains("potion"))
+                                {
+                                    championName = "items";
+                                    break;
+                                }
+                                championName = "map";
+                                break;
+                            // Malphite
+                            case "seismic":
+                                championName = "malphite";
+                                break;
+                            // Shadow disambiguation
+                                if (shortFileName.ToLower().Contains("step"))
+                                {
+                                    championName = "akali";
+                                    break;
+                                }
+                                championName = "evelynn";
+                                break;
+                            // Soul disambiguation
+                                if (shortFileName.ToLower().Contains("shackles"))
+                                {
+                                    championName = "morgana";
+                                    break;
+                                }
+                                championName = "items";
+                                break;
 
 
 
