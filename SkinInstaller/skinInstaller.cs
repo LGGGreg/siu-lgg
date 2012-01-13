@@ -9312,7 +9312,7 @@ namespace SkinInstaller
                     foreach (KeyValuePair<RAFFileListEntry, List<String>> troybinKVP in abilityKVP.Value)
                     {
                         FileInfo troyFileInfo = new FileInfo(troybinKVP.Key.FileName);
-                        TreeNode troybinNode = champNode.Nodes.Add(troybinKVP.Key.FileName, Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(troyFileInfo.Name.Substring(0, troyFileInfo.Name.IndexOf("."))));
+                        TreeNode troybinNode = abilityNode.Nodes.Add(troybinKVP.Key.FileName, Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(troyFileInfo.Name.Substring(0, troyFileInfo.Name.IndexOf("."))));
 
                         //TreeNode troybinNode = champNode.Nodes.Find(troybinKVP.Key.FileName, false)[0];
                         rafTreeDataObject tag = new rafTreeDataObject();
