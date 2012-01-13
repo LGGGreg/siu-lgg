@@ -76,6 +76,12 @@
     <Compile Include="GUI\dxtVersionReader.Designer.cs">
       <DependentUpon>dxtVersionReader.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\ParticleFinderNew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ParticleFinderNew.Designer.cs">
+      <DependentUpon>ParticleFinderNew.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ParticleReference.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -133,6 +139,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\LCIntHelp.resx">
       <DependentUpon>LCIntHelp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ParticleFinderNew.resx">
+      <DependentUpon>ParticleFinderNew.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\ParticleReference.resx">
       <DependentUpon>ParticleReference.cs</DependentUpon>

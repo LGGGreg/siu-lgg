@@ -378,6 +378,7 @@ namespace SkinInstaller
         private ToolStripMenuItem getVersionFilePathToolStripMenuItem;
         private ToolStripMenuItem readVersionsToolStripMenuItem;
         private Label label2Percent;
+        private BackgroundWorker ParticleTreeWorkerNew;
         PaintEventHandler importantP;
         #endregion
         #region webIntegrate
@@ -3976,7 +3977,7 @@ namespace SkinInstaller
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(skinInstaller));
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
             this.exit = new System.Windows.Forms.Button();
             this.skinFile = new System.Windows.Forms.OpenFileDialog();
             this.helpBar = new System.Windows.Forms.StatusStrip();
@@ -4030,6 +4031,16 @@ namespace SkinInstaller
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.listView1 = new SkinInstaller.ListViewItemHover();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.dataBaseListMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripSelectUninstalled = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSelectAllInstalled = new System.Windows.Forms.ToolStripMenuItem();
@@ -4124,6 +4135,7 @@ namespace SkinInstaller
             this.pictureBoxCount = new System.Windows.Forms.PictureBox();
             this.panel7 = new System.Windows.Forms.Panel();
             this.progrespanel = new System.Windows.Forms.Panel();
+            this.label2Percent = new System.Windows.Forms.Label();
             this.buttoncancel = new System.Windows.Forms.Button();
             this.button3startLoL = new System.Windows.Forms.Button();
             this.button3lcintegrate = new System.Windows.Forms.Button();
@@ -4146,17 +4158,7 @@ namespace SkinInstaller
             this.toolStripMenuItem3 = new System.Windows.Forms.ToolStripMenuItem();
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportTreeViewWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.label2Percent = new System.Windows.Forms.Label();
-            this.listView1 = new SkinInstaller.ListViewItemHover();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.ParticleTreeWorkerNew = new System.ComponentModel.BackgroundWorker();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -4695,6 +4697,81 @@ namespace SkinInstaller
             this.splitContainer2.SplitterDistance = 615;
             this.splitContainer2.TabIndex = 7;
             // 
+            // listView1
+            // 
+            this.listView1.AutoArrange = false;
+            this.listView1.CheckBoxes = true;
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader5,
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader6,
+            this.columnHeader8,
+            this.columnHeader9,
+            this.columnHeader7});
+            this.listView1.ContextMenuStrip = this.dataBaseListMenuStrip1;
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.GridLines = true;
+            this.listView1.LargeImageList = this.imageList1;
+            this.listView1.Location = new System.Drawing.Point(18, 15);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(597, 266);
+            this.listView1.SmallImageList = this.imageList1;
+            this.listView1.TabIndex = 0;
+            this.listView1.TileSize = new System.Drawing.Size(2, 2);
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ItemHover += new SkinInstaller.ListViewItemHover.ItemHoverEventHandler(this.listView1_ItemMouseHover);
+            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
+            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = " ";
+            this.columnHeader1.Width = 43;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Skin Title";
+            this.columnHeader2.Width = 190;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Author";
+            this.columnHeader5.Width = 100;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "File Count";
+            this.columnHeader3.Width = 69;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Installed";
+            this.columnHeader4.Width = 53;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Added";
+            this.columnHeader6.Width = 67;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "Date and Time Added";
+            this.columnHeader8.Width = 0;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "Date and Time Installed";
+            this.columnHeader9.Width = 0;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "Character";
+            this.columnHeader7.Width = 90;
+            // 
             // dataBaseListMenuStrip1
             // 
             this.dataBaseListMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -5124,11 +5201,11 @@ namespace SkinInstaller
             this.treeView1.ItemHeight = 16;
             this.treeView1.Location = new System.Drawing.Point(0, 0);
             this.treeView1.Name = "treeView1";
-            treeNode1.Name = "Please Wait";
-            treeNode1.Text = "Please wait for the progress bar to finish loading bellow...";
-            treeNode1.ToolTipText = "Please wait...";
+            treeNode3.Name = "Please Wait";
+            treeNode3.Text = "Please wait for the progress bar to finish loading bellow...";
+            treeNode3.ToolTipText = "Please wait...";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
+            treeNode3});
             this.treeView1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.treeView1.ShowNodeToolTips = true;
             this.treeView1.Size = new System.Drawing.Size(776, 283);
@@ -5286,7 +5363,7 @@ namespace SkinInstaller
             this.progressBar1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.progressBar1.Location = new System.Drawing.Point(0, 0);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(819, 22);
+            this.progressBar1.Size = new System.Drawing.Size(769, 22);
             this.progressBar1.TabIndex = 40;
             this.progressBar1.Click += new System.EventHandler(this.progressBar1_Click);
             // 
@@ -5673,6 +5750,15 @@ namespace SkinInstaller
             this.progrespanel.Size = new System.Drawing.Size(819, 22);
             this.progrespanel.TabIndex = 44;
             // 
+            // label2Percent
+            // 
+            this.label2Percent.AutoSize = true;
+            this.label2Percent.Location = new System.Drawing.Point(29, 5);
+            this.label2Percent.Name = "label2Percent";
+            this.label2Percent.Size = new System.Drawing.Size(44, 13);
+            this.label2Percent.TabIndex = 42;
+            this.label2Percent.Text = "Percent";
+            // 
             // buttoncancel
             // 
             this.buttoncancel.Dock = System.Windows.Forms.DockStyle.Right;
@@ -5812,89 +5898,12 @@ namespace SkinInstaller
             this.exportTreeViewWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.exportTreeViewWorker1_ProgressChanged);
             this.exportTreeViewWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.exportTreeViewWorker1_RunWorkerCompleted);
             // 
-            // label2Percent
+            // ParticleTreeWorkerNew
             // 
-            this.label2Percent.AutoSize = true;
-            this.label2Percent.Location = new System.Drawing.Point(29, 5);
-            this.label2Percent.Name = "label2Percent";
-            this.label2Percent.Size = new System.Drawing.Size(44, 13);
-            this.label2Percent.TabIndex = 42;
-            this.label2Percent.Text = "Percent";
-            // 
-            // listView1
-            // 
-            this.listView1.AutoArrange = false;
-            this.listView1.CheckBoxes = true;
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader5,
-            this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader6,
-            this.columnHeader8,
-            this.columnHeader9,
-            this.columnHeader7});
-            this.listView1.ContextMenuStrip = this.dataBaseListMenuStrip1;
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.GridLines = true;
-            this.listView1.LargeImageList = this.imageList1;
-            this.listView1.Location = new System.Drawing.Point(18, 15);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(597, 266);
-            this.listView1.SmallImageList = this.imageList1;
-            this.listView1.TabIndex = 0;
-            this.listView1.TileSize = new System.Drawing.Size(2, 2);
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.ItemHover += new SkinInstaller.ListViewItemHover.ItemHoverEventHandler(this.listView1_ItemMouseHover);
-            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
-            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = " ";
-            this.columnHeader1.Width = 43;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Skin Title";
-            this.columnHeader2.Width = 190;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Author";
-            this.columnHeader5.Width = 100;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "File Count";
-            this.columnHeader3.Width = 69;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Installed";
-            this.columnHeader4.Width = 53;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "Added";
-            this.columnHeader6.Width = 67;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "Date and Time Added";
-            this.columnHeader8.Width = 0;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "Date and Time Installed";
-            this.columnHeader9.Width = 0;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "Character";
-            this.columnHeader7.Width = 90;
+            this.ParticleTreeWorkerNew.WorkerReportsProgress = true;
+            this.ParticleTreeWorkerNew.DoWork += new System.ComponentModel.DoWorkEventHandler(this.ParticleTreeWorkerNew_DoWork);
+            this.ParticleTreeWorkerNew.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ParticleTreeWorkerNew_ProgressChanged);
+            this.ParticleTreeWorkerNew.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.ParticleTreeWorkerNew_RunWorkerCompleted);
             // 
             // skinInstaller
             // 
@@ -8699,7 +8708,13 @@ namespace SkinInstaller
             treeView1.Nodes.Add("Particles", "Particles");
             TreeNode particleNode = treeView1.Nodes.Find("Particles", false)[0];
             particleNode.Name = "Particles";
-            particleNode.Nodes.Add("Loading...(Watch Progress bar at bottom)");
+            TreeNode particleNewNode = particleNode.Nodes.Add("Particles New", "Particles New");
+            particleNewNode.Name = "Particles New";
+            particleNewNode.Nodes.Add("Loading...(Watch Progress bar at bottom)");
+            TreeNode particleOldNode = particleNode.Nodes.Add("Particles Old", "Particles Old");
+            particleOldNode.Name = "Particles Old";
+            particleOldNode.Nodes.Add("Loading...(Watch Progress bar at bottom)");
+            
             
                     
 
@@ -8854,11 +8869,17 @@ namespace SkinInstaller
                 ted.ShowDialog();
                 e.Node.Collapse();
             }
-            if ((e.Node.Name == "Particles") && e.Node.Nodes.Count < 2)
+            if ((e.Node.Name == "Particles Old") && e.Node.Nodes.Count < 2)
             {
-                e.Node.Text = "Particles (Powered By RichieSams)";
+                e.Node.Text = "Particles Old (Powered By RichieSams)";
                 PartRef.ParticleReference p = new PartRef.ParticleReference();
                 p.startGettingParticleStructure(this,gameDirectory + "RADS\\projects\\lol_game_client\\filearchives\\");
+            }
+            if ((e.Node.Name == "Particles New") && e.Node.Nodes.Count < 2)
+            {
+                e.Node.Text = "Particles New (Powered By RichieSams)";
+                ParticleFinder.ParticleFinderNew p = new ParticleFinder.ParticleFinderNew();
+                p.startGettingParticleStructure(this, gameDirectory + "RADS\\projects\\lol_game_client\\filearchives\\");
             }
         }
         private void rafTreeBuilderWorker2_DoWork(object sender, DoWorkEventArgs e)
@@ -9125,7 +9146,11 @@ namespace SkinInstaller
         }
         public void recieveParticleInformation(Dictionary<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> particleDef)
         {
-            ParticleTreeWorker2.RunWorkerAsync(particleDef);            
+            ParticleTreeWorker2.RunWorkerAsync(particleDef);
+        }
+        public void recieveNewParticleInformation(Dictionary<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> particleDef)
+        {
+            ParticleTreeWorkerNew.RunWorkerAsync(particleDef);
         }
         public void recieveParticleProgress(int p)
         {
@@ -9246,7 +9271,137 @@ namespace SkinInstaller
         }
         private void ParticleTreeWorker2_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
-            TreeNode particleNode = treeView1.Nodes.Find("Particles", false)[0];
+            TreeNode particleNode = treeView1.Nodes.Find("Particles Old", true)[0];
+            particleNode.Nodes.Clear();
+            foreach (TreeNode node in ((TreeNode)e.Result).Nodes)
+            {
+                particleNode.Nodes.Add(node);
+            }
+            treeView1.Sort();
+            UpdateProgressSafe(100);
+        }
+
+        private void ParticleTreeWorkerNew_DoWork(object sender, DoWorkEventArgs e)
+        {
+            TreeNode particleNode = new TreeNode("Particles");//treeView1.Nodes.Find("Particles", false)[0];
+            particleNode.Nodes.Clear();
+
+            int i = 0;
+            int lastProg = 0;
+
+            foreach (KeyValuePair<String, Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>> championKVP in
+                (Dictionary
+                <String, Dictionary
+                    <String, Dictionary
+                        <RAFFileListEntry, List<String>>>>)e.Argument)
+            {
+                i++;
+                int prog = (int)(((double)i / (double)((Dictionary
+                <String, Dictionary
+                    <String, Dictionary
+                        <RAFFileListEntry, List<String>>>>)e.Argument).Count) * 45) + 50;
+                if (prog != lastProg) { lastProg = prog; ParticleTreeWorkerNew.ReportProgress(prog); }
+
+                TreeNode champNode = particleNode.Nodes.Add(championKVP.Key, Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(championKVP.Key));
+                //TreeNode champNode =particleNode.Nodes.Find(championKVP.Key, false)[0];
+                int lowestPower = int.MaxValue;
+                foreach (KeyValuePair<String, Dictionary<RAFFileListEntry, List<String>>> abilityKVP in championKVP.Value)
+                {
+                    TreeNode abilityNode = champNode.Nodes.Add(abilityKVP.Key, Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(abilityKVP.Key));
+
+                    foreach (KeyValuePair<RAFFileListEntry, List<String>> troybinKVP in abilityKVP.Value)
+                    {
+                        FileInfo troyFileInfo = new FileInfo(troybinKVP.Key.FileName);
+                        TreeNode troybinNode = champNode.Nodes.Add(troybinKVP.Key.FileName, Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(troyFileInfo.Name.Substring(0, troyFileInfo.Name.IndexOf("."))));
+
+                        //TreeNode troybinNode = champNode.Nodes.Find(troybinKVP.Key.FileName, false)[0];
+                        rafTreeDataObject tag = new rafTreeDataObject();
+
+                        //get troy version number
+                        string troyfullpath = "";
+                        Color troyColor = Color.Red;
+                        foreach (KeyValuePair<String, String> pairFileName_Path in allFilesList)
+                        {
+                            if (pairFileName_Path.Key.ToLower() == troyFileInfo.Name.ToLower())
+                            {
+                                troyfullpath = pairFileName_Path.Value;
+                                break;
+                            }
+                        }
+                        if (troyfullpath != "")
+                        {
+                            tag.rafPower = getRafPowerFromVersion(troyfullpath);
+                            troyColor = colorFromRafPower(tag.rafPower);
+                            if (tag.rafPower < lowestPower) lowestPower = tag.rafPower;
+                        }
+
+                        tag.fileLocation = troyfullpath;
+                        troybinNode.ToolTipText = tag.fileLocation;
+                        troybinNode.ForeColor = troyColor;
+                        troybinNode.Tag = tag;
+
+                        foreach (String fileEntry in troybinKVP.Value)
+                        {
+                            TreeNode[] matchingNodes = troybinNode.Nodes.Find(fileEntry, false);
+                            if (matchingNodes.Length == 0)//avoid duplicate entries
+                            {
+                                troybinNode.Nodes.Add(fileEntry, fileEntry);
+                                matchingNodes = troybinNode.Nodes.Find(fileEntry, false);
+                            }
+                            TreeNode fileNode = matchingNodes[0];
+
+                            Color fileColor = troyColor;
+                            FileInfo fileNodeInfo = new FileInfo(fileEntry);
+                            int imageIndex = 5;
+                            rafTreeDataObject filetag = new rafTreeDataObject();
+                            switch (fileNodeInfo.Extension.ToLower())
+                            {
+                                case ".skl": imageIndex = 1; break;
+                                case ".skn": imageIndex = 2; break;
+                                case ".anm": imageIndex = 3; break;
+                                case ".dds": imageIndex = 4; break;
+                                case ".tga": imageIndex = 4; break;
+                                case ".sco": imageIndex = 6; break;
+                                case ".scb": imageIndex = 7; break;
+                                default: imageIndex = 5; break;
+                            }
+                            string filefullpath = "";
+                            fileNode.ToolTipText = "DATA\\Particles\\" + fileEntry;
+                            filetag.fileLocation = fileEntry;
+                            //still slow as hell
+                            /*foreach (KeyValuePair<String, String> pairFileName_Path in allFilesList)
+                            {
+                                if (pairFileName_Path.Key.ToLower() == fileNodeInfo.Name.ToLower())
+                                {
+                                    filefullpath = pairFileName_Path.Value;
+                                    break;
+                                }
+                            }*/
+                            if (filefullpath != "")
+                            {
+                                filetag.rafPower = getRafPowerFromVersion(filefullpath);
+                                fileColor = colorFromRafPower(filetag.rafPower);
+                                fileNode.ToolTipText = filefullpath;
+                                filetag.fileLocation = filefullpath;
+                                if (filetag.rafPower < lowestPower) lowestPower = filetag.rafPower;
+                            }
+                            fileNode.Tag = tag;
+                            fileNode.ImageIndex = fileNode.SelectedImageIndex = imageIndex;
+                        }
+                    }
+                }
+                champNode.ForeColor = colorFromRafPower(lowestPower);
+            }
+
+            e.Result = particleNode;
+        }
+        private void ParticleTreeWorkerNew_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            UpdateProgressSafe(e.ProgressPercentage);
+        }
+        private void ParticleTreeWorkerNew_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            TreeNode particleNode = treeView1.Nodes.Find("Particles New", true)[0];
             particleNode.Nodes.Clear();
             foreach (TreeNode node in ((TreeNode)e.Result).Nodes)
             {
@@ -9344,6 +9499,7 @@ namespace SkinInstaller
         }
 
         #endregion
+
 
     }
     #region strucks

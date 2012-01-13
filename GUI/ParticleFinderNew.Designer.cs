@@ -1,6 +1,6 @@
 ﻿namespace ParticleFinder
 {
-    partial class ParticleFinder
+    partial class ParticleFinderNew
     {
         /// <summary>
         /// Required designer variable.
@@ -54,9 +54,9 @@
             // 
             // treeView1
             // 
-            this.treeView1.Location = new System.Drawing.Point(34, 89);
+            this.treeView1.Location = new System.Drawing.Point(34, 82);
             this.treeView1.Name = "treeView1";
-            this.treeView1.Size = new System.Drawing.Size(626, 418);
+            this.treeView1.Size = new System.Drawing.Size(626, 425);
             this.treeView1.TabIndex = 2;
             // 
             // ParticleReferenceWorker
@@ -75,7 +75,7 @@
             this.progress_lbl.TabIndex = 3;
             this.progress_lbl.Text = "00";
             // 
-            // ParticleFinder
+            // ParticleFinderNew
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -84,7 +84,7 @@
             this.Controls.Add(this.treeView1);
             this.Controls.Add(this.progressBar1);
             this.Controls.Add(this.findParticles);
-            this.Name = "ParticleFinder";
+            this.Name = "ParticleFinderNew";
             this.Text = "Particle Finder";
             this.Load += new System.EventHandler(this.ParticleFinder_Load);
             this.ResumeLayout(false);
