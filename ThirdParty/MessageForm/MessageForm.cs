@@ -243,6 +243,7 @@ namespace Cliver
                     b.Size = button_sample.Size;
                     b.TabIndex = ind + 2;
                     b.Text = a;
+                    b.ForeColor = Color.Black;
                     //b.UseVisualStyleBackColor = false;
                     b.Click += new System.EventHandler(this.button_Click);
                     b.Tag = ind;
