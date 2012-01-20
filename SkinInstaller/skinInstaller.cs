@@ -7321,11 +7321,15 @@ namespace SkinInstaller
                 {
                    newFile = dxtVersions[fi.Name.ToLower()];
                 }
+
+                //hack to prevent trasnp rewritting
+                int origComparator = (origFile == 3) ? 5 : origFile;
+                int newComparator = (newFile == 3) ? 5 : newFile;
                 
-                if (origFile == newFile)
+                if ((origComparator == newComparator)||(newComparator==-1))
                 {
                     this.SIFileOp.FileCopy(str3, o);
-                    debugadd("No Need to re-write " + str3);
+                    debugadd("No Need to re-write " + str3+ " , riot file is "+newFile.ToString()+" and input was "+origFile.ToString());
                 }
                 else
                 {
@@ -7346,7 +7350,7 @@ namespace SkinInstaller
                         {
                             if (LGGDevilSave(bb, o))
                             {
-                                debugadd(o + " was saved correctly");
+                                debugadd(o + " was saved correctly from dxt "+origFile.ToString()+" to what the origonal riot file is at dxt "+newFile.ToString());
                             }
                         }
                         catch
