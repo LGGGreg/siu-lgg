@@ -357,14 +357,14 @@ namespace SkinInstaller
         public void setFromVersionFile(string versionFilePath)
         {
             BinaryReader r = new BinaryReader(new FileStream(versionFilePath, FileMode.Open));
-            if (r.BaseStream.Length != 15)
+            if (r.BaseStream.Length != 16)
             {
-                Cliver.Message.Show("Ah Crap!",
+                /*Cliver.Message.Show("Ah Crap!",
                     SystemIcons.Information,
                     "Something is wrong with your version file! Maybe..\r\n" +
                     "Your length is " + r.BaseStream.Length.ToString() + " when it should be 16..\r\n\r\n" +
                     "PLEASE email lordgreggreg@gmail.com and attach this file\r\n" +
-                    versionFilePath, 0, new string[1] { "Yes.. I Obey.. for the sake of humanity." });
+                    versionFilePath, 0, new string[1] { "Yes.. I Obey.. for the sake of humanity." });*/
 
                 r.Close();
 
