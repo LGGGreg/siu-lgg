@@ -379,6 +379,7 @@ namespace SkinInstaller
         private ToolStripMenuItem readVersionsToolStripMenuItem;
         private Label label2Percent;
         private BackgroundWorker ParticleTreeWorkerNew;
+        private ToolStripMenuItem getLastModDateToolStripMenuItem;
         PaintEventHandler importantP;
         #endregion
         #region webIntegrate
@@ -792,7 +793,7 @@ namespace SkinInstaller
             else if (File.Exists(Application.StartupPath + "\\allfiles.ini"))
             {
                 this.ReadFilelistINI();
-                this.CheckForUpdate(false);//remove this later
+                //this.CheckForUpdate(false);//remove this later
             }
             setImageValue(Properties.Settings.Default.iconSize,true);
             //lgg open db
@@ -3978,7 +3979,7 @@ namespace SkinInstaller
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(skinInstaller));
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
             this.exit = new System.Windows.Forms.Button();
             this.skinFile = new System.Windows.Forms.OpenFileDialog();
             this.helpBar = new System.Windows.Forms.StatusStrip();
@@ -4160,6 +4161,7 @@ namespace SkinInstaller
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportTreeViewWorker1 = new System.ComponentModel.BackgroundWorker();
             this.ParticleTreeWorkerNew = new System.ComponentModel.BackgroundWorker();
+            this.getLastModDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -5202,11 +5204,11 @@ namespace SkinInstaller
             this.treeView1.ItemHeight = 16;
             this.treeView1.Location = new System.Drawing.Point(0, 0);
             this.treeView1.Name = "treeView1";
-            treeNode3.Name = "Please Wait";
-            treeNode3.Text = "Please wait for the progress bar to finish loading bellow...";
-            treeNode3.ToolTipText = "Please wait...";
+            treeNode1.Name = "Please Wait";
+            treeNode1.Text = "Please wait for the progress bar to finish loading bellow...";
+            treeNode1.ToolTipText = "Please wait...";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode3});
+            treeNode1});
             this.treeView1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.treeView1.ShowNodeToolTips = true;
             this.treeView1.Size = new System.Drawing.Size(776, 283);
@@ -5496,7 +5498,8 @@ namespace SkinInstaller
             // 
             this.moreDebugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.getVersionFilePathToolStripMenuItem,
-            this.readVersionsToolStripMenuItem});
+            this.readVersionsToolStripMenuItem,
+            this.getLastModDateToolStripMenuItem});
             this.moreDebugToolStripMenuItem.Name = "moreDebugToolStripMenuItem";
             this.moreDebugToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
             this.moreDebugToolStripMenuItem.Text = "More Debug";
@@ -5906,6 +5909,13 @@ namespace SkinInstaller
             this.ParticleTreeWorkerNew.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ParticleTreeWorkerNew_ProgressChanged);
             this.ParticleTreeWorkerNew.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.ParticleTreeWorkerNew_RunWorkerCompleted);
             // 
+            // getLastModDateToolStripMenuItem
+            // 
+            this.getLastModDateToolStripMenuItem.Name = "getLastModDateToolStripMenuItem";
+            this.getLastModDateToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.getLastModDateToolStripMenuItem.Text = "Get Last Mod Date";
+            this.getLastModDateToolStripMenuItem.Click += new System.EventHandler(this.getLastModDateToolStripMenuItem_Click);
+            // 
             // skinInstaller
             // 
             this.AllowDrop = true;
@@ -6040,7 +6050,7 @@ namespace SkinInstaller
                 {
                     allFilesCt--;
                 }*/
-                //remove this laterthis.CheckForUpdate(false);
+                this.CheckForUpdate(false);
             }
             else
             {
@@ -6122,6 +6132,7 @@ namespace SkinInstaller
 
             }
         }
+        
         #region DisplayList
         private void UpdateListView()
         {
@@ -6816,23 +6827,22 @@ namespace SkinInstaller
 
         private void CheckForUpdate(bool force)
         {
-            currentVersions = new riotVersions(getVersionFilePath());
+            DateTime lastModDate = getLastModDate();
             bool needsUpdate = true;
 
             if (allFilesExtensions[0] != string.Empty)
             {
-                riotVersions rvs = new riotVersions();
-                rvs.fromCSVString(allFilesExtensions[0]);
-                if (rvs.Equals(currentVersions)) needsUpdate = false;
+                long ticks = 0;
+                long.TryParse(allFilesExtensions[0], out ticks);
+                if(ticks==lastModDate.Ticks) needsUpdate = false;
             }
-            needsUpdate = true;//remove this later
             
             if (
                 ((force) || (!File.Exists(Application.StartupPath + "\\allfiles.ini") || (needsUpdate)))
                 && 
-                /*(Cliver.Message.Show("Update Required", SystemIcons.Information, "Program data appears to be out of date, would you like to update now?\nThis process will take several minutes.\nBut will allow the program to have a better knowledge for where each file name belongs.", 0,
-                new string[2] { "Yes", "No" }) == 0)*/
-                (true)//remove this later
+                (Cliver.Message.Show("Update Required", SystemIcons.Information, "Program data appears to be out of date, would you like to update now?\nThis process will take several minutes.\nBut will allow the program to have a better knowledge for where each file name belongs.", 0,
+                new string[2] { "Yes", "No" }) == 0)
+                
                 )
             {
                 this.UpdateFileList();
@@ -7171,7 +7181,7 @@ namespace SkinInstaller
             debugadd("Please wait...writing to disk");
             TextWriter tw = new StreamWriter(fileName);
             
-            tw.WriteLine(new riotVersions(getVersionFilePath()).toCSVString() + "|" + string.Join("|", fileExtensions.ToArray()));
+            tw.WriteLine(getLastModDate().Ticks.ToString()+ "|" + string.Join("|", fileExtensions.ToArray()));
             foreach (string str3 in fileList.ToArray())
             {
                 if (fileListWorker1.CancellationPending)
@@ -9501,6 +9511,44 @@ namespace SkinInstaller
                 (rv.Equals(testRV)?"Equal!":"Not Equal :<")+
                 "\r\n\r\nThe CSV Used was \r\n"+theCSV
                 );
+        }
+        private DateTime getLastModDate()
+        {
+            //check version file mod data
+            //check raf file creation (not mod!) date
+            //check empty data folder leftovers date
+            //check air folder
+            FileInfo versionFile = new FileInfo(getVersionFilePath());
+            DateTime newestDate = versionFile.LastWriteTime;
+            //C:\Riot Games\League of Legends\RADS\projects\lol_game_client\filearchives\0.0.0.25
+            string rafPath = gameDirectory + @"RADS\projects\lol_game_client\filearchives\";
+            string[] files = Directory.GetFiles(rafPath, "*.raf.dat*", SearchOption.AllDirectories);
+            foreach (string file in files)
+            {
+                FileInfo rafFile = new FileInfo(file);
+                if (rafFile.CreationTime > newestDate) newestDate = rafFile.CreationTime;
+                string dataFolerPath = rafFile.DirectoryName + "\\DATA\\";
+                //Cliver.Message.Inform("data folder is " + dataFolerPath);
+                FileInfo datafolder = new FileInfo(dataFolerPath);
+                if (datafolder.CreationTime > newestDate) newestDate = datafolder.CreationTime;
+                if (datafolder.LastAccessTime > newestDate) newestDate = datafolder.LastAccessTime;
+                if (datafolder.LastWriteTime > newestDate) newestDate = datafolder.LastWriteTime;
+                //Cliver.Message.Inform("file name is " + file);
+            }     
+            string airDir = gameDirectory+@"RADS\projects\lol_air_client\releases";
+            files = Directory.GetDirectories(airDir, "*", SearchOption.TopDirectoryOnly);
+            foreach (string file in files)
+            {
+                FileInfo airFolderInfo = new FileInfo(file);
+                if (airFolderInfo.CreationTime > newestDate) newestDate = airFolderInfo.CreationTime;                
+            }
+            
+            return newestDate;
+        }
+
+        private void getLastModDateToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Cliver.Message.Inform("Last mod date was...\r\n\r\n"+getLastModDate().ToLongDateString());
         }
 
         #endregion
