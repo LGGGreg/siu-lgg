@@ -3683,13 +3683,18 @@ namespace SkinInstaller
         {
             String backupDir = Application.StartupPath + @"\backup\";
             //Cliver.Message.Inform("Going to install text from "+ textModLocation);
-            ted.installText(getMenuFilePath(), textModLocation, backupDir);
+            string textPath = getMenuFilePath();
+            if(textPath!="")
+                ted.installText(textPath, textModLocation, backupDir);
         }
         private void button3reinstallText_Click(object sender, EventArgs e)
         {
             setInstallButtons(false);
             int reinst = 0;
             string extra = "";
+            string riottextPath = getMenuFilePath();
+            if (riottextPath == "") return;
+                            
             foreach (ListViewItem item in this.listView1.Items)
             {
                 if (item.SubItems[4].Text != "No")
@@ -3703,7 +3708,7 @@ namespace SkinInstaller
                         extra += textPath;
                         String backupDir = Application.StartupPath + @"\backup\";
                         reinst++;
-                        ted.installText(getMenuFilePath(), textPath, backupDir);
+                        ted.installText(riottextPath, textPath, backupDir);
                     }
                 }
             }
@@ -3911,7 +3916,12 @@ namespace SkinInstaller
             String backupDir = Application.StartupPath + @"\backup\";
 
             //Cliver.Message.Inform("Going to uninstall text from " + textModPath);
-            ted.uninstallText(getMenuFilePath(), textModPath, backupDir);
+            List<string> textPaths = new List<string>();
+            foreach (KeyValuePair<string, string> pair in getMenuFilePaths())
+            {
+                textPaths.Add(gameDirectory + pair.Value.Replace("\\\\", "\\").Substring(1));
+            }
+            ted.uninstallTexts(textPaths, textModPath, backupDir);
         }
         #endregion
         protected override void Dispose(bool disposing)
@@ -9469,19 +9479,110 @@ namespace SkinInstaller
                 fileListWorker1.CancelAsync();
         }
         #region MenuFileStuff
+        public List<KeyValuePair<string, string>> getMenuFilePaths()
+        {
+            Regex regex = new Regex(
+        @"\\\\managedfiles\\\\\d+\.\d+\.\d+\.\d+\\\\data\\\\menu\\\\fontconfig_"+getLocale()+@"\.txt",
+                RegexOptions.IgnoreCase
+                );
+            return new List<KeyValuePair<string, string>>(
+                allFilesList.Where(m => regex.Match(m.Value).Success));
+            //return gameDirectory + matches[0].Value.Replace("\\\\", "\\").Substring(1);
+           
+        }
+        public string getLocale()
+        {
+            string to_return = "en_us";
+            string path = gameDirectory+"rads\\system\\locale.cfg";
+            if(File.Exists(path))
+            {
+                TextReader reader = new StreamReader(path);
+                string line = reader.ReadLine();
+                reader.Close();
+                //locale = en_gb
+                to_return = (line.Split(new string[1]{"="},StringSplitOptions.None))[1].Trim();
+
+            }
+            return to_return;
+                
+        }
         public string getMenuFilePath()
         {
-            KeyValuePair<string, string> isfound = 
-                allFilesList.FirstOrDefault(m => m.Key.ToLower().Contains("fontconfig_en_us.txt"));
-            if (isfound.Key != null)
+            List<KeyValuePair<string, string>> matched = getMenuFilePaths();
+            string textPath = "";
+            if (matched.Count == 1)
             {
-                return gameDirectory+isfound.Value.Replace("\\\\","\\").Substring(1);
+                textPath = gameDirectory + matched[0].Value.Replace("\\\\", "\\").Substring(1);
             }
-            return "";
+            else if (matched.Count == 0)
+            {
+                Cliver.Message.Show("Can't find menu!", SystemIcons.Error,
+                    "Unable to find the menu file to change text in\r\nWe will skip this part."
+                    , 0, new string[1] { "Ok", });
+                return "";
+            }
+            else
+            {
+                int bestScore = 0;
+                List<KeyValuePair<string, string>> betterOptions = new List<KeyValuePair<string, string>>();
+                foreach (KeyValuePair<string, string> pair in matched)
+                {
+                    Regex r1 = new Regex(@"\\(\d+\.\d+\.\d+\.\d+)\\");
+                    Match match = r1.Match(pair.Value);
+
+                    if (match.Success)
+                    {
+                        string versionString = match.Groups[1].Value;
+                        string[] versions = versionString.Split('.');
+                        int total = 0;
+                        int multiplier = 1;
+                        for (int i = versions.Length - 1; i >= 0; i--)
+                        {
+                            int vA = int.Parse(versions[i].Trim());
+                            total += (vA * multiplier);
+                            multiplier += 500;
+                        }
+                        if (total == bestScore)
+                        {
+                            betterOptions.Add(pair);
+                        }
+                        else if (total > bestScore)
+                        {
+                            betterOptions.Clear();
+                            betterOptions.Add(pair);
+                            bestScore = total;
+                        }
+                    }
+                }
+                if (betterOptions.Count == 1)
+                {
+                    textPath = gameDirectory+betterOptions[0].Value.Replace("\\\\", "\\").Substring(1);
+                }
+                else
+                {
+                    //if we still cant tell, ask
+                    List<string> options = new List<string>();
+                    foreach (KeyValuePair<string, string> pair in matched)
+                    {
+                        options.Add(pair.Key);
+                    }
+                    int option = Cliver.Message.Show("Select Menu Language",
+                        SystemIcons.Information, "Which menu are you using?", 0, options.ToArray());
+                    textPath = gameDirectory+matched[option].Value.Replace("\\\\", "\\").Substring(1);
+                }
+
+            }
+            return textPath;
         }
         private void showMenuFileLocationToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Cliver.Message.Inform("Menu File is at\r\n" + getMenuFilePath());
+            string paths = "";
+            foreach (KeyValuePair<string, string> pair in getMenuFilePaths())
+            {
+                paths += gameDirectory +pair.Value.Replace("\\\\", "\\").Substring(1)+"\r\n";
+            }
+            paths += "\r\n Final Choice is \r\n" + getMenuFilePath();
+            Cliver.Message.Inform("Menu File is at\r\n" + paths);
         }
         private void openTextTreeEditorToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -9548,7 +9649,7 @@ namespace SkinInstaller
 
         private void getLastModDateToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Cliver.Message.Inform("Last mod date was...\r\n\r\n"+getLastModDate().ToLongDateString());
+            Cliver.Message.Inform("Last mod date was...\r\n\r\n"+getLastModDate().ToString());
         }
 
         #endregion

@@ -381,13 +381,19 @@ namespace TextEditor
 
         public void installText(String fontConfigPath, String customEditPath, String backupDir)
         {
+            if (!File.Exists(fontConfigPath)) return;
+            FileInfo fontConfigPathInfo = new FileInfo(fontConfigPath);
+            String backUpPath = backupDir +"\\"+ fontConfigPathInfo.Name + ".backup";
+            //don't loose old backups , so keep old name on en us
+            if (fontConfigPathInfo.Name.ToLower() == "fontconfig_en_us.txt")
+                backUpPath = backupDir + "\\backupText.txt";
             Dictionary<String, String> backup = new Dictionary<String, String>();
             Dictionary<String, String> edit = new Dictionary<String, String>();
             Dictionary<String, String> finish = new Dictionary<String, String>();
-            
-            if (File.Exists(backupDir + "\\backupText.txt"))
+
+            if (File.Exists(backUpPath))
             {
-                FileStream bakFS = new FileStream(backupDir + "\\backupText.txt", FileMode.Open, FileAccess.Read);
+                FileStream bakFS = new FileStream(backUpPath, FileMode.Open, FileAccess.Read);
                 StreamReader bakReader = new StreamReader(bakFS);
 
                 try
@@ -479,7 +485,7 @@ namespace TextEditor
             reader.Close();
             fs.Close();
 
-            dataWriter = new StreamWriter(backupDir + "\\backupText.txt");
+            dataWriter = new StreamWriter(backUpPath);
 
             foreach (KeyValuePair<String, String> backupKVP in backup)
             {
@@ -492,16 +498,30 @@ namespace TextEditor
             File.Delete(fontConfigPath);
             File.Move(backupDir + "\\fontConfigOutput.txt", fontConfigPath);
         }
+        public void uninstallTexts(List<string> fontConfigPaths, String customEditPath, String backupDir)
+        {
+            foreach (string fontConfigPath in fontConfigPaths)
+            {
+                uninstallText(fontConfigPath, customEditPath, backupDir);
+            }
+        }
 
         public void uninstallText(String fontConfigPath, String customEditPath, String backupDir)
         {
+            if (!File.Exists(fontConfigPath)) return;
+            FileInfo fontConfigPathInfo = new FileInfo(fontConfigPath);
+            String backUpPath = backupDir + "\\" + fontConfigPathInfo.Name + ".backup";
+            //don't loose old backups , so keep old name on en us
+            if (fontConfigPathInfo.Name.ToLower() == "fontconfig_en_us.txt")
+                backUpPath = backupDir + "\\backupText.txt";
+
             Dictionary<String, String> backup = new Dictionary<String, String>();
             Dictionary<String, String> edit = new Dictionary<String, String>();
             Dictionary<String, String> finish = new Dictionary<String, String>();
 
-            if (File.Exists(backupDir + "\\backupText.txt"))
+            if (File.Exists(backUpPath))
             {
-                FileStream bakFS = new FileStream(backupDir + "\\backupText.txt", FileMode.Open, FileAccess.Read);
+                FileStream bakFS = new FileStream(backUpPath, FileMode.Open, FileAccess.Read);
                 StreamReader bakReader = new StreamReader(bakFS);
 
                 try
@@ -605,7 +625,7 @@ namespace TextEditor
             reader.Close();
             fs.Close();
 
-            dataWriter = new StreamWriter(backupDir + "\\backupText.txt");
+            dataWriter = new StreamWriter(backUpPath);
 
             foreach (KeyValuePair<String, String> backupKVP in backup)
             {
