@@ -3784,43 +3784,73 @@ namespace SkinInstaller
                                 DirectoryInfo airRestoreDir = new DirectoryInfo(backupDir + path.Substring(0, airIndex + 25));
                                 string remainingPath = path.Substring(path.Substring(airIndex + 25).IndexOf("\\") + airIndex + 25);
                                 //debugadd("air file restore dir :"+airbackupDir.FullName);
-                                string lowestVersion = "";
-                                if (airRestoreDir.Exists)
-                                {
-                                    foreach (DirectoryInfo dir in airRestoreDir.GetDirectories())
-                                    {
-                                        if (lowestVersion == "") lowestVersion = dir.Name;
-                                        else
-                                        {
-                                            string[] versions = dir.Name.Split('.');
-                                            string[] lowestversions = lowestVersion.Split('.');
-                                            for (int i = versions.Length - 1; i >= 0; i--)
-                                            {
-                                                int vA = int.Parse(versions[i].Trim());
-                                                int lvA = int.Parse(lowestversions[i].Trim());
-                                                if (vA < lvA) lowestVersion = dir.Name;
-                                            }
-                                        }
-                                    }
-                                    bf = airRestoreDir + lowestVersion + remainingPath + fileName;
-                                    //ok we have the correct backup, now we have to find 
-                                    DirectoryInfo airWorkingDir = new DirectoryInfo(gameDirectory + path.Substring(0, airIndex + 25));
-                                    foreach (DirectoryInfo dir in airWorkingDir.GetDirectories())
-                                    {
-                                        //make sure we pick the highest version
 
+                                //we have the correct backup, now we have to find 
+                                string highestVersion = "";
+                                DirectoryInfo airWorkingDir = new DirectoryInfo(gameDirectory + path.Substring(0, airIndex + 25));
+                                foreach (DirectoryInfo dir in airWorkingDir.GetDirectories())
+                                {
+                                    //make sure we pick the highest version
+                                    if (highestVersion == "") highestVersion = dir.Name;
+                                    else
+                                    {
                                         string[] versions = dir.Name.Split('.');
-                                        string[] lowestversions = lowestVersion.Split('.');
+                                        string[] highestversions = highestVersion.Split('.');
                                         for (int i = versions.Length - 1; i >= 0; i--)
                                         {
                                             int vA = int.Parse(versions[i].Trim());
-                                            int lvA = int.Parse(lowestversions[i].Trim());
+                                            int lvA = int.Parse(highestversions[i].Trim());
                                             //tacky but im re-using this var name to mean "highest dir"
-                                            if (vA > lvA) lowestVersion = dir.Name;
+                                            if (vA > lvA) highestVersion = dir.Name;
 
                                         }
                                     }
-                                    path = path.Substring(0, airIndex + 25) + lowestVersion + remainingPath;
+                                }
+                                
+                                
+                                
+                                string lowestVersion = "";
+                                //todo get for all air files
+                                for (int airV = 0; airV <= 10; airV++ )
+                                {
+                                    string fileNameOption = Regex.Replace(fileName, @"\d+", airV.ToString(), RegexOptions.IgnoreCase);
+
+                                    if (airRestoreDir.Exists)
+                                    {
+                                        foreach (DirectoryInfo dir in airRestoreDir.GetDirectories())
+                                        {
+                                            string lookfor = airRestoreDir + dir.Name + remainingPath + fileNameOption;
+                                            if (File.Exists(lookfor))
+                                            {
+                                                if (lowestVersion == "") lowestVersion = dir.Name;
+                                                else
+                                                {
+
+                                                    string[] versions = dir.Name.Split('.');
+                                                    string[] lowestversions = lowestVersion.Split('.');
+                                                    for (int i = versions.Length - 1; i >= 0; i--)
+                                                    {
+                                                        int vA = int.Parse(versions[i].Trim());
+                                                        int lvA = int.Parse(lowestversions[i].Trim());
+                                                        if (vA < lvA) lowestVersion = dir.Name;
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        if (lowestVersion != "")
+                                        {
+
+                                            bf = airRestoreDir + lowestVersion + remainingPath + fileNameOption;
+
+                                            path = path.Substring(0, airIndex + 25) + highestVersion + remainingPath;
+                                            if (File.Exists(bf))
+                                            {
+                                                this.SIFileOp.FileDelete(gameDirectory + path + fileNameOption);
+
+                                                this.SIFileOp.FileCopy(bf, gameDirectory + path + fileNameOption);
+                                            }
+                                        }
+                                    }
                                 }
 
                             }
@@ -9660,8 +9690,6 @@ namespace SkinInstaller
         }
 
         #endregion
-
-
     }
     #region strucks
     public class LogTextWriter : TextWriter
