@@ -9621,6 +9621,7 @@ namespace SkinInstaller
             //check air folder
             FileInfo versionFile = new FileInfo(getVersionFilePath());
             DateTime newestDate = versionFile.LastWriteTime;
+            //Cliver.Message.Inform("version date i s" + newestDate.ToLongDateString() +" - "+ newestDate.ToLongTimeString());
             //C:\Riot Games\League of Legends\RADS\projects\lol_game_client\filearchives\0.0.0.25
             string rafPath = gameDirectory + @"RADS\projects\lol_game_client\filearchives\";
             string[] files = Directory.GetFiles(rafPath, "*.raf.dat*", SearchOption.AllDirectories);
@@ -9628,12 +9629,16 @@ namespace SkinInstaller
             {
                 FileInfo rafFile = new FileInfo(file);
                 if (rafFile.CreationTime > newestDate) newestDate = rafFile.CreationTime;
+               // Cliver.Message.Inform("raf date i s"+rafFile+" is " + newestDate.ToLongDateString() + " - " + newestDate.ToLongTimeString());
+            
                 string dataFolerPath = rafFile.DirectoryName + "\\DATA\\";
                 //Cliver.Message.Inform("data folder is " + dataFolerPath);
                 FileInfo datafolder = new FileInfo(dataFolerPath);
                 if (datafolder.CreationTime > newestDate) newestDate = datafolder.CreationTime;
-                if (datafolder.LastAccessTime > newestDate) newestDate = datafolder.LastAccessTime;
+                //if (datafolder.LastAccessTime > newestDate) newestDate = datafolder.LastAccessTime;
                 if (datafolder.LastWriteTime > newestDate) newestDate = datafolder.LastWriteTime;
+                //Cliver.Message.Inform("data date i s" + rafFile + " is " + newestDate.ToLongDateString() + " - " + newestDate.ToLongTimeString());
+            
                 //Cliver.Message.Inform("file name is " + file);
             }     
             string airDir = gameDirectory+@"RADS\projects\lol_air_client\releases";
@@ -9641,7 +9646,9 @@ namespace SkinInstaller
             foreach (string file in files)
             {
                 FileInfo airFolderInfo = new FileInfo(file);
-                if (airFolderInfo.CreationTime > newestDate) newestDate = airFolderInfo.CreationTime;                
+                if (airFolderInfo.CreationTime > newestDate) newestDate = airFolderInfo.CreationTime;
+               // Cliver.Message.Inform("air date i s" + file + " is " + newestDate.ToLongDateString() + " - " + newestDate.ToLongTimeString());
+            
             }
             
             return newestDate;
