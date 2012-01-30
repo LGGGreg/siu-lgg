@@ -1,7 +1,7 @@
 ﻿
 /*
 LOLViewer
-Copyright 2011 James Lammlein 
+Copyright 2011-2012 James Lammlein 
 
  
 
@@ -39,6 +39,7 @@ using System.Windows.Forms;
 
 using OpenTK;
 using LOLViewer.IO;
+using LOLViewer.GUI;
 using System.IO;
 using System.Threading;
 using System.Globalization;
@@ -138,6 +139,7 @@ namespace LOLViewer
             animationController.playAnimationButton = playAnimationButton;
             animationController.previousKeyFrameButton = previousKeyFrameButton;
             animationController.glControlMain = glControlMain;
+            animationController.timelineTrackBar = timelineTrackBar;
 
             animationController.renderer = renderer;
 
@@ -147,6 +149,7 @@ namespace LOLViewer
             nextKeyFrameButton.Click += new EventHandler(animationController.OnNextKeyFrameButtonClick);
             playAnimationButton.Click += new EventHandler(animationController.OnPlayAnimationButtonClick);
             currentAnimationComboBox.SelectedIndexChanged += new EventHandler(animationController.OnCurrentAnimationComboBoxSelectedIndexChanged);
+            timelineTrackBar.Scroll += new EventHandler(animationController.OnTimelineTrackBar);
 
             animationController.DisableAnimation();
             //renderer.SetClearColor(System.Drawing.Color.LightGray);
@@ -315,7 +318,7 @@ namespace LOLViewer
             if (isGLLoaded == false)
                 return;
 
-            renderer.OnRender(camera);
+            renderer.OnRender( ref camera);
 
             glControlMain.SwapBuffers();
         }
@@ -581,6 +584,33 @@ namespace LOLViewer
         {
             this.Hide();
             e.Cancel = true;
+        }
+
+        private void button1FullScreen_Click(object sender, EventArgs e)
+        {
+            Size resolution = SystemInformation.PrimaryMonitorSize;
+
+            // Create a full screen window.
+            FullScreenWindow fullScreenWindow = new
+                FullScreenWindow(ref renderer, ref camera, 
+                ref animationController, ref timer,
+                ref glControlMain,
+                FIELD_OF_VIEW, NEAR_PLANE, FAR_PLANE);
+
+            // Display it.
+            fullScreenWindow.ShowDialog(this);
+
+            // The full screen context makes itself the current context
+            // for OpenGL.  So, when it's done being shown, we need to make
+            // the original form the current context and redraw it.
+            glControlMain.Context.MakeCurrent(glControlMain.WindowInfo);
+
+            // Send a resize message to update the camera and renderer.
+            GLControlMainOnResize(null, null);
+
+            // Redraw
+            glControlMain.Invalidate();
+        
         }
     }
 }

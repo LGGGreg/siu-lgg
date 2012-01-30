@@ -2,7 +2,7 @@
 
 /*
 LOLViewer
-Copyright 2011 James Lammlein 
+Copyright 2011-2012 James Lammlein 
 
  
 
@@ -74,6 +74,7 @@ namespace LOLViewer
             this.yOffsetTrackbar = new System.Windows.Forms.TrackBar();
             this.VerticalOffsetLabel = new System.Windows.Forms.Label();
             this.animationOptionsTab = new System.Windows.Forms.TabPage();
+            this.timelineTrackBar = new System.Windows.Forms.TrackBar();
             this.playAnimationButton = new System.Windows.Forms.Button();
             this.nextKeyFrameButton = new System.Windows.Forms.Button();
             this.previousKeyFrameButton = new System.Windows.Forms.Button();
@@ -82,6 +83,7 @@ namespace LOLViewer
             this.currentAnimationLabel = new System.Windows.Forms.Label();
             this.enableAnimationCheckBox = new System.Windows.Forms.CheckBox();
             this.glTabModelListBoxSplitContainer = new System.Windows.Forms.SplitContainer();
+            this.button1FullScreen = new System.Windows.Forms.Button();
             this.PreviewWindowMenuStrip.SuspendLayout();
             this.PreviewWindowStatusStrip.SuspendLayout();
             this.glControlTabControlSplitContainer.Panel1.SuspendLayout();
@@ -92,6 +94,7 @@ namespace LOLViewer
             ((System.ComponentModel.ISupportInitialize)(this.modelScaleTrackbar)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.yOffsetTrackbar)).BeginInit();
             this.animationOptionsTab.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.timelineTrackBar)).BeginInit();
             this.glTabModelListBoxSplitContainer.Panel1.SuspendLayout();
             this.glTabModelListBoxSplitContainer.SuspendLayout();
             this.SuspendLayout();
@@ -202,6 +205,7 @@ namespace LOLViewer
             // renderOptionsTab
             // 
             this.renderOptionsTab.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.renderOptionsTab.Controls.Add(this.button1FullScreen);
             this.renderOptionsTab.Controls.Add(this.backgroundColorButton);
             this.renderOptionsTab.Controls.Add(this.backgroundLabel);
             this.renderOptionsTab.Controls.Add(this.cameraLabel);
@@ -298,6 +302,7 @@ namespace LOLViewer
             // animationOptionsTab
             // 
             this.animationOptionsTab.BackColor = System.Drawing.Color.WhiteSmoke;
+            this.animationOptionsTab.Controls.Add(this.timelineTrackBar);
             this.animationOptionsTab.Controls.Add(this.playAnimationButton);
             this.animationOptionsTab.Controls.Add(this.nextKeyFrameButton);
             this.animationOptionsTab.Controls.Add(this.previousKeyFrameButton);
@@ -311,6 +316,15 @@ namespace LOLViewer
             this.animationOptionsTab.Size = new System.Drawing.Size(604, 62);
             this.animationOptionsTab.TabIndex = 1;
             this.animationOptionsTab.Text = "Animation Options";
+            // 
+            // timelineTrackBar
+            // 
+            this.timelineTrackBar.LargeChange = 1;
+            this.timelineTrackBar.Location = new System.Drawing.Point(7, 30);
+            this.timelineTrackBar.Maximum = 100;
+            this.timelineTrackBar.Name = "timelineTrackBar";
+            this.timelineTrackBar.Size = new System.Drawing.Size(104, 40);
+            this.timelineTrackBar.TabIndex = 7;
             // 
             // playAnimationButton
             // 
@@ -391,6 +405,16 @@ namespace LOLViewer
             this.glTabModelListBoxSplitContainer.SplitterDistance = 458;
             this.glTabModelListBoxSplitContainer.TabIndex = 11;
             // 
+            // button1FullScreen
+            // 
+            this.button1FullScreen.Location = new System.Drawing.Point(474, 39);
+            this.button1FullScreen.Name = "button1FullScreen";
+            this.button1FullScreen.Size = new System.Drawing.Size(75, 23);
+            this.button1FullScreen.TabIndex = 8;
+            this.button1FullScreen.Text = "Full Screen";
+            this.button1FullScreen.UseVisualStyleBackColor = true;
+            this.button1FullScreen.Click += new System.EventHandler(this.button1FullScreen_Click);
+            // 
             // PreviewWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -419,6 +443,7 @@ namespace LOLViewer
             ((System.ComponentModel.ISupportInitialize)(this.yOffsetTrackbar)).EndInit();
             this.animationOptionsTab.ResumeLayout(false);
             this.animationOptionsTab.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.timelineTrackBar)).EndInit();
             this.glTabModelListBoxSplitContainer.Panel1.ResumeLayout(false);
             this.glTabModelListBoxSplitContainer.ResumeLayout(false);
             this.ResumeLayout(false);
@@ -457,6 +482,8 @@ namespace LOLViewer
         private System.Windows.Forms.Button backgroundColorButton;
         private System.Windows.Forms.Label backgroundLabel;
         private System.Windows.Forms.ToolStripStatusLabel PreviewWindowStatusLabel;
+        private System.Windows.Forms.TrackBar timelineTrackBar;
+        private System.Windows.Forms.Button button1FullScreen;
     }
 }
 

@@ -1,7 +1,7 @@
 ﻿
 /*
 LOLViewer
-Copyright 2011 James Lammlein 
+Copyright 2011-2012 James Lammlein 
 
  
 
@@ -435,10 +435,10 @@ namespace LOLViewer.IO
 
                 //
                 // New method to read the newer .inibins.
-                // Why compute offset by reading in data from the file
-                // when we can just compute it?  This seems to fix the problem
-                // with newer .inibins.  I'm not sure what the actual value is used for
-                // in the file header though.
+                // Why determine the offset by reading in data from the file header
+                // when we can just compute it here?  This seems to fix the problem
+                // with newer .inibins.  I'm not sure what the value in the header
+                // is used for though.
                 //
                 oldStyleOffset = (int)stream.Position + keys.Length * 2;
 
@@ -499,6 +499,11 @@ namespace LOLViewer.IO
             Debug.WriteLine("Skin #7 SKN: " + file.properties[(long) InibinHashID.SKIN_SEVEN_SKN]);
             Debug.WriteLine("Skin #7 SKL: " + file.properties[(long) InibinHashID.SKIN_SEVEN_SKL]);
             Debug.WriteLine("Skin #7 DDS: " + file.properties[(long) InibinHashID.SKIN_SEVEN_TEXTURE]); 
+
+            Debug.WriteLine("Skin #8 Name: " + file.properties[(long)InibinHashID.SKIN_EIGHT_NAME]);
+            Debug.WriteLine("Skin #8 SKN: " + file.properties[(long)InibinHashID.SKIN_EIGHT_SKN]);
+            Debug.WriteLine("Skin #8 SKL: " + file.properties[(long)InibinHashID.SKIN_EIGHT_SKL]);
+            Debug.WriteLine("Skin #8 DDS: " + file.properties[(long)InibinHashID.SKIN_EIGHT_TEXTURE]); 
 #endif
             return result;
         }
