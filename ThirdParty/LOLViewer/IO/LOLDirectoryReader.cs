@@ -3,7 +3,7 @@
 
 /*
 LOLViewer
-Copyright 2011 James Lammlein 
+Copyright 2011-2012 James Lammlein 
 
  
 
@@ -140,6 +140,10 @@ namespace LOLViewer.IO
             foreach (RAFFileListEntry f in inibins)
             {
                 InibinFile iniFile = new InibinFile();
+                if (f.FileName.ToLower().Contains("war"))
+                {
+                    ;
+                }
                 bool readResult = InibinReader.ReadCharacterInibin(f, ref iniFile);
 
                 if (readResult == true)
@@ -152,7 +156,10 @@ namespace LOLViewer.IO
                         {
                             LOLModel model;
                             bool storeResult = StoreModel(modelDefs[i], out model);
-
+                            if (modelDefs[i].name.ToLower().Contains("hye"))
+                            {
+                                ;
+                            }
                             if (storeResult == true)
                             {
                                 // Try to store animations for model as well

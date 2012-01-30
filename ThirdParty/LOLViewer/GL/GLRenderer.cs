@@ -2,7 +2,7 @@
 
 /*
 LOLViewer
-Copyright 2011 James Lammlein 
+Copyright 2011-2012 James Lammlein 
 
  
 
@@ -40,7 +40,7 @@ using OpenTK.Graphics.OpenGL;
 
 namespace LOLViewer
 {
-    class GLRenderer
+    public class GLRenderer
     {
         // Renderer Variables
         public OpenTK.Graphics.Color4 clearColor;
@@ -67,7 +67,7 @@ namespace LOLViewer
 
         public GLRenderer()
         {
-            clearColor = new OpenTK.Graphics.Color4(0.7f, 0.7f, 0.7f, 0.0f);
+            clearColor = new OpenTK.Graphics.Color4(0.1f, 0.2f, 0.5f, 0.0f);
 
             programs = new Dictionary<String, GLShaderProgram>();
             shaders = new Dictionary<String, GLShader>();
@@ -108,6 +108,12 @@ namespace LOLViewer
                     ShaderType.VertexShader);
             }
 
+            if (result == true)
+            {
+                result = CreateShaderFromMemory("cellRigged.vert", GLShaderDefinitions.CellShadedRiggedVertex,
+                    ShaderType.VertexShader);
+            }
+
             // Create fragment shaders.
             if (result == true)
             {
@@ -133,6 +139,12 @@ namespace LOLViewer
                 // Unused atm.
                 result = CreateShaderFromMemory("phongTexOnly.frag", 
                     GLShaderDefinitions.PhongTexOnlyFragment, ShaderType.FragmentShader);
+            }
+
+            if (result == true)
+            {
+                result = CreateShaderFromMemory("cell.frag", GLShaderDefinitions.CellShadedFragment,
+                    ShaderType.FragmentShader);
             }
 
             //
@@ -190,7 +202,6 @@ namespace LOLViewer
                 uniforms.Add("u_SExponent");
                 uniforms.Add("u_Texture");
 
-                // Unused atm.
                 result = CreateProgram("phong", "phong.vert", "phong.frag",
                     attributes, uniforms);
             }
@@ -206,6 +217,7 @@ namespace LOLViewer
                 uniforms.Add("u_WorldViewProjection");
                 uniforms.Add("u_Texture");
 
+                // Unused atm.
                 result = CreateProgram("phongTexOnly", "phong.vert", "phongTexOnly.frag",
                     attributes, uniforms);
             }
@@ -233,6 +245,34 @@ namespace LOLViewer
                 uniforms.Add("u_Texture");
 
                 result = CreateProgram("phongRigged", "phongRigged.vert", "phong.frag",
+                    attributes, uniforms);
+            }
+
+            // Cell Shading with Skeletal Animation
+            if (result == true)
+            {
+                List<String> attributes = new List<String>();
+                attributes.Add("in_Position");
+                attributes.Add("in_Normal");
+                attributes.Add("in_TexCoords");
+                attributes.Add("in_BoneID");
+                attributes.Add("in_Weights");
+
+                List<String> uniforms = new List<String>();
+                uniforms.Add("u_WorldView");
+                uniforms.Add("u_WorldViewProjection");
+                uniforms.Add("u_LightDirection");
+                uniforms.Add("u_BoneTransform");
+                uniforms.Add("u_Texture");
+                uniforms.Add("u_QOne");
+                uniforms.Add("u_QTwo");
+                uniforms.Add("u_QThree");
+                uniforms.Add("u_ValueOne");
+                uniforms.Add("u_ValueTwo");
+                uniforms.Add("u_ValueThree");
+                uniforms.Add("u_ValueFour");
+
+                result = CreateProgram("cellRigged", "cellRigged.vert", "cell.frag",
                     attributes, uniforms);
             }
 
@@ -350,7 +390,7 @@ namespace LOLViewer
             GL.Viewport(x, y, width, height);
         }
 
-        public void OnRender(GLCamera camera)
+        public void OnRender(ref GLCamera camera)
         {
             //
             // TODO: Refactor/clean up this render loop.
@@ -418,7 +458,7 @@ namespace LOLViewer
             // Load shaders for Phong lit rigged models.
             //
 
-            if (rModels.Count > 0 || true)
+            if (rModels.Count > 0)
             {
                 program = programs["phongRigged"];
                 program.Load();
@@ -436,6 +476,27 @@ namespace LOLViewer
                 program.UpdateUniform("u_KS", 0.05f);
                 program.UpdateUniform("u_SExponent", 8.0f);
             }
+
+            // Cell Shading Test
+            //if (rModels.Count > 0)
+            //{
+            //    program = programs["cellRigged"];
+            //    program.Load();
+
+            //    //
+            //    // Update parameters for cell shading.
+            //    //
+
+            //    // Fragment Shader Uniforms
+            //    program.UpdateUniform("u_LightDirection", new Vector3(0.0f, 0.0f, 1.0f));
+            //    program.UpdateUniform("u_QOne", 0.9f);
+            //    program.UpdateUniform("u_QTwo", 0.5f);
+            //    program.UpdateUniform("u_QThree", 0.3f);
+            //    program.UpdateUniform("u_ValueOne", 1.1f);
+            //    program.UpdateUniform("u_ValueTwo", 1.0f);
+            //    program.UpdateUniform("u_ValueThree", 0.9f);
+            //    program.UpdateUniform("u_ValueFour", 0.8f);
+            //}
 
             // Draw Model
             foreach (var r in rModels)
@@ -510,7 +571,7 @@ namespace LOLViewer
                 else
                 {
                     // Account for the skinning scale if we're not skinning.
-                    Matrix4 scale = Matrix4.Scale( 1.0f / rModels.First().Value.rig.bindingJoints[0].scale); //hacky
+                    Matrix4 scale = Matrix4.Scale(rModels.First().Value.rig.bindingJoints[0].scale); //hacky
                     worldView = scale * world * camera.view;
                 }
 
@@ -569,6 +630,30 @@ namespace LOLViewer
             }
         }
 
+        // TODO: Doesn't support multiple models.
+        public void SetCurrentFrameInCurrentAnimation(int frame, float percentTowardsNextFrame)
+        {
+            foreach (var m in rModels)
+            {
+                m.Value.SetCurrentFrame( frame, percentTowardsNextFrame );
+                break;
+            }
+        }
+
+        // TODO: Doesn't support multiple models.
+        public float GetCurrentAnimationPercentageAnimated()
+        {
+            float result = 0.0f;
+
+            foreach (var m in rModels)
+            {
+                result = m.Value.GetPercentageAnimated();
+                break;
+            }
+
+            return result;
+        }
+
         // Unlike decrement and increment, this function doesn't directly
         // translate to multiple models.  Need to pass a model ID or something.
         // But for now, who cares.  Only one model should be available at a time anyways.
@@ -578,6 +663,20 @@ namespace LOLViewer
             {
                 m.Value.SetCurrentAnimation(animation);
             }
+        }
+
+        // TODO: Doesn't support multiple models.
+        public uint GetNumberOfFramesInCurrentAnimation()
+        {
+            uint result = 0;
+
+            foreach (var m in rModels)
+            {
+                result = m.Value.GetNumberOfFramesInCurrentAnimation();
+                break;
+            }
+
+            return result;
         }
 
         public void OnUpdate(float elapsedTime)

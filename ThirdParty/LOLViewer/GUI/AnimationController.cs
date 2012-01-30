@@ -2,7 +2,7 @@
 
 /*
 LOLViewer
-Copyright 2011 James Lammlein 
+Copyright 2011-2012 James Lammlein 
 
  
 
@@ -36,26 +36,14 @@ using System.Text;
 using System.Windows.Forms;
 using System.Diagnostics;
 
-namespace LOLViewer
+namespace LOLViewer.GUI
 {
-    class AnimationController
+    public class AnimationController
     {
-        public bool isFirstTime;
         public bool isEnabled;
         public bool isAnimating;
         public String currentAnimation;
         public Stopwatch timer;
-
-        public AnimationController()
-        {
-            isFirstTime = true;
-            isEnabled = false;
-            isAnimating = false;
-            currentAnimation = String.Empty;
-            timer = new Stopwatch();
-            timer.Reset();
-            timer.Stop();
-        }
 
         //
         // References to actual forms controls.
@@ -64,9 +52,20 @@ namespace LOLViewer
         public OpenTK.GLControl glControlMain;
         public CheckBox enableAnimationCheckBox;
         public ComboBox currentAnimationComboBox;
-        public Button   previousKeyFrameButton;
-        public Button   nextKeyFrameButton;
-        public Button   playAnimationButton;
+        public Button previousKeyFrameButton;
+        public Button nextKeyFrameButton;
+        public Button playAnimationButton;
+        public TrackBar timelineTrackBar;
+
+        public AnimationController()
+        {
+            isEnabled = false;
+            isAnimating = false;
+            currentAnimation = String.Empty;
+            timer = new Stopwatch();
+            timer.Reset();
+            timer.Stop();
+        }
 
         // More references
         public GLRenderer renderer;
@@ -80,6 +79,7 @@ namespace LOLViewer
             previousKeyFrameButton.Enabled = false;
             nextKeyFrameButton.Enabled = false;
             playAnimationButton.Enabled = false;
+            timelineTrackBar.Enabled = false;
 
             renderer.isSkinning = false;
         }
@@ -93,6 +93,7 @@ namespace LOLViewer
             previousKeyFrameButton.Enabled = true;
             nextKeyFrameButton.Enabled = true;
             playAnimationButton.Enabled = true;
+            timelineTrackBar.Enabled = true;
 
             renderer.isSkinning = true;
         }
@@ -123,6 +124,13 @@ namespace LOLViewer
             glControlMain.Invalidate();
         }
 
+        //
+        // Technically this function should only be called once when the app enters an idle state.
+        // However, since I invalidate the GL window, I think that flags the app as non idle 
+        // momentarily. Therefore, as long as we're animating and invalidating the GL window, this function
+        // should be called repeatedly.  This works on .NET.  However, on Mono, it's only called once.
+        //
+
         public void OnApplicationIdle(object sender, EventArgs e)
         {
             if (isAnimating == true)
@@ -132,7 +140,10 @@ namespace LOLViewer
                 renderer.OnUpdate(elapsedTime);
 
                 timer.Reset();
+                timer.Stop();
                 timer.Start();
+
+                UpdateTimelineTrackBar();
 
                 glControlMain.Invalidate();
             }
@@ -140,11 +151,15 @@ namespace LOLViewer
 
         public void SetAnimation()
         {
+            // Cache animation name.
             currentAnimation = currentAnimationComboBox.SelectedItem.ToString();
 
             if (currentAnimation.Length > 0)
             {
                 renderer.SetAnimations(currentAnimation);
+
+                UpdateTimelineTrackBar();
+
                 glControlMain.Invalidate();
             }
         }
@@ -155,6 +170,9 @@ namespace LOLViewer
             {
                 StopAnimation();
                 renderer.IncrementAnimations();
+
+                UpdateTimelineTrackBar();
+
                 glControlMain.Invalidate();
             }
         }
@@ -165,6 +183,9 @@ namespace LOLViewer
             {
                 StopAnimation();
                 renderer.DecrementAnimations();
+
+                UpdateTimelineTrackBar();
+
                 glControlMain.Invalidate();
             }
         }
@@ -212,8 +233,50 @@ namespace LOLViewer
             }
         }
 
+        public void OnTimelineTrackBar(object sender, EventArgs e)
+        {
+            //
+            // This function updates the renderer relative to the
+            // data in the trackbar.
+            //
+            // Called when a user manipulates the trackbar.
+            //
+
+            StopAnimation();
+
+            float percentageOfAnimation = (float)timelineTrackBar.Value / (float)timelineTrackBar.Maximum;
+            float frameAbsolute = percentageOfAnimation * renderer.GetNumberOfFramesInCurrentAnimation();
+
+            int selectedFrame = (int)Math.Floor( frameAbsolute );
+            float percentTowardsNextFrame = frameAbsolute - selectedFrame;
+
+            renderer.SetCurrentFrameInCurrentAnimation(selectedFrame, percentTowardsNextFrame);
+
+            // Redraw the model.
+            glControlMain.Invalidate();
+        }
+
         //
         // Helper functions
         //
+        private void UpdateTimelineTrackBar()
+        {
+            //
+            // This function updates the trackbar relative the animation
+            // data in the renderer.
+            //
+            // Called when the animation controller updates the renderer.
+            //
+
+            float percentageAnimated = renderer.GetCurrentAnimationPercentageAnimated();
+            int timelineValue = (int)Math.Floor(percentageAnimated * 100.0f); // Move the decimal into integer range.
+
+            // Try to cut down on the amount of time we change the track bar value.
+            // This way we don't spam update it.
+            if (timelineValue != timelineTrackBar.Value)
+            {
+                timelineTrackBar.Value = timelineValue;
+            }
+        }
     }
 }

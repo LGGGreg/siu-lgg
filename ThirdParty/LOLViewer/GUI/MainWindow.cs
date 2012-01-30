@@ -1,7 +1,7 @@
 ﻿
 /*
 LOLViewer
-Copyright 2011 James Lammlein 
+Copyright 2011-2012 James Lammlein 
 
  
 
@@ -37,14 +37,18 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using System.IO;
+
 using OpenTK;
 using LOLViewer.IO;
-using System.Threading;
+using LOLViewer.GUI;
 
 namespace LOLViewer
 {
     public partial class MainWindow : Form
     {
+        private const String DEFAULT_DIRECTORY_FILE = "root.dat";
+
         // Windowing variables
         private bool isGLLoaded;
         private Stopwatch timer;
@@ -74,20 +78,53 @@ namespace LOLViewer
        
         public MainWindow()
         {
-            Thread.CurrentThread.CurrentCulture = new System.Globalization.CultureInfo("en-US");
-            Thread.CurrentThread.CurrentUICulture = new System.Globalization.CultureInfo("en-US");
-            
             isGLLoaded = false;
             timer = new Stopwatch();
 
             camera = new GLCamera();
-            camera.SetViewParameters(new Vector3(0.0f, 0.0f, 300.0f), Vector3.Zero); 
+            camera.SetViewParameters(new Vector3(0.0f, 0.0f, 300.0f), Vector3.Zero);
             renderer = new GLRenderer();
 
-            reader = new LOLDirectoryReader();
+            // Set up the reader and initialize its root to the value in 'root.dat' if
+            // the file exists.
+            {
+                reader = new LOLDirectoryReader();
+
+                bool isFileOpen = false;
+                FileStream file = null;
+                try
+                {
+                    FileInfo fileInfo = new FileInfo(DEFAULT_DIRECTORY_FILE);
+                    if (fileInfo.Exists == true)
+                    {
+                        file = new FileStream(fileInfo.FullName, FileMode.Open);
+                        isFileOpen = true;
+                    }
+                }
+                catch {}
+
+                if (isFileOpen == true)
+                {
+                    BinaryReader fileReader = null;
+                    if (file != null)
+                    {
+                        try
+                        {
+                            fileReader = new BinaryReader(file);
+                            reader.root = fileReader.ReadString();
+                            fileReader.Close();
+                        }
+                        catch
+                        {
+                            file.Close();
+                        }
+                    }
+                }
+            }
 
             InitializeComponent();
-            modelScaleTrackbar.Value = (int) (GLRenderer.DEFAULT_MODEL_SCALE * DEFAULT_SCALE_TRACKBAR);
+
+            modelScaleTrackbar.Value = (int)(GLRenderer.DEFAULT_MODEL_SCALE * DEFAULT_SCALE_TRACKBAR);
             yOffsetTrackbar.Value = -GLRenderer.DEFAULT_MODEL_YOFFSET;
 
             lastSearch = String.Empty;
@@ -113,7 +150,7 @@ namespace LOLViewer
             glControlMain.KeyUp += new KeyEventHandler(GLControlMainOnKeyUp);
 
             // Menu Callbacks
-            closeToolStripMenuItem.Click += new EventHandler(OnClose);
+            exitToolStripMenuItem.Click += new EventHandler(OnExit);
             setDirectoryToolStripMenuItem.Click += new EventHandler(OnSetDirectory);
             aboutToolStripMenuItem.Click += new EventHandler(OnAbout);
             readDefaultDirectoryToolStrip.Click += new EventHandler(OnReadModels);
@@ -130,7 +167,15 @@ namespace LOLViewer
             resetCameraButton.Click += new EventHandler(OnResetCameraButtonClick);
             backgroundColorButton.Click += new EventHandler(OnBackgroundColorButtonClick);
 
+            // Checkboxes
+            fullScreenCheckBox.Click += new EventHandler(OnFullScreenCheckBoxClick);
+
+            //
             // Animation Controller
+            //
+
+            // TODO: Pass the references and callbacks into constructor instead of doing them out here.
+            // Kind of ugly code. :(
             animationController = new AnimationController();
 
             // Set references
@@ -140,6 +185,7 @@ namespace LOLViewer
             animationController.playAnimationButton = playAnimationButton;
             animationController.previousKeyFrameButton = previousKeyFrameButton;
             animationController.glControlMain = glControlMain;
+            animationController.timelineTrackBar = timelineTrackBar;
 
             animationController.renderer = renderer;
 
@@ -149,18 +195,25 @@ namespace LOLViewer
             nextKeyFrameButton.Click += new EventHandler(animationController.OnNextKeyFrameButtonClick);
             playAnimationButton.Click += new EventHandler(animationController.OnPlayAnimationButtonClick);
             currentAnimationComboBox.SelectedIndexChanged += new EventHandler(animationController.OnCurrentAnimationComboBoxSelectedIndexChanged);
+            timelineTrackBar.Scroll += new EventHandler(animationController.OnTimelineTrackBar);
 
             animationController.DisableAnimation();
 
+            //
+            // End Animation Controller
+            //
+
             // Search Box
             modelSearchBox.TextChanged += new EventHandler(OnModelSearchBoxTextChanged);
+            modelSearchBox.KeyPress += new KeyPressEventHandler(OnModelSearchBoxKeyPress);
+            modelSearchBox.KeyDown += new KeyEventHandler(OnModelSearchBoxKeyDown);
         }
 
         //
         // Main Window Handlers
         //
 
-        void OnMainWindowShown(object sender, EventArgs e)
+        private void OnMainWindowShown(object sender, EventArgs e)
         {
             // Read model files.
             OnReadModels(sender, e);
@@ -175,7 +228,7 @@ namespace LOLViewer
             if (isGLLoaded == false)
                 return;
 
-            renderer.OnRender(camera);
+            renderer.OnRender(ref camera);
 
             glControlMain.SwapBuffers();
         }
@@ -198,15 +251,19 @@ namespace LOLViewer
 
         public void GLControlMainOnLoad(object sender, EventArgs e)
         {
-            isGLLoaded = true;
-
             // Set up renderer.
             bool result = renderer.OnLoad();
             if (result == false)
             {
+                MessageBox.Show("OpenGL failed to load." +
+                    "  Please install the latest display drivers from your GPU manufacturer.", "Error",
+                    MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 this.Close();
                 return;
             }
+
+            isGLLoaded = true;
 
             // Call an initial resize to get some camera and renderer parameters set up.
             GLControlMainOnResize(sender, e);
@@ -228,7 +285,7 @@ namespace LOLViewer
             }
         }
 
-        void GLControlMainOnDispose(object sender, EventArgs e)
+        private void GLControlMainOnDispose(object sender, EventArgs e)
         {
             renderer.ShutDown();
         }
@@ -265,13 +322,13 @@ namespace LOLViewer
         // Keyboard Handlers
         //
 
-        void GLControlMainOnKeyUp(object sender, KeyEventArgs e)
+        private void GLControlMainOnKeyUp(object sender, KeyEventArgs e)
         {
             camera.OnKeyUp(e);
             GLControlMainOnUpdateFrame(sender, e);
         }
 
-        void GLControlMainOnKeyDown(object sender, KeyEventArgs e)
+        private void GLControlMainOnKeyDown(object sender, KeyEventArgs e)
         {
             camera.OnKeyDown(e);
             GLControlMainOnUpdateFrame(sender, e);
@@ -287,16 +344,17 @@ namespace LOLViewer
         // Menu Strip Handlers
         //
 
-        void OnAbout(object sender, EventArgs e)
+        private void OnAbout(object sender, EventArgs e)
         {
             AboutWindow aboutDlg = new AboutWindow();
+            aboutDlg.StartPosition = FormStartPosition.CenterParent;
             aboutDlg.ShowDialog();
         }
 
-        void OnSetDirectory(object sender, EventArgs e)
+        private void OnSetDirectory(object sender, EventArgs e)
         {
             FolderBrowserDialog dlg = new FolderBrowserDialog();
-            dlg.Description = "Select the 'League of Legends' folder.";
+            dlg.Description = "Select the League of Legends' root installation folder.";
             dlg.ShowNewFolderButton = false;
 
             DialogResult result = dlg.ShowDialog();
@@ -312,12 +370,12 @@ namespace LOLViewer
             }
         }
 
-        void OnClose(object sender, EventArgs e)
+        private void OnExit(object sender, EventArgs e)
         {
             this.Close();
         }
 
-        void OnReadModels(object sender, EventArgs e)
+        private void OnReadModels(object sender, EventArgs e)
         {
             // Clear old data.
             modelListBox.Items.Clear();
@@ -326,6 +384,7 @@ namespace LOLViewer
 
             LoadingModelsWindow loader = new LoadingModelsWindow();
             loader.reader = reader;
+            loader.StartPosition = FormStartPosition.CenterParent;
             loader.ShowDialog();
 
             DialogResult result = loader.result;
@@ -333,13 +392,37 @@ namespace LOLViewer
             {
                 MessageBox.Show("Unable to read models. If you installed League of legends" +
                                  " in a non-default location, change the default directory" +
-                                 " to the 'League of Legends' folder by using the command in the 'Options' menu.", "Error",
+                                 " to the League of Legends' root installation folder by using the command" +
+                                 " in the 'Options' menu.", "Error",
                     MessageBoxButtons.OK, MessageBoxIcon.Error);
                 return;
             }
             else if (result == DialogResult.Cancel)
             {
                 return;
+            }
+
+            // On successful read, write the root directory to file.
+            FileStream file = null;
+            try
+            {
+                file = new FileStream(DEFAULT_DIRECTORY_FILE, FileMode.OpenOrCreate);
+            }
+            catch {}
+
+            BinaryWriter writer = null;
+            if (file != null)
+            {
+                try
+                {
+                    writer = new BinaryWriter(file);
+                    writer.Write(reader.root);
+                    writer.Close();
+                }
+                catch
+                {
+                    file.Close();
+                }
             }
 
             // Populate the model list box.
@@ -354,7 +437,7 @@ namespace LOLViewer
         // Model List Box Handlers
         //
 
-        void OnModelListDoubleClick(object sender, EventArgs e)
+        private void OnModelListDoubleClick(object sender, EventArgs e)
         {
             String modelName = (String) modelListBox.SelectedItem;
 
@@ -382,20 +465,21 @@ namespace LOLViewer
             GLControlMainOnUpdateFrame(sender, e);
         }
 
-        void OnModelListKeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        private void OnModelListKeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
         {
             // When enter is pressed
             if (e.KeyChar == '\r')
             {
                 // Update model.
                 OnModelListDoubleClick(sender, e);
+                e.Handled = true; // fixes unwanted 'ding' sound
             }
         }
 
         //
         // Trackbar Handlers
         //
-        void YOffsetTrackbarOnScroll(object sender, EventArgs e)
+        private void YOffsetTrackbarOnScroll(object sender, EventArgs e)
         {
             Matrix4 world = Matrix4.Scale(modelScaleTrackbar.Value / DEFAULT_SCALE_TRACKBAR);
             world.M42 = (float)-yOffsetTrackbar.Value;
@@ -405,7 +489,7 @@ namespace LOLViewer
             GLControlMainOnPaint(sender, null);
         }
 
-        void ModelScaleTrackbarOnScroll(object sender, EventArgs e)
+        private void ModelScaleTrackbarOnScroll(object sender, EventArgs e)
         {
             Matrix4 world = Matrix4.Scale(modelScaleTrackbar.Value / DEFAULT_SCALE_TRACKBAR);
             world.M42 = (float)-yOffsetTrackbar.Value;
@@ -416,7 +500,7 @@ namespace LOLViewer
         }
 
         // Button Handlers
-        void OnResetCameraButtonClick(object sender, EventArgs e)
+        private void OnResetCameraButtonClick(object sender, EventArgs e)
         {
             camera.Reset();
 
@@ -424,7 +508,7 @@ namespace LOLViewer
             glControlMain.Invalidate();
         }
 
-        void OnBackgroundColorButtonClick(object sender, EventArgs e)
+        private void OnBackgroundColorButtonClick(object sender, EventArgs e)
         {
             ColorDialog colorDlg = new ColorDialog();
 
@@ -442,7 +526,11 @@ namespace LOLViewer
             }
         }
 
-        void OnModelSearchBoxTextChanged(object sender, EventArgs e)
+        //
+        // Search Box Handlers
+        //
+
+        private void OnModelSearchBoxTextChanged(object sender, EventArgs e)
         {
             String search = modelSearchBox.Text;
             search = search.ToLower();
@@ -493,6 +581,82 @@ namespace LOLViewer
             // Redraw the list box.
             modelListBox.Invalidate();
         }
+
+        private void OnModelSearchBoxKeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
+        {
+            // Note: Arrow keys don't get passed through this handler.
+
+            // Pass it through to the list box handler.
+            OnModelListKeyPress(sender, e);
+        }
+
+        private void OnModelSearchBoxKeyDown(object sender, KeyEventArgs e)
+        {
+            //
+            // The default windows forms behavior will intercept the arrow key messages
+            // and handle them in the background.  This is normally ideal.  However, here, it would
+            // be nice if the search box could change the the selection of the list box.  That way, users
+            // can manipulate the list box while their typing in a search.
+            //
+
+            // Handle the arrow keys at this point.
+            if (e.KeyCode == Keys.Down)
+            {
+                // Not doing a wrap around on this.  Just increment it if we can.
+                if (modelListBox.Items.Count > 0 && modelListBox.SelectedIndex + 1 < modelListBox.Items.Count)
+                {
+                    modelListBox.SelectedIndex++;
+                }
+
+                // Flag the key as handled so the text box doesn't move the cursor.
+                e.Handled = true;
+            }
+            else if (e.KeyCode == Keys.Up)
+            {
+                // Not doing a wrap around on this.  Just decrement it if we can.
+                if (modelListBox.Items.Count > 0 && modelListBox.SelectedIndex - 1 >= 0)
+                {
+                    modelListBox.SelectedIndex--;
+                }
+
+                // Flag the key as handled so the text box doesn't move the cursor.
+                e.Handled = true;
+            }
+        }
+
+        //
+        // Checkbox Handlers
+        //
+
+        private void OnFullScreenCheckBoxClick(object sender, EventArgs e)
+        {
+            // Query resolution
+            Size resolution = SystemInformation.PrimaryMonitorSize;
+
+            // Create a full screen window.
+            FullScreenWindow fullScreenWindow = new
+                FullScreenWindow(ref renderer, ref camera, 
+                ref animationController, ref timer,
+                ref glControlMain,
+                FIELD_OF_VIEW, NEAR_PLANE, FAR_PLANE);
+
+            // Display it.
+            fullScreenWindow.ShowDialog(this);
+
+            // The full screen context makes itself the current context
+            // for OpenGL.  So, when it's done being shown, we need to make
+            // the original form the current context and redraw it.
+            glControlMain.Context.MakeCurrent(glControlMain.WindowInfo);
+
+            // Send a resize message to update the camera and renderer.
+            GLControlMainOnResize(null, null);
+
+            // Redraw
+            glControlMain.Invalidate();
+
+            // Uncheck the GUI on close. (Maybe should just make this a normal button?)
+            fullScreenCheckBox.Checked = false;
+        }
         
         //
         // Helper Functions
@@ -505,11 +669,6 @@ namespace LOLViewer
             timer.Reset();
             timer.Start();
             return elapsedTime;
-        }
-
-        private void resetCameraButton_Click(object sender, EventArgs e)
-        {
-
         }
     }
 }

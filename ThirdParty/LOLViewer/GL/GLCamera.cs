@@ -2,7 +2,7 @@
 
 /*
 LOLViewer
-Copyright 2011 James Lammlein 
+Copyright 2011-2012 James Lammlein 
 
  
 
@@ -43,7 +43,7 @@ using OpenTK;
 
 namespace LOLViewer
 {
-    class GLCamera
+    public class GLCamera
     {
         // Keybinding
         public enum CameraKeyValues
@@ -63,7 +63,7 @@ namespace LOLViewer
         public Matrix4 view, projection;
 
         // We need to account for the fact that OpenGL does not have
-        // the same handedness as DirectX.  So, we compute everything
+        // the same handedness as DirectX.  So, we compute everything 
         // left handed as a DirectX pipeline would.  Then, at the very last step,
         // we multiply in the conversion into the view matrix.  This will convert
         // the data to a right handed system.
@@ -338,10 +338,10 @@ namespace LOLViewer
         {
             eye = defaultEye;
             target = defaultTarget;
+
             radius = defaultRadius;
             viewArcBall.Reset();
             viewArcBall.SetRadius(radius * RADIUS_SCALE);
-            view = handConverter * view;
 
             wasDraggedSinceLastUpdate = true;
 
