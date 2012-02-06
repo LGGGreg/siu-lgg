@@ -86,7 +86,6 @@
             this.Controls.Add(this.findParticles);
             this.Name = "ParticleFinderNew";
             this.Text = "Particle Finder";
-            this.Load += new System.EventHandler(this.ParticleFinder_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 
