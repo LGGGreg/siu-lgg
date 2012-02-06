@@ -35,27 +35,6 @@ namespace ParticleFinder
 
         String lolDirectory = "C:\\Riot Games\\League of Legends";
 
-        FolderBrowserDialog lolDirBrowser = new FolderBrowserDialog();
-
-        Stopwatch totalTime = new Stopwatch();
-        Stopwatch getRAFEntryTime = new Stopwatch();
-        Stopwatch searchTroyTime = new Stopwatch();
-        Stopwatch readTroyContent = new Stopwatch();
-
-        private void ParticleFinder_Load(object sender, EventArgs e)
-        {
-            lolDirBrowser.Description = "Select your League of Legends game directory.\n(Example: C:\\Riot Games\\League of Legends)";
-            lolDirBrowser.ShowNewFolderButton = false;
-            lolDirBrowser.RootFolder = Environment.SpecialFolder.MyComputer;
-            lolDirBrowser.Tag = "Particle Reference";
-            if (!Directory.Exists(lolDirectory))
-            {
-                lolDirBrowser.ShowDialog();
-                lolDirectory = lolDirBrowser.SelectedPath;
-                this.Activate();
-            }
-        }
-
         public void reportProgress(int p)
         {
             if (p != lastProgress)
@@ -117,8 +96,6 @@ namespace ParticleFinder
             }
             reportProgress(25);            
 
-            totalTime.Start();
-
             i = 0;
             // Search through DATA/Spells directory
             foreach (RAFFileListEntry file in fileList)
@@ -154,6 +131,8 @@ namespace ParticleFinder
                         {
                             championName = shortFileName.Substring(0, splitIndex).ToLower();
                         }
+
+                        #region Champion Name Exceptions
 
                         switch (championName)
                         {
@@ -968,7 +947,8 @@ namespace ParticleFinder
                                 break;
                         }
 
-                            
+                        #endregion // Champion Name Exceptions
+
                         if (championName != "")
                         {
                             // Add to dictionary
@@ -993,12 +973,11 @@ namespace ParticleFinder
                                 // Get RAFFileListEntry for the troybin
                                 RAFFileListEntry troyEntry = null;
                                 String matchStr = match.Groups[1].ToString().ToLower() + "troybin";
-                                getRAFEntryTime.Start();
+
                                 if(rafReference.ContainsKey(matchStr))
                                 {
                                     troyEntry = rafReference[matchStr];
                                 }
-                                getRAFEntryTime.Stop();
 
                                 if (troyEntry != null)
                                 {
@@ -1013,7 +992,6 @@ namespace ParticleFinder
                                         particleDef[championName][shortFileName][troyEntry] = new List<String>();
                                     }
 
-                                    searchTroyTime.Start();
                                     // Search troybins for .dds, .sco, .scb, etc.
                                     MemoryStream myInputTwo = new MemoryStream(troyEntry.GetContent());
                                     StreamReader readerTwo = new StreamReader(myInputTwo);
@@ -1032,8 +1010,6 @@ namespace ParticleFinder
                                             particleDef[championName][shortFileName][troyEntry].Add(particleMatch.Value);
                                         }
                                     }
-
-                                    searchTroyTime.Stop();
                                 }
                             }
                         }
@@ -1046,8 +1022,6 @@ namespace ParticleFinder
             {
                 archive.GetDataFileContentStream().Close();
             }
-
-            totalTime.Stop();
 
             reportProgress(100);
 
