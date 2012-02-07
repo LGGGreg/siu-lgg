@@ -4,22 +4,39 @@ using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace SkinInstaller
+namespace ParticleFinder
 {
     class fxReader
     {
-        private int origonalOffset = 16;
-        private int spacing = 588;
-
         public static List<string> getTroysFromFxFile(MemoryStream inputStream)
         {
-            return new List<string>();
+            List<String> troyList = new List<String>();
+            List<long> offsetList = new List<long>();
+            offsetList.Add(16);
+            offsetList.Add(604);
+            offsetList.Add(1192);
+            offsetList.Add(1780);
+            offsetList.Add(2368);
+            offsetList.Add(2960);
+            offsetList.Add(3544);
+            offsetList.Add(4132);
+
+            int currentOffset = 0;
+
+            while (currentOffset < offsetList.Count)
+            {
+                String troyStr = ReadNullTerminatedString(ref inputStream, offsetList[currentOffset]);
+                if (troyStr.Contains(".tro") && troyStr.IndexOf(".tro") != 0)
+                    troyList.Add(troyStr);
+                currentOffset++;
+            }
+
+            return troyList;
         }
 
 
-        public static String ReadNulTerminatedString(ref MemoryStream s, int atOffset)
+        public static String ReadNullTerminatedString(ref MemoryStream s, long atOffset)
         {
-            long oldPos = s.Position;
             s.Seek(atOffset, SeekOrigin.Begin);
 
             StringBuilder sb = new StringBuilder();
@@ -29,7 +46,6 @@ namespace SkinInstaller
                 sb.Append((char)c);
             }
 
-            s.Seek(oldPos, SeekOrigin.Begin);
             return sb.ToString();
         }
     }

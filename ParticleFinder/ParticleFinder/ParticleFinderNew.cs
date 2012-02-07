@@ -48,7 +48,7 @@ namespace ParticleFinder
         public PStruct getParticleStructure(string rafPath)
         {
             PStruct particleDef = new PStruct();
-            Dictionary<String, String> matchList = new Dictionary<String, String>();
+            Dictionary<String, List<String>> matchList = new Dictionary<String, List<String>>();
 
             // Browse LoL directory and find .raf files
             List<RAFFileListEntry> fileList = new List<RAFFileListEntry>();
@@ -99,7 +99,6 @@ namespace ParticleFinder
             reportProgress(25);            
 
             i = 0;
-            string dout = "";
             // Search through DATA/Spells directory
             foreach (RAFFileListEntry file in fileList)
             {
@@ -965,12 +964,19 @@ namespace ParticleFinder
                             }
                             MemoryStream myInput = new MemoryStream(file.GetContent());                                
                             List<string> troyMatchedStrings = new List<string>();
-                            // Use slighlty different regex for fx files
+                            // Use byte searching for fx files
                             if (fileInfo.Extension == ".fx")
                             {
                                 //captureFileNames = new Regex(@"(?:a?(?:33|ff))*[a-b]([a-zA-z0-9\-_ ]+\.)(?:troy|troybin)", RegexOptions.IgnoreCase);
-                                troyMatchedStrings.AddRange(fxReader.getTroysFromFxFile(myInput));
+                                List<String> tempList = fxReader.getTroysFromFxFile(myInput);
+                                troyMatchedStrings.AddRange(tempList);
                                 myInput.Close();
+                                if (tempList.Count > 0)
+                                {
+                                    if (!matchList.ContainsKey(file.FileName))
+                                        matchList[file.FileName] = new List<string>();
+                                    matchList[file.FileName].AddRange(tempList);
+                                }
                             }
                             else
                             {

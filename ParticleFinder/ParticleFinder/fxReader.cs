@@ -8,18 +8,26 @@ namespace ParticleFinder
 {
     class fxReader
     {
-        private int origonalOffset = 16;
-        private int spacing = 588;
-
         public static List<string> getTroysFromFxFile(MemoryStream inputStream)
         {
+            List<String> troyList = new List<String>();
+            long spacing = 588;
+            long currentOffset = 16;
+
+            long streamLen = inputStream.Length;
+
+            while (currentOffset < streamLen)
+            {
+                troyList.Add(ReadNullTerminatedString(ref inputStream, currentOffset));
+                currentOffset += spacing;
+            }
+
             return new List<string>();
         }
 
 
-        public static String ReadNulTerminatedString(ref MemoryStream s, int atOffset)
+        public static String ReadNullTerminatedString(ref MemoryStream s, long atOffset)
         {
-            long oldPos = s.Position;
             s.Seek(atOffset, SeekOrigin.Begin);
 
             StringBuilder sb = new StringBuilder();
@@ -29,7 +37,6 @@ namespace ParticleFinder
                 sb.Append((char)c);
             }
 
-            s.Seek(oldPos, SeekOrigin.Begin);
             return sb.ToString();
         }
     }
