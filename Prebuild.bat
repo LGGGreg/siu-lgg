@@ -15,6 +15,8 @@ XCopy ..\..\GUI\ParticleFinderNew.resx ..\..\ParticleFinder\ParticleFinder\Parti
 
 XCopy ..\..\GUI\ParticleFinderNew.Designer.cs ..\..\ParticleFinder\ParticleFinder\ParticleFinderNew.Designer.cs /R /U /Y /D
 
+XCopy ..\..\Other\fsReader.cs ..\..\ParticleFinder\ParticleFinder\fxReader.cs /R /U /Y /D
+
 Echo "Copying Particle Project over to SIU"
 
 XCopy ..\..\ParticleReferenceForSIU\ParticleReferenceForSIU\ParticleReference.cs ..\..\GUI\ParticleReference.cs /R /U /Y /D
@@ -30,6 +32,8 @@ XCopy ..\..\ParticleFinder\ParticleFinder\ParticleFinderNew.cs ..\..\GUI\Particl
 XCopy ..\..\ParticleFinder\ParticleFinder\ParticleFinderNew.resx ..\..\GUI\ParticleFinderNew.resx /R /U /Y /D
 
 XCopy ..\..\ParticleFinder\ParticleFinder\ParticleFinderNew.Designer.cs ..\..\GUI\ParticleFinderNew.Designer.cs /R /U /Y /D
+
+XCopy ..\..\ParticleFinder\ParticleFinder\fxReader.cs ..\..\Other\fsReader.cs /R /U /Y /D
 
 Echo "Finished all copying, go build now! (This happens before the build, you do not have to re-build)"
 Exit 0

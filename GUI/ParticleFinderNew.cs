@@ -12,6 +12,7 @@ using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Diagnostics;
 using System.Threading;
+using SkinInstaller;
 
 namespace ParticleFinder
 {
@@ -98,6 +99,7 @@ namespace ParticleFinder
             reportProgress(25);            
 
             i = 0;
+            string dout = "";
             // Search through DATA/Spells directory
             foreach (RAFFileListEntry file in fileList)
             {
@@ -961,38 +963,45 @@ namespace ParticleFinder
                             {
                                 particleDef[championName] = new Dictionary<String, Dictionary<RAFFileListEntry, List<String>>>();
                             }
-
-                            // Search luaobj's for .troy or .troybin
-                            // Get the content from the luaobj's
-                            MemoryStream myInput = new MemoryStream(file.GetContent());
-                            StreamReader reader = new StreamReader(myInput);
-                            String result = reader.ReadToEnd();
-                            reader.Close();
-                            myInput.Close();
-
-                            String cleanString = Regex.Replace(result, @"[^\u0000-\u007F]", "").Replace("\0\0", "?");
-                            Regex captureFileNames = new Regex(@"([a-zA-z0-9\-_ ]+\.)(?:troy|troybin)", RegexOptions.IgnoreCase);
-                            // Use slighly different regex for fx files
+                            MemoryStream myInput = new MemoryStream(file.GetContent());                                
+                            List<string> troyMatchedStrings = new List<string>();
+                            // Use slighlty different regex for fx files
                             if (fileInfo.Extension == ".fx")
-                                captureFileNames = new Regex(@"(?:a?(?:33|ff))*[a-b]([a-zA-z0-9\-_ ]+\.)(?:troy|troybin)", RegexOptions.IgnoreCase);
-
-                            MatchCollection matches = captureFileNames.Matches(cleanString);
-                            foreach (Match match in matches)
                             {
-                                if (fileInfo.Extension == ".fx")
-                                {
-                                    if (!matchList.ContainsKey(match.Groups[1].ToString().ToLower() + "troybin"))
-                                        matchList.Add(match.Groups[1].ToString().ToLower() + "troybin", cleanString);
-                                }
+                                //captureFileNames = new Regex(@"(?:a?(?:33|ff))*[a-b]([a-zA-z0-9\-_ ]+\.)(?:troy|troybin)", RegexOptions.IgnoreCase);
+                                troyMatchedStrings.AddRange(fxReader.getTroysFromFxFile(myInput));
+                                myInput.Close();
+                            }
+                            else
+                            {
+                                // Search luaobj's for .troy or .troybin
+                                // Get the content from the luaobj's
+                                StreamReader reader = new StreamReader(myInput);
+                                String result = reader.ReadToEnd();
+                                reader.Close();
+                                myInput.Close();
 
+                                String cleanString = Regex.Replace(result, @"[^\u0000-\u007F]", "").Replace("\0\0", "?");
+                                Regex captureFileNames = new Regex(@"([a-zA-z0-9\-_ ]+\.)(?:troy|troybin)", RegexOptions.IgnoreCase);
+
+                            
+                                MatchCollection matches = captureFileNames.Matches(cleanString);
+                                foreach (Match match in matches)
+                                {
+                                    String matchStr = match.Groups[1].ToString().ToLower() + "troybin";
+                                    troyMatchedStrings.Add(matchStr);
+                                }
+                            }
+                            foreach (string matchStr in troyMatchedStrings)
+                            {
                                 // Get RAFFileListEntry for the troybin
                                 RAFFileListEntry troyEntry = null;
-                                String matchStr = match.Groups[1].ToString().ToLower() + "troybin";
-
+                                
                                 if (rafReference.ContainsKey(matchStr))
                                 {
                                     troyEntry = rafReference[matchStr];
                                 }
+
 
                                 if (troyEntry != null)
                                 {
@@ -1014,8 +1023,8 @@ namespace ParticleFinder
                                     readerTwo.Close();
                                     myInputTwo.Close();
 
-                                    cleanString = Regex.Replace(resultTwo, @"[^\u0000-\u007F]", "").Replace('\0', '?');
-                                    captureFileNames = new Regex(@"([a-zA-z0-9\-_ ]+\.(?:tga|sco|scb|dds|png))", RegexOptions.IgnoreCase);
+                                    String cleanString = Regex.Replace(resultTwo, @"[^\u0000-\u007F]", "").Replace('\0', '?');
+                                    Regex captureFileNames = new Regex(@"([a-zA-z0-9\-_ ]+\.(?:tga|sco|scb|dds|png))", RegexOptions.IgnoreCase);
                                     MatchCollection troyMatches = captureFileNames.Matches(cleanString);
 
                                     foreach (Match particleMatch in troyMatches)

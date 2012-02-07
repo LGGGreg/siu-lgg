@@ -88,6 +88,7 @@
     <Compile Include="GUI\ParticleReference.Designer.cs">
       <DependentUpon>ParticleReference.cs</DependentUpon>
     </Compile>
+    <Compile Include="Other\fxReader.cs" />
     <Compile Include="Properties\Resource.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
