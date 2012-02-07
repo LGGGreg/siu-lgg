@@ -47,6 +47,7 @@ namespace ParticleFinder
         public PStruct getParticleStructure(string rafPath)
         {
             PStruct particleDef = new PStruct();
+            Dictionary<String, String> matchList = new Dictionary<String, String>();
 
             // Browse LoL directory and find .raf files
             List<RAFFileListEntry> fileList = new List<RAFFileListEntry>();
@@ -106,9 +107,13 @@ namespace ParticleFinder
                 if (file.FileName.Contains("DATA/Spells") && !file.FileName.Contains("DATA/Spells/Icons2D") && !file.FileName.Contains("DATA/Spells/Textures"))
                 {
                     FileInfo fileInfo = new FileInfo(file.FileName);
-                    if (fileInfo.Extension == ".luaobj" || fileInfo.Extension == ".inibin")
+                    if (fileInfo.Extension == ".luaobj" || fileInfo.Extension == ".inibin" || fileInfo.Extension == ".fx")
                     {
-                        String shortFileName = file.FileName.Substring(file.FileName.LastIndexOf('/') + 1, file.FileName.Length - file.FileName.LastIndexOf('/') - 8);
+                        String shortFileName = String.Empty;
+                        if (fileInfo.Extension == ".luaobj" || fileInfo.Extension == ".inibin")
+                            shortFileName = file.FileName.Substring(file.FileName.LastIndexOf('/') + 1, file.FileName.Length - file.FileName.LastIndexOf('/') - 8);
+                        else
+                            shortFileName = file.FileName.Substring(file.FileName.LastIndexOf('/') + 1, file.FileName.Length - file.FileName.LastIndexOf('/') - 4);
                         String championName = String.Empty;
 
                         // Find index of second uppercase letter
@@ -965,16 +970,26 @@ namespace ParticleFinder
                             reader.Close();
                             myInput.Close();
 
-                            String cleanString = Regex.Replace(result, @"[^\u0000-\u007F]", "").Replace('\0', '?');
+                            String cleanString = Regex.Replace(result, @"[^\u0000-\u007F]", "").Replace("\0\0", "?");
                             Regex captureFileNames = new Regex(@"([a-zA-z0-9\-_ ]+\.)(?:troy|troybin)", RegexOptions.IgnoreCase);
+                            // Use slighly different regex for fx files
+                            if (fileInfo.Extension == ".fx")
+                                captureFileNames = new Regex(@"(?:a?(?:33|ff))*[a-b]([a-zA-z0-9\-_ ]+\.)(?:troy|troybin)", RegexOptions.IgnoreCase);
+
                             MatchCollection matches = captureFileNames.Matches(cleanString);
                             foreach (Match match in matches)
                             {
+                                if (fileInfo.Extension == ".fx")
+                                {
+                                    if (!matchList.ContainsKey(match.Groups[1].ToString().ToLower() + "troybin"))
+                                        matchList.Add(match.Groups[1].ToString().ToLower() + "troybin", cleanString);
+                                }
+
                                 // Get RAFFileListEntry for the troybin
                                 RAFFileListEntry troyEntry = null;
                                 String matchStr = match.Groups[1].ToString().ToLower() + "troybin";
 
-                                if(rafReference.ContainsKey(matchStr))
+                                if (rafReference.ContainsKey(matchStr))
                                 {
                                     troyEntry = rafReference[matchStr];
                                 }
@@ -1015,7 +1030,6 @@ namespace ParticleFinder
                         }
                     }
                 }
-
             }
 
             foreach (RAFArchive archive in archiveList)
