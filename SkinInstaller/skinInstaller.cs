@@ -4148,6 +4148,7 @@ namespace SkinInstaller
             this.moreDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getVersionFilePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.readVersionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.getLastModDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.soundFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clientLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.repathAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -4201,7 +4202,6 @@ namespace SkinInstaller
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportTreeViewWorker1 = new System.ComponentModel.BackgroundWorker();
             this.ParticleTreeWorkerNew = new System.ComponentModel.BackgroundWorker();
-            this.getLastModDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -4245,7 +4245,7 @@ namespace SkinInstaller
             // exit
             // 
             this.exit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.exit.Location = new System.Drawing.Point(750, 6);
+            this.exit.Location = new System.Drawing.Point(758, 3);
             this.exit.Name = "exit";
             this.exit.Size = new System.Drawing.Size(57, 23);
             this.exit.TabIndex = 20;
@@ -5381,9 +5381,9 @@ namespace SkinInstaller
             // 
             this.UpdateFL.Location = new System.Drawing.Point(90, 3);
             this.UpdateFL.Name = "UpdateFL";
-            this.UpdateFL.Size = new System.Drawing.Size(158, 23);
+            this.UpdateFL.Size = new System.Drawing.Size(120, 23);
             this.UpdateFL.TabIndex = 35;
-            this.UpdateFL.Text = "Update File List (Click me after every LoL Update)";
+            this.UpdateFL.Text = "Re-Read LoL Files";
             this.UpdateFL.UseVisualStyleBackColor = true;
             this.UpdateFL.Click += new System.EventHandler(this.UpdateFL_Click);
             this.UpdateFL.MouseEnter += new System.EventHandler(this.Update_MouseEnter);
@@ -5413,7 +5413,7 @@ namespace SkinInstaller
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(700, 6);
+            this.button2.Location = new System.Drawing.Point(700, 3);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(44, 23);
             this.button2.TabIndex = 41;
@@ -5557,6 +5557,13 @@ namespace SkinInstaller
             this.readVersionsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
             this.readVersionsToolStripMenuItem.Text = "Read Versions";
             this.readVersionsToolStripMenuItem.Click += new System.EventHandler(this.readVersionsToolStripMenuItem_Click);
+            // 
+            // getLastModDateToolStripMenuItem
+            // 
+            this.getLastModDateToolStripMenuItem.Name = "getLastModDateToolStripMenuItem";
+            this.getLastModDateToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.getLastModDateToolStripMenuItem.Text = "Get Last Mod Date";
+            this.getLastModDateToolStripMenuItem.Click += new System.EventHandler(this.getLastModDateToolStripMenuItem_Click);
             // 
             // soundFileLocationToolStripMenuItem
             // 
@@ -5816,7 +5823,7 @@ namespace SkinInstaller
             // 
             // button3startLoL
             // 
-            this.button3startLoL.Location = new System.Drawing.Point(565, 6);
+            this.button3startLoL.Location = new System.Drawing.Point(544, 3);
             this.button3startLoL.Name = "button3startLoL";
             this.button3startLoL.Size = new System.Drawing.Size(75, 23);
             this.button3startLoL.TabIndex = 43;
@@ -5826,7 +5833,7 @@ namespace SkinInstaller
             // 
             // button3lcintegrate
             // 
-            this.button3lcintegrate.Location = new System.Drawing.Point(295, 4);
+            this.button3lcintegrate.Location = new System.Drawing.Point(233, 3);
             this.button3lcintegrate.Name = "button3lcintegrate";
             this.button3lcintegrate.Size = new System.Drawing.Size(153, 23);
             this.button3lcintegrate.TabIndex = 42;
@@ -5948,13 +5955,6 @@ namespace SkinInstaller
             this.ParticleTreeWorkerNew.DoWork += new System.ComponentModel.DoWorkEventHandler(this.ParticleTreeWorkerNew_DoWork);
             this.ParticleTreeWorkerNew.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ParticleTreeWorkerNew_ProgressChanged);
             this.ParticleTreeWorkerNew.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.ParticleTreeWorkerNew_RunWorkerCompleted);
-            // 
-            // getLastModDateToolStripMenuItem
-            // 
-            this.getLastModDateToolStripMenuItem.Name = "getLastModDateToolStripMenuItem";
-            this.getLastModDateToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
-            this.getLastModDateToolStripMenuItem.Text = "Get Last Mod Date";
-            this.getLastModDateToolStripMenuItem.Click += new System.EventHandler(this.getLastModDateToolStripMenuItem_Click);
             // 
             // skinInstaller
             // 
