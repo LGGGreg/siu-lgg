@@ -17,7 +17,7 @@ namespace ParticleFinder
             offsetList.Add(1192);
             offsetList.Add(1780);
             offsetList.Add(2368);
-            offsetList.Add(2960);
+            offsetList.Add(2956);
             offsetList.Add(3544);
             offsetList.Add(4132);
 
@@ -26,8 +26,9 @@ namespace ParticleFinder
             while (currentOffset < offsetList.Count)
             {
                 String troyStr = ReadNullTerminatedString(ref inputStream, offsetList[currentOffset]);
-                if (troyStr.Contains(".tro") && troyStr.IndexOf(".tro") != 0)
-                    troyList.Add(troyStr);
+                int troyExtIndex = troyStr.IndexOf(".tro");
+                if (troyExtIndex>0)
+                    troyList.Add((troyStr.Substring(0,troyExtIndex)+".troybin").ToLower());
                 currentOffset++;
             }
 

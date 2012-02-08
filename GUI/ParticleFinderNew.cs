@@ -965,7 +965,7 @@ namespace ParticleFinder
                             MemoryStream myInput = new MemoryStream(file.GetContent());                                
                             List<string> troyMatchedStrings = new List<string>();
                             // Use byte searching for fx files
-                            if (fileInfo.Extension == ".fx")
+                            if (fileInfo.Extension.ToLower() == ".fx")
                             {
                                 //captureFileNames = new Regex(@"(?:a?(?:33|ff))*[a-b]([a-zA-z0-9\-_ ]+\.)(?:troy|troybin)", RegexOptions.IgnoreCase);
                                 List<String> tempList = fxReader.getTroysFromFxFile(myInput);
@@ -1007,7 +1007,6 @@ namespace ParticleFinder
                                 {
                                     troyEntry = rafReference[matchStr];
                                 }
-
 
                                 if (troyEntry != null)
                                 {
