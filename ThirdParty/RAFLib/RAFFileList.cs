@@ -6,6 +6,8 @@ using System.Text;
 using ItzWarty;
 
 using System.IO;
+using System.Threading;
+using System.Globalization;
 
 namespace RAFLib
 {
@@ -20,6 +22,9 @@ namespace RAFLib
         private List<RAFFileListEntry> fileEntries = null;
         public RAFFileList(RAFArchive raf, byte[] directoryFileContent, UInt32 offsetFileListHeader)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            
             this.content = directoryFileContent;
             this.offsetFileListHeader = offsetFileListHeader;
 

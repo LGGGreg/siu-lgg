@@ -8,6 +8,8 @@ using System.IO;
 using zlib = ComponentAce.Compression.Libs.zlib;
 
 using ItzWarty;
+using System.Threading;
+using System.Globalization;
 
 namespace RAFLib
 {
@@ -28,6 +30,9 @@ namespace RAFLib
         
         public bool PackRAF(string sourceDirectory, string targetDirectory)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            
             //RAFHashManager.Init(); //Inits if it needs to load the hashes dict...
 
             //archivedPaths = RAFHashManager.GetKeys();

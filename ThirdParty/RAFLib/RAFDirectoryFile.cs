@@ -6,6 +6,8 @@ using System.Text;
 using ItzWarty;
 
 using System.IO;
+using System.Threading;
+using System.Globalization;
 
 namespace RAFLib
 {
@@ -43,6 +45,9 @@ namespace RAFLib
         RAFArchive raf = null;
         public RAFDirectoryFile(RAFArchive raf, string location)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            
             this.raf = raf;
             content = System.IO.File.ReadAllBytes(location);
             magic = BitConverter.ToUInt32(content.SubArray(0, 4), 0);
