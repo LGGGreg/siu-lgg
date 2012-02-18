@@ -6,6 +6,8 @@ using System.Text;
 using System.IO;
 
 using zlib = ComponentAce.Compression.Libs.zlib;
+using System.Threading;
+using System.Globalization;
 
 namespace RAFLib
 {
@@ -40,6 +42,9 @@ namespace RAFLib
         //(string rafPath, UInt32 offset, UInt32 fileSize, UInt32 nameStringTableIndex)
         public RAFFileListEntry(RAFArchive raf, ref byte[] directoryFileContent, UInt32 offsetDirectoryEntry)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            
             this.raf = raf;
             this.directoryFileContent = directoryFileContent;
             this.offsetEntry = offsetDirectoryEntry;

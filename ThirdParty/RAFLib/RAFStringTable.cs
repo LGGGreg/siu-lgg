@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 
 using ItzWarty;
+using System.Threading;
+using System.Globalization;
 
 namespace RAFLib
 {
@@ -14,6 +16,9 @@ namespace RAFLib
         private List<String> strings = new List<string>();
         public RAFStringTable(RAFArchive raf, byte[] directoryFileContent, UInt32 offsetTable)
         {
+            Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
+            Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
+            
             this.raf = raf;
             this.directoryFileContent = directoryFileContent;
 

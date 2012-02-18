@@ -6895,6 +6895,20 @@ namespace SkinInstaller
 
                     rebuildTree();
 
+                    if (argsToProc != "")
+                    {
+                        processArgs(argsToProc);
+                    }
+
+                    if (File.Exists("FreshInstall.LGG"))
+                    {
+                        File.Delete("FreshInstall.LGG");
+                        repathAll();
+                    }
+
+                    statusText.Text = "Ready!";
+                    b_IAddFiles.Enabled = true;
+                    b_IAddDirectory.Enabled = true;
                 }
             }
         }
@@ -9527,11 +9541,11 @@ namespace SkinInstaller
             if(File.Exists(path))
             {
                 TextReader reader = new StreamReader(path);
-                string line = reader.ReadLine();
+                string[] lines = reader.ReadLine().Split(new string[1] { "=" }, StringSplitOptions.None);
                 reader.Close();
                 //locale = en_gb
-                to_return = (line.Split(new string[1]{"="},StringSplitOptions.None))[1].Trim();
-
+                if(lines.Length>1)
+                    to_return = lines[1].Trim();
             }
             return to_return;
                 
