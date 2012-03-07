@@ -9178,12 +9178,20 @@ namespace SkinInstaller
                     }
                     else
                     {
+                        if (checkedNode.Text == "Loading...(Watch Progress bar at bottom)")
+                        {
+                            //skip, warn
+                            Cliver.Message.Inform("Please Expand the RAF folder before exporting");
+                            //return;
+                        }
+                        else
+                        {
 
+                            string fileLocation = ((rafTreeDataObject)checkedNode.Tag).fileLocation;
 
-                        string fileLocation = ((rafTreeDataObject)checkedNode.Tag).fileLocation;
-
-                        toBackup.Add(fileLocation);
-                        output += fileLocation + "\r\n";
+                            toBackup.Add(fileLocation);
+                            output += fileLocation + "\r\n";
+                        }
                     }
                 }
             }
@@ -9240,7 +9248,14 @@ namespace SkinInstaller
             string path = myResult.path;
             string extraFolder = myResult.extraFolder;
             if (extraFolder == "")
-                Cliver.Message.Show("Success", SystemIcons.Application, "Successfully processed:\r\n" + output, 0, new string[] { "Yay!" });
+            {
+                if(output!="")
+                    Cliver.Message.Show("Success", SystemIcons.Application, "Successfully processed:\r\n" + output, 0, new string[] { "Yay!" });
+                else
+                {
+                    Cliver.Message.Inform("No files exported, please check your checked entries or expand the folders you selected.");
+                }
+            }
             else
             {
                 if (Cliver.Message.Show("Success", SystemIcons.Application, "Successfully saved " + extraFolder + "\r\n\r\nTo: " + path
