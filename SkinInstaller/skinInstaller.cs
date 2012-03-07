@@ -8848,6 +8848,7 @@ namespace SkinInstaller
             rafRootNode.Nodes.Clear();
             int prog = 0;
             int lastReport = 1;
+            // Iterate through all the files
             foreach (KeyValuePair<String, String> fileskv in allFilesList)
             {
                 prog++;
@@ -8857,11 +8858,14 @@ namespace SkinInstaller
                     lastReport = newProg;
                     rafTreeBuilderWorker2.ReportProgress(newProg);
                 }
-                //rafRootNode.Nodes.Add(fileskv.Value.ToLower());
+                // Only care about raf files
                 if (fileskv.Value.ToLower().Contains(".raf\\"))
                 {
+                    // Strip off the raf archive text
                     string rafPath = fileskv.Value.Substring(fileskv.Value.IndexOf(".raf\\") + 6);
+                    // Create a fileinfo to easily get extensions and short file names
                     FileInfo rafFileInfo = new FileInfo(rafPath);
+                    // Strip off the file name (ie. Only want the directory path)
                     if (rafPath.IndexOf("\\\\") == -1)
                         rafPath = "";
                     else
@@ -8869,21 +8873,29 @@ namespace SkinInstaller
 
                     // Create a refence to the database
                     TreeNode lookIn = database;
+                    // Split the directory into its parts
                     String[] folderArray = rafPath.Split(new string[] { "\\\\" }, StringSplitOptions.RemoveEmptyEntries);
 
+                    // Create a new node for each directory part
                     foreach (String folder in folderArray)
                     {
                         if (!lookIn.Nodes.ContainsKey(folder))
                             lookIn.Nodes.Add(folder, folder);
                         lookIn = lookIn.Nodes.Find(folder, false)[0];
                     }
-                    TreeNode addedNode = lookIn.Nodes.Add(fileskv.Value, rafFileInfo.Name);
-                    addedNode.ToolTipText = fileskv.Value;
-                    rafTreeDataObject tag = new rafTreeDataObject();
-                    tag.fileLocation= gameDirectory.Substring(0, gameDirectory.Length - 1) + fileskv.Value.Replace("\\\\", "\\");
-                    tag.rafPower = getRafPowerFromVersion(tag.fileLocation);
 
+                    // Create a node for the actual file
+                    TreeNode addedNode = lookIn.Nodes.Add(fileskv.Value, rafFileInfo.Name);
+                    // Set tooltip text
+                    addedNode.ToolTipText = fileskv.Value;
+
+                    // Get text color based on what RAF the file is from
+                    rafTreeDataObject tag = new rafTreeDataObject();
+                    tag.fileLocation = gameDirectory.Substring(0, gameDirectory.Length - 1) + fileskv.Value.Replace("\\\\", "\\");
+                    tag.rafPower = getRafPowerFromVersion(tag.fileLocation);
                     addedNode.Tag = tag;
+
+                    // Get image based on extension
                     int imageIndex = 5;
                     switch (rafFileInfo.Extension.ToLower())
                     {
@@ -8901,52 +8913,80 @@ namespace SkinInstaller
                         if(rafFileInfo.Name.ToLower().Contains("loadscreen"))
                             imageIndex = 8;
                     }
+
+                    // Set image and color
                     addedNode.ImageIndex = addedNode.SelectedImageIndex = imageIndex;
                     addedNode.ForeColor = colorFromRafPower(tag.rafPower);
                 }
             }
 
+            // Initial fill
             foreach (TreeNode node in database.Nodes)
             {
                 TreeNode childNode = new TreeNode(node.Text);
+                // If the child has children, create a dummy child for it
                 if (node.Nodes.Count > 0)
                     childNode.Nodes.Add("dummy", "dummy");
                 rafRootNode.Nodes.Add(childNode);
             }
 
+            // Add rootnode to the treeview
             newRafNode = rafRootNode;
+            // Color the folders 
             colorizeFolder(newRafNode);
             #endregion
             rafTreeBuilderWorker2.ReportProgress(100);
         }
         private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
+            // If the expanded node contains a dummy node, replace it with the real data
             if (e.Node.Nodes.ContainsKey("dummy"))
             {
+                // Disable redrawing of the treeview to prevent hangs
+                e.Node.TreeView.BeginUpdate();
+
+                // Remove the dummy child
                 e.Node.Nodes["dummy"].Remove();
+
                 TreeNode lookUp = e.Node;
+                // Create a list to hold the heirarchy required to get to the top
                 List<String> parentList = new List<String>();
+                // Add the actual node itself
                 parentList.Add(e.Node.Text);
+                // Keep adding until it's at the top
                 while (lookUp.Parent.Text != "RAF")
                 {
                     parentList.Add(lookUp.Parent.Text);
                     lookUp = lookUp.Parent;
                 }
+                // Reverse the list so I can go down the heirarchy
                 parentList.Reverse();
 
+                // Reference the first node in the heirarchy to the database
                 lookUp = database.Nodes[parentList[0]];
+                // Work down to the node in question
                 for (int i = 1; i < parentList.Count; i++)
                 {
                     lookUp = lookUp.Nodes[parentList[i]];
                 }
 
+                // Iterate through any children the node has
                 foreach (TreeNode node in lookUp.Nodes)
                 {
                     TreeNode childNode = new TreeNode(node.Text);
+                    // If the child has children, create a dummy child for it
                     if (node.Nodes.Count > 0)
                         childNode.Nodes.Add("dummy", "dummy");
+                    // Update the image and color according to the database values
+                    childNode.ImageIndex = node.ImageIndex;
+                    childNode.ForeColor = node.ForeColor;
                     e.Node.Nodes.Add(childNode);
                 }
+                // Color the folders
+                colorizeFolder(e.Node.TreeView.Nodes.Find("RAF", false)[0]);
+
+                // Re-enable drawing of the treeview
+                e.Node.TreeView.EndUpdate();
             }
         }
         private void treeView1_AfterExpand(object sender, TreeViewEventArgs e)
