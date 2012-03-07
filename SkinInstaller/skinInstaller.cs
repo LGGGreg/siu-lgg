@@ -8575,6 +8575,14 @@ namespace SkinInstaller
             }
             return rafPower;
         }
+        private string getRafVersionFromRafPower(int rafPower)
+        {
+            if (rafPower > previewWindow.reader.rafArchives.Count) return "Unknown";
+            return new Regex(@"\\(\d+\.\d+\.\d+\.\d+)\\").
+                Match(previewWindow.reader.rafArchives.Keys.ToArray()[rafPower]).
+                Captures[0].Value;
+            
+        }
         private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
         {
             if (e.Node.Name == "Text" && e.Node.Nodes.Count < 2)
@@ -8785,34 +8793,60 @@ namespace SkinInstaller
             TreeNode particleOldNode = particleNode.Nodes.Add("Particles Old", "Particles Old");
             particleOldNode.Name = "Particles Old";
             particleOldNode.Nodes.Add("Loading...(Watch Progress bar at bottom)");
-            
-            
-                    
-
         }
-        private int colorizeFolder(TreeNode folder)
+        private int colorizeFolder(TreeNode folder, bool usePreviousResults=true)
         {
-            int toReturn=0;
+            int toReturn = 10000;
             if (folder.Nodes.Count > 0)
             {
-                //is a folder
-                
-                int lowestRafPower = 100000;
+                //we know this is a folder so we color it based on what is inside of it!               
+                int lowestRafPower = 100000;//not very low yet :P
                 foreach (TreeNode innerNode in folder.Nodes)
                 {
-                     int nodesPower=-1;
-                    if (innerNode.Tag != null)                    
+                    int nodesPower = -1;
+                    /*if one of the items inside of this folder 
+                     * (either another folder, or a item)
+                     * has already figured out what version (and thus what color)
+                     * it is from, we need to find that and 
+                     * choose the newest version to color this one from
+                     * 
+                     * basically the idea is that we need to get version information
+                     * from EVERYTHING inside this folder, before we set it
+                     * thus the recursion to set the other folders first before we 
+                     * continue
+                    */
+                    if ((usePreviousResults != true) && (innerNode.Nodes.Count > 0))
+                    {
+                        //we are not using previous results, so don't bother checking tag
+                        //get new one, and make sure all child folders do the same
+                        nodesPower = colorizeFolder(innerNode, usePreviousResults);
+                    }else
+                    if (innerNode.Tag != null)
                     {
                         if (((rafTreeDataObject)innerNode.Tag).fileLocation == "Skin")
                         {
-                            nodesPower = colorizeFolder(innerNode);
-                        }else
-                        nodesPower = ((rafTreeDataObject)innerNode.Tag).rafPower;
-                        
-                    }else
-                    {
-                        nodesPower=colorizeFolder(innerNode);
+                            /*this folder item is not complete yet, 
+                             * recursion to color it first before
+                             * we continue */
+                            nodesPower = colorizeFolder(innerNode,usePreviousResults);
+                        }
+                        else //this inner node already has its raf version set, take it
+                            nodesPower = ((rafTreeDataObject)innerNode.Tag).rafPower;
+
                     }
+                    else
+                    {
+                        if ((innerNode.Name.ToLower() == "dummy")&&usePreviousResults==false)
+                        {
+                            nodesPower = 100000;
+                        }
+                        else
+                        //this means the folder(node) inside doesn't even have a tag yet
+                        //recursion call to set it first too
+                        nodesPower = colorizeFolder(innerNode,usePreviousResults);
+                    }
+                    //ok, now w/e this node was, should be set, 
+                    //so we can use it to find the newest raf
                     if (nodesPower < lowestRafPower)
                     {
                         lowestRafPower = nodesPower;
@@ -8820,6 +8854,10 @@ namespace SkinInstaller
                 }
                 if (lowestRafPower != 100000)
                 {
+                    //we have the newest raf version for this node(folder)
+                    //we should create a tag for us in case we are in a folder and
+                    //either by recursion, or another call, our function wants to see what version
+                    //we are
                     rafTreeDataObject tag = new rafTreeDataObject();
                     tag.fileLocation = "";
                     if (folder.Tag != null) tag.fileLocation = ((rafTreeDataObject)folder.Tag).fileLocation;
@@ -8828,6 +8866,9 @@ namespace SkinInstaller
                     Color test = colorFromRafPower(tag.rafPower);
                     //if (test.Equals(Color.Black)) test = Color.Lime;
                     folder.ForeColor = test;
+                    folder.ToolTipText = "Highest Raf Version Detected In This Folder So Far:\r\n"+
+                    getRafVersionFromRafPower(tag.rafPower);
+                    //also return the result NOW for the recursion events above
                     toReturn = tag.rafPower;
                 }
             }
@@ -8927,13 +8968,17 @@ namespace SkinInstaller
                 // If the child has children, create a dummy child for it
                 if (node.Nodes.Count > 0)
                     childNode.Nodes.Add("dummy", "dummy");
+                childNode.Tag = node.Tag;
+                childNode.ToolTipText = node.ToolTipText;
+                childNode.ImageIndex = childNode.SelectedImageIndex = node.ImageIndex;
+                childNode.ForeColor = node.ForeColor;
                 rafRootNode.Nodes.Add(childNode);
             }
 
             // Add rootnode to the treeview
             newRafNode = rafRootNode;
             // Color the folders 
-            colorizeFolder(newRafNode);
+            colorizeFolder(treeView1.Nodes.Find("RAF", false)[0], false);
             #endregion
             rafTreeBuilderWorker2.ReportProgress(100);
         }
@@ -8978,15 +9023,18 @@ namespace SkinInstaller
                     if (node.Nodes.Count > 0)
                         childNode.Nodes.Add("dummy", "dummy");
                     // Update the image and color according to the database values
-                    childNode.ImageIndex = node.ImageIndex;
+                    childNode.ImageIndex = childNode.SelectedImageIndex = node.ImageIndex;
                     childNode.ForeColor = node.ForeColor;
+                    childNode.Tag = node.Tag;
+                    childNode.ToolTipText = node.ToolTipText;
                     e.Node.Nodes.Add(childNode);
                 }
-                // Color the folders
-                colorizeFolder(e.Node.TreeView.Nodes.Find("RAF", false)[0]);
 
                 // Re-enable drawing of the treeview
                 e.Node.TreeView.EndUpdate();
+
+                // Color the folders
+                colorizeFolder(e.Node.TreeView.Nodes.Find("RAF", false)[0],false);
             }
         }
         private void treeView1_AfterExpand(object sender, TreeViewEventArgs e)
