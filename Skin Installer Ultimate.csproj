@@ -1,0 +1,472 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" DefaultTargets="Build">
+  <PropertyGroup>
+    <ProjectType>local</ProjectType>
+    <ProjectVersion>7.10.377</ProjectVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{94D492C3-FA9E-4453-9F65-A7DE84535D4C}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <AssemblyName>Skin Installer Ultimate</AssemblyName>
+    <OutputType>WinExe</OutputType>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <ApplicationIcon>Other\LGGIcon.ico</ApplicationIcon>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <ApplicationManifest>Other\app.manifest</ApplicationManifest>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">Debug</Configuration>
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">Debug</Configuration>
+    <PlatformTarget>x86</PlatformTarget>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
+    <OutputPath>bin\debug\</OutputPath>
+    <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
+    <DefineConstants>TRACE;DEBUG;(RemoveThis)USkin,(OrRemoveThis)SKINTHING</DefineConstants>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
+  </PropertyGroup>
+  <PropertyGroup>
+    <RootNamespace>SkinInstaller</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <ItemGroup>
+    <Compile Include="guiskinning\USkinSDK.cs" />
+    <Compile Include="GUI\CharacterSelectionForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\CharacterSelectionForm.Designer.cs">
+      <DependentUpon>CharacterSelectionForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\dxtVersionReader.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\dxtVersionReader.Designer.cs">
+      <DependentUpon>dxtVersionReader.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ParticleFinderNew.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ParticleFinderNew.Designer.cs">
+      <DependentUpon>ParticleFinderNew.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ParticleReference.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ParticleReference.Designer.cs">
+      <DependentUpon>ParticleReference.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Other\fxReader.cs" />
+    <Compile Include="Properties\Resource.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resource.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="SkinInstaller\CommonLibs.cs" />
+    <Compile Include="GUI\EditSkinItemForm1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\EditSkinItemForm1.Designer.cs">
+      <DependentUpon>EditSkinItemForm1.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\InputBox.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\LCIntHelp.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\LCIntHelp.Designer.cs">
+      <DependentUpon>LCIntHelp.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SkinInstaller\ListViewColumnSorter.cs" />
+    <Compile Include="SkinInstaller\MessageHelper.cs" />
+    <Compile Include="SkinInstaller\PortableSettingsProvider.cs" />
+    <Compile Include="Other\Settings.cs" />
+    <Compile Include="SkinInstaller\TexLib.cs" />
+    <Compile Include="GUI\UpdateAvailiableForm1.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\UpdateAvailiableForm1.Designer.cs">
+      <DependentUpon>UpdateAvailiableForm1.cs</DependentUpon>
+    </Compile>
+    <EmbeddedResource Include="GUI\CharacterSelectionForm.resx">
+      <DependentUpon>CharacterSelectionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\dxtVersionReader.resx">
+      <DependentUpon>dxtVersionReader.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\EditSkinItemForm1.resx">
+      <DependentUpon>EditSkinItemForm1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\InputBox.resx">
+      <DependentUpon>InputBox.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\LCIntHelp.resx">
+      <DependentUpon>LCIntHelp.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ParticleFinderNew.resx">
+      <DependentUpon>ParticleFinderNew.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ParticleReference.resx">
+      <DependentUpon>ParticleReference.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\UpdateAvailiableForm1.resx">
+      <DependentUpon>UpdateAvailiableForm1.cs</DependentUpon>
+    </EmbeddedResource>
+    <Reference Include="ICSharpCode.SharpZipLib">
+      <HintPath>ThirdParty\SharpZipLib\ICSharpCode.SharpZipLib.dll</HintPath>
+    </Reference>
+    <Reference Include="Ionic.Zip, Version=1.9.1.5, Culture=neutral, PublicKeyToken=edbe51ad942a3f5c, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ThirdParty\IconicZip\Ionic.Zip.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ThirdParty\OpenTK\OpenTK.dll</HintPath>
+    </Reference>
+    <Reference Include="OpenTK.GLControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>ThirdParty\OpenTK\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="skincrafter.net-vs2003">
+      <HintPath>..\..\..\..\Program Files (x86)\SkinCrafter3\SkinCrafterDemo\SkinCrafterDotNet_vs2003\skincrafter.net-vs2003.dll</HintPath>
+    </Reference>
+    <Reference Include="System.configuration" />
+    <Reference Include="System.Data.SQLite">
+      <HintPath>ThirdParty\SQLite\System.Data.SQLite.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
+    <Compile Include="Other\AssemblyInfo.cs" />
+    <Compile Include="GUI\ImagePreviewForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ImagePreviewForm.Designer.cs">
+      <DependentUpon>ImagePreviewForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\ListviewItemHover.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FullPreferencesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\FullPreferencesForm.Designer.cs">
+      <DependentUpon>FullPreferencesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\FileLocForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\InfoForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\InfoForm.Designer.cs">
+      <DependentUpon>InfoForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GUI\PreferencesForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\PreferencesForm.Designer.cs">
+      <DependentUpon>PreferencesForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="SkinInstaller\skinInstaller.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="SkinInstaller\FileHandler.cs" />
+    <Compile Include="SkinInstaller\Program.cs" />
+    <Compile Include="SkinInstaller\ZipUtil.cs" />
+    <EmbeddedResource Include="GUI\ImagePreviewForm.resx">
+      <DependentUpon>ImagePreviewForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FullPreferencesForm.resx">
+      <DependentUpon>FullPreferencesForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\FileLocForm.resx">
+      <DependentUpon>FileLocForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\InfoForm.resx">
+      <DependentUpon>InfoForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\PreferencesForm.resx">
+      <DependentUpon>PreferencesForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resource.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="SkinInstaller\skinInstaller.resx">
+      <DependentUpon>skinInstaller.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Reference Include="Tao.DevIl">
+      <HintPath>ThirdParty\Tao\Tao.DevIl.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="fsb\map.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="fsb\reb.bat">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="guiskinning\ClearLooks.msstyles">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="guiskinning\ConcaveD.msstyles">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="guiskinning\DiyGreen.msstyles">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <None Include="guiskinning\WindowSkin.skf">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="TreeViewImages\lemon.png" />
+    <None Include="TreeViewImages\Dee-dee.png" />
+    <None Include="TreeViewImages\tex-2.png" />
+    <None Include="TreeViewImages\skul16b.png" />
+    <None Include="TreeViewImages\skin.png" />
+    <None Include="TreeViewImages\folder.png" />
+    <EmbeddedResource Include="fixs\soundfix\CorporateMundo.spellcasteffor_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\CorporateMundo.spellcasteffor_2.wav" />
+    <EmbeddedResource Include="fixs\soundfix\CorporateMundo.spellcasteffor_3.wav" />
+    <EmbeddedResource Include="fixs\soundfix\CorporateMundo.ultimateeffort_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\CorporateMundo.ultimateeffort_2.wav" />
+    <EmbeddedResource Include="fixs\soundfix\CorporateMundo.ultimateeffort_3.wav" />
+    <EmbeddedResource Include="fixs\soundfix\dandychogath.spellcasteffort2_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\dandychogath.spellcasteffort2_2.wav" />
+    <EmbeddedResource Include="fixs\soundfix\dandychogath.spellcasteffort2_3.wav" />
+    <EmbeddedResource Include="fixs\soundfix\dandychogath.spellcasteffort2_4.wav" />
+    <EmbeddedResource Include="fixs\soundfix\TryndamereDemonsword.ultimate_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\TryndamereDemonsword.ultimate_2.wav" />
+    <EmbeddedResource Include="fixs\soundfix\TryndamereDemonsword.ultimate_3.wav" />
+    <EmbeddedResource Include="fixs\soundfix\001.Odin1.female1.Welcome_The_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\103.Odin1.female1.NexusEnemy__1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\103.Odin1.female1.NexusEnemy__2.wav" />
+    <EmbeddedResource Include="fixs\soundfix\Shyvana.spellcasteffort.wav" />
+    <EmbeddedResource Include="fixs\soundfix\Shyvana.spellcasteffort_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_2.wav" />
+    <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_3.wav" />
+    <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_4.wav" />
+    <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_5.wav" />
+    <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_6.wav" />
+    <EmbeddedResource Include="fixs\soundfix\ShyvanaDragon.spellcasteffort_7.wav" />
+    <None Include="TreeViewImages\small-cube-1.png" />
+    <None Include="TreeViewImages\small-cube-2.png" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_10.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_2.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_3.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_4.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_5.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_6.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_7.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_8.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.spellcastef_9.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.ultimateeff_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.ultimateeff_2.wav" />
+    <EmbeddedResource Include="fixs\soundfix\BloodKingVladimir.ultimateeff_3.wav" />
+    <EmbeddedResource Include="fixs\soundfix\HyenaWarwick.spellcasteffort2_1.wav" />
+    <EmbeddedResource Include="fixs\soundfix\HyenaWarwick.spellcasteffort2_2.wav" />
+    <EmbeddedResource Include="fixs\soundfix\HyenaWarwick.spellcasteffort2_3.wav" />
+    <EmbeddedResource Include="fixs\soundfix\HyenaWarwick.spellcasteffort2_4.wav" />
+    <Content Include="fsb\fsbext.exe">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="GUI\downarrow.png" />
+    <Content Include="TreeViewImages\loadscreenicon.png" />
+    <Content Include="USkin.dll">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LeagueOfLegendsSkinInstallerLeagueCraftIntegration.user.js">
+      <SubType>Form</SubType>
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Other\LGGIcon.ico" />
+    <Content Include="LGGSIU1.bmp">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Other\lollgg.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.2.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 2.0 %28x86%29</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.0">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.0 %28x86%29</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="app.config" />
+    <None Include="dxtVersion.ini">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+    <EmbeddedResource Include="fixs\tryndamereskn\DarkChampion.skl" />
+    <EmbeddedResource Include="fixs\tryndamereskn\DarkChampion.skn" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_attack1.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_attack2.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_crit.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_Dance.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_Death.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_Idle1.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_Idle2.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_Idle3.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_Joke.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_Laugh.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_Run.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_Spell1.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_Spell2.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_Spell3.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_spell4_loop.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_spell4_winddown.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_spell4_windup.anm" />
+    <EmbeddedResource Include="fixs\jannaanm\Janna_Taunt.anm" />
+    <EmbeddedResource Include="fixs\jannaskn\Janna.skl" />
+    <EmbeddedResource Include="fixs\jannaskn\Janna.skn" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Attack1.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Attack2.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Crit.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Dance.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Death.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Idle1.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Idle2.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Idle3.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Idle4.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Joke.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Laugh.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Run.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Run_Rage.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Spell1.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Spell2.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Spell3.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Spell4.anm" />
+    <EmbeddedResource Include="fixs\tryndamereanm\DarkChampion_Taunt.anm" />
+    <None Include="Other\App.config">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Other\app.manifest">
+      <SubType>Designer</SubType>
+    </None>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="Global Info\Global Info.csproj">
+      <Project>{07450611-C310-4368-92EA-E662680CD79A}</Project>
+      <Name>Global Info</Name>
+    </ProjectReference>
+    <ProjectReference Include="SIURegistry Installer\SIURegistry Installer.csproj">
+      <Project>{93628B92-AB46-4BDB-B70E-B158CA861C34}</Project>
+      <Name>SIURegistry Installer</Name>
+    </ProjectReference>
+    <ProjectReference Include="TextEditor\TextEditor.csproj">
+      <Project>{6087D6FE-BA69-43AF-86FF-D375D28AC980}</Project>
+      <Name>TextEditor</Name>
+    </ProjectReference>
+    <ProjectReference Include="ThirdParty\Be.Windows.Forms.HexBox\Be.Windows.Forms.HexBox.csproj">
+      <Project>{26C5F25F-B450-4CAF-AD8B-B8D11AE73457}</Project>
+      <Name>Be.Windows.Forms.HexBox</Name>
+    </ProjectReference>
+    <ProjectReference Include="ThirdParty\ColorSlider\ColorSlider.csproj">
+      <Project>{16E224DC-7FF0-4908-8318-D6A3AC2E797A}</Project>
+      <Name>ColorSlider</Name>
+    </ProjectReference>
+    <ProjectReference Include="ThirdParty\LOLViewer\LOLViewer.csproj">
+      <Project>{30DAB98B-9CBD-4FEB-808F-144A554AA18C}</Project>
+      <Name>LOLViewer</Name>
+    </ProjectReference>
+    <ProjectReference Include="ThirdParty\MessageForm\MessageForm.csproj">
+      <Project>{6E7D9609-B82F-48A9-8E79-7E3340855AD6}</Project>
+      <Name>MessageForm</Name>
+    </ProjectReference>
+    <ProjectReference Include="ThirdParty\RAF Manager\RAFManager.csproj">
+      <Project>{298D7AEA-B775-4DD2-ABBB-D8A9C1792B6F}</Project>
+      <Name>RAFManager</Name>
+    </ProjectReference>
+    <ProjectReference Include="ThirdParty\RAFLib\RAFLib.csproj">
+      <Project>{4661A92E-7729-4021-B35F-D5BDA01A79F9}</Project>
+      <Name>RAFLib</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
+  <PropertyGroup>
+    <PreBuildEvent>"$(ProjectDir)Prebuild.bat"
+</PreBuildEvent>
+  </PropertyGroup>
+</Project>
