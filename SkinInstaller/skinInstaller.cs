@@ -8921,7 +8921,33 @@ namespace SkinInstaller
         }
         private void treeView1_BeforeExpand(object sender, TreeViewCancelEventArgs e)
         {
-           
+            if (e.Node.Nodes.ContainsKey("dummy"))
+            {
+                e.Node.Nodes["dummy"].Remove();
+                TreeNode lookUp = e.Node;
+                List<String> parentList = new List<String>();
+                parentList.Add(e.Node.Text);
+                while (lookUp.Parent.Text != "RAF")
+                {
+                    parentList.Add(lookUp.Parent.Text);
+                    lookUp = lookUp.Parent;
+                }
+                parentList.Reverse();
+
+                lookUp = database.Nodes[parentList[0]];
+                for (int i = 1; i < parentList.Count; i++)
+                {
+                    lookUp = lookUp.Nodes[parentList[i]];
+                }
+
+                foreach (TreeNode node in lookUp.Nodes)
+                {
+                    TreeNode childNode = new TreeNode(node.Text);
+                    if (node.Nodes.Count > 0)
+                        childNode.Nodes.Add("dummy", "dummy");
+                    e.Node.Nodes.Add(childNode);
+                }
+            }
         }
         private void treeView1_AfterExpand(object sender, TreeViewEventArgs e)
         {
