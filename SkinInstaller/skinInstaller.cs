@@ -8987,56 +8987,63 @@ namespace SkinInstaller
             // If the expanded node contains a dummy node, replace it with the real data
             if (e.Node.Nodes.ContainsKey("dummy"))
             {
-                // Disable redrawing of the treeview to prevent hangs
-                e.Node.TreeView.BeginUpdate();
-
-                // Remove the dummy child
-                e.Node.Nodes["dummy"].Remove();
-
-                TreeNode lookUp = e.Node;
-                // Create a list to hold the heirarchy required to get to the top
-                List<String> parentList = new List<String>();
-                // Add the actual node itself
-                parentList.Add(e.Node.Text);
-                // Keep adding until it's at the top
-                while (lookUp.Parent.Text != "RAF")
-                {
-                    parentList.Add(lookUp.Parent.Text);
-                    lookUp = lookUp.Parent;
-                }
-                // Reverse the list so I can go down the heirarchy
-                parentList.Reverse();
-
-                // Reference the first node in the heirarchy to the database
-                lookUp = database.Nodes[parentList[0]];
-                // Work down to the node in question
-                for (int i = 1; i < parentList.Count; i++)
-                {
-                    lookUp = lookUp.Nodes[parentList[i]];
-                }
-
-                // Iterate through any children the node has
-                foreach (TreeNode node in lookUp.Nodes)
-                {
-                    TreeNode childNode = new TreeNode(node.Text);
-                    // If the child has children, create a dummy child for it
-                    if (node.Nodes.Count > 0)
-                        childNode.Nodes.Add("dummy", "dummy");
-                    // Update the image and color according to the database values
-                    childNode.ImageIndex = childNode.SelectedImageIndex = node.ImageIndex;
-                    childNode.ForeColor = node.ForeColor;
-                    childNode.Tag = node.Tag;
-                    childNode.ToolTipText = node.ToolTipText;
-                    e.Node.Nodes.Add(childNode);
-                }
-
-                // Re-enable drawing of the treeview
-                e.Node.TreeView.EndUpdate();
-
-                // Color the folders
-                colorizeFolder(e.Node.TreeView.Nodes.Find("RAF", false)[0],false);
+                createChildren(e.Node);
             }
         }
+        private void createChildren(TreeNode node)
+        {
+            // Disable redrawing of the treeview to prevent hangs
+            node.TreeView.BeginUpdate();
+
+            // Remove the dummy child
+            node.Nodes["dummy"].Remove();
+
+            TreeNode lookUp = node;
+            // Create a list to hold the heirarchy required to get to the top
+            List<String> parentList = new List<String>();
+            // Add the actual node itself
+            parentList.Add(node.Text);
+            // Keep adding until it's at the top
+            while (lookUp.Parent.Text != "RAF")
+            {
+                parentList.Add(lookUp.Parent.Text);
+                lookUp = lookUp.Parent;
+            }
+            // Reverse the list so I can go down the heirarchy
+            parentList.Reverse();
+
+            // Reference the first node in the heirarchy to the database
+            lookUp = database.Nodes[parentList[0]];
+            // Work down to the node in question
+            for (int i = 1; i < parentList.Count; i++)
+            {
+                lookUp = lookUp.Nodes[parentList[i]];
+            }
+
+            // Iterate through any children the node has
+            foreach (TreeNode luNode in lookUp.Nodes)
+            {
+                TreeNode childNode = new TreeNode(luNode.Text);
+                // If the child has children, create a dummy child for it
+                if (luNode.Nodes.Count > 0)
+                    childNode.Nodes.Add("dummy", "dummy");
+                // Update the image, color, and tag according to the database values
+                childNode.ImageIndex = luNode.ImageIndex;
+                childNode.ForeColor = luNode.ForeColor;
+                childNode.Tag = luNode.Tag;
+                node.Nodes.Add(childNode);
+            }
+            // Color the folders
+            colorizeFolder(node.TreeView.Nodes.Find("RAF", false)[0]);
+
+            // Check new children if e.Node is checked
+            if (node.Checked)
+                setNodeAndChildrenCheck(true, node);
+
+            // Re-enable drawing of the treeview
+            node.TreeView.EndUpdate();
+        }
+
         private void treeView1_AfterExpand(object sender, TreeViewEventArgs e)
         {
             if (e.Node.Name == "RAF" && e.Node.Nodes.Count < 2)
@@ -9287,10 +9294,17 @@ namespace SkinInstaller
                 getChildrenNodes(node, ref nodes);
             }
             exportNodes(nodes,treeView1.SelectedNode.Text);
-        }           
+        }
         private void getCheckedNodes(TreeNode node, ref List<TreeNode> checkedNodes)
         {
-            if(node.Checked)checkedNodes.Add(node);
+            if (node.Checked)
+            {
+                checkedNodes.Add(node);
+                if (node.Nodes.ContainsKey("dummy"))
+                {
+                    createChildren(node);
+                }
+            }
             foreach (TreeNode innerNode in node.Nodes)
             {
                 getCheckedNodes(innerNode, ref checkedNodes);
