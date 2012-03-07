@@ -381,6 +381,8 @@ namespace SkinInstaller
         private BackgroundWorker ParticleTreeWorkerNew;
         private ToolStripMenuItem getLastModDateToolStripMenuItem;
         PaintEventHandler importantP;
+
+        TreeNode database = new TreeNode("dbRoot");
         #endregion
         #region webIntegrate
         private void button3lcintegrate_Click(object sender, EventArgs e)
@@ -8858,68 +8860,60 @@ namespace SkinInstaller
                 //rafRootNode.Nodes.Add(fileskv.Value.ToLower());
                 if (fileskv.Value.ToLower().Contains(".raf\\"))
                 {
-                    string rafPath = fileskv.Value.Substring(
-                        fileskv.Value.ToLower().IndexOf(".raf\\") + 6);
+                    string rafPath = fileskv.Value.Substring(fileskv.Value.IndexOf(".raf\\") + 6);
                     FileInfo rafFileInfo = new FileInfo(rafPath);
-                    string[] folderParts=new string[0];
-                    if (rafPath.Contains("\\"))
-                    {
-                        rafPath = rafPath.Remove(rafPath.Length - rafFileInfo.Name.Length).ToUpper().Replace("\\\\","\\");
-                        //folderParts = Regex.Split(rafPath, "\\\\");
-                        folderParts = rafPath.Split('\\');
-                    }
-                    
-                    TreeNode lookIn = rafRootNode;
-                    if(folderParts.Length>0)
-                      for (int i = 0; i < folderParts.Length; i++)
-                      {
-                          if (folderParts[i].Length < 1)
-                          {
-                              if (i == folderParts.Length-1) continue;
-                              else  i++;
-                          }
-                          if (!lookIn.Nodes.ContainsKey(folderParts[i]))
-                          {
-                              lookIn.Nodes.Add(folderParts[i],
-                                  Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(folderParts[i].ToLower()));
-                          }
-                          lookIn = lookIn.Nodes.Find(folderParts[i], false)[0];
+                    if (rafPath.IndexOf("\\\\") == -1)
+                        rafPath = "";
+                    else
+                        rafPath = rafPath.Remove(rafPath.LastIndexOf("\\\\"));
 
-                      }
-                      //we may need to add some extra logic here if a raf file has duplicate entries across versions
-                      TreeNode addedNode=lookIn.Nodes.Add(fileskv.Value, Thread.CurrentThread.CurrentCulture.TextInfo.ToTitleCase(rafFileInfo.Name));
-                      //TreeNode addedNode = lookIn.Nodes.Find(fileskv.Value, false)[0];
-                      addedNode.ToolTipText = fileskv.Value;
-                      rafTreeDataObject tag = new rafTreeDataObject();
-                    tag.fileLocation=
-                        gameDirectory.Substring(0, gameDirectory.Length - 1) + 
-                        fileskv.Value.Replace("\\\\", "\\");
+                    // Create a refence to the database
+                    TreeNode lookIn = database;
+                    String[] folderArray = rafPath.Split(new string[] { "\\\\" }, StringSplitOptions.RemoveEmptyEntries);
+
+                    foreach (String folder in folderArray)
+                    {
+                        if (!lookIn.Nodes.ContainsKey(folder))
+                            lookIn.Nodes.Add(folder, folder);
+                        lookIn = lookIn.Nodes.Find(folder, false)[0];
+                    }
+                    TreeNode addedNode = lookIn.Nodes.Add(fileskv.Value, rafFileInfo.Name);
+                    addedNode.ToolTipText = fileskv.Value;
+                    rafTreeDataObject tag = new rafTreeDataObject();
+                    tag.fileLocation= gameDirectory.Substring(0, gameDirectory.Length - 1) + fileskv.Value.Replace("\\\\", "\\");
                     tag.rafPower = getRafPowerFromVersion(tag.fileLocation);
 
                     addedNode.Tag = tag;
-                      int imageIndex = 5;
-                      switch (rafFileInfo.Extension.ToLower())
-                      {
-                          case ".skl": imageIndex = 1; break;
-                          case ".skn": imageIndex = 2; break;
-                          case ".anm": imageIndex = 3; break;
-                          case ".dds": imageIndex = 4; break;
-                          case ".tga": imageIndex = 4; break;
-                          case ".sco": imageIndex = 6; break;
-                          case ".scb": imageIndex = 7; break;
-                          default: imageIndex = 5; break;
-                      }
-                      if (imageIndex == 4)
-                      {
-                          if(rafFileInfo.Name.ToLower().Contains("loadscreen"))
+                    int imageIndex = 5;
+                    switch (rafFileInfo.Extension.ToLower())
+                    {
+                        case ".skl": imageIndex = 1; break;
+                        case ".skn": imageIndex = 2; break;
+                        case ".anm": imageIndex = 3; break;
+                        case ".dds": imageIndex = 4; break;
+                        case ".tga": imageIndex = 4; break;
+                        case ".sco": imageIndex = 6; break;
+                        case ".scb": imageIndex = 7; break;
+                        default: imageIndex = 5; break;
+                    }
+                    if (imageIndex == 4)
+                    {
+                        if(rafFileInfo.Name.ToLower().Contains("loadscreen"))
                             imageIndex = 8;
-                        }
-                      addedNode.ImageIndex = addedNode.SelectedImageIndex = imageIndex;
-                      addedNode.ForeColor = colorFromRafPower(tag.rafPower);
-               
-                  }
-
+                    }
+                    addedNode.ImageIndex = addedNode.SelectedImageIndex = imageIndex;
+                    addedNode.ForeColor = colorFromRafPower(tag.rafPower);
+                }
             }
+
+            foreach (TreeNode node in database.Nodes)
+            {
+                TreeNode childNode = new TreeNode(node.Text);
+                if (node.Nodes.Count > 0)
+                    childNode.Nodes.Add("dummy", "dummy");
+                rafRootNode.Nodes.Add(childNode);
+            }
+
             newRafNode = rafRootNode;
             colorizeFolder(newRafNode);
             #endregion
