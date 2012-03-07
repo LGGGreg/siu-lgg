@@ -781,7 +781,14 @@ namespace SkinInstaller
                     }
                 }
             }
-            if (!File.Exists(Application.StartupPath + "\\allfiles.ini"))// && File.Exists(gameDirectory + "HeroPak_client.zip"))
+            if (gameDirectory.ToLower().Contains("garena"))
+            {
+                Cliver.Message.Show("Unsupported :<", SystemIcons.Error,
+                    "The garena client is currently not supported by SIU,\r\nPlans are to add this soon,\r\n\r\n" +
+                    "Most features will not work right now, but you can still use it to check for updates", 0,
+                 new string[1] { "OK" });
+            }
+            else if (!File.Exists(Application.StartupPath + "\\allfiles.ini"))// && File.Exists(gameDirectory + "HeroPak_client.zip"))
             {
                 Cliver.Message.Inform("Looks like this is your First Time Running this program.\r\n" +
                     "Please be patient while we inspect your LoL installation, and format any pre-packed skins\r\n\r\n" +
