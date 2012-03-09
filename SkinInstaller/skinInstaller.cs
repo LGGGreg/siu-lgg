@@ -8801,7 +8801,7 @@ namespace SkinInstaller
             particleOldNode.Name = "Particles Old";
             particleOldNode.Nodes.Add("Loading...(Watch Progress bar at bottom)");
         }
-        private int colorizeFolder(TreeNode folder, bool usePreviousResults=true)
+        private int colorizeFolder(TreeNode folder, bool usePreviousResults = true)
         {
             int toReturn = 10000;
             if (folder.Nodes.Count > 0)
@@ -8827,31 +8827,32 @@ namespace SkinInstaller
                         //we are not using previous results, so don't bother checking tag
                         //get new one, and make sure all child folders do the same
                         nodesPower = colorizeFolder(innerNode, usePreviousResults);
-                    }else
-                    if (innerNode.Tag != null)
-                    {
-                        if (((rafTreeDataObject)innerNode.Tag).fileLocation == "Skin")
-                        {
-                            /*this folder item is not complete yet, 
-                             * recursion to color it first before
-                             * we continue */
-                            nodesPower = colorizeFolder(innerNode,usePreviousResults);
-                        }
-                        else //this inner node already has its raf version set, take it
-                            nodesPower = ((rafTreeDataObject)innerNode.Tag).rafPower;
-
                     }
                     else
-                    {
-                        if ((innerNode.Name.ToLower() == "dummy")&&usePreviousResults==false)
+                        if (innerNode.Tag != null)
                         {
-                            nodesPower = 100000;
+                            if (((rafTreeDataObject)innerNode.Tag).fileLocation == "Skin")
+                            {
+                                /*this folder item is not complete yet, 
+                                 * recursion to color it first before
+                                 * we continue */
+                                nodesPower = colorizeFolder(innerNode, usePreviousResults);
+                            }
+                            else //this inner node already has its raf version set, take it
+                                nodesPower = ((rafTreeDataObject)innerNode.Tag).rafPower;
+
                         }
                         else
-                        //this means the folder(node) inside doesn't even have a tag yet
-                        //recursion call to set it first too
-                        nodesPower = colorizeFolder(innerNode,usePreviousResults);
-                    }
+                        {
+                            if ((innerNode.Name.ToLower() == "dummy") && usePreviousResults == false)
+                            {
+                                nodesPower = 100000;
+                            }
+                            else
+                                //this means the folder(node) inside doesn't even have a tag yet
+                                //recursion call to set it first too
+                                nodesPower = colorizeFolder(innerNode, usePreviousResults);
+                        }
                     //ok, now w/e this node was, should be set, 
                     //so we can use it to find the newest raf
                     if (nodesPower < lowestRafPower)
@@ -8873,7 +8874,7 @@ namespace SkinInstaller
                     Color test = colorFromRafPower(tag.rafPower);
                     //if (test.Equals(Color.Black)) test = Color.Lime;
                     folder.ForeColor = test;
-                    folder.ToolTipText = "Highest Raf Version Detected In This Folder So Far:\r\n"+
+                    folder.ToolTipText = "Highest Raf Version Detected In This Folder So Far:\r\n" +
                     getRafVersionFromRafPower(tag.rafPower);
                     //also return the result NOW for the recursion events above
                     toReturn = tag.rafPower;
@@ -9034,18 +9035,20 @@ namespace SkinInstaller
                 // If the child has children, create a dummy child for it
                 if (luNode.Nodes.Count > 0)
                     childNode.Nodes.Add("dummy", "dummy");
-                // Update the image, color, and tag according to the database values
-                childNode.ImageIndex = luNode.ImageIndex;
+                // Update the image and color according to the database values
+                childNode.ImageIndex = childNode.SelectedImageIndex = luNode.ImageIndex;
                 childNode.ForeColor = luNode.ForeColor;
                 childNode.Tag = luNode.Tag;
+                childNode.ToolTipText = luNode.ToolTipText;
                 node.Nodes.Add(childNode);
             }
-            // Color the folders
-            colorizeFolder(node.TreeView.Nodes.Find("RAF", false)[0]);
 
             // Check new children if e.Node is checked
             if (node.Checked)
                 setNodeAndChildrenCheck(true, node);
+
+            // Color the folders
+            colorizeFolder(node.TreeView.Nodes.Find("RAF", false)[0], false);
 
             // Re-enable drawing of the treeview
             node.TreeView.EndUpdate();
