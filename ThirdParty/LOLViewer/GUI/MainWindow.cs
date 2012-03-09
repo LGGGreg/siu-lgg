@@ -75,7 +75,7 @@ namespace LOLViewer
 
         // Animation Control Handle
         private AnimationController animationController;
-       
+
         public MainWindow()
         {
             isGLLoaded = false;
@@ -101,7 +101,7 @@ namespace LOLViewer
                         isFileOpen = true;
                     }
                 }
-                catch {}
+                catch { }
 
                 if (isFileOpen == true)
                 {
@@ -275,7 +275,7 @@ namespace LOLViewer
             double elapsedTime = ComputeElapsedTime();
 
             // Update camera and animation controller.
-            camera.OnUpdate((float) elapsedTime);
+            camera.OnUpdate((float)elapsedTime);
             animationController.OnApplicationIdle(sender, e);
 
             // Hacky, prevents double invalidation.
@@ -358,13 +358,13 @@ namespace LOLViewer
             dlg.ShowNewFolderButton = false;
 
             DialogResult result = dlg.ShowDialog();
-            
+
             String selectedDir = String.Empty;
             if (result == DialogResult.OK)
             {
                 // Lets not check and let the directory reader sort it out.
                 reader.SetRoot(dlg.SelectedPath);
-                    
+
                 // Reread the models.
                 OnReadModels(sender, e);
             }
@@ -408,7 +408,7 @@ namespace LOLViewer
             {
                 file = new FileStream(DEFAULT_DIRECTORY_FILE, FileMode.OpenOrCreate);
             }
-            catch {}
+            catch { }
 
             BinaryWriter writer = null;
             if (file != null)
@@ -426,11 +426,15 @@ namespace LOLViewer
             }
 
             // Populate the model list box.
+            modelListBox.BeginUpdate();
+
             List<String> modelNames = reader.GetModelNames();
             foreach (String name in modelNames)
             {
                 modelListBox.Items.Add(name);
             }
+
+            modelListBox.EndUpdate();
         }
 
         //
@@ -439,7 +443,7 @@ namespace LOLViewer
 
         private void OnModelListDoubleClick(object sender, EventArgs e)
         {
-            String modelName = (String) modelListBox.SelectedItem;
+            String modelName = (String)modelListBox.SelectedItem;
 
             // TODO: Not really sure how to handle errors
             // if either of these functions fail.
@@ -449,9 +453,9 @@ namespace LOLViewer
                 bool result = renderer.LoadModel(model);
 
                 currentAnimationComboBox.Items.Clear();
-                foreach (var a in model.animations)
+                foreach (String name in renderer.GetAnimationsInCurrentModel())
                 {
-                    currentAnimationComboBox.Items.Add(a.Key);
+                    currentAnimationComboBox.Items.Add(name);
                 }
 
                 currentAnimationComboBox.Text = "";
@@ -512,9 +516,9 @@ namespace LOLViewer
         {
             ColorDialog colorDlg = new ColorDialog();
 
-            Color iniColor = Color.FromArgb( (int) (renderer.clearColor.A * 255),
-                (int) (renderer.clearColor.R * 255), (int) (renderer.clearColor.G * 255),
-                (int) (renderer.clearColor.B * 255) );
+            Color iniColor = Color.FromArgb((int)(renderer.clearColor.A * 255),
+                (int)(renderer.clearColor.R * 255), (int)(renderer.clearColor.G * 255),
+                (int)(renderer.clearColor.B * 255));
 
             colorDlg.Color = iniColor;
 
@@ -548,6 +552,8 @@ namespace LOLViewer
             //else
             // We can search off of the last subset of strings.
 
+            modelListBox.BeginUpdate();
+
             lastSearch = search;
             modelListBox.Items.Clear();
 
@@ -578,8 +584,7 @@ namespace LOLViewer
             if (modelListBox.Items.Count > 0)
                 modelListBox.SelectedIndex = 0;
 
-            // Redraw the list box.
-            modelListBox.Invalidate();
+            modelListBox.EndUpdate();
         }
 
         private void OnModelSearchBoxKeyPress(object sender, System.Windows.Forms.KeyPressEventArgs e)
@@ -635,7 +640,7 @@ namespace LOLViewer
 
             // Create a full screen window.
             FullScreenWindow fullScreenWindow = new
-                FullScreenWindow(ref renderer, ref camera, 
+                FullScreenWindow(ref renderer, ref camera,
                 ref animationController, ref timer,
                 ref glControlMain,
                 FIELD_OF_VIEW, NEAR_PLANE, FAR_PLANE);
@@ -657,7 +662,7 @@ namespace LOLViewer
             // Uncheck the GUI on close. (Maybe should just make this a normal button?)
             fullScreenCheckBox.Checked = false;
         }
-        
+
         //
         // Helper Functions
         //

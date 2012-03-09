@@ -104,7 +104,7 @@ namespace LOLViewer
 
             if (result == true)
             {
-                result = CreateShaderFromMemory("phongRigged.vert", GLShaderDefinitions.PhongRiggedVertex, 
+                result = CreateShaderFromMemory("phongRigged.vert", GLShaderDefinitions.PhongRiggedVertex,
                     ShaderType.VertexShader);
             }
 
@@ -118,14 +118,14 @@ namespace LOLViewer
             if (result == true)
             {
                 // Unused atm.
-                result = CreateShaderFromMemory("texSampler.frag", 
+                result = CreateShaderFromMemory("texSampler.frag",
                     GLShaderDefinitions.TextureSamplerFragment, ShaderType.FragmentShader);
             }
 
             if (result == true)
             {
                 // Unused atm.
-                result = CreateShaderFromMemory("texSamplerGreyscale.frag", 
+                result = CreateShaderFromMemory("texSamplerGreyscale.frag",
                     GLShaderDefinitions.TextureSamplerGreyscaleFragment, ShaderType.FragmentShader);
             }
 
@@ -137,7 +137,7 @@ namespace LOLViewer
             if (result == true)
             {
                 // Unused atm.
-                result = CreateShaderFromMemory("phongTexOnly.frag", 
+                result = CreateShaderFromMemory("phongTexOnly.frag",
                     GLShaderDefinitions.PhongTexOnlyFragment, ShaderType.FragmentShader);
             }
 
@@ -280,29 +280,29 @@ namespace LOLViewer
             // Old Debugging Code.
             // I kept it around incase it would be cool to draw a ground
             // plane or something.
-            
+
             if (result == true)
             {
                 List<float> verts = new List<float>();
                 // Bottom Left
-                verts.Add( -5.0f );
-                verts.Add( -5.0f );
-                verts.Add( 0.0f );
+                verts.Add(-5.0f);
+                verts.Add(-5.0f);
+                verts.Add(0.0f);
 
                 // Top Left
-                verts.Add( -5.0f );
-                verts.Add( 5.0f );
-                verts.Add( 0.0f );
+                verts.Add(-5.0f);
+                verts.Add(5.0f);
+                verts.Add(0.0f);
 
                 // Top Right
-                verts.Add( 5.0f );
-                verts.Add( 5.0f );
-                verts.Add( 0.0f );
+                verts.Add(5.0f);
+                verts.Add(5.0f);
+                verts.Add(0.0f);
 
                 // Bottom Right
-                verts.Add( 5.0f );
-                verts.Add( -5.0f );
-                verts.Add( 0.0f );
+                verts.Add(5.0f);
+                verts.Add(-5.0f);
+                verts.Add(0.0f);
 
                 List<float> texs = new List<float>();
                 // Bottom Left
@@ -323,17 +323,17 @@ namespace LOLViewer
 
                 List<uint> inds = new List<uint>();
                 // Tri 1
-                inds.Add( 0 );
-                inds.Add( 1 );
-                inds.Add( 2 );
+                inds.Add(0);
+                inds.Add(1);
+                inds.Add(2);
 
                 // Tri 2
-                inds.Add( 0 );
-                inds.Add( 2 );
-                inds.Add( 3 );
+                inds.Add(0);
+                inds.Add(2);
+                inds.Add(3);
 
                 result = CreateBillboard("default", verts, texs, inds);
-            }         
+            }
 
             // Misc. OpenGL Parameters.
             if (result == true)
@@ -359,7 +359,7 @@ namespace LOLViewer
             GL.ClearColor(clearColor);
         }
 
-        public bool LoadModel( LOLModel model)
+        public bool LoadModel(LOLModel model)
         {
             bool result = true;
 
@@ -401,14 +401,14 @@ namespace LOLViewer
 
             // Clear back buffers.
             GL.Clear(ClearBufferMask.ColorBufferBit | ClearBufferMask.DepthBufferBit | ClearBufferMask.StencilBufferBit);
-            
+
             // Enable a normal depth test without stenciling.
             GL.Enable(EnableCap.DepthTest);
             GL.Disable(EnableCap.StencilTest);
             GL.DepthFunc(DepthFunction.Less);
 
             GLShaderProgram program = null;
-            
+
             //
             // Load shaders for Phong lit static models.
             //
@@ -448,7 +448,7 @@ namespace LOLViewer
                 {
                     textures[s.Value.textureName].Bind(); // not checking return value        
                 }
-       
+
                 s.Value.Draw();
             }
 
@@ -518,7 +518,7 @@ namespace LOLViewer
                 // Bone Transforms
                 //
 
-                
+
                 if (isSkinning == true)
                 {
                     Matrix4[] transforms = r.Value.GetBoneTransformations();
@@ -539,9 +539,9 @@ namespace LOLViewer
 
                         // Perserve world space transforms between skinning and non skinning.
                         transforms = new Matrix4[GLRig.MAX_BONES];
-                        for ( int i = 0; i < GLRig.MAX_BONES; ++i )
+                        for (int i = 0; i < GLRig.MAX_BONES; ++i)
                         {
-                            transforms[i] = Matrix4.Scale(1.0f / 
+                            transforms[i] = Matrix4.Scale(1.0f /
                                 rModels.First().Value.rig.bindingJoints[0].scale); //hacky
                         }
 
@@ -609,9 +609,9 @@ namespace LOLViewer
                 //    billboards["default"].Draw();
                 //}
             }
-          
+
             // Unload shaders.
-            GL.UseProgram( 0 );
+            GL.UseProgram(0);
         }
 
         public void IncrementAnimations()
@@ -635,7 +635,7 @@ namespace LOLViewer
         {
             foreach (var m in rModels)
             {
-                m.Value.SetCurrentFrame( frame, percentTowardsNextFrame );
+                m.Value.SetCurrentFrame(frame, percentTowardsNextFrame);
                 break;
             }
         }
@@ -673,6 +673,23 @@ namespace LOLViewer
             foreach (var m in rModels)
             {
                 result = m.Value.GetNumberOfFramesInCurrentAnimation();
+                break;
+            }
+
+            return result;
+        }
+
+        // TODO: Doesn't support multiple models.
+        public List<String> GetAnimationsInCurrentModel()
+        {
+            List<String> result = new List<String>();
+
+            foreach (var m in rModels)
+            {
+                foreach (var animation in m.Value.animations)
+                {
+                    result.Add(animation.Key);
+                }
                 break;
             }
 
@@ -813,7 +830,7 @@ namespace LOLViewer
         }
 
         private bool CreateProgram(String progName, String vertName, String fragName,
-            List<String> attributes, List<String> uniforms) 
+            List<String> attributes, List<String> uniforms)
         {
             bool result = true;
 
@@ -904,8 +921,8 @@ namespace LOLViewer
             return result;
         }
 
-        private bool CreateBillboard( String name, List<float> vertexData,
-            List<float> texData, List<uint> indexData )
+        private bool CreateBillboard(String name, List<float> vertexData,
+            List<float> texData, List<uint> indexData)
         {
             bool result = true;
 
@@ -935,7 +952,7 @@ namespace LOLViewer
                 // Model is stored in a RAF.
                 result = SKNReader.Read(model.skn,
                     ref file);
-                
+
             }
 
             GLStaticModel glModel = new GLStaticModel();
@@ -1021,7 +1038,7 @@ namespace LOLViewer
                 // Texture stored in RAF file.
                 result = CreateTexture(model.texture, TextureTarget.Texture2D,
                         GLTexture.SupportedImageEncodings.DDS);
-                
+
                 // Store it in our new model file.
                 if (result == true)
                 {
@@ -1079,7 +1096,7 @@ namespace LOLViewer
 
             return result;
         }
-        
+
         private bool CreateTexture(FileInfo f, TextureTarget target,
             GLTexture.SupportedImageEncodings encoding)
         {
