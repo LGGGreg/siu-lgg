@@ -6505,15 +6505,19 @@ namespace SkinInstaller
         }
         private void dbDelete_Click(object sender, EventArgs e)
         {
-            foreach (ListViewItem item in this.listView1.CheckedItems)
+            if (Cliver.Message.Show("Are you sure?",
+                SystemIcons.Question, "Are you sure want delete these skins?", 0, new string[2] { "Yes", "No" }) == 0)
             {
-                if (Directory.Exists(Application.StartupPath + @"\skins\" + item.SubItems[1].Text))
+                foreach (ListViewItem item in this.listView1.CheckedItems)
                 {
-                    this.SIFileOp.DirectoryDelete(Application.StartupPath + @"\skins\" + item.SubItems[1].Text, true);
-                }
+                    if (Directory.Exists(Application.StartupPath + @"\skins\" + item.SubItems[1].Text))
+                    {
+                        this.SIFileOp.DirectoryDelete(Application.StartupPath + @"\skins\" + item.SubItems[1].Text, true);
+                    }
 
-                this.ExecuteQuery("DELETE FROM skins WHERE sName=\"" + item.SubItems[1].Text + "\"");
-                this.listView1.Items.Remove(item);
+                    this.ExecuteQuery("DELETE FROM skins WHERE sName=\"" + item.SubItems[1].Text + "\"");
+                    this.listView1.Items.Remove(item);
+                }
             }
             this.UpdateListView();
         }
