@@ -474,8 +474,11 @@ namespace LOLViewer.IO
                 for (int i = 1; i <= children.Length; ++i)
                 {
                     result = OpenGameClientVersion(children[children.Length - i]);
-                    if (result == false) 
+                    if (result == false)
+                    {
+                        MessageBox.Show("error 1 on " + children[children.Length - i]);
                         break;
+                    }
                 }
             }
 #if VERBOSE
@@ -485,7 +488,7 @@ namespace LOLViewer.IO
                 ErrorMessage(e.Message);
             }
 #else
-            catch
+            catch(Exception e)
             {
                 result = false;
             }
@@ -497,6 +500,8 @@ namespace LOLViewer.IO
         private bool OpenGameClientVersion(DirectoryInfo dir)
         {
             bool result = true;
+            //separation to handle directories with no .raf file
+            bool rafFound = false;
 
             // Read in .raf files and look for model information in them.
             RAFArchive archive = null;
@@ -506,13 +511,14 @@ namespace LOLViewer.IO
                 {
                     // Ignore non RAF files.
                     if (f.Extension != ".raf")
-                        continue;
+                        continue;           
                     
                     result = ReadRAF(f, ref archive);
                     if (result == false)
                     {
                         break;
                     }
+                    rafFound = true;
                 }
             }
 #if VERBOSE
@@ -529,12 +535,12 @@ namespace LOLViewer.IO
 #endif
 
             // Note: archive will always equal the last RAFArchive in the directory.
-            // So, we alawys apend files to the last one if there's more than one in a directory.
+            // So, we always append files to the last one if there's more than one in a directory.
             // However, it really shouldn't matter which one they are appended to as long as their
             // in memory.
 
             // Look for raw model information contain on the hard drive.
-            if( result == true )
+            if( rafFound == true )
             {
                 try
                 {
@@ -703,8 +709,9 @@ namespace LOLViewer.IO
                 ErrorMessage(e.Message);
             }
 #else
-            catch
+            catch(Exception e)
             {
+                MessageBox.Show(e.Message);
                 result = false;
             }
 #endif
