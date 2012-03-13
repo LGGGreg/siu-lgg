@@ -52,7 +52,11 @@ namespace LOLViewer.IO
         public static bool Read(RAFFileListEntry file, ref ANMFile data)
         {
             bool result = true;
-
+            // This happens if the path is a actual path on the hard drive.
+            if (file.FileName.Contains(":"))
+            {
+                return Read(new FileInfo(file.FileName), ref data);
+            }
             // This happens when the file does not actually exist in the RAF archive.
             if (file.IsMemoryEntry == true)
             {
