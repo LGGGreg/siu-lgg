@@ -4,7 +4,7 @@
 // @namespace   LoLSIULGGLC
 // @icon        http://img856.imageshack.us/img856/7456/unled2lq.jpg
 // @description Re-works links in League craft to auto work with SIU+LGG
-// @version     0.5 (29 Sept 2011)
+// @version     0.6 (25 March 2012)
 // @license     GPL 2.0
 // @include     http://leaguecraft.com/skins/*
 // @exclude     http://leaguecraft.com/skins/download/*
@@ -35,46 +35,59 @@ function init() {
     //var html_tag = evaluate_xpath('.//html'); 
     lgg_log("page loaded");
 
-    var downloadLinks = evaluate_xpath('.//a[ @href[contains(.,"skins/download")] and @style[contains(.,"")]]');
+    var downloadLinks = evaluate_xpath('.//a[ @href[contains(.,"skins/download")] ]');
     var i = 0;
     if (downloadLinks.snapshotLength < 1) return;
     var downloadLink = downloadLinks.snapshotItem(i);
     var downloadURL = downloadLink.getAttribute("href")
-    var linksToReplace = evaluate_xpath('.//a[ @href[contains(.,"http://forum.leaguecraft.com/index.php?/topic/1700-how-to-install-skins")] and @style[contains(.,"")]]');
-    var linkToReplace = linksToReplace.snapshotItem(i);
+	if (debug > 0) lgg_log("Download URL is " + downloadURL);
+    //var linksToReplace = evaluate_xpath('.//a[ @href[contains(.,"http://forum.leaguecraft.com/index.php?/topic/1700-how-to-install-skins")] and @style[contains(.,"")]]');
+    //var linkToReplace = linksToReplace.snapshotItem(i);
     //        <img src="uploads/MMKH/skins/924.jpg" class="example_image" />
-    var imageBoxs = evaluate_xpath('.//div[ @id[contains(.,"skinImageBox")]]');
+    var imageBoxs = evaluate_xpath('.//div[ @id[contains(.,"image_container")]]');
     var imageBox = imageBoxs.snapshotItem(i);
     //x:html/x:body/x:div[2]/x:table/x:tbody/x:tr[4]/x:td[1]/x:div[1]/x:div/x:table/x:tbody/x:tr/x:td/x:table/x:tbody/x:tr[2]/x:td
 
+	//<meta name="description" content="Riven Skin: Custom Skin created by lordgreggreg. This skin is rated: Good" />
+
+	var descriptionBoxs = evaluate_xpath('.//meta[ @name[contains(.,"description")]]');
+	var descriptionBox = descriptionBoxs.snapshotItem(i);
+	var nameDesc = descriptionBox.getAttribute("content");
+	
     var add = 2;
     if (debug > 2) add = 3;
     //x:html/x:body/x:div[2]/x:table/x:tbody/x:tr[4]/x:td[1]/x:div[2]/x:div
 	//x:html/x:body/x:div[3]/x:table/x:tbody/x:tr[5]/x:td[1]/x:div/x:div/x:p
-	///x:html/x:body/x:div[3]/x:table/x:tbody/x:tr[6]/x:td[1]/x:div/x:div/x:p
-    var infoBoxs = evaluate_xpath('.//body/div[' + add + ']/table/tbody/tr[6]/td[1]/div/div/p');
+	//x:html/x:body/x:div[3]/x:table/x:tbody/x:tr[6]/x:td[1]/x:div/x:div/x:p
+    var infoBoxs = evaluate_xpath('.//p[ @id[contains(.,"description")]]');
+    
+	//evaluate_xpath('.//body/div[' + add + ']/table/tbody/tr[6]/td[1]/div/div/p');
 
     var SIURL = "skininstallerultimatelgg://";
 
     //-----------URL------------
     //http://leaguecraft.com/download/skin/924
     //http://leaguecraft.com/skins/download/924-ancient-guardian-nasus-by-mmkh
-    var skinNumber = downloadURL.substring(downloadURL.lastIndexOf("/") + 1, downloadURL.indexOf("-"));
-    var directURL = 'http://leaguecraft.com/download/skin/' + skinNumber;
+    //var skinNumber = downloadURL.substring(downloadURL.lastIndexOf("/") + 1, downloadURL.indexOf("-"));
+    // /skins/download/?id=6701
+	var skinNumber = downloadURL.substring(downloadURL.lastIndexOf("/") + 5);
+    
+	var directURL = 'http://leaguecraft.com/skins/download/?id=' + skinNumber;
     if (debug > 0) lgg_log("URL is " + directURL);
     SIURL += '[param]url[value]' + directURL;
     //----------NAME-----------
     //<title>Ancient Guardian Nasus (by MMKH) by MMKH :: Nasus, the Curator of the Sands :: Custom Skin :: Leaguecraft</title>
-    var end = document.title.indexOf("::");
-    if (end == -1) end = document.title.indexOf("|");
-    var title = document.title.substring(0, end);
+    //var end = document.title.indexOf("::");
+    //if (end == -1) end = document.title.indexOf("|");
+    var title = document.title;//.substring(0, end);
     //remove stuff in parens
     title = title.replace(/\(.*\)/, '').replace(/\[.*\]/, '').replace(/\{.*\}/, '');
-    var name = title.substring(0, title.lastIndexOf(" by")).replace(/^\s+|\s+$/g, '');
+    
+	var name =title.replace(/^\s+|\s+$/g, '');
     if (debug > 0) lgg_log("Name is " + name);
     SIURL += '[param]name[value]' + name;
     //-------------AUTHOR-----
-    var author = title.substring(title.lastIndexOf(" by") + 3).replace(/^\s+|\s+$/g, '');
+    var author = nameDesc.substring( nameDesc.lastIndexOf(" by")+3,nameDesc.lastIndexOf(".")).replace(/^\s+|\s+$/g, '');
     if (debug > 0) lgg_log("Author is " + author);
     SIURL += '[param]author[value]' + author;
     //------------IMAGE PREVIEW------------
@@ -94,19 +107,21 @@ function init() {
 
     //----------LINK MAKE------
     var my_link = document.createElement('a');
-    my_link.innerHTML = '<a href="' + SIURL + '" style="color: rgb(255,255,200); text-decoration: none;">' +
-              '<div id="5a4b1e24ab14c7a56d2abde5febf69ac" class="clickable rounded_10px action_button" style="font-size: 17px;">' +
-              '    Install With SIU               </div>' +
-          ' </a>';
-
-    linkToReplace.parentNode.insertBefore(my_link, linkToReplace);
+    my_link.innerHTML = '<div class="button" style="background-color:maroon; width:119p">'+
+	'<a href="' + SIURL + '" style="color: rgb(255,255,200); width:119px; text-decoration: none; text-align: top;">' +
+            //  '<div id="5a4b1e24ab14c7a56d2abde5febf69ac" class="clickable rounded_10px action_button" style="font-size: 17px;">' +
+              '<img src="http://siu-lgg.googlecode.com/hg/instalwithsiu.png" width="119" height="25" style="background-color:maroon;width:119px"> &nbsp; ' +
+			 // '    </div>' +
+          ' </a></div>';
+ 
+    //linkToReplace.parentNode.
+	downloadLink.parentNode.parentNode.insertBefore(my_link, downloadLink.parentNode);
 
     //document.body.insertBefore(my_link, document.body.firstChild);
 
-    linkToReplace.innerHTML = '<a href="' + SIURL + '" style="color: rgb(255,255,200); text-decoration: none;">' +
-
-          ' </a>';
-    //linkToReplace.innerHTML = '<a id="siuLink"; style="color:#000000"; href="'+downloadURL+'">GET @ @</a>';
+    ////linkToReplace.innerHTML = '<a href="' + SIURL + '" style="color: rgb(255,255,200); text-decoration: none;">' +   ' </a>';
+    
+	//linkToReplace.innerHTML = '<a id="siuLink"; style="color:#000000"; href="'+downloadURL+'">GET @ @</a>';
 
 
 
