@@ -56,8 +56,8 @@
     <Setting Name="wtfRainbows" Provider="SkinInstaller.PortableSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
-    <Setting Name="size" Provider="SkinInstaller.PortableSettingsProvider" Type="System.Drawing.Size" Scope="User">
-      <Value Profile="(Default)">835, 523</Value>
+    <Setting Name="size2" Provider="SkinInstaller.PortableSettingsProvider" Type="System.Drawing.Size" Scope="User">
+      <Value Profile="(Default)">894, 515</Value>
     </Setting>
     <Setting Name="dxFormat" Provider="SkinInstaller.PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)">dxt3</Value>
@@ -141,6 +141,9 @@
       <Value Profile="(Default)">0</Value>
     </Setting>
     <Setting Name="showCharSelection" Provider="SkinInstaller.PortableSettingsProvider" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="showAds" Provider="SkinInstaller.PortableSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>

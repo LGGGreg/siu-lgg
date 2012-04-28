@@ -94,7 +94,7 @@ namespace SkinInstaller
 
         private void button1_Click(object sender, EventArgs e)
         {
-            System.Diagnostics.Process.Start(textBox2updateurl.Text);
+            //System.Diagnostics.Process.Start(textBox2updateurl.Text);
         }
 
         private void textBox2updateurl_MouseClick(object sender, MouseEventArgs e)

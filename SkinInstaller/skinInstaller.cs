@@ -82,6 +82,7 @@ namespace SkinInstaller
     using System.Reflection;
     using System.Collections;
     using System.Globalization;
+    using mshtml;
     
     public class skinInstaller : Form
     {
@@ -381,6 +382,14 @@ namespace SkinInstaller
         private BackgroundWorker ParticleTreeWorkerNew;
         private ToolStripMenuItem getLastModDateToolStripMenuItem;
         PaintEventHandler importantP;
+        private SplitContainer splitContainer6;
+        private ExtendedWebBrowser webBrowser1;
+        private Panel panel10;
+        private Button button3openAd;
+        private Button button3openAds3;
+        private Button button3openAds2;
+        private Button button3CloseAd;
+        private SkinInstaller.ExtendedWebBrowser webBrowser2Test;
 
         TreeNode database = new TreeNode("dbRoot");
         #endregion
@@ -584,6 +593,10 @@ namespace SkinInstaller
         #endregion
         public skinInstaller(string incname, string version, string args)
         {
+            //lgg open db
+            this.sqLiteCon.ConnectionString = "data source=\"" + Application.StartupPath + "\\skins.db\"";
+            this.sqLiteCon.Open();
+
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
             Thread.CurrentThread.CurrentUICulture = new CultureInfo("en-US");
             myCurrentVersion = version;
@@ -610,9 +623,9 @@ namespace SkinInstaller
             {
                 
             }else
-            if (Properties.Settings.Default.size.Height != 0)
+            if (Properties.Settings.Default.size2.Height != 0)
             {
-                this.Size = Properties.Settings.Default.size;
+                this.Size = Properties.Settings.Default.size2;
             }
             this.listView1.ListViewItemSorter=lvwColumnSorter;
             this.tabControl1.DrawMode = TabDrawMode.OwnerDrawFixed;
@@ -649,8 +662,7 @@ namespace SkinInstaller
             this.AddToDatabasePanel.Paint += importantP;
 
 
-            this.argsToProc = args;
-            
+            this.argsToProc = args;  
             
         }
 
@@ -665,6 +677,7 @@ namespace SkinInstaller
             USkinSDK.USkinInit("", "", skinUPath);
                 USkinSDK.USkinLoadSkin(skinUPath);
 #endif
+            doBrowser(Properties.Settings.Default.showAds);
             loadNameReplacements();
             UpdateProgressSafe(0);
             if (Application.StartupPath.Length > 63)
@@ -805,9 +818,7 @@ namespace SkinInstaller
                 //this.CheckForUpdate(false);//remove this later
             }
             setImageValue(Properties.Settings.Default.iconSize,true);
-            //lgg open db
-            this.sqLiteCon.ConnectionString = "data source=\"" + Application.StartupPath + "\\skins.db\"";
-            this.sqLiteCon.Open();
+            
             this.UpdateListView();
             updateWorker2.RunWorkerAsync(new object[] { this, false });
             backgroundWorkerCountUpdate.RunWorkerAsync();
@@ -4054,6 +4065,7 @@ namespace SkinInstaller
             this.label8 = new System.Windows.Forms.Label();
             this.textBoxauthor = new System.Windows.Forms.TextBox();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.button3openAd = new System.Windows.Forms.Button();
             this.AddToDatabasePanel = new System.Windows.Forms.Panel();
             this.button1 = new System.Windows.Forms.Button();
             this.addFilesPanel = new System.Windows.Forms.Panel();
@@ -4117,6 +4129,7 @@ namespace SkinInstaller
             this.labelSkinName = new System.Windows.Forms.Label();
             this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.button3openAds3 = new System.Windows.Forms.Button();
             this.button3reinstallText = new System.Windows.Forms.Button();
             this.dbDelete = new System.Windows.Forms.Button();
             this.dbInstall = new System.Windows.Forms.Button();
@@ -4127,6 +4140,7 @@ namespace SkinInstaller
             this.splitContainer4 = new System.Windows.Forms.SplitContainer();
             this.splitContainer5 = new System.Windows.Forms.SplitContainer();
             this.treeView1 = new System.Windows.Forms.TreeView();
+            this.button3openAds2 = new System.Windows.Forms.Button();
             this.label10 = new System.Windows.Forms.Label();
             this.button3exporttree = new System.Windows.Forms.Button();
             this.buttonRebuildTree = new System.Windows.Forms.Button();
@@ -4211,6 +4225,11 @@ namespace SkinInstaller
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportTreeViewWorker1 = new System.ComponentModel.BackgroundWorker();
             this.ParticleTreeWorkerNew = new System.ComponentModel.BackgroundWorker();
+            this.splitContainer6 = new System.Windows.Forms.SplitContainer();
+            this.panel10 = new System.Windows.Forms.Panel();
+            this.button3CloseAd = new System.Windows.Forms.Button();
+            this.webBrowser2Test = new SkinInstaller.ExtendedWebBrowser();
+                    
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -4249,12 +4268,16 @@ namespace SkinInstaller
             this.panel7.SuspendLayout();
             this.progrespanel.SuspendLayout();
             this.treeMenuStripSkin1.SuspendLayout();
+            this.splitContainer6.Panel1.SuspendLayout();
+            this.splitContainer6.Panel2.SuspendLayout();
+            this.splitContainer6.SuspendLayout();
+            this.panel10.SuspendLayout();
             this.SuspendLayout();
             // 
             // exit
             // 
             this.exit.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.exit.Location = new System.Drawing.Point(758, 3);
+            this.exit.Location = new System.Drawing.Point(825, 3);
             this.exit.Name = "exit";
             this.exit.Size = new System.Drawing.Size(57, 23);
             this.exit.TabIndex = 20;
@@ -4273,7 +4296,7 @@ namespace SkinInstaller
             this.helpBar.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
             this.helpBar.Location = new System.Drawing.Point(0, 463);
             this.helpBar.Name = "helpBar";
-            this.helpBar.Size = new System.Drawing.Size(819, 22);
+            this.helpBar.Size = new System.Drawing.Size(886, 22);
             this.helpBar.TabIndex = 0;
             this.helpBar.Text = "Ready..";
             // 
@@ -4365,7 +4388,7 @@ namespace SkinInstaller
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(811, 318);
+            this.tabPage2.Size = new System.Drawing.Size(720, 318);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "==Add New Skin==";
             // 
@@ -4376,7 +4399,7 @@ namespace SkinInstaller
             this.panel4.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel4.Location = new System.Drawing.Point(3, 3);
             this.panel4.Name = "panel4";
-            this.panel4.Size = new System.Drawing.Size(638, 312);
+            this.panel4.Size = new System.Drawing.Size(547, 312);
             this.panel4.TabIndex = 39;
             // 
             // installFiles_ListBox
@@ -4386,7 +4409,7 @@ namespace SkinInstaller
             this.installFiles_ListBox.FormattingEnabled = true;
             this.installFiles_ListBox.Location = new System.Drawing.Point(0, 77);
             this.installFiles_ListBox.Name = "installFiles_ListBox";
-            this.installFiles_ListBox.Size = new System.Drawing.Size(638, 235);
+            this.installFiles_ListBox.Size = new System.Drawing.Size(547, 235);
             this.installFiles_ListBox.TabIndex = 29;
             this.installFiles_ListBox.DragDrop += new System.Windows.Forms.DragEventHandler(this.skinInstaller_DragDrop);
             this.installFiles_ListBox.DragEnter += new System.Windows.Forms.DragEventHandler(this.skinInstaller_DragEnter);
@@ -4404,7 +4427,7 @@ namespace SkinInstaller
             this.panel5.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel5.Location = new System.Drawing.Point(0, 0);
             this.panel5.Name = "panel5";
-            this.panel5.Size = new System.Drawing.Size(638, 77);
+            this.panel5.Size = new System.Drawing.Size(547, 77);
             this.panel5.TabIndex = 38;
             this.panel5.DragDrop += new System.Windows.Forms.DragEventHandler(this.skinInstaller_DragDrop);
             this.panel5.DragEnter += new System.Windows.Forms.DragEventHandler(this.skinInstaller_DragEnter);
@@ -4460,6 +4483,7 @@ namespace SkinInstaller
             // panel3
             // 
             this.panel3.BackColor = System.Drawing.SystemColors.Control;
+            this.panel3.Controls.Add(this.button3openAd);
             this.panel3.Controls.Add(this.AddToDatabasePanel);
             this.panel3.Controls.Add(this.addFilesPanel);
             this.panel3.Controls.Add(this.saveToDb);
@@ -4467,10 +4491,21 @@ namespace SkinInstaller
             this.panel3.Controls.Add(this.b_IRemoveFiles);
             this.panel3.Controls.Add(this.b_IInstallFiles);
             this.panel3.Dock = System.Windows.Forms.DockStyle.Right;
-            this.panel3.Location = new System.Drawing.Point(641, 3);
+            this.panel3.Location = new System.Drawing.Point(550, 3);
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(167, 312);
             this.panel3.TabIndex = 38;
+            // 
+            // button3openAd
+            // 
+            this.button3openAd.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3openAd.Location = new System.Drawing.Point(133, 286);
+            this.button3openAd.Name = "button3openAd";
+            this.button3openAd.Size = new System.Drawing.Size(31, 23);
+            this.button3openAd.TabIndex = 39;
+            this.button3openAd.Text = "<<";
+            this.button3openAd.UseVisualStyleBackColor = true;
+            this.button3openAd.Click += new System.EventHandler(this.button3openAd_Click);
             // 
             // AddToDatabasePanel
             // 
@@ -4546,7 +4581,7 @@ namespace SkinInstaller
             this.saveToDb.CheckState = System.Windows.Forms.CheckState.Checked;
             this.saveToDb.Location = new System.Drawing.Point(11, 332);
             this.saveToDb.Name = "saveToDb";
-            this.saveToDb.Size = new System.Drawing.Size(111, 17);
+            this.saveToDb.Size = new System.Drawing.Size(112, 17);
             this.saveToDb.TabIndex = 33;
             this.saveToDb.Text = "Save to Database";
             this.saveToDb.UseVisualStyleBackColor = false;
@@ -4710,11 +4745,11 @@ namespace SkinInstaller
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.DrawMode = System.Windows.Forms.TabDrawMode.OwnerDrawFixed;
             this.tabControl1.HotTrack = true;
-            this.tabControl1.Location = new System.Drawing.Point(0, 24);
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
             this.tabControl1.Multiline = true;
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(819, 344);
+            this.tabControl1.Size = new System.Drawing.Size(728, 344);
             this.tabControl1.TabIndex = 0;
             this.tabControl1.DragDrop += new System.Windows.Forms.DragEventHandler(this.skinInstaller_DragDrop);
             this.tabControl1.DragEnter += new System.Windows.Forms.DragEventHandler(this.skinInstaller_DragEnter);
@@ -4726,7 +4761,7 @@ namespace SkinInstaller
             this.tabPage4.Location = new System.Drawing.Point(4, 22);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage4.Size = new System.Drawing.Size(811, 318);
+            this.tabPage4.Size = new System.Drawing.Size(720, 318);
             this.tabPage4.TabIndex = 3;
             this.tabPage4.Text = "==Install Existing Skin==";
             // 
@@ -4745,8 +4780,8 @@ namespace SkinInstaller
             // splitContainer2.Panel2
             // 
             this.splitContainer2.Panel2.Controls.Add(this.splitContainer3);
-            this.splitContainer2.Size = new System.Drawing.Size(805, 281);
-            this.splitContainer2.SplitterDistance = 615;
+            this.splitContainer2.Size = new System.Drawing.Size(714, 281);
+            this.splitContainer2.SplitterDistance = 522;
             this.splitContainer2.TabIndex = 7;
             // 
             // listView1
@@ -4769,7 +4804,7 @@ namespace SkinInstaller
             this.listView1.LargeImageList = this.imageList1;
             this.listView1.Location = new System.Drawing.Point(18, 15);
             this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(597, 266);
+            this.listView1.Size = new System.Drawing.Size(504, 266);
             this.listView1.SmallImageList = this.imageList1;
             this.listView1.TabIndex = 0;
             this.listView1.TileSize = new System.Drawing.Size(2, 2);
@@ -4937,7 +4972,7 @@ namespace SkinInstaller
             this.panel8.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel8.Location = new System.Drawing.Point(0, 0);
             this.panel8.Name = "panel8";
-            this.panel8.Size = new System.Drawing.Size(615, 15);
+            this.panel8.Size = new System.Drawing.Size(522, 15);
             this.panel8.TabIndex = 1;
             // 
             // checkBox1dispCharacter
@@ -4947,7 +4982,7 @@ namespace SkinInstaller
             this.checkBox1dispCharacter.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispCharacter.Location = new System.Drawing.Point(507, 1);
             this.checkBox1dispCharacter.Name = "checkBox1dispCharacter";
-            this.checkBox1dispCharacter.Size = new System.Drawing.Size(71, 17);
+            this.checkBox1dispCharacter.Size = new System.Drawing.Size(72, 17);
             this.checkBox1dispCharacter.TabIndex = 8;
             this.checkBox1dispCharacter.Text = "Character";
             this.checkBox1dispCharacter.UseVisualStyleBackColor = true;
@@ -4960,7 +4995,7 @@ namespace SkinInstaller
             this.checkBox1dispDateInstalledFull.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispDateInstalledFull.Location = new System.Drawing.Point(420, 1);
             this.checkBox1dispDateInstalledFull.Name = "checkBox1dispDateInstalledFull";
-            this.checkBox1dispDateInstalledFull.Size = new System.Drawing.Size(90, 17);
+            this.checkBox1dispDateInstalledFull.Size = new System.Drawing.Size(91, 17);
             this.checkBox1dispDateInstalledFull.TabIndex = 7;
             this.checkBox1dispDateInstalledFull.Text = "Time Installed";
             this.checkBox1dispDateInstalledFull.UseVisualStyleBackColor = true;
@@ -4973,7 +5008,7 @@ namespace SkinInstaller
             this.checkBox1dispDateAddedFull.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispDateAddedFull.Location = new System.Drawing.Point(342, 1);
             this.checkBox1dispDateAddedFull.Name = "checkBox1dispDateAddedFull";
-            this.checkBox1dispDateAddedFull.Size = new System.Drawing.Size(82, 17);
+            this.checkBox1dispDateAddedFull.Size = new System.Drawing.Size(83, 17);
             this.checkBox1dispDateAddedFull.TabIndex = 6;
             this.checkBox1dispDateAddedFull.Text = "Time Added";
             this.checkBox1dispDateAddedFull.UseVisualStyleBackColor = true;
@@ -4986,7 +5021,7 @@ namespace SkinInstaller
             this.checkBox1dispDateAdded.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispDateAdded.Location = new System.Drawing.Point(265, 1);
             this.checkBox1dispDateAdded.Name = "checkBox1dispDateAdded";
-            this.checkBox1dispDateAdded.Size = new System.Drawing.Size(82, 17);
+            this.checkBox1dispDateAdded.Size = new System.Drawing.Size(83, 17);
             this.checkBox1dispDateAdded.TabIndex = 5;
             this.checkBox1dispDateAdded.Text = "Date Added";
             this.checkBox1dispDateAdded.UseVisualStyleBackColor = true;
@@ -4999,7 +5034,7 @@ namespace SkinInstaller
             this.checkBox1dispInstalled.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispInstalled.Location = new System.Drawing.Point(204, 1);
             this.checkBox1dispInstalled.Name = "checkBox1dispInstalled";
-            this.checkBox1dispInstalled.Size = new System.Drawing.Size(64, 17);
+            this.checkBox1dispInstalled.Size = new System.Drawing.Size(65, 17);
             this.checkBox1dispInstalled.TabIndex = 4;
             this.checkBox1dispInstalled.Text = "Installed";
             this.checkBox1dispInstalled.UseVisualStyleBackColor = true;
@@ -5012,7 +5047,7 @@ namespace SkinInstaller
             this.checkBox1dispFileCount.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispFileCount.Location = new System.Drawing.Point(134, 1);
             this.checkBox1dispFileCount.Name = "checkBox1dispFileCount";
-            this.checkBox1dispFileCount.Size = new System.Drawing.Size(72, 17);
+            this.checkBox1dispFileCount.Size = new System.Drawing.Size(73, 17);
             this.checkBox1dispFileCount.TabIndex = 3;
             this.checkBox1dispFileCount.Text = "File Count";
             this.checkBox1dispFileCount.UseVisualStyleBackColor = true;
@@ -5025,7 +5060,7 @@ namespace SkinInstaller
             this.checkBox1dispAuthor.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispAuthor.Location = new System.Drawing.Point(78, 1);
             this.checkBox1dispAuthor.Name = "checkBox1dispAuthor";
-            this.checkBox1dispAuthor.Size = new System.Drawing.Size(56, 17);
+            this.checkBox1dispAuthor.Size = new System.Drawing.Size(57, 17);
             this.checkBox1dispAuthor.TabIndex = 2;
             this.checkBox1dispAuthor.Text = "Author";
             this.checkBox1dispAuthor.UseVisualStyleBackColor = true;
@@ -5038,7 +5073,7 @@ namespace SkinInstaller
             this.checkBox1dispTitle.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispTitle.Location = new System.Drawing.Point(36, 1);
             this.checkBox1dispTitle.Name = "checkBox1dispTitle";
-            this.checkBox1dispTitle.Size = new System.Drawing.Size(45, 17);
+            this.checkBox1dispTitle.Size = new System.Drawing.Size(46, 17);
             this.checkBox1dispTitle.TabIndex = 1;
             this.checkBox1dispTitle.Text = "Title";
             this.checkBox1dispTitle.UseVisualStyleBackColor = true;
@@ -5069,7 +5104,7 @@ namespace SkinInstaller
             // splitContainer3.Panel2
             // 
             this.splitContainer3.Panel2.Controls.Add(this.pictureBox2);
-            this.splitContainer3.Size = new System.Drawing.Size(186, 281);
+            this.splitContainer3.Size = new System.Drawing.Size(188, 281);
             this.splitContainer3.SplitterDistance = 89;
             this.splitContainer3.TabIndex = 0;
             // 
@@ -5083,7 +5118,7 @@ namespace SkinInstaller
             this.textBox2.Multiline = true;
             this.textBox2.Name = "textBox2";
             this.textBox2.ReadOnly = true;
-            this.textBox2.Size = new System.Drawing.Size(186, 68);
+            this.textBox2.Size = new System.Drawing.Size(188, 68);
             this.textBox2.TabIndex = 1;
             this.textBox2.TextAlign = System.Windows.Forms.HorizontalAlignment.Center;
             this.textBox2.TextChanged += new System.EventHandler(this.textBox2_TextChanged);
@@ -5110,7 +5145,7 @@ namespace SkinInstaller
             this.pictureBox2.InitialImage = null;
             this.pictureBox2.Location = new System.Drawing.Point(0, 0);
             this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(186, 188);
+            this.pictureBox2.Size = new System.Drawing.Size(188, 188);
             this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
             this.pictureBox2.TabIndex = 0;
             this.pictureBox2.TabStop = false;
@@ -5118,6 +5153,7 @@ namespace SkinInstaller
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.button3openAds3);
             this.panel1.Controls.Add(this.button3reinstallText);
             this.panel1.Controls.Add(this.dbDelete);
             this.panel1.Controls.Add(this.dbInstall);
@@ -5127,8 +5163,19 @@ namespace SkinInstaller
             this.panel1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel1.Location = new System.Drawing.Point(3, 284);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(805, 31);
+            this.panel1.Size = new System.Drawing.Size(714, 31);
             this.panel1.TabIndex = 6;
+            // 
+            // button3openAds3
+            // 
+            this.button3openAds3.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3openAds3.Location = new System.Drawing.Point(680, 5);
+            this.button3openAds3.Name = "button3openAds3";
+            this.button3openAds3.Size = new System.Drawing.Size(31, 23);
+            this.button3openAds3.TabIndex = 40;
+            this.button3openAds3.Text = "<<";
+            this.button3openAds3.UseVisualStyleBackColor = true;
+            this.button3openAds3.Click += new System.EventHandler(this.button3openAd_Click);
             // 
             // button3reinstallText
             // 
@@ -5204,7 +5251,7 @@ namespace SkinInstaller
             this.tabPage3.Location = new System.Drawing.Point(4, 22);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage3.Size = new System.Drawing.Size(811, 318);
+            this.tabPage3.Size = new System.Drawing.Size(720, 318);
             this.tabPage3.TabIndex = 5;
             this.tabPage3.Text = "==Skin Creation==";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -5222,10 +5269,11 @@ namespace SkinInstaller
             // 
             // splitContainer4.Panel2
             // 
+            this.splitContainer4.Panel2.Controls.Add(this.button3openAds2);
             this.splitContainer4.Panel2.Controls.Add(this.label10);
             this.splitContainer4.Panel2.Controls.Add(this.button3exporttree);
             this.splitContainer4.Panel2.Controls.Add(this.buttonRebuildTree);
-            this.splitContainer4.Size = new System.Drawing.Size(805, 312);
+            this.splitContainer4.Size = new System.Drawing.Size(714, 312);
             this.splitContainer4.SplitterDistance = 283;
             this.splitContainer4.TabIndex = 0;
             // 
@@ -5238,7 +5286,7 @@ namespace SkinInstaller
             // splitContainer5.Panel2
             // 
             this.splitContainer5.Panel2.Controls.Add(this.treeView1);
-            this.splitContainer5.Size = new System.Drawing.Size(805, 283);
+            this.splitContainer5.Size = new System.Drawing.Size(714, 283);
             this.splitContainer5.SplitterDistance = 25;
             this.splitContainer5.TabIndex = 0;
             // 
@@ -5260,13 +5308,24 @@ namespace SkinInstaller
             treeNode1});
             this.treeView1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.treeView1.ShowNodeToolTips = true;
-            this.treeView1.Size = new System.Drawing.Size(776, 283);
+            this.treeView1.Size = new System.Drawing.Size(685, 283);
             this.treeView1.TabIndex = 0;
             this.treeView1.BeforeCheck += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeCheck);
             this.treeView1.BeforeExpand += new System.Windows.Forms.TreeViewCancelEventHandler(this.treeView1_BeforeExpand);
             this.treeView1.AfterExpand += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterExpand);
             this.treeView1.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView1_AfterSelect);
             this.treeView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.treeView1_MouseUp);
+            // 
+            // button3openAds2
+            // 
+            this.button3openAds2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.button3openAds2.Location = new System.Drawing.Point(680, -1);
+            this.button3openAds2.Name = "button3openAds2";
+            this.button3openAds2.Size = new System.Drawing.Size(31, 23);
+            this.button3openAds2.TabIndex = 40;
+            this.button3openAds2.Text = "<<";
+            this.button3openAds2.UseVisualStyleBackColor = true;
+            this.button3openAds2.Click += new System.EventHandler(this.button3openAd_Click);
             // 
             // label10
             // 
@@ -5304,7 +5363,7 @@ namespace SkinInstaller
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(811, 318);
+            this.tabPage1.Size = new System.Drawing.Size(720, 318);
             this.tabPage1.TabIndex = 4;
             this.tabPage1.UseVisualStyleBackColor = true;
             this.tabPage1.Click += new System.EventHandler(this.tabPage1_Click);
@@ -5323,8 +5382,8 @@ namespace SkinInstaller
             // 
             this.splitContainer1.Panel2.Controls.Add(this.textBox1);
             this.splitContainer1.Panel2.Controls.Add(this.panel6);
-            this.splitContainer1.Size = new System.Drawing.Size(805, 312);
-            this.splitContainer1.SplitterDistance = 264;
+            this.splitContainer1.Size = new System.Drawing.Size(714, 312);
+            this.splitContainer1.SplitterDistance = 232;
             this.splitContainer1.TabIndex = 1;
             // 
             // pictureBox1
@@ -5332,7 +5391,7 @@ namespace SkinInstaller
             this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pictureBox1.Location = new System.Drawing.Point(0, 0);
             this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(264, 312);
+            this.pictureBox1.Size = new System.Drawing.Size(232, 312);
             this.pictureBox1.TabIndex = 0;
             this.pictureBox1.TabStop = false;
             // 
@@ -5343,7 +5402,7 @@ namespace SkinInstaller
             this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
             this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(537, 212);
+            this.textBox1.Size = new System.Drawing.Size(478, 212);
             this.textBox1.TabIndex = 1;
             this.textBox1.Text = "Nothing To See Here";
             // 
@@ -5352,7 +5411,7 @@ namespace SkinInstaller
             this.panel6.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.panel6.Location = new System.Drawing.Point(0, 212);
             this.panel6.Name = "panel6";
-            this.panel6.Size = new System.Drawing.Size(537, 100);
+            this.panel6.Size = new System.Drawing.Size(478, 100);
             this.panel6.TabIndex = 0;
             // 
             // treeViewMenuStrip1
@@ -5415,14 +5474,14 @@ namespace SkinInstaller
             this.progressBar1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.progressBar1.Location = new System.Drawing.Point(0, 0);
             this.progressBar1.Name = "progressBar1";
-            this.progressBar1.Size = new System.Drawing.Size(769, 22);
+            this.progressBar1.Size = new System.Drawing.Size(836, 22);
             this.progressBar1.TabIndex = 40;
             this.progressBar1.Click += new System.EventHandler(this.progressBar1_Click);
             // 
             // button2
             // 
             this.button2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.button2.Location = new System.Drawing.Point(700, 3);
+            this.button2.Location = new System.Drawing.Point(767, 3);
             this.button2.Name = "button2";
             this.button2.Size = new System.Drawing.Size(44, 23);
             this.button2.TabIndex = 41;
@@ -5440,7 +5499,7 @@ namespace SkinInstaller
             this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.menuStrip1.Size = new System.Drawing.Size(819, 24);
+            this.menuStrip1.Size = new System.Drawing.Size(886, 24);
             this.menuStrip1.TabIndex = 42;
             this.menuStrip1.Text = "menuStrip1";
             // 
@@ -5746,7 +5805,7 @@ namespace SkinInstaller
             this.panel2.MaximumSize = new System.Drawing.Size(2000, 2000);
             this.panel2.MinimumSize = new System.Drawing.Size(478, 95);
             this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(819, 95);
+            this.panel2.Size = new System.Drawing.Size(886, 95);
             this.panel2.TabIndex = 43;
             // 
             // panelGL
@@ -5757,7 +5816,7 @@ namespace SkinInstaller
             this.panelGL.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panelGL.Location = new System.Drawing.Point(0, 54);
             this.panelGL.Name = "panelGL";
-            this.panelGL.Size = new System.Drawing.Size(819, 41);
+            this.panelGL.Size = new System.Drawing.Size(886, 41);
             this.panelGL.TabIndex = 43;
             // 
             // label5
@@ -5767,7 +5826,7 @@ namespace SkinInstaller
             this.label5.BackColor = System.Drawing.Color.Transparent;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 6F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
             this.label5.ForeColor = System.Drawing.Color.Red;
-            this.label5.Location = new System.Drawing.Point(575, 28);
+            this.label5.Location = new System.Drawing.Point(642, 28);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(77, 9);
             this.label5.TabIndex = 45;
@@ -5777,7 +5836,7 @@ namespace SkinInstaller
             // 
             this.pictureBoxCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.pictureBoxCount.BackColor = System.Drawing.Color.Black;
-            this.pictureBoxCount.Location = new System.Drawing.Point(736, 28);
+            this.pictureBoxCount.Location = new System.Drawing.Point(803, 28);
             this.pictureBoxCount.Name = "pictureBoxCount";
             this.pictureBoxCount.Size = new System.Drawing.Size(83, 13);
             this.pictureBoxCount.TabIndex = 44;
@@ -5796,7 +5855,7 @@ namespace SkinInstaller
             this.panel7.Dock = System.Windows.Forms.DockStyle.Top;
             this.panel7.Location = new System.Drawing.Point(0, 0);
             this.panel7.Name = "panel7";
-            this.panel7.Size = new System.Drawing.Size(819, 54);
+            this.panel7.Size = new System.Drawing.Size(886, 54);
             this.panel7.TabIndex = 42;
             // 
             // progrespanel
@@ -5807,7 +5866,7 @@ namespace SkinInstaller
             this.progrespanel.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.progrespanel.Location = new System.Drawing.Point(0, 32);
             this.progrespanel.Name = "progrespanel";
-            this.progrespanel.Size = new System.Drawing.Size(819, 22);
+            this.progrespanel.Size = new System.Drawing.Size(886, 22);
             this.progrespanel.TabIndex = 44;
             // 
             // label2Percent
@@ -5822,7 +5881,7 @@ namespace SkinInstaller
             // buttoncancel
             // 
             this.buttoncancel.Dock = System.Windows.Forms.DockStyle.Right;
-            this.buttoncancel.Location = new System.Drawing.Point(769, 0);
+            this.buttoncancel.Location = new System.Drawing.Point(836, 0);
             this.buttoncancel.Name = "buttoncancel";
             this.buttoncancel.Size = new System.Drawing.Size(50, 22);
             this.buttoncancel.TabIndex = 41;
@@ -5965,12 +6024,63 @@ namespace SkinInstaller
             this.ParticleTreeWorkerNew.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.ParticleTreeWorkerNew_ProgressChanged);
             this.ParticleTreeWorkerNew.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.ParticleTreeWorkerNew_RunWorkerCompleted);
             // 
+            // splitContainer6
+            // 
+            this.splitContainer6.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer6.Location = new System.Drawing.Point(0, 24);
+            this.splitContainer6.Name = "splitContainer6";
+            // 
+            // splitContainer6.Panel1
+            // 
+            this.splitContainer6.Panel1.Controls.Add(this.tabControl1);
+            // 
+            // splitContainer6.Panel2
+            // 
+            this.splitContainer6.Panel2.Controls.Add(this.panel10);
+            this.splitContainer6.Panel2MinSize = 1;
+            this.splitContainer6.Size = new System.Drawing.Size(886, 344);
+            this.splitContainer6.SplitterDistance = 728;
+            this.splitContainer6.TabIndex = 44;
+            // 
+            // panel10
+            // 
+            this.panel10.Controls.Add(this.webBrowser2Test);
+            this.panel10.Controls.Add(this.button3CloseAd);
+            this.panel10.Dock = System.Windows.Forms.DockStyle.Bottom;
+            this.panel10.Location = new System.Drawing.Point(0, 306);
+            this.panel10.Name = "panel10";
+            this.panel10.Size = new System.Drawing.Size(154, 38);
+            this.panel10.TabIndex = 0;
+            // 
+            // button3CloseAd
+            // 
+            this.button3CloseAd.Location = new System.Drawing.Point(3, 6);
+            this.button3CloseAd.Name = "button3CloseAd";
+            this.button3CloseAd.Size = new System.Drawing.Size(30, 23);
+            this.button3CloseAd.TabIndex = 0;
+            this.button3CloseAd.Text = ">>";
+            this.button3CloseAd.UseVisualStyleBackColor = true;
+            this.button3CloseAd.Click += new System.EventHandler(this.button3CloseAd_Click);
+            // 
+            // webBrowser2Test
+            // 
+            this.webBrowser2Test.Location = new System.Drawing.Point(50, 8);
+            this.webBrowser2Test.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser2Test.Name = "webBrowser2Test";
+            this.webBrowser2Test.Size = new System.Drawing.Size(39, 21);
+            this.webBrowser2Test.TabIndex = 1;
+            this.webBrowser2Test.Visible = false;
+            this.webBrowser2Test.BeforeNavigate2 += new EventHandler<BeforeNavigate2EventArgs>(webBrowser2_BeforeNavigate2);
+            this.webBrowser2Test.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(webBrowser2Test_DocumentCompleted);
+         
+            this.webBrowser2Test.Tag = true;
+            // 
             // skinInstaller
             // 
             this.AllowDrop = true;
             this.AutoSize = true;
-            this.ClientSize = new System.Drawing.Size(819, 485);
-            this.Controls.Add(this.tabControl1);
+            this.ClientSize = new System.Drawing.Size(886, 485);
+            this.Controls.Add(this.splitContainer6);
             this.Controls.Add(this.panel2);
             this.Controls.Add(this.helpBar);
             this.Controls.Add(this.menuStrip1);
@@ -6035,6 +6145,10 @@ namespace SkinInstaller
             this.progrespanel.ResumeLayout(false);
             this.progrespanel.PerformLayout();
             this.treeMenuStripSkin1.ResumeLayout(false);
+            this.splitContainer6.Panel1.ResumeLayout(false);
+            this.splitContainer6.Panel2.ResumeLayout(false);
+            this.splitContainer6.ResumeLayout(false);
+            this.panel10.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -8509,7 +8623,7 @@ namespace SkinInstaller
         #endregion
         private void skinInstaller_FormClosing(object sender, FormClosingEventArgs e)
         {
-            Properties.Settings.Default.size = this.Size;
+            Properties.Settings.Default.size2 = this.Size;
             Properties.Settings.Default.lastSelectedTab = tabControl1.SelectedIndex;
             Properties.Settings.Default.Save();
         }
@@ -9854,6 +9968,214 @@ namespace SkinInstaller
             Cliver.Message.Inform("Last mod date was...\r\n\r\n"+getLastModDate().ToString());
         }
 
+        #endregion
+        #region webbrowserBs
+        private void webBrowser1_NewWindow(object sender, CancelEventArgs e)
+        {
+            //Cliver.Message.Inform("new windows\r\n" + e.ToString());
+
+            HtmlElement link = webBrowser1.Document.ActiveElement;
+            String url = link.GetAttribute("href");
+            if (url.Equals(""))
+            {
+                e.Cancel = false;
+                return;
+            }
+            if (url.StartsWith("//"))
+            {
+
+            }
+            else if (url.StartsWith("/"))
+                url = webBrowser1.Url.Host + url;
+
+            //Cliver.Message.Inform("link is \r\n" + url);
+            System.Diagnostics.Process.Start(url);
+            e.Cancel = true;
+        }
+        private void link_MouseUp(object sender, HtmlElementEventArgs e)
+        {
+            mshtml.HTMLAnchorElementClass a = (mshtml.HTMLAnchorElementClass)((HtmlElement)sender).DomElement;
+            switch (e.MouseButtonsPressed)
+            {
+                case MouseButtons.Left:
+                    {
+                        string url = a.href;
+                        // open new tab
+                        if (url.StartsWith("//"))
+                        {
+
+                        }
+                        else if (url.StartsWith("/"))
+                            url = webBrowser1.Url.Host + url;
+
+                        //Cliver.Message.Inform("link is \r\n" + url);
+                        System.Diagnostics.Process.Start(url);
+                        break;
+                    }
+                case MouseButtons.Right:
+                    {
+                        // open context menu
+                        break;
+                    }
+            }
+        }
+        private void webBrowser1_NewWindow2(object sender, NewWindow2EventArgs e)
+        {
+            clicked = true;
+          //  Cliver.Message.Inform("new windows2\r\n" + e.ToString()+"\r\n\r\n");
+            e.PPDisp = webBrowser2Test.Application;
+        }
+        private void webBrowser1_Navigating(object sender, WebBrowserNavigatingEventArgs e)
+        {
+            if (mainWebReady)
+            {
+                //Cliver.Message.Inform("Nav " + e.Url + "\r\n\r\nAt " + e.TargetFrameName.ToString());
+                //_MyUrl = e.Url;
+                string url = e.Url.ToString();
+                if (url.StartsWith("/"))
+                url = webBrowser1.Url.Host + url;
+                
+                System.Diagnostics.Process.Start(url);
+               e.Cancel=true;
+            }
+           
+        }
+        private void button3openAd_Click(object sender, EventArgs e)
+        {
+            doBrowser(true);
+        }
+        void webBrowser2Test_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            waitForWeb = false;
+        }
+       
+        public bool waitForWeb = false;
+        public bool clicked = false;
+        public bool mainWebReady = false;
+        void webBrowser2_BeforeNavigate2(object sender, BeforeNavigate2EventArgs e)
+        {
+           if (waitForWeb) return;
+           if (!clicked) return;
+
+            if ((bool)this.webBrowser2Test.Tag == true)
+            {
+                if (
+                  ((int)e.flags == 64 || true)
+
+                    && e.url.ToString() != "about:blank")
+                {
+                    e.Cancel = true;
+                    if (e.url.ToString().ToLower().Contains("http"))
+                        System.Diagnostics.Process.Start(e.url.ToString());
+
+                    e.Cancel = true;
+                    waitForWeb = true;
+
+                    clicked = false;
+                    
+                }
+            }
+            //  waitForWeb = true;
+          //  while (webBrowser2Test.ReadyState != WebBrowserReadyState.Complete)
+           // {
+          //      Application.DoEvents();
+          //  }
+          //  waitForWeb = false;
+          //      
+            
+        }
+        void webBrowser1_BeforeNavigate2(object sender, BeforeNavigate2EventArgs e)
+        {
+            if (mainWebReady)
+            {
+                //Cliver.Message.Inform("Srs click! @@\r\n\r\n " + e.url.ToString());
+                //e.url = "about:blank";
+                string url = e.url.ToString();
+                if (url.StartsWith("/"))
+                url = webBrowser1.Url.Host + url;
+                
+                System.Diagnostics.Process.Start(url);
+                e.Cancel = true;
+            }//else
+                //Cliver.Message.Inform("Normal click to follow click! @@\r\n\r\n " + e.url.ToString());
+        }
+        
+        private void doBrowser(bool on)
+        {
+            if (on)
+            {
+                if (this.webBrowser1 == null)
+                {
+                    this.webBrowser1 = new SkinInstaller.ExtendedWebBrowser();
+                    //this.webBrowser1 = new Axwebbroswer;
+                    this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
+                    this.webBrowser1.Location = new System.Drawing.Point(0, 0);
+                    this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+                    this.webBrowser1.Name = "webBrowser1";
+                    this.webBrowser1.ScrollBarsEnabled = false;
+                    this.webBrowser1.Size = new System.Drawing.Size(154, 306);
+                    this.webBrowser1.TabIndex = 1;
+                    this.webBrowser1.Url = new System.Uri("http://sites.google.com/site/siuupdates/helpful-links", System.UriKind.Absolute);
+                    this.webBrowser1.NewWindow2 += new System.EventHandler<SkinInstaller.NewWindow2EventArgs>(this.webBrowser1_NewWindow2);
+                    this.webBrowser1.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser1_Navigating);
+                    this.webBrowser1.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser1_NewWindow);
+                    this.webBrowser1.BeforeNavigate2 += new EventHandler<BeforeNavigate2EventArgs>(webBrowser1_BeforeNavigate2);
+                    this.webBrowser1.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(webBrowser1_DocumentCompleted);
+                    this.splitContainer6.Panel2.Controls.Add(this.webBrowser1);
+                }
+            }
+            if (webBrowser1 != null)
+            {
+                webBrowser1.Visible = on;
+                //webBrowser1.Refresh();
+                while (webBrowser1.ReadyState != WebBrowserReadyState.Complete)
+                {
+                    Application.DoEvents();
+                    System.Threading.Thread.Sleep(20);
+                }
+                IHTMLElement2 body = webBrowser1.Document.Body.DomElement as IHTMLElement2;
+                IHTMLElement2 doc = (webBrowser1.Document.DomDocument as IHTMLDocument3).documentElement as IHTMLElement2;
+                
+                doc.scrollLeft = 21;
+                doc.scrollTop = 51;
+
+            }
+            button3CloseAd.Enabled = button3CloseAd.Visible = on;
+            button3openAd.Visible = button3openAds2.Visible = button3openAds3.Visible =
+                button3openAd.Enabled = button3openAds2.Enabled = button3openAds3.Enabled =
+                !on;
+            splitContainer6.SplitterDistance = on ? (splitContainer6.Size.Width - (/*886 - 728*/190)) : splitContainer6.Size.Width - 1;
+
+            Properties.Settings.Default.showAds = on;
+            Properties.Settings.Default.Save();
+
+        }
+
+        void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
+        {
+            foreach (HtmlElement tag in webBrowser1.Document.All)
+            {
+                tag.Id = String.Empty;
+                switch (tag.TagName.ToUpper())
+                {
+                    case "A":
+                        {
+                            tag.MouseUp += new HtmlElementEventHandler(link_MouseUp);
+                            break;
+                        }
+                }
+            }
+            mainWebReady = true;
+            webBrowser1.Document.MouseUp += new HtmlElementEventHandler(Document_MouseUp);
+        }
+        void Document_MouseUp(object sender, HtmlElementEventArgs e)
+        {
+            //Cliver.Message.Inform("Click!");
+        }
+        private void button3CloseAd_Click(object sender, EventArgs e)
+        {
+            doBrowser(false);
+        }
         #endregion
     }
     #region strucks
