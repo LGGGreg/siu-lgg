@@ -82,7 +82,7 @@ namespace SkinInstaller
     using System.Reflection;
     using System.Collections;
     using System.Globalization;
-    using mshtml;
+    //using mshtml;
     
     public class skinInstaller : Form
     {
@@ -390,6 +390,7 @@ namespace SkinInstaller
         private Button button3openAds2;
         private Button button3CloseAd;
         private SkinInstaller.ExtendedWebBrowser webBrowser2Test;
+        private ToolStripMenuItem deleteBackupsToolStripMenuItem;
 
         TreeNode database = new TreeNode("dbRoot");
         #endregion
@@ -1448,11 +1449,12 @@ namespace SkinInstaller
                 foreach (string fileName in currentFiles)
                 {
                     FileInfo fi = new FileInfo(fileName);
-                    if (fi.Extension.ToLower().Contains("wav")) hasSounds = true;
+                    if (fi.Extension.ToLower().Contains("wav") || fi.Extension.ToLower().Contains("mp3")) hasSounds = true;
                 }
                 if (hasSounds)
                 {
-                    addInFiles("soundfix", c_TEMP_DIR_NAME_FIXED_SKIN_FILES);
+                    //not needed with new sound method
+                    //addInFiles("soundfix", c_TEMP_DIR_NAME_FIXED_SKIN_FILES);
                 }
             }
             {//trynd fix check
@@ -1657,6 +1659,7 @@ namespace SkinInstaller
                     String newFullNameAndPath = this.fixRiotv40Name(fullNameAndPath);
                     //cuz we cnat check sounds yet,error on the side of making new sounds work
                     if (oldFullNameAndPath.ToLower().Contains(".wav")) newFullNameAndPath = oldFullNameAndPath;
+                    if (oldFullNameAndPath.ToLower().Contains(".mp3")) newFullNameAndPath = oldFullNameAndPath;
                   
                     FileInfo fiold = new FileInfo(oldFullNameAndPath);
                     FileInfo finew = new FileInfo(newFullNameAndPath);
@@ -2382,7 +2385,7 @@ namespace SkinInstaller
                     Cliver.Message.Inform("Inibin files are known to cause issues\r\nNot going to use\r\n" + fileName);
                 return new fileLocReturn(moreOptions);
             }
-            if (fileName.ToLower().EndsWith(".wav"))
+            if (fileName.ToLower().EndsWith(".wav") || fileName.ToLower().EndsWith(".mp3"))
             {
                 return new fileLocReturn( "formatedsounds\\\\", fileName );
             }
@@ -2861,7 +2864,7 @@ namespace SkinInstaller
             //Cliver.Message.Inform(path);
             path += @"\formatedsounds";
             backupSounds();
-            installWorker2.ReportProgress(10, "Installing...Building rebuild file...");        
+            installWorker2.ReportProgress(10, "Installing...Building rebuild file..extracting current sounds...");        
 
             String backupDir = Application.StartupPath+@"\backup\";
             String fsbDir = Application.StartupPath+@"\fsb\";
@@ -2869,24 +2872,23 @@ namespace SkinInstaller
 	        String rebuildFile = fsbDir+"rebuild.dat";
             String soundsFolder = fsbDir+"sounds";
             String tempFSB = fsbDir + "temp.fsb";
+
+            installWorker2.ReportProgress(30, "Installing...Clearing old sound folder...");
             if(File.Exists(rebuildFile))
             {
                 File.Delete(rebuildFile);
             }
             if (File.Exists(tempFSB)) File.Delete(tempFSB);
             this.SIFileOp.FileCopy(gameDirectory + soundlocname, tempFSB);
-
-            runthis(fsbDir + "map.bat","", tempFSB,false);
-            File.Delete(tempFSB);
-	        //RunWait(@ScriptDir & '\fsbext\fsbext -l -s rebuild.dat "' & $SLOLDIR & '\Game\DATA\Sounds\FMOD\VOBank_en_US.fsb" ', @ScriptDir & "\fsbext", @SW_HIDE)
-            installWorker2.ReportProgress(30, "Installing...Clearing old sound folder...");
-            if(Directory.Exists(soundsFolder))SIFileOp.DirectoryDelete(soundsFolder,true);
+            if (Directory.Exists(soundsFolder)) SIFileOp.DirectoryDelete(soundsFolder, true);
             Directory.CreateDirectory(soundsFolder);
 
             installWorker2.ReportProgress(35, "Installing ... Unpacking soundbank...(This takes a while, be patient");
             
-            runthis(fsbDir + "fsbext.exe", "-R -d sounds " + "\"" + gameDirectory +
-               soundlocname + "\"", fsbDir,false);
+            runthis(fsbDir + "ext.bat", "",fsbDir, false);
+
+            File.Delete(tempFSB);
+            //runthis(fsbDir + "fsbext.exe", "-s -d sounds " + "\"" + gameDirectory +       soundlocname + "\"", fsbDir,false);
             //RunWait(@ScriptDir & '\fsbext\fsbext -R -d sounds "' & $SLOLDIR & '\Game\DATA\Sounds\FMOD\VOBank_en_US.fsb" ', @ScriptDir & "\fsbext", @SW_HIDE)
 
             installWorker2.ReportProgress(65, "Installing .... Replacing modded soundfiles...");
@@ -2895,7 +2897,8 @@ namespace SkinInstaller
             {
                 FileInfo fi = new FileInfo(str);
                 string fileNameWithExtension = fi.Name;
-                string fileNameNoExt = fileNameWithExtension.Substring(0, fileNameWithExtension.LastIndexOf("."));
+                int extLoc = fileNameWithExtension.LastIndexOf(".");
+                string fileNameNoExt = fileNameWithExtension.Substring(0, extLoc);
                 int underscore = fileNameNoExt.LastIndexOf("_");
                 //mkae sure its a number after..
                 int num = 0;
@@ -2912,7 +2915,7 @@ namespace SkinInstaller
                 int length = beforeUnder.Length;
                 if (length > 29) beforeUnder = beforeUnder.Substring(0, 29);
 
-                string name = beforeUnder + afterUnder;
+                string name = beforeUnder + afterUnder+".mp3";
                 //string name = str.Substring(str.LastIndexOf("\\"));
                 String target = fsbDir + "sounds\\" + name;
                 //Cliver.Message.Inform(target);
@@ -4171,9 +4174,10 @@ namespace SkinInstaller
             this.moreDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getVersionFilePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.readVersionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clientLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getLastModDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.soundFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.clientLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteBackupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.repathAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.showDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.imagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -4227,9 +4231,8 @@ namespace SkinInstaller
             this.ParticleTreeWorkerNew = new System.ComponentModel.BackgroundWorker();
             this.splitContainer6 = new System.Windows.Forms.SplitContainer();
             this.panel10 = new System.Windows.Forms.Panel();
-            this.button3CloseAd = new System.Windows.Forms.Button();
             this.webBrowser2Test = new SkinInstaller.ExtendedWebBrowser();
-                    
+            this.button3CloseAd = new System.Windows.Forms.Button();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -4581,7 +4584,7 @@ namespace SkinInstaller
             this.saveToDb.CheckState = System.Windows.Forms.CheckState.Checked;
             this.saveToDb.Location = new System.Drawing.Point(11, 332);
             this.saveToDb.Name = "saveToDb";
-            this.saveToDb.Size = new System.Drawing.Size(112, 17);
+            this.saveToDb.Size = new System.Drawing.Size(111, 17);
             this.saveToDb.TabIndex = 33;
             this.saveToDb.Text = "Save to Database";
             this.saveToDb.UseVisualStyleBackColor = false;
@@ -4982,7 +4985,7 @@ namespace SkinInstaller
             this.checkBox1dispCharacter.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispCharacter.Location = new System.Drawing.Point(507, 1);
             this.checkBox1dispCharacter.Name = "checkBox1dispCharacter";
-            this.checkBox1dispCharacter.Size = new System.Drawing.Size(72, 17);
+            this.checkBox1dispCharacter.Size = new System.Drawing.Size(71, 17);
             this.checkBox1dispCharacter.TabIndex = 8;
             this.checkBox1dispCharacter.Text = "Character";
             this.checkBox1dispCharacter.UseVisualStyleBackColor = true;
@@ -4995,7 +4998,7 @@ namespace SkinInstaller
             this.checkBox1dispDateInstalledFull.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispDateInstalledFull.Location = new System.Drawing.Point(420, 1);
             this.checkBox1dispDateInstalledFull.Name = "checkBox1dispDateInstalledFull";
-            this.checkBox1dispDateInstalledFull.Size = new System.Drawing.Size(91, 17);
+            this.checkBox1dispDateInstalledFull.Size = new System.Drawing.Size(90, 17);
             this.checkBox1dispDateInstalledFull.TabIndex = 7;
             this.checkBox1dispDateInstalledFull.Text = "Time Installed";
             this.checkBox1dispDateInstalledFull.UseVisualStyleBackColor = true;
@@ -5008,7 +5011,7 @@ namespace SkinInstaller
             this.checkBox1dispDateAddedFull.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispDateAddedFull.Location = new System.Drawing.Point(342, 1);
             this.checkBox1dispDateAddedFull.Name = "checkBox1dispDateAddedFull";
-            this.checkBox1dispDateAddedFull.Size = new System.Drawing.Size(83, 17);
+            this.checkBox1dispDateAddedFull.Size = new System.Drawing.Size(82, 17);
             this.checkBox1dispDateAddedFull.TabIndex = 6;
             this.checkBox1dispDateAddedFull.Text = "Time Added";
             this.checkBox1dispDateAddedFull.UseVisualStyleBackColor = true;
@@ -5021,7 +5024,7 @@ namespace SkinInstaller
             this.checkBox1dispDateAdded.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispDateAdded.Location = new System.Drawing.Point(265, 1);
             this.checkBox1dispDateAdded.Name = "checkBox1dispDateAdded";
-            this.checkBox1dispDateAdded.Size = new System.Drawing.Size(83, 17);
+            this.checkBox1dispDateAdded.Size = new System.Drawing.Size(82, 17);
             this.checkBox1dispDateAdded.TabIndex = 5;
             this.checkBox1dispDateAdded.Text = "Date Added";
             this.checkBox1dispDateAdded.UseVisualStyleBackColor = true;
@@ -5034,7 +5037,7 @@ namespace SkinInstaller
             this.checkBox1dispInstalled.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispInstalled.Location = new System.Drawing.Point(204, 1);
             this.checkBox1dispInstalled.Name = "checkBox1dispInstalled";
-            this.checkBox1dispInstalled.Size = new System.Drawing.Size(65, 17);
+            this.checkBox1dispInstalled.Size = new System.Drawing.Size(64, 17);
             this.checkBox1dispInstalled.TabIndex = 4;
             this.checkBox1dispInstalled.Text = "Installed";
             this.checkBox1dispInstalled.UseVisualStyleBackColor = true;
@@ -5047,7 +5050,7 @@ namespace SkinInstaller
             this.checkBox1dispFileCount.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispFileCount.Location = new System.Drawing.Point(134, 1);
             this.checkBox1dispFileCount.Name = "checkBox1dispFileCount";
-            this.checkBox1dispFileCount.Size = new System.Drawing.Size(73, 17);
+            this.checkBox1dispFileCount.Size = new System.Drawing.Size(72, 17);
             this.checkBox1dispFileCount.TabIndex = 3;
             this.checkBox1dispFileCount.Text = "File Count";
             this.checkBox1dispFileCount.UseVisualStyleBackColor = true;
@@ -5060,7 +5063,7 @@ namespace SkinInstaller
             this.checkBox1dispAuthor.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispAuthor.Location = new System.Drawing.Point(78, 1);
             this.checkBox1dispAuthor.Name = "checkBox1dispAuthor";
-            this.checkBox1dispAuthor.Size = new System.Drawing.Size(57, 17);
+            this.checkBox1dispAuthor.Size = new System.Drawing.Size(56, 17);
             this.checkBox1dispAuthor.TabIndex = 2;
             this.checkBox1dispAuthor.Text = "Author";
             this.checkBox1dispAuthor.UseVisualStyleBackColor = true;
@@ -5073,7 +5076,7 @@ namespace SkinInstaller
             this.checkBox1dispTitle.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispTitle.Location = new System.Drawing.Point(36, 1);
             this.checkBox1dispTitle.Name = "checkBox1dispTitle";
-            this.checkBox1dispTitle.Size = new System.Drawing.Size(46, 17);
+            this.checkBox1dispTitle.Size = new System.Drawing.Size(45, 17);
             this.checkBox1dispTitle.TabIndex = 1;
             this.checkBox1dispTitle.Text = "Title";
             this.checkBox1dispTitle.UseVisualStyleBackColor = true;
@@ -5578,7 +5581,7 @@ namespace SkinInstaller
             this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.moreDebugToolStripMenuItem,
             this.soundFileLocationToolStripMenuItem,
-            this.clientLocationToolStripMenuItem,
+            this.deleteBackupsToolStripMenuItem,
             this.repathAllFilesToolStripMenuItem,
             this.showDebugToolStripMenuItem,
             this.imagesToolStripMenuItem,
@@ -5607,6 +5610,7 @@ namespace SkinInstaller
             this.moreDebugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.getVersionFilePathToolStripMenuItem,
             this.readVersionsToolStripMenuItem,
+            this.clientLocationToolStripMenuItem,
             this.getLastModDateToolStripMenuItem});
             this.moreDebugToolStripMenuItem.Name = "moreDebugToolStripMenuItem";
             this.moreDebugToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
@@ -5626,6 +5630,13 @@ namespace SkinInstaller
             this.readVersionsToolStripMenuItem.Text = "Read Versions";
             this.readVersionsToolStripMenuItem.Click += new System.EventHandler(this.readVersionsToolStripMenuItem_Click);
             // 
+            // clientLocationToolStripMenuItem
+            // 
+            this.clientLocationToolStripMenuItem.Name = "clientLocationToolStripMenuItem";
+            this.clientLocationToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.clientLocationToolStripMenuItem.Text = "Client Location";
+            this.clientLocationToolStripMenuItem.Click += new System.EventHandler(this.clientLocationToolStripMenuItem_Click);
+            // 
             // getLastModDateToolStripMenuItem
             // 
             this.getLastModDateToolStripMenuItem.Name = "getLastModDateToolStripMenuItem";
@@ -5640,12 +5651,12 @@ namespace SkinInstaller
             this.soundFileLocationToolStripMenuItem.Text = "Sound File Location";
             this.soundFileLocationToolStripMenuItem.Click += new System.EventHandler(this.soundFileLocationToolStripMenuItem_Click);
             // 
-            // clientLocationToolStripMenuItem
+            // deleteBackupsToolStripMenuItem
             // 
-            this.clientLocationToolStripMenuItem.Name = "clientLocationToolStripMenuItem";
-            this.clientLocationToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
-            this.clientLocationToolStripMenuItem.Text = "Client Location";
-            this.clientLocationToolStripMenuItem.Click += new System.EventHandler(this.clientLocationToolStripMenuItem_Click);
+            this.deleteBackupsToolStripMenuItem.Name = "deleteBackupsToolStripMenuItem";
+            this.deleteBackupsToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.deleteBackupsToolStripMenuItem.Text = "Delete Backups";
+            this.deleteBackupsToolStripMenuItem.Click += new System.EventHandler(this.deleteBackupsToolStripMenuItem_Click);
             // 
             // repathAllFilesToolStripMenuItem
             // 
@@ -6052,6 +6063,19 @@ namespace SkinInstaller
             this.panel10.Size = new System.Drawing.Size(154, 38);
             this.panel10.TabIndex = 0;
             // 
+            // webBrowser2Test
+            // 
+            this.webBrowser2Test.AdditionalHeaders = null;
+            this.webBrowser2Test.Location = new System.Drawing.Point(50, 8);
+            this.webBrowser2Test.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser2Test.Name = "webBrowser2Test";
+            this.webBrowser2Test.Size = new System.Drawing.Size(39, 21);
+            this.webBrowser2Test.TabIndex = 1;
+            this.webBrowser2Test.Tag = true;
+            this.webBrowser2Test.Visible = false;
+            this.webBrowser2Test.BeforeNavigate2 += new System.EventHandler<SkinInstaller.BeforeNavigate2EventArgs>(this.webBrowser2_BeforeNavigate2);
+            this.webBrowser2Test.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser2Test_DocumentCompleted);
+            // 
             // button3CloseAd
             // 
             this.button3CloseAd.Location = new System.Drawing.Point(3, 6);
@@ -6061,19 +6085,6 @@ namespace SkinInstaller
             this.button3CloseAd.Text = ">>";
             this.button3CloseAd.UseVisualStyleBackColor = true;
             this.button3CloseAd.Click += new System.EventHandler(this.button3CloseAd_Click);
-            // 
-            // webBrowser2Test
-            // 
-            this.webBrowser2Test.Location = new System.Drawing.Point(50, 8);
-            this.webBrowser2Test.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser2Test.Name = "webBrowser2Test";
-            this.webBrowser2Test.Size = new System.Drawing.Size(39, 21);
-            this.webBrowser2Test.TabIndex = 1;
-            this.webBrowser2Test.Visible = false;
-            this.webBrowser2Test.BeforeNavigate2 += new EventHandler<BeforeNavigate2EventArgs>(webBrowser2_BeforeNavigate2);
-            this.webBrowser2Test.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(webBrowser2Test_DocumentCompleted);
-         
-            this.webBrowser2Test.Tag = true;
             // 
             // skinInstaller
             // 
@@ -6572,17 +6583,18 @@ namespace SkinInstaller
         private void unpackSoundsToolStripMenuItem_Click(object sender, EventArgs e)
         {
             String fsbDir = Application.StartupPath + @"\fsb\";
-            String tempFSB = fsbDir + "temp.fsb";
+            String soundsFolder = fsbDir + "sounds";
+            /*String tempFSB = fsbDir + "temp.fsb";
 
             this.SIFileOp.FileCopy(gameDirectory + findSoundsFSBLocation(), tempFSB);
-            String soundsFolder = fsbDir + "sounds";
+            
 
             runthis(fsbDir + "map.bat", "", tempFSB, false);
-            File.Delete(tempFSB);
+            File.Delete(tempFSB);*/
             if (Directory.Exists(soundsFolder)) SIFileOp.DirectoryDelete(soundsFolder, true);
             Directory.CreateDirectory(soundsFolder);
 
-            runthis(fsbDir + "fsbext.exe", "-R -d sounds " + "\"" + gameDirectory +
+            runthis(fsbDir + "fsbext.exe", "-s -d sounds " + "\"" + gameDirectory +
                findSoundsFSBLocation() + "\"", fsbDir, false);
         }
         private void openPublisherToolStripMenuItem_Click(object sender, EventArgs e)
@@ -9994,7 +10006,7 @@ namespace SkinInstaller
         }
         private void link_MouseUp(object sender, HtmlElementEventArgs e)
         {
-            mshtml.HTMLAnchorElementClass a = (mshtml.HTMLAnchorElementClass)((HtmlElement)sender).DomElement;
+           /* mshtml.HTMLAnchorElementClass a = (mshtml.HTMLAnchorElementClass)((HtmlElement)sender).DomElement;
             switch (e.MouseButtonsPressed)
             {
                 case MouseButtons.Left:
@@ -10017,7 +10029,7 @@ namespace SkinInstaller
                         // open context menu
                         break;
                     }
-            }
+            }*/
         }
         private void webBrowser1_NewWindow2(object sender, NewWindow2EventArgs e)
         {
@@ -10102,6 +10114,7 @@ namespace SkinInstaller
         
         private void doBrowser(bool on)
         {
+            on = false;//screw it :|
             if (on)
             {
                 if (this.webBrowser1 == null)
@@ -10124,7 +10137,7 @@ namespace SkinInstaller
                     this.splitContainer6.Panel2.Controls.Add(this.webBrowser1);
                 }
             }
-            if (webBrowser1 != null)
+            /*if (webBrowser1 != null)
             {
                 webBrowser1.Visible = on;
                 //webBrowser1.Refresh();
@@ -10136,15 +10149,17 @@ namespace SkinInstaller
                 IHTMLElement2 body = webBrowser1.Document.Body.DomElement as IHTMLElement2;
                 IHTMLElement2 doc = (webBrowser1.Document.DomDocument as IHTMLDocument3).documentElement as IHTMLElement2;
                 
-                doc.scrollLeft = 21;
-                doc.scrollTop = 51;
+                doc.scrollLeft = 20;
+                doc.scrollTop = 1;
 
-            }
+            }*/
             button3CloseAd.Enabled = button3CloseAd.Visible = on;
             button3openAd.Visible = button3openAds2.Visible = button3openAds3.Visible =
                 button3openAd.Enabled = button3openAds2.Enabled = button3openAds3.Enabled =
                 !on;
-            splitContainer6.SplitterDistance = on ? (splitContainer6.Size.Width - (/*886 - 728*/190)) : splitContainer6.Size.Width - 1;
+            int roomForWeb = (splitContainer6.Size.Width - (/*886 - 728*/190));
+            if (roomForWeb < 200) roomForWeb = 200;
+            splitContainer6.SplitterDistance = on ? roomForWeb: splitContainer6.Size.Width - 0;
 
             Properties.Settings.Default.showAds = on;
             Properties.Settings.Default.Save();
@@ -10177,6 +10192,20 @@ namespace SkinInstaller
             doBrowser(false);
         }
         #endregion
+
+        private void deleteBackupsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if(Cliver.Message.Show("Are you sure?",
+                                SystemIcons.Information,
+                                "You should NOT delete backups unless you have just repaired or reinstalled LoL\r\n"+
+                "\r\nGo to the help menu to learn how to repair\r\n\r\nAre you sure you want to delete backups now?\r\nThis process can not be undone.",
+                                0, new string[2] { "No! Never mind!", "Yes" }) == 1)
+            {
+
+                String backupDir = Application.StartupPath + @"\backup\";
+                SIFileOp.DirectoryDelete(backupDir,true);
+            }
+        }
     }
     #region strucks
     public class LogTextWriter : TextWriter
