@@ -99,6 +99,7 @@ namespace SIU_Publish
             toReturn.Add("fsb\\fsbext.exe");
             toReturn.Add("fsb\\map.bat");
             toReturn.Add("fsb\\reb.bat");
+            toReturn.Add("fsb\\ext.bat");
 
             toReturn.Add("7-zip.dll");
             toReturn.Add("7z.dll");
