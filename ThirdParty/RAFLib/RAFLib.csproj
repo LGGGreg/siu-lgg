@@ -70,9 +70,8 @@
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
-    <Reference Include="zlib.net, Version=1.0.3.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\ThirdParty\zlib\zlib.net.dll</HintPath>
+    <Reference Include="zlib.net">
+      <HintPath>..\zlib\zlib.net.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -105,13 +104,13 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="nocompress.txt" />
+  </ItemGroup>
+  <ItemGroup>
     <ProjectReference Include="..\ItzWarty\ItzWartyLib\ItzWarty.csproj">
       <Project>{097B6B08-4034-408A-B3C0-A12E8F9E8893}</Project>
       <Name>ItzWarty</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="nocompress.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

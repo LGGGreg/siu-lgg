@@ -38,11 +38,6 @@
     <Reference Include="RAFLib">
       <HintPath>.\RAFLib.dll</HintPath>
     </Reference>
-    <Reference Include="Skin Installer Ultimate, Version=10.11.25.0, Culture=neutral, processorArchitecture=x86">
-      <SpecificVersion>False</SpecificVersion>
-      <ExecutableExtension>.exe</ExecutableExtension>
-      <HintPath>..\..\bin\debug\Skin Installer Ultimate.exe</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -90,6 +85,12 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\..\Skin Installer Ultimate.csproj">
+      <Project>{94D492C3-FA9E-4453-9F65-A7DE84535D4C}</Project>
+      <Name>Skin Installer Ultimate</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
