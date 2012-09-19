@@ -8702,12 +8702,15 @@ namespace SkinInstaller
             int numberOfRafVersions = previewWindow.reader.rafArchives.Count;
             Regex rafRegex = new Regex(@"\\\d+\.\d+\.\d+\.\d+\\");
             Match rafMatch = rafRegex.Match(fileString);
-            string caught = rafMatch.Captures[0].Value.Substring(1, rafMatch.Captures[0].Value.Length - 2);
-            for (int i = 0; i < numberOfRafVersions; i++)
+            if (rafMatch.Success)
             {
-                if (previewWindow.reader.rafArchives.Keys.ToArray()[i].Contains(caught))
+                string caught = rafMatch.Captures[0].Value.Substring(1, rafMatch.Captures[0].Value.Length - 2);
+                for (int i = 0; i < numberOfRafVersions; i++)
                 {
-                    rafPower = i;
+                    if (previewWindow.reader.rafArchives.Keys.ToArray()[i].Contains(caught))
+                    {
+                        rafPower = i;
+                    }
                 }
             }
             return rafPower;

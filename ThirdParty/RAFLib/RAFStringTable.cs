@@ -9,6 +9,7 @@ using System.Globalization;
 
 namespace RAFLib
 {
+    
     public class RAFStringTable
     {
         private RAFArchive raf = null; 
@@ -40,6 +41,8 @@ namespace RAFLib
                 strings.Add(Encoding.ASCII.GetString(stringBytes));
             }
         }
+        
+
         public string this[UInt32 index] { get { return this.strings[(int)index]; } }
         /// <summary>
         /// </summary>
