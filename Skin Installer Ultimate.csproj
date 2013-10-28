@@ -79,6 +79,12 @@
     <Compile Include="GUI\ExtendedWebBrowser.cs">
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="GUI\ImageVersionView.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\ImageVersionView.Designer.cs">
+      <DependentUpon>ImageVersionView.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\ParticleFinderNew.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,6 +143,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\EditSkinItemForm1.resx">
       <DependentUpon>EditSkinItemForm1.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\ImageVersionView.resx">
+      <DependentUpon>ImageVersionView.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\InputBox.resx">
       <DependentUpon>InputBox.cs</DependentUpon>
