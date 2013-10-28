@@ -62,9 +62,6 @@
     <Setting Name="dxFormat" Provider="SkinInstaller.PortableSettingsProvider" Type="System.String" Scope="User">
       <Value Profile="(Default)">dxt3</Value>
     </Setting>
-    <Setting Name="fixDDSFiles" Provider="SkinInstaller.PortableSettingsProvider" Type="System.Boolean" Scope="User">
-      <Value Profile="(Default)">True</Value>
-    </Setting>
     <Setting Name="sortAscending" Provider="SkinInstaller.PortableSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
@@ -144,6 +141,9 @@
       <Value Profile="(Default)">True</Value>
     </Setting>
     <Setting Name="showAds" Provider="SkinInstaller.PortableSettingsProvider" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">True</Value>
+    </Setting>
+    <Setting Name="fixDDSFiles_1" Provider="SkinInstaller.PortableSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
   </Settings>

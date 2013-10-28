@@ -49,6 +49,8 @@ namespace SkinInstaller
                 FileInfo fi = new FileInfo(file);
 
                 int dxt = commonOps.getDXTVersion(file);
+                Size s = commonOps.getFileDimensions(file);
+                              
 
                 // progress stuffs
                 int progress = (int)(Math.Floor(((double)(++num)) / ((double)(numFiles)) * 100.0));
@@ -58,7 +60,7 @@ namespace SkinInstaller
                     lastP=rep=progress;
                 }
                 ddsReaderWorker.ReportProgress(rep, "("+progress.ToString()+"%)"+num.ToString()+"/"+numFiles.ToString()+
-                    ": Reading File: "+fi.Name+"==="+dxt.ToString());
+                    ": Reading File: "+fi.Name+"==="+dxt.ToString()+"==="+s.Width.ToString()+"==="+s.Height.ToString());
             }
 
                 
@@ -73,9 +75,14 @@ namespace SkinInstaller
                 //logb.Append(info + "\r\n");
                // (99%)5762/5763: Reading File: Akali_Circle_0.dds===DXT5
                 string endPart = info.Substring(info.IndexOf("File:") + 6);
-                string name = endPart.Substring(0, endPart.IndexOf("==="));
-                string dxt=endPart.Substring(endPart.IndexOf("===")+3);
-                logb.Append(name+"|"+dxt+"\r\n");
+                string [] infos = endPart.Split(new string[1]{"==="},StringSplitOptions.RemoveEmptyEntries);
+                //string name = endPart.Substring(0, endPart.IndexOf("==="));
+                string name = infos[0];
+                string dxt = infos[1];
+                string width = infos[2];
+                string height = infos[3];
+                //string dxt=endPart.Substring(endPart.IndexOf("===")+3);
+                logb.Append(name + "|" + dxt + "|" + width + "|" + height + "\r\n");
             }
             if (e.ProgressPercentage != 0)
             {

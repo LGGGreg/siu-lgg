@@ -138,7 +138,47 @@ namespace SkinInstaller
             {
             }
             return toReturn;
+        }
+        public static Bitmap ResizeImage(Bitmap imgToResize, Size size)
+        {
 
+            Bitmap b = new Bitmap(size.Width, size.Height);
+            try
+            {
+                using (Graphics g = Graphics.FromImage((Image)b))
+                {
+                    g.InterpolationMode = System.Drawing.Drawing2D.InterpolationMode.HighQualityBicubic;
+                    g.DrawImage(imgToResize, 0, 0, size.Width, size.Height);
+                }
+            }
+            catch { }
+
+            return b;
+        }
+        static public Size getFileDimensions(string file)
+        {
+            int imageID;
+            int iW = -1;
+            int iH = -1;
+            Size s = new Size(-1, -1);
+            Tao.DevIl.Il.ilGenImages(1, out imageID);
+            Tao.DevIl.Il.ilBindImage(imageID);
+            try
+            {
+                if (false == Tao.DevIl.Il.ilLoadImage(file))
+                {
+                }
+                else
+                {
+                    iW = Tao.DevIl.Il.ilGetInteger(Tao.DevIl.Il.IL_IMAGE_WIDTH);
+                    iH = Tao.DevIl.Il.ilGetInteger(Tao.DevIl.Il.IL_IMAGE_HEIGHT);
+                    Tao.DevIl.Il.ilDeleteImages(1, ref imageID);
+                }
+            }
+            catch  {     }
+            s.Width = iW;
+            s.Height = iH;
+            return s;
         }
     }
 

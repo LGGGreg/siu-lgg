@@ -31,7 +31,7 @@ namespace SkinInstaller
             this.checkBox1autoReplace.Checked = Properties.Settings.Default.autoOverwrite;
             this.checkBox1checkupdates.Checked = Properties.Settings.Default.checkForUpdates;
             this.checkBox1sendstats.Checked = Properties.Settings.Default.sendStats;
-            this.checkBox1fixDDS.Checked = Properties.Settings.Default.fixDDSFiles;
+            this.checkBox1fixDDS.Checked = Properties.Settings.Default.fixDDSFiles_1;
             this.checkBox1webIntegrate.Checked = Properties.Settings.Default.webURLHandleing;
             this.checkBox1drawLines.Checked = Properties.Settings.Default.drawGraficsLines;
             this.checkBox1graifcsGlow.Checked = Properties.Settings.Default.graficsGlow;
@@ -95,7 +95,7 @@ namespace SkinInstaller
                 this.checkBox1checkupdates.Checked;
             Properties.Settings.Default.sendStats =
                 this.checkBox1sendstats.Checked;
-            Properties.Settings.Default.fixDDSFiles =
+            Properties.Settings.Default.fixDDSFiles_1 =
                 this.checkBox1fixDDS.Checked;
             Properties.Settings.Default.webURLHandleing =
                 this.checkBox1webIntegrate.Checked;

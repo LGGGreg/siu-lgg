@@ -109,16 +109,18 @@ namespace SIU_Updater
             debugadd("Found program to run at " + programFile);
             foreach (string file in files)
             {
+                debugadd("Working on file " + file);
                 if (file.ToLower().Contains("siu-updater.exe"))
                 {
                     debugadd("Found our updater, skipping @" + file);
                 }
                 else
                 {
-                    string destination = file.Replace(programFileInfo.Directory.FullName, Application.StartupPath);
-                    debugadd("Installing file " + file + " to " + destination);
                     try
                     {
+                        string destination = file.Replace(programFileInfo.Directory.FullName, Application.StartupPath);
+                        debugadd("Installing file " + file + " to " + destination);
+                    
                         bool toy = true;
                         FileInfo thisFile = new FileInfo(destination);
                         if (IsFileLocked(thisFile)) debugadd("Waiting on file use for " + destination);

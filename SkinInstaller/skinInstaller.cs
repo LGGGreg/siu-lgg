@@ -98,7 +98,7 @@ namespace SkinInstaller
         TreeNode newRafNode=new TreeNode("RAF");
         PreviewWindow previewWindow;
         Dictionary<String, String> charFixs = new Dictionary<String, String>();
-        Dictionary<String, int> dxtVersions = new Dictionary<string, int>();
+        Dictionary<String, Dictionary<String, int>> dxtVersions = new Dictionary<String, Dictionary<String, int>>();
         List<Image> imageIcons = new List<Image>();
         int lggsiu1tex;
         string argsToProc = "";
@@ -391,6 +391,7 @@ namespace SkinInstaller
         private Button button3CloseAd;
         private SkinInstaller.ExtendedWebBrowser webBrowser2Test;
         private ToolStripMenuItem deleteBackupsToolStripMenuItem;
+        private ToolStripMenuItem viewDXTVersionsToolStripMenuItem;
 
         TreeNode database = new TreeNode("dbRoot");
         #endregion
@@ -3752,7 +3753,8 @@ namespace SkinInstaller
 
         private void dbUninstall_Click(object sender, EventArgs e)
         {
-
+            Cliver.Message.Inform("UnInstall currently does not work, please repair your client to undo skins.\n\nOpen up your launcher, click the gear on the top right, then click repair.");
+            return;
             if (fileListWorker1.IsBusy)
             {
                 Cliver.Message.Inform("Please wait a moment for this program to finish updating\r\nThe Progress Bar below will show you the status of this");
@@ -4041,8 +4043,8 @@ namespace SkinInstaller
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(skinInstaller));
             System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(skinInstaller));
             this.exit = new System.Windows.Forms.Button();
             this.skinFile = new System.Windows.Forms.OpenFileDialog();
             this.helpBar = new System.Windows.Forms.StatusStrip();
@@ -4130,7 +4132,6 @@ namespace SkinInstaller
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.labelSkinName = new System.Windows.Forms.Label();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button3openAds3 = new System.Windows.Forms.Button();
             this.button3reinstallText = new System.Windows.Forms.Button();
@@ -4149,7 +4150,6 @@ namespace SkinInstaller
             this.buttonRebuildTree = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel6 = new System.Windows.Forms.Panel();
             this.treeViewMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -4202,7 +4202,6 @@ namespace SkinInstaller
             this.panel2 = new System.Windows.Forms.Panel();
             this.panelGL = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
-            this.pictureBoxCount = new System.Windows.Forms.PictureBox();
             this.panel7 = new System.Windows.Forms.Panel();
             this.progrespanel = new System.Windows.Forms.Panel();
             this.label2Percent = new System.Windows.Forms.Label();
@@ -4233,6 +4232,10 @@ namespace SkinInstaller
             this.panel10 = new System.Windows.Forms.Panel();
             this.webBrowser2Test = new SkinInstaller.ExtendedWebBrowser();
             this.button3CloseAd = new System.Windows.Forms.Button();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
+            this.pictureBoxCount = new System.Windows.Forms.PictureBox();
+            this.viewDXTVersionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -4250,7 +4253,6 @@ namespace SkinInstaller
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.splitContainer4.Panel1.SuspendLayout();
@@ -4262,12 +4264,10 @@ namespace SkinInstaller
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.treeViewMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panelGL.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).BeginInit();
             this.panel7.SuspendLayout();
             this.progrespanel.SuspendLayout();
             this.treeMenuStripSkin1.SuspendLayout();
@@ -4275,6 +4275,9 @@ namespace SkinInstaller
             this.splitContainer6.Panel2.SuspendLayout();
             this.splitContainer6.SuspendLayout();
             this.panel10.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).BeginInit();
             this.SuspendLayout();
             // 
             // exit
@@ -4584,7 +4587,7 @@ namespace SkinInstaller
             this.saveToDb.CheckState = System.Windows.Forms.CheckState.Checked;
             this.saveToDb.Location = new System.Drawing.Point(11, 332);
             this.saveToDb.Name = "saveToDb";
-            this.saveToDb.Size = new System.Drawing.Size(111, 17);
+            this.saveToDb.Size = new System.Drawing.Size(112, 17);
             this.saveToDb.TabIndex = 33;
             this.saveToDb.Text = "Save to Database";
             this.saveToDb.UseVisualStyleBackColor = false;
@@ -4873,7 +4876,7 @@ namespace SkinInstaller
             this.previewThisSkinToolStripMenuItem});
             this.dataBaseListMenuStrip1.Name = "contextMenuStrip1";
             this.dataBaseListMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.dataBaseListMenuStrip1.Size = new System.Drawing.Size(210, 136);
+            this.dataBaseListMenuStrip1.Size = new System.Drawing.Size(215, 136);
             this.dataBaseListMenuStrip1.Opening += new System.ComponentModel.CancelEventHandler(this.contextMenuStrip1_Opening);
             this.dataBaseListMenuStrip1.Opened += new System.EventHandler(this.contextMenuStrip1_Opened);
             // 
@@ -4881,42 +4884,42 @@ namespace SkinInstaller
             // 
             this.toolStripSelectUninstalled.AutoToolTip = true;
             this.toolStripSelectUninstalled.Name = "toolStripSelectUninstalled";
-            this.toolStripSelectUninstalled.Size = new System.Drawing.Size(209, 22);
+            this.toolStripSelectUninstalled.Size = new System.Drawing.Size(214, 22);
             this.toolStripSelectUninstalled.Text = "Select All Uninstalled Skins";
             this.toolStripSelectUninstalled.Click += new System.EventHandler(this.toolStripSelectUninstalled_Click);
             // 
             // toolStripSelectAllInstalled
             // 
             this.toolStripSelectAllInstalled.Name = "toolStripSelectAllInstalled";
-            this.toolStripSelectAllInstalled.Size = new System.Drawing.Size(209, 22);
+            this.toolStripSelectAllInstalled.Size = new System.Drawing.Size(214, 22);
             this.toolStripSelectAllInstalled.Text = "Select All Installed Skins";
             this.toolStripSelectAllInstalled.Click += new System.EventHandler(this.toolStripSelectAllInstalled_Click);
             // 
             // selectAllSkinsToolStripMenuItem
             // 
             this.selectAllSkinsToolStripMenuItem.Name = "selectAllSkinsToolStripMenuItem";
-            this.selectAllSkinsToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.selectAllSkinsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.selectAllSkinsToolStripMenuItem.Text = "Select All Skins";
             this.selectAllSkinsToolStripMenuItem.Click += new System.EventHandler(this.selectAllSkinsToolStripMenuItem_Click);
             // 
             // deselectAllSkinsToolStripMenuItem
             // 
             this.deselectAllSkinsToolStripMenuItem.Name = "deselectAllSkinsToolStripMenuItem";
-            this.deselectAllSkinsToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.deselectAllSkinsToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.deselectAllSkinsToolStripMenuItem.Text = "Deselect All Skins";
             this.deselectAllSkinsToolStripMenuItem.Click += new System.EventHandler(this.deselectAllSkinsToolStripMenuItem_Click);
             // 
             // editThisSkinToolStripMenuItem
             // 
             this.editThisSkinToolStripMenuItem.Name = "editThisSkinToolStripMenuItem";
-            this.editThisSkinToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.editThisSkinToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.editThisSkinToolStripMenuItem.Text = "* Edit This Skin *";
             this.editThisSkinToolStripMenuItem.Click += new System.EventHandler(this.editThisSkinToolStripMenuItem_Click);
             // 
             // previewThisSkinToolStripMenuItem
             // 
             this.previewThisSkinToolStripMenuItem.Name = "previewThisSkinToolStripMenuItem";
-            this.previewThisSkinToolStripMenuItem.Size = new System.Drawing.Size(209, 22);
+            this.previewThisSkinToolStripMenuItem.Size = new System.Drawing.Size(214, 22);
             this.previewThisSkinToolStripMenuItem.Text = "* Preview This Skin *";
             this.previewThisSkinToolStripMenuItem.Click += new System.EventHandler(this.previewThisSkinToolStripMenuItem_Click);
             // 
@@ -4985,7 +4988,7 @@ namespace SkinInstaller
             this.checkBox1dispCharacter.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispCharacter.Location = new System.Drawing.Point(507, 1);
             this.checkBox1dispCharacter.Name = "checkBox1dispCharacter";
-            this.checkBox1dispCharacter.Size = new System.Drawing.Size(71, 17);
+            this.checkBox1dispCharacter.Size = new System.Drawing.Size(72, 17);
             this.checkBox1dispCharacter.TabIndex = 8;
             this.checkBox1dispCharacter.Text = "Character";
             this.checkBox1dispCharacter.UseVisualStyleBackColor = true;
@@ -4998,7 +5001,7 @@ namespace SkinInstaller
             this.checkBox1dispDateInstalledFull.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispDateInstalledFull.Location = new System.Drawing.Point(420, 1);
             this.checkBox1dispDateInstalledFull.Name = "checkBox1dispDateInstalledFull";
-            this.checkBox1dispDateInstalledFull.Size = new System.Drawing.Size(90, 17);
+            this.checkBox1dispDateInstalledFull.Size = new System.Drawing.Size(91, 17);
             this.checkBox1dispDateInstalledFull.TabIndex = 7;
             this.checkBox1dispDateInstalledFull.Text = "Time Installed";
             this.checkBox1dispDateInstalledFull.UseVisualStyleBackColor = true;
@@ -5011,7 +5014,7 @@ namespace SkinInstaller
             this.checkBox1dispDateAddedFull.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispDateAddedFull.Location = new System.Drawing.Point(342, 1);
             this.checkBox1dispDateAddedFull.Name = "checkBox1dispDateAddedFull";
-            this.checkBox1dispDateAddedFull.Size = new System.Drawing.Size(82, 17);
+            this.checkBox1dispDateAddedFull.Size = new System.Drawing.Size(83, 17);
             this.checkBox1dispDateAddedFull.TabIndex = 6;
             this.checkBox1dispDateAddedFull.Text = "Time Added";
             this.checkBox1dispDateAddedFull.UseVisualStyleBackColor = true;
@@ -5024,7 +5027,7 @@ namespace SkinInstaller
             this.checkBox1dispDateAdded.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispDateAdded.Location = new System.Drawing.Point(265, 1);
             this.checkBox1dispDateAdded.Name = "checkBox1dispDateAdded";
-            this.checkBox1dispDateAdded.Size = new System.Drawing.Size(82, 17);
+            this.checkBox1dispDateAdded.Size = new System.Drawing.Size(83, 17);
             this.checkBox1dispDateAdded.TabIndex = 5;
             this.checkBox1dispDateAdded.Text = "Date Added";
             this.checkBox1dispDateAdded.UseVisualStyleBackColor = true;
@@ -5037,7 +5040,7 @@ namespace SkinInstaller
             this.checkBox1dispInstalled.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispInstalled.Location = new System.Drawing.Point(204, 1);
             this.checkBox1dispInstalled.Name = "checkBox1dispInstalled";
-            this.checkBox1dispInstalled.Size = new System.Drawing.Size(64, 17);
+            this.checkBox1dispInstalled.Size = new System.Drawing.Size(65, 17);
             this.checkBox1dispInstalled.TabIndex = 4;
             this.checkBox1dispInstalled.Text = "Installed";
             this.checkBox1dispInstalled.UseVisualStyleBackColor = true;
@@ -5050,7 +5053,7 @@ namespace SkinInstaller
             this.checkBox1dispFileCount.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispFileCount.Location = new System.Drawing.Point(134, 1);
             this.checkBox1dispFileCount.Name = "checkBox1dispFileCount";
-            this.checkBox1dispFileCount.Size = new System.Drawing.Size(72, 17);
+            this.checkBox1dispFileCount.Size = new System.Drawing.Size(73, 17);
             this.checkBox1dispFileCount.TabIndex = 3;
             this.checkBox1dispFileCount.Text = "File Count";
             this.checkBox1dispFileCount.UseVisualStyleBackColor = true;
@@ -5063,7 +5066,7 @@ namespace SkinInstaller
             this.checkBox1dispAuthor.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispAuthor.Location = new System.Drawing.Point(78, 1);
             this.checkBox1dispAuthor.Name = "checkBox1dispAuthor";
-            this.checkBox1dispAuthor.Size = new System.Drawing.Size(56, 17);
+            this.checkBox1dispAuthor.Size = new System.Drawing.Size(57, 17);
             this.checkBox1dispAuthor.TabIndex = 2;
             this.checkBox1dispAuthor.Text = "Author";
             this.checkBox1dispAuthor.UseVisualStyleBackColor = true;
@@ -5076,7 +5079,7 @@ namespace SkinInstaller
             this.checkBox1dispTitle.CheckState = System.Windows.Forms.CheckState.Checked;
             this.checkBox1dispTitle.Location = new System.Drawing.Point(36, 1);
             this.checkBox1dispTitle.Name = "checkBox1dispTitle";
-            this.checkBox1dispTitle.Size = new System.Drawing.Size(45, 17);
+            this.checkBox1dispTitle.Size = new System.Drawing.Size(46, 17);
             this.checkBox1dispTitle.TabIndex = 1;
             this.checkBox1dispTitle.Text = "Title";
             this.checkBox1dispTitle.UseVisualStyleBackColor = true;
@@ -5137,22 +5140,6 @@ namespace SkinInstaller
             this.labelSkinName.Size = new System.Drawing.Size(100, 21);
             this.labelSkinName.TabIndex = 0;
             this.labelSkinName.Text = "Click a Skin!";
-            // 
-            // pictureBox2
-            // 
-            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.SizeAll;
-            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox2.ErrorImage = null;
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.InitialImage = null;
-            this.pictureBox2.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(188, 188);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 0;
-            this.pictureBox2.TabStop = false;
-            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
             // 
             // panel1
             // 
@@ -5389,15 +5376,6 @@ namespace SkinInstaller
             this.splitContainer1.SplitterDistance = 232;
             this.splitContainer1.TabIndex = 1;
             // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(232, 312);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            // 
             // textBox1
             // 
             this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -5509,14 +5487,14 @@ namespace SkinInstaller
             // aboutToolStripMenuItem
             // 
             this.aboutToolStripMenuItem.Name = "aboutToolStripMenuItem";
-            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(50, 20);
+            this.aboutToolStripMenuItem.Size = new System.Drawing.Size(52, 20);
             this.aboutToolStripMenuItem.Text = "About";
             this.aboutToolStripMenuItem.Click += new System.EventHandler(this.aboutToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem
             // 
             this.helpToolStripMenuItem.Name = "helpToolStripMenuItem";
-            this.helpToolStripMenuItem.Size = new System.Drawing.Size(43, 20);
+            this.helpToolStripMenuItem.Size = new System.Drawing.Size(44, 20);
             this.helpToolStripMenuItem.Text = "Help";
             this.helpToolStripMenuItem.Click += new System.EventHandler(this.helpToolStripMenuItem_Click);
             // 
@@ -5530,49 +5508,49 @@ namespace SkinInstaller
             this.checkForUpdateToolStripMenuItem,
             this.registerAppForWebUrlsToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
+            this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
             this.optionsToolStripMenuItem.Click += new System.EventHandler(this.optionsToolStripMenuItem_Click);
             // 
             // editInstallPreferencesToolStripMenuItem
             // 
             this.editInstallPreferencesToolStripMenuItem.Name = "editInstallPreferencesToolStripMenuItem";
-            this.editInstallPreferencesToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.editInstallPreferencesToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.editInstallPreferencesToolStripMenuItem.Text = "Edit Install Preferences";
             this.editInstallPreferencesToolStripMenuItem.Click += new System.EventHandler(this.editInstallPreferencesToolStripMenuItem_Click);
             // 
             // changeGameClientLocationToolStripMenuItem
             // 
             this.changeGameClientLocationToolStripMenuItem.Name = "changeGameClientLocationToolStripMenuItem";
-            this.changeGameClientLocationToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.changeGameClientLocationToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.changeGameClientLocationToolStripMenuItem.Text = "Change Game Client Location";
             this.changeGameClientLocationToolStripMenuItem.Click += new System.EventHandler(this.changeGameClientLocationToolStripMenuItem_Click);
             // 
             // updateFileListToolStripMenuItem
             // 
             this.updateFileListToolStripMenuItem.Name = "updateFileListToolStripMenuItem";
-            this.updateFileListToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.updateFileListToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.updateFileListToolStripMenuItem.Text = "Update File List";
             this.updateFileListToolStripMenuItem.Click += new System.EventHandler(this.updateFileListToolStripMenuItem_Click);
             // 
             // editAllPreferencesToolStripMenuItem
             // 
             this.editAllPreferencesToolStripMenuItem.Name = "editAllPreferencesToolStripMenuItem";
-            this.editAllPreferencesToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.editAllPreferencesToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.editAllPreferencesToolStripMenuItem.Text = "Edit All Preferences";
             this.editAllPreferencesToolStripMenuItem.Click += new System.EventHandler(this.editAllPreferencesToolStripMenuItem_Click);
             // 
             // checkForUpdateToolStripMenuItem
             // 
             this.checkForUpdateToolStripMenuItem.Name = "checkForUpdateToolStripMenuItem";
-            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.checkForUpdateToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.checkForUpdateToolStripMenuItem.Text = "Check For Update";
             this.checkForUpdateToolStripMenuItem.Click += new System.EventHandler(this.checkForUpdateToolStripMenuItem_Click);
             // 
             // registerAppForWebUrlsToolStripMenuItem
             // 
             this.registerAppForWebUrlsToolStripMenuItem.Name = "registerAppForWebUrlsToolStripMenuItem";
-            this.registerAppForWebUrlsToolStripMenuItem.Size = new System.Drawing.Size(223, 22);
+            this.registerAppForWebUrlsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
             this.registerAppForWebUrlsToolStripMenuItem.Text = "Register App For WebUrls";
             this.registerAppForWebUrlsToolStripMenuItem.Click += new System.EventHandler(this.registerAppForWebUrlsToolStripMenuItem_Click);
             // 
@@ -5602,7 +5580,7 @@ namespace SkinInstaller
             this.openTextTreeEditorToolStripMenuItem,
             this.openPublisherToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
-            this.debugToolStripMenuItem.Size = new System.Drawing.Size(53, 20);
+            this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.debugToolStripMenuItem.Text = "Debug";
             // 
             // moreDebugToolStripMenuItem
@@ -5611,64 +5589,65 @@ namespace SkinInstaller
             this.getVersionFilePathToolStripMenuItem,
             this.readVersionsToolStripMenuItem,
             this.clientLocationToolStripMenuItem,
-            this.getLastModDateToolStripMenuItem});
+            this.getLastModDateToolStripMenuItem,
+            this.viewDXTVersionsToolStripMenuItem});
             this.moreDebugToolStripMenuItem.Name = "moreDebugToolStripMenuItem";
-            this.moreDebugToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.moreDebugToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.moreDebugToolStripMenuItem.Text = "More Debug";
             // 
             // getVersionFilePathToolStripMenuItem
             // 
             this.getVersionFilePathToolStripMenuItem.Name = "getVersionFilePathToolStripMenuItem";
-            this.getVersionFilePathToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.getVersionFilePathToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.getVersionFilePathToolStripMenuItem.Text = "Get Version File Path";
             this.getVersionFilePathToolStripMenuItem.Click += new System.EventHandler(this.getVersionFilePathToolStripMenuItem_Click);
             // 
             // readVersionsToolStripMenuItem
             // 
             this.readVersionsToolStripMenuItem.Name = "readVersionsToolStripMenuItem";
-            this.readVersionsToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.readVersionsToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.readVersionsToolStripMenuItem.Text = "Read Versions";
             this.readVersionsToolStripMenuItem.Click += new System.EventHandler(this.readVersionsToolStripMenuItem_Click);
             // 
             // clientLocationToolStripMenuItem
             // 
             this.clientLocationToolStripMenuItem.Name = "clientLocationToolStripMenuItem";
-            this.clientLocationToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.clientLocationToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.clientLocationToolStripMenuItem.Text = "Client Location";
             this.clientLocationToolStripMenuItem.Click += new System.EventHandler(this.clientLocationToolStripMenuItem_Click);
             // 
             // getLastModDateToolStripMenuItem
             // 
             this.getLastModDateToolStripMenuItem.Name = "getLastModDateToolStripMenuItem";
-            this.getLastModDateToolStripMenuItem.Size = new System.Drawing.Size(179, 22);
+            this.getLastModDateToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
             this.getLastModDateToolStripMenuItem.Text = "Get Last Mod Date";
             this.getLastModDateToolStripMenuItem.Click += new System.EventHandler(this.getLastModDateToolStripMenuItem_Click);
             // 
             // soundFileLocationToolStripMenuItem
             // 
             this.soundFileLocationToolStripMenuItem.Name = "soundFileLocationToolStripMenuItem";
-            this.soundFileLocationToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.soundFileLocationToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.soundFileLocationToolStripMenuItem.Text = "Sound File Location";
             this.soundFileLocationToolStripMenuItem.Click += new System.EventHandler(this.soundFileLocationToolStripMenuItem_Click);
             // 
             // deleteBackupsToolStripMenuItem
             // 
             this.deleteBackupsToolStripMenuItem.Name = "deleteBackupsToolStripMenuItem";
-            this.deleteBackupsToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.deleteBackupsToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.deleteBackupsToolStripMenuItem.Text = "Delete Backups";
             this.deleteBackupsToolStripMenuItem.Click += new System.EventHandler(this.deleteBackupsToolStripMenuItem_Click);
             // 
             // repathAllFilesToolStripMenuItem
             // 
             this.repathAllFilesToolStripMenuItem.Name = "repathAllFilesToolStripMenuItem";
-            this.repathAllFilesToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.repathAllFilesToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.repathAllFilesToolStripMenuItem.Text = "Repath All Files";
             this.repathAllFilesToolStripMenuItem.Click += new System.EventHandler(this.repathAllFilesToolStripMenuItem_Click);
             // 
             // showDebugToolStripMenuItem
             // 
             this.showDebugToolStripMenuItem.Name = "showDebugToolStripMenuItem";
-            this.showDebugToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.showDebugToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.showDebugToolStripMenuItem.Text = "Show Debug";
             this.showDebugToolStripMenuItem.Click += new System.EventHandler(this.showDebugToolStripMenuItem_Click);
             // 
@@ -5678,132 +5657,132 @@ namespace SkinInstaller
             this.loadToolStripMenuItem,
             this.saveToolStripMenuItem});
             this.imagesToolStripMenuItem.Name = "imagesToolStripMenuItem";
-            this.imagesToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.imagesToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.imagesToolStripMenuItem.Text = "Images";
             // 
             // loadToolStripMenuItem
             // 
             this.loadToolStripMenuItem.Name = "loadToolStripMenuItem";
-            this.loadToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.loadToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.loadToolStripMenuItem.Text = "Load";
             this.loadToolStripMenuItem.Click += new System.EventHandler(this.loadToolStripMenuItem_Click);
             // 
             // saveToolStripMenuItem
             // 
             this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+            this.saveToolStripMenuItem.Size = new System.Drawing.Size(100, 22);
             this.saveToolStripMenuItem.Text = "Save";
             this.saveToolStripMenuItem.Click += new System.EventHandler(this.saveToolStripMenuItem_Click);
             // 
             // iAmLGGToolStripMenuItem
             // 
             this.iAmLGGToolStripMenuItem.Name = "iAmLGGToolStripMenuItem";
-            this.iAmLGGToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.iAmLGGToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.iAmLGGToolStripMenuItem.Text = "I am LGG";
             this.iAmLGGToolStripMenuItem.Click += new System.EventHandler(this.iAmLGGToolStripMenuItem_Click);
             // 
             // iCantStandLGGToolStripMenuItem
             // 
             this.iCantStandLGGToolStripMenuItem.Name = "iCantStandLGGToolStripMenuItem";
-            this.iCantStandLGGToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.iCantStandLGGToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.iCantStandLGGToolStripMenuItem.Text = "I can\'t stand LGG";
             this.iCantStandLGGToolStripMenuItem.Click += new System.EventHandler(this.iCantStandLGGToolStripMenuItem_Click);
             // 
             // pingToolStripMenuItem
             // 
             this.pingToolStripMenuItem.Name = "pingToolStripMenuItem";
-            this.pingToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.pingToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.pingToolStripMenuItem.Text = "Ping";
             this.pingToolStripMenuItem.Click += new System.EventHandler(this.pingToolStripMenuItem_Click);
             // 
             // viewStatsToolStripMenuItem
             // 
             this.viewStatsToolStripMenuItem.Name = "viewStatsToolStripMenuItem";
-            this.viewStatsToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.viewStatsToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.viewStatsToolStripMenuItem.Text = "View Stats";
             this.viewStatsToolStripMenuItem.Click += new System.EventHandler(this.viewStatsToolStripMenuItem_Click);
             // 
             // wtfRainbowsToolStripMenuItem
             // 
             this.wtfRainbowsToolStripMenuItem.Name = "wtfRainbowsToolStripMenuItem";
-            this.wtfRainbowsToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.wtfRainbowsToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.wtfRainbowsToolStripMenuItem.Text = "wtf rainbows";
             this.wtfRainbowsToolStripMenuItem.Click += new System.EventHandler(this.wtfRainbowsToolStripMenuItem_Click);
             // 
             // setSoundFileLocationToolStripMenuItem
             // 
             this.setSoundFileLocationToolStripMenuItem.Name = "setSoundFileLocationToolStripMenuItem";
-            this.setSoundFileLocationToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.setSoundFileLocationToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.setSoundFileLocationToolStripMenuItem.Text = "Set Sound File Location";
             this.setSoundFileLocationToolStripMenuItem.Click += new System.EventHandler(this.setSoundFileLocationToolStripMenuItem_Click);
             // 
             // getProgramLocationToolStripMenuItem
             // 
             this.getProgramLocationToolStripMenuItem.Name = "getProgramLocationToolStripMenuItem";
-            this.getProgramLocationToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.getProgramLocationToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.getProgramLocationToolStripMenuItem.Text = "Get Program Location";
             this.getProgramLocationToolStripMenuItem.Click += new System.EventHandler(this.getProgramLocationToolStripMenuItem_Click);
             // 
             // resetCharacterIconsCacheToolStripMenuItem
             // 
             this.resetCharacterIconsCacheToolStripMenuItem.Name = "resetCharacterIconsCacheToolStripMenuItem";
-            this.resetCharacterIconsCacheToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.resetCharacterIconsCacheToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.resetCharacterIconsCacheToolStripMenuItem.Text = "Reset Character Icons Cache";
             this.resetCharacterIconsCacheToolStripMenuItem.Click += new System.EventHandler(this.resetCharacterIconsCacheToolStripMenuItem_Click);
             // 
             // useDDSVersionReaderToolStripMenuItem
             // 
             this.useDDSVersionReaderToolStripMenuItem.Name = "useDDSVersionReaderToolStripMenuItem";
-            this.useDDSVersionReaderToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.useDDSVersionReaderToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.useDDSVersionReaderToolStripMenuItem.Text = "Use DDS Version Reader";
             this.useDDSVersionReaderToolStripMenuItem.Click += new System.EventHandler(this.useDDSVersionReaderToolStripMenuItem_Click);
             // 
             // testReadResFilesToolStripMenuItem
             // 
             this.testReadResFilesToolStripMenuItem.Name = "testReadResFilesToolStripMenuItem";
-            this.testReadResFilesToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.testReadResFilesToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.testReadResFilesToolStripMenuItem.Text = "Test Read Res Files";
             this.testReadResFilesToolStripMenuItem.Click += new System.EventHandler(this.testReadResFilesToolStripMenuItem_Click);
             // 
             // unpackSoundsToolStripMenuItem
             // 
             this.unpackSoundsToolStripMenuItem.Name = "unpackSoundsToolStripMenuItem";
-            this.unpackSoundsToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.unpackSoundsToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.unpackSoundsToolStripMenuItem.Text = "unpack sounds";
             this.unpackSoundsToolStripMenuItem.Click += new System.EventHandler(this.unpackSoundsToolStripMenuItem_Click);
             // 
             // loLViewerOpenNotPreviewToolStripMenuItem
             // 
             this.loLViewerOpenNotPreviewToolStripMenuItem.Name = "loLViewerOpenNotPreviewToolStripMenuItem";
-            this.loLViewerOpenNotPreviewToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.loLViewerOpenNotPreviewToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.loLViewerOpenNotPreviewToolStripMenuItem.Text = "LoLViewer Open (Not Preview)";
             this.loLViewerOpenNotPreviewToolStripMenuItem.Click += new System.EventHandler(this.loLViewerOpenNotPreviewToolStripMenuItem_Click);
             // 
             // openParticleReferenceToolStripMenuItem
             // 
             this.openParticleReferenceToolStripMenuItem.Name = "openParticleReferenceToolStripMenuItem";
-            this.openParticleReferenceToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.openParticleReferenceToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.openParticleReferenceToolStripMenuItem.Text = "Open Particle Reference";
             this.openParticleReferenceToolStripMenuItem.Click += new System.EventHandler(this.openParticleReferenceToolStripMenuItem_Click);
             // 
             // showMenuFileLocationToolStripMenuItem
             // 
             this.showMenuFileLocationToolStripMenuItem.Name = "showMenuFileLocationToolStripMenuItem";
-            this.showMenuFileLocationToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.showMenuFileLocationToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.showMenuFileLocationToolStripMenuItem.Text = "Show Menu File Location";
             this.showMenuFileLocationToolStripMenuItem.Click += new System.EventHandler(this.showMenuFileLocationToolStripMenuItem_Click);
             // 
             // openTextTreeEditorToolStripMenuItem
             // 
             this.openTextTreeEditorToolStripMenuItem.Name = "openTextTreeEditorToolStripMenuItem";
-            this.openTextTreeEditorToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.openTextTreeEditorToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.openTextTreeEditorToolStripMenuItem.Text = "Open Text Tree Editor";
             this.openTextTreeEditorToolStripMenuItem.Click += new System.EventHandler(this.openTextTreeEditorToolStripMenuItem_Click);
             // 
             // openPublisherToolStripMenuItem
             // 
             this.openPublisherToolStripMenuItem.Name = "openPublisherToolStripMenuItem";
-            this.openPublisherToolStripMenuItem.Size = new System.Drawing.Size(227, 22);
+            this.openPublisherToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.openPublisherToolStripMenuItem.Text = "Open Publisher";
             this.openPublisherToolStripMenuItem.Click += new System.EventHandler(this.openPublisherToolStripMenuItem_Click);
             // 
@@ -5842,17 +5821,6 @@ namespace SkinInstaller
             this.label5.Size = new System.Drawing.Size(77, 9);
             this.label5.TabIndex = 45;
             this.label5.Text = "Total Skins Installed :";
-            // 
-            // pictureBoxCount
-            // 
-            this.pictureBoxCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBoxCount.BackColor = System.Drawing.Color.Black;
-            this.pictureBoxCount.Location = new System.Drawing.Point(803, 28);
-            this.pictureBoxCount.Name = "pictureBoxCount";
-            this.pictureBoxCount.Size = new System.Drawing.Size(83, 13);
-            this.pictureBoxCount.TabIndex = 44;
-            this.pictureBoxCount.TabStop = false;
-            this.pictureBoxCount.Click += new System.EventHandler(this.pictureBoxCount_Click);
             // 
             // panel7
             // 
@@ -5990,34 +5958,34 @@ namespace SkinInstaller
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem});
             this.treeMenuStripSkin1.Name = "treeViewMenuStrip1";
             this.treeMenuStripSkin1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.treeMenuStripSkin1.Size = new System.Drawing.Size(262, 92);
+            this.treeMenuStripSkin1.Size = new System.Drawing.Size(268, 92);
             this.treeMenuStripSkin1.Opening += new System.ComponentModel.CancelEventHandler(this.treeMenuStripSkin1_Opening);
             // 
             // toolStripMenuItem1
             // 
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-            this.toolStripMenuItem1.Size = new System.Drawing.Size(261, 22);
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(267, 22);
             this.toolStripMenuItem1.Text = "Export Selected Files";
             this.toolStripMenuItem1.Click += new System.EventHandler(this.exportSelectedFilesToolStripMenuItem_Click);
             // 
             // toolStripMenuItem2
             // 
             this.toolStripMenuItem2.Name = "toolStripMenuItem2";
-            this.toolStripMenuItem2.Size = new System.Drawing.Size(261, 22);
+            this.toolStripMenuItem2.Size = new System.Drawing.Size(267, 22);
             this.toolStripMenuItem2.Text = "Deselect All Files";
             this.toolStripMenuItem2.Click += new System.EventHandler(this.deselectAllFilesToolStripMenuItem_Click);
             // 
             // toolStripMenuItem3
             // 
             this.toolStripMenuItem3.Name = "toolStripMenuItem3";
-            this.toolStripMenuItem3.Size = new System.Drawing.Size(261, 22);
+            this.toolStripMenuItem3.Size = new System.Drawing.Size(267, 22);
             this.toolStripMenuItem3.Text = "Help!";
             this.toolStripMenuItem3.Click += new System.EventHandler(this.helpToolStripMenuItem1_Click);
             // 
             // makeSimpleSkinFromThisRiotSkinToolStripMenuItem
             // 
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Name = "makeSimpleSkinFromThisRiotSkinToolStripMenuItem";
-            this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Size = new System.Drawing.Size(261, 22);
+            this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Size = new System.Drawing.Size(267, 22);
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Text = "Make Simple Skin from this Riot Skin";
             this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem.Click += new System.EventHandler(this.makeSimpleSkinFromThisRiotSkinToolStripMenuItem_Click);
             // 
@@ -6086,6 +6054,49 @@ namespace SkinInstaller
             this.button3CloseAd.UseVisualStyleBackColor = true;
             this.button3CloseAd.Click += new System.EventHandler(this.button3CloseAd_Click);
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.SizeAll;
+            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox2.ErrorImage = null;
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.InitialImage = null;
+            this.pictureBox2.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(188, 188);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 0;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(232, 312);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
+            // 
+            // pictureBoxCount
+            // 
+            this.pictureBoxCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxCount.BackColor = System.Drawing.Color.Black;
+            this.pictureBoxCount.Location = new System.Drawing.Point(803, 28);
+            this.pictureBoxCount.Name = "pictureBoxCount";
+            this.pictureBoxCount.Size = new System.Drawing.Size(83, 13);
+            this.pictureBoxCount.TabIndex = 44;
+            this.pictureBoxCount.TabStop = false;
+            this.pictureBoxCount.Click += new System.EventHandler(this.pictureBoxCount_Click);
+            // 
+            // viewDXTVersionsToolStripMenuItem
+            // 
+            this.viewDXTVersionsToolStripMenuItem.Name = "viewDXTVersionsToolStripMenuItem";
+            this.viewDXTVersionsToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.viewDXTVersionsToolStripMenuItem.Text = "View DXT Versions";
+            this.viewDXTVersionsToolStripMenuItem.Click += new System.EventHandler(this.viewDXTVersionsToolStripMenuItem_Click);
+            // 
             // skinInstaller
             // 
             this.AllowDrop = true;
@@ -6130,7 +6141,6 @@ namespace SkinInstaller
             this.splitContainer3.Panel1.PerformLayout();
             this.splitContainer3.Panel2.ResumeLayout(false);
             this.splitContainer3.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.splitContainer4.Panel1.ResumeLayout(false);
@@ -6144,14 +6154,12 @@ namespace SkinInstaller
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
             this.splitContainer1.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.treeViewMenuStrip1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panelGL.ResumeLayout(false);
             this.panelGL.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).EndInit();
             this.panel7.ResumeLayout(false);
             this.progrespanel.ResumeLayout(false);
             this.progrespanel.PerformLayout();
@@ -6160,6 +6168,9 @@ namespace SkinInstaller
             this.splitContainer6.Panel2.ResumeLayout(false);
             this.splitContainer6.ResumeLayout(false);
             this.panel10.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -6175,8 +6186,15 @@ namespace SkinInstaller
                     string[] line = reader.ReadLine().ToLower().Split(new char[] { '|' });
                     if (line.Length > 1)
                     {
-                        if (!dxtVersions.ContainsKey(line[0]))
-                            dxtVersions.Add(line[0], int.Parse(line[1]));
+                        if (!dxtVersions.ContainsKey(line[0].Trim()))
+                        {
+
+                            Dictionary<String, int> infos = new Dictionary<String, int>();
+                            infos.Add("dxtv", int.Parse(line[1]));
+                            infos.Add("width", int.Parse(line[2]));
+                            infos.Add("height", int.Parse(line[3]));
+                            dxtVersions.Add(line[0].Trim(), infos);
+                        }
                     }
                 }
                 reader.Close();
@@ -6231,7 +6249,7 @@ namespace SkinInstaller
                 Cliver.Message.Inform("The file list, allfiles.ini, could not be found or created.\nPlease restart Skin Installer Ultimate again to attempt to correct the issue.");
             }
             setInstallButtons(true);
-            ted = new TextEditor.TextEditorMain(getMenuFilePath());      
+            ted = new TextEditor.TextEditorMain(getMenuFilePath(false));      
 
         }
         private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
@@ -6919,6 +6937,11 @@ namespace SkinInstaller
             //vr.StartPosition=
             vr.Show();
         }
+        private void viewDXTVersionsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ImageVersionView ivv = new ImageVersionView(this.dxtVersions);
+            ivv.Show();
+        }
         private void testReadResFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             this.addInFiles("Tryndamere", "fx");
@@ -7484,8 +7507,21 @@ namespace SkinInstaller
             return bit;
 
         }
-        public bool LGGDevilSave(Bitmap bit, string fileName)
+        public bool LGGDevilSave(Bitmap bit, string fileName, int dXTFileType=-1)
         {
+            int fileSaveType = Tao.DevIl.Il.IL_DXT5;
+            switch (dXTFileType)
+            {
+                case 0: fileSaveType = Tao.DevIl.Il.IL_DXT5; ; break;
+                case 1: fileSaveType = Tao.DevIl.Il.IL_DXT1; break;
+                case 2: fileSaveType = Tao.DevIl.Il.IL_DXT2; break;
+                case 3: fileSaveType = Tao.DevIl.Il.IL_DXT3; break;
+                case 4: fileSaveType = Tao.DevIl.Il.IL_DXT4; break;
+                case 5: fileSaveType = Tao.DevIl.Il.IL_DXT5; break;
+                default: fileSaveType = Tao.DevIl.Il.IL_DXT5; break;
+            }
+            Tao.DevIl.Il.ilSetInteger(Tao.DevIl.Il.IL_DXTC_FORMAT, fileSaveType);
+
             int ImageId;
             Tao.DevIl.Il.ilGenImages(1, out ImageId);
             Tao.DevIl.Il.ilBindImage(ImageId);
@@ -7507,66 +7543,90 @@ namespace SkinInstaller
 		        return false;
 	        }
             bool bRes = Tao.DevIl.Il.ilSaveImage(fileName);
+            //bool bRes = Tao.DevIl.Il.ilSave(fileSaveType,fileName);
+            if (!bRes)
+            {
+
+                int aerror = Tao.DevIl.Il.ilGetError();
+                int op1 = Tao.DevIl.Il.IL_INVALID_ENUM;
+                int op2 = Tao.DevIl.Il.IL_COULD_NOT_OPEN_FILE;
+            }
             Tao.DevIl.Il.ilDeleteImages(1, ref ImageId);
 
             bit.UnlockBits(pBd);
             bit.RotateFlip(RotateFlipType.RotateNoneFlipY);
             return bRes;
         }
-        private void copyAndFix(string str3, string o)
+        private void copyAndFix(string origination, string destination)
         {//Application.StartupPath + @"\st\" + str4 + @"\" + str5
-            FileInfo fi = new FileInfo(str3);
-            if (fi.Extension == ".dds" && Properties.Settings.Default.fixDDSFiles)
+            FileInfo fi_orig = new FileInfo(origination);
+            FileInfo fi_dest = new FileInfo(destination);
+            if (fi_orig.Extension == ".dds" && Properties.Settings.Default.fixDDSFiles_1)
             {
-                int origFile = commonOps.getDXTVersion(fi.FullName);
-                int newFile = -1;
-                if (dxtVersions.ContainsKey(fi.Name.ToLower()))
+                int origFile_dxtv = commonOps.getDXTVersion(fi_orig.FullName);
+                Size origFile_Size = commonOps.getFileDimensions(fi_orig.FullName);
+                int origFile_width = origFile_Size.Width;
+                int origFile_height = origFile_Size.Height;
+                int newFile_dxtv = -1;
+                int newFile_width = -1;
+                int newFile_height = -1;
+                if (dxtVersions.ContainsKey(fi_dest.Name.ToLower().Trim()))
                 {
-                   newFile = dxtVersions[fi.Name.ToLower()];
+                    Dictionary<String, int> infos = dxtVersions[fi_dest.Name.ToLower().Trim()];
+                    newFile_dxtv = infos["dxtv"];
+                    newFile_width = infos["width"];
+                    newFile_height = infos["height"];
                 }
 
-                //hack to prevent trasnp rewritting
-                int origComparator = (origFile == 3) ? 5 : origFile;
-                int newComparator = (newFile == 3) ? 5 : newFile;
-                
-                if ((origComparator == newComparator)||(newComparator==-1))
+                //hack to prevent trasnp rewritting, 3s will all be 5
+                int origComparator = (origFile_dxtv == 3) ? 5 : origFile_dxtv;
+                int newComparator = (newFile_dxtv == 3) ? 5 : newFile_dxtv;
+
+                if (((origComparator == newComparator) && (origFile_width == newFile_width) && (origFile_height == newFile_height)) || (newComparator == -1) || (newFile_width == -1) || (newFile_height == -1))
                 {
-                    this.SIFileOp.FileCopy(str3, o);
-                    debugadd("No Need to re-write " + str3+ " , riot file is "+newFile.ToString()+" and input was "+origFile.ToString());
+                    this.SIFileOp.FileCopy(origination, destination);
+                    debugadd("No Need to re-write " + origination+ " , riot file is "+newFile_dxtv.ToString()+" and input was "+origFile_dxtv.ToString());
                 }
                 else
                 {
-                    debugadd("attempting to verify the integredy of " + str3);
+                    debugadd("attempting to verify the integredy of " + origination);
                     Bitmap bb = null;
                     try
                     {
-                        bb = LGGDevilLoadImage(str3);
+                        bb = LGGDevilLoadImage(origination);
                     }
                     catch
                     {
-                        debugadd("Something went wrong in file conversion opening" + str3);
+                        debugadd("Something went wrong in file conversion opening" + origination);
                     }
 
                     if (bb != null)
                     {
                         try
                         {
-                            if (LGGDevilSave(bb, o))
+                            if ((origFile_width != newFile_width) || (origFile_height != newFile_height))
                             {
-                                debugadd(o + " was saved correctly from dxt "+origFile.ToString()+" to what the origonal riot file is at dxt "+newFile.ToString());
+                                bb = commonOps.ResizeImage(bb, new System.Drawing.Size(newFile_width, newFile_height));
+
+                                debugadd(destination + " was saved correctly from dim " + origFile_width.ToString() + " x "+origFile_height.ToString() +
+                                    " to what the origonal riot file is at dim " + newFile_width.ToString()+" x "+newFile_height.ToString());
+                            }
+                            if (LGGDevilSave(bb, destination, newFile_dxtv))
+                            {
+                                debugadd(destination + " was saved correctly from dxt "+origFile_dxtv.ToString()+" to what the origonal riot file is at dxt "+newFile_dxtv.ToString());
                             }
                         }
                         catch
                         {
-                            debugadd("Something went wrong in file conversion saving to " + o);
-                            this.SIFileOp.FileCopy(str3, o);
+                            debugadd("Something went wrong in file conversion saving to " + destination);
+                            this.SIFileOp.FileCopy(origination, destination);
 
                         }
                     }
                     else
                     {
-                        debugadd("looks like something else went wrong opening " + str3);
-                        this.SIFileOp.FileCopy(str3, o);
+                        debugadd("looks like something else went wrong opening " + origination);
+                        this.SIFileOp.FileCopy(origination, destination);
                     }
                 }
                 
@@ -7574,9 +7634,9 @@ namespace SkinInstaller
             }
             else
             {
-                this.SIFileOp.FileCopy(str3, o);
+                this.SIFileOp.FileCopy(origination, destination);
             }
-            File.SetAttributes(o, FileAttributes.Normal);                                    
+            File.SetAttributes(destination, FileAttributes.Normal);                                    
         }
         #region GLPaint
         void glControl1_Resize(object sender, EventArgs e)
@@ -9830,7 +9890,7 @@ namespace SkinInstaller
             return to_return;
                 
         }
-        public string getMenuFilePath()
+        public string getMenuFilePath(bool showError=true)
         {
             List<KeyValuePair<string, string>> matched = getMenuFilePaths();
             string textPath = "";
@@ -9840,7 +9900,7 @@ namespace SkinInstaller
             }
             else if (matched.Count == 0)
             {
-                Cliver.Message.Show("Can't find menu!", SystemIcons.Error,
+                if(showError)Cliver.Message.Show("Can't find menu!", SystemIcons.Error,
                     "Unable to find the menu file to change text in\r\nWe will skip this part."
                     , 0, new string[1] { "Ok", });
                 return "";
@@ -10209,6 +10269,7 @@ namespace SkinInstaller
                 SIFileOp.DirectoryDelete(backupDir,true);
             }
         }
+
     }
     #region strucks
     public class LogTextWriter : TextWriter
