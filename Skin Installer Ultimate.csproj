@@ -53,7 +53,7 @@
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
     <OutputPath>bin\debug\</OutputPath>
     <CodeAnalysisRuleSet>AllRules.ruleset</CodeAnalysisRuleSet>
-    <DefineConstants>TRACE;DEBUG;(RemoveThis)USkin,(OrRemoveThis)SKINTHING</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;(RemoveThis)USkin,SKINTHING</DefineConstants>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <CodeAnalysisIgnoreGeneratedCode>false</CodeAnalysisIgnoreGeneratedCode>
@@ -176,6 +176,12 @@
     <Reference Include="OpenTK.GLControl, Version=1.0.0.0, Culture=neutral, PublicKeyToken=bad199fe84eb3df4, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
       <HintPath>ThirdParty\OpenTK\OpenTK.GLControl.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX">
+      <HintPath>ThirdParty\sharpdx\SharpDX.dll</HintPath>
+    </Reference>
+    <Reference Include="SharpDX.Toolkit.Graphics">
+      <HintPath>ThirdParty\sharpdx\SharpDX.Toolkit.Graphics.dll</HintPath>
     </Reference>
     <Reference Include="skincrafter.net-vs2003">
       <HintPath>..\..\..\..\Program Files (x86)\SkinCrafter3\SkinCrafterDemo\SkinCrafterDotNet_vs2003\skincrafter.net-vs2003.dll</HintPath>

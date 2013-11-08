@@ -101,6 +101,7 @@ namespace SIU_Publish
             toReturn.Add("fsb\\reb.bat");
             toReturn.Add("fsb\\ext.bat");
 
+            toReturn.Add("nvdxt.exe");
             toReturn.Add("7-zip.dll");
             toReturn.Add("7z.dll");
             toReturn.Add("7z.exe");
@@ -114,6 +115,7 @@ namespace SIU_Publish
             toReturn.Add("LGGSIU1.bmp");
             toReturn.Add("LOLViewer.exe");
             toReturn.Add("LeagueOfLegendsSkinInstallerLeagueCraftIntegration.user.js");
+            toReturn.Add("License - nvidia.txt");
             toReturn.Add("License - 7zip.txt");
             toReturn.Add("License - Be.HexBox.txt");
             toReturn.Add("License - ColorSlider.txt");

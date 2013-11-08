@@ -41,7 +41,7 @@
  * And also uses code from LoLViewer by 
  * Authentication found here http://code.google.com/p/lolmodelviewer/
  * 
- * It also uses the devil image library, 7zip, and openTK
+ * It also uses the devil image library, 7zip, nvidia dds tools, and openTK
  * 
  * All external code is licensed and copyright 
  * by their respective owners
@@ -68,6 +68,7 @@ namespace SkinInstaller
     using RAFLib;
     using System.Text;
     using System.Text.RegularExpressions;
+    
 
     using System.Drawing.Drawing2D;
 
@@ -2760,7 +2761,7 @@ namespace SkinInstaller
             {
                 int end = path.IndexOf(".raf\\") + 5;
                 string temp = path.Substring(0, end - 5);
-                int start = temp.LastIndexOf("\\")+1;
+                int start = temp.LastIndexOf("\\") + 1;
                 if ((start != -1) && andVersion)
                 {
                     temp = temp.Substring(0, start);
@@ -2770,6 +2771,17 @@ namespace SkinInstaller
                 {
                     path = path.Remove(start, end - start);
                 }
+            }
+            //debugadd("result is " + path);
+            return path;
+        }
+        public string getAfterRafName(string path)
+        {
+            // debugadd("remove raf from " + path);
+            if (path.Contains(".raf\\"))
+            {
+                int start = path.IndexOf(".raf\\") + 5;
+                path = path.Substring(start);
             }
             //debugadd("result is " + path);
             return path;
@@ -3753,8 +3765,8 @@ namespace SkinInstaller
 
         private void dbUninstall_Click(object sender, EventArgs e)
         {
-            Cliver.Message.Inform("UnInstall currently does not work, please repair your client to undo skins.\n\nOpen up your launcher, click the gear on the top right, then click repair.");
-            return;
+            //Cliver.Message.Inform("UnInstall currently does not work, please repair your client to undo skins.\n\nOpen up your launcher, click the gear on the top right, then click repair.");
+            //return;
             if (fileListWorker1.IsBusy)
             {
                 Cliver.Message.Inform("Please wait a moment for this program to finish updating\r\nThe Progress Bar below will show you the status of this");
@@ -4043,8 +4055,8 @@ namespace SkinInstaller
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(skinInstaller));
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
             this.exit = new System.Windows.Forms.Button();
             this.skinFile = new System.Windows.Forms.OpenFileDialog();
             this.helpBar = new System.Windows.Forms.StatusStrip();
@@ -4132,6 +4144,7 @@ namespace SkinInstaller
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.textBox2 = new System.Windows.Forms.TextBox();
             this.labelSkinName = new System.Windows.Forms.Label();
+            this.pictureBox2 = new System.Windows.Forms.PictureBox();
             this.panel1 = new System.Windows.Forms.Panel();
             this.button3openAds3 = new System.Windows.Forms.Button();
             this.button3reinstallText = new System.Windows.Forms.Button();
@@ -4150,6 +4163,7 @@ namespace SkinInstaller
             this.buttonRebuildTree = new System.Windows.Forms.Button();
             this.tabPage1 = new System.Windows.Forms.TabPage();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.panel6 = new System.Windows.Forms.Panel();
             this.treeViewMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
@@ -4176,6 +4190,7 @@ namespace SkinInstaller
             this.readVersionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clientLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getLastModDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.viewDXTVersionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.soundFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteBackupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.repathAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -4202,6 +4217,7 @@ namespace SkinInstaller
             this.panel2 = new System.Windows.Forms.Panel();
             this.panelGL = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
+            this.pictureBoxCount = new System.Windows.Forms.PictureBox();
             this.panel7 = new System.Windows.Forms.Panel();
             this.progrespanel = new System.Windows.Forms.Panel();
             this.label2Percent = new System.Windows.Forms.Label();
@@ -4232,10 +4248,6 @@ namespace SkinInstaller
             this.panel10 = new System.Windows.Forms.Panel();
             this.webBrowser2Test = new SkinInstaller.ExtendedWebBrowser();
             this.button3CloseAd = new System.Windows.Forms.Button();
-            this.pictureBox2 = new System.Windows.Forms.PictureBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
-            this.pictureBoxCount = new System.Windows.Forms.PictureBox();
-            this.viewDXTVersionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -4253,6 +4265,7 @@ namespace SkinInstaller
             this.splitContainer3.Panel1.SuspendLayout();
             this.splitContainer3.Panel2.SuspendLayout();
             this.splitContainer3.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
             this.panel1.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.splitContainer4.Panel1.SuspendLayout();
@@ -4264,10 +4277,12 @@ namespace SkinInstaller
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.treeViewMenuStrip1.SuspendLayout();
             this.menuStrip1.SuspendLayout();
             this.panel2.SuspendLayout();
             this.panelGL.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).BeginInit();
             this.panel7.SuspendLayout();
             this.progrespanel.SuspendLayout();
             this.treeMenuStripSkin1.SuspendLayout();
@@ -4275,9 +4290,6 @@ namespace SkinInstaller
             this.splitContainer6.Panel2.SuspendLayout();
             this.splitContainer6.SuspendLayout();
             this.panel10.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).BeginInit();
             this.SuspendLayout();
             // 
             // exit
@@ -5141,6 +5153,22 @@ namespace SkinInstaller
             this.labelSkinName.TabIndex = 0;
             this.labelSkinName.Text = "Click a Skin!";
             // 
+            // pictureBox2
+            // 
+            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
+            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.SizeAll;
+            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox2.ErrorImage = null;
+            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
+            this.pictureBox2.InitialImage = null;
+            this.pictureBox2.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox2.Name = "pictureBox2";
+            this.pictureBox2.Size = new System.Drawing.Size(188, 188);
+            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox2.TabIndex = 0;
+            this.pictureBox2.TabStop = false;
+            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
+            // 
             // panel1
             // 
             this.panel1.Controls.Add(this.button3openAds3);
@@ -5375,6 +5403,15 @@ namespace SkinInstaller
             this.splitContainer1.Size = new System.Drawing.Size(714, 312);
             this.splitContainer1.SplitterDistance = 232;
             this.splitContainer1.TabIndex = 1;
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
+            this.pictureBox1.Name = "pictureBox1";
+            this.pictureBox1.Size = new System.Drawing.Size(232, 312);
+            this.pictureBox1.TabIndex = 0;
+            this.pictureBox1.TabStop = false;
             // 
             // textBox1
             // 
@@ -5623,6 +5660,13 @@ namespace SkinInstaller
             this.getLastModDateToolStripMenuItem.Text = "Get Last Mod Date";
             this.getLastModDateToolStripMenuItem.Click += new System.EventHandler(this.getLastModDateToolStripMenuItem_Click);
             // 
+            // viewDXTVersionsToolStripMenuItem
+            // 
+            this.viewDXTVersionsToolStripMenuItem.Name = "viewDXTVersionsToolStripMenuItem";
+            this.viewDXTVersionsToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.viewDXTVersionsToolStripMenuItem.Text = "View DXT Versions";
+            this.viewDXTVersionsToolStripMenuItem.Click += new System.EventHandler(this.viewDXTVersionsToolStripMenuItem_Click);
+            // 
             // soundFileLocationToolStripMenuItem
             // 
             this.soundFileLocationToolStripMenuItem.Name = "soundFileLocationToolStripMenuItem";
@@ -5821,6 +5865,17 @@ namespace SkinInstaller
             this.label5.Size = new System.Drawing.Size(77, 9);
             this.label5.TabIndex = 45;
             this.label5.Text = "Total Skins Installed :";
+            // 
+            // pictureBoxCount
+            // 
+            this.pictureBoxCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
+            this.pictureBoxCount.BackColor = System.Drawing.Color.Black;
+            this.pictureBoxCount.Location = new System.Drawing.Point(803, 28);
+            this.pictureBoxCount.Name = "pictureBoxCount";
+            this.pictureBoxCount.Size = new System.Drawing.Size(83, 13);
+            this.pictureBoxCount.TabIndex = 44;
+            this.pictureBoxCount.TabStop = false;
+            this.pictureBoxCount.Click += new System.EventHandler(this.pictureBoxCount_Click);
             // 
             // panel7
             // 
@@ -6054,49 +6109,6 @@ namespace SkinInstaller
             this.button3CloseAd.UseVisualStyleBackColor = true;
             this.button3CloseAd.Click += new System.EventHandler(this.button3CloseAd_Click);
             // 
-            // pictureBox2
-            // 
-            this.pictureBox2.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Zoom;
-            this.pictureBox2.Cursor = System.Windows.Forms.Cursors.SizeAll;
-            this.pictureBox2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox2.ErrorImage = null;
-            this.pictureBox2.Image = ((System.Drawing.Image)(resources.GetObject("pictureBox2.Image")));
-            this.pictureBox2.InitialImage = null;
-            this.pictureBox2.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox2.Name = "pictureBox2";
-            this.pictureBox2.Size = new System.Drawing.Size(188, 188);
-            this.pictureBox2.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox2.TabIndex = 0;
-            this.pictureBox2.TabStop = false;
-            this.pictureBox2.Click += new System.EventHandler(this.pictureBox2_Click);
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pictureBox1.Location = new System.Drawing.Point(0, 0);
-            this.pictureBox1.Name = "pictureBox1";
-            this.pictureBox1.Size = new System.Drawing.Size(232, 312);
-            this.pictureBox1.TabIndex = 0;
-            this.pictureBox1.TabStop = false;
-            // 
-            // pictureBoxCount
-            // 
-            this.pictureBoxCount.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
-            this.pictureBoxCount.BackColor = System.Drawing.Color.Black;
-            this.pictureBoxCount.Location = new System.Drawing.Point(803, 28);
-            this.pictureBoxCount.Name = "pictureBoxCount";
-            this.pictureBoxCount.Size = new System.Drawing.Size(83, 13);
-            this.pictureBoxCount.TabIndex = 44;
-            this.pictureBoxCount.TabStop = false;
-            this.pictureBoxCount.Click += new System.EventHandler(this.pictureBoxCount_Click);
-            // 
-            // viewDXTVersionsToolStripMenuItem
-            // 
-            this.viewDXTVersionsToolStripMenuItem.Name = "viewDXTVersionsToolStripMenuItem";
-            this.viewDXTVersionsToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.viewDXTVersionsToolStripMenuItem.Text = "View DXT Versions";
-            this.viewDXTVersionsToolStripMenuItem.Click += new System.EventHandler(this.viewDXTVersionsToolStripMenuItem_Click);
-            // 
             // skinInstaller
             // 
             this.AllowDrop = true;
@@ -6141,6 +6153,7 @@ namespace SkinInstaller
             this.splitContainer3.Panel1.PerformLayout();
             this.splitContainer3.Panel2.ResumeLayout(false);
             this.splitContainer3.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
             this.panel1.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.splitContainer4.Panel1.ResumeLayout(false);
@@ -6154,12 +6167,14 @@ namespace SkinInstaller
             this.splitContainer1.Panel2.ResumeLayout(false);
             this.splitContainer1.Panel2.PerformLayout();
             this.splitContainer1.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.treeViewMenuStrip1.ResumeLayout(false);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             this.panel2.ResumeLayout(false);
             this.panelGL.ResumeLayout(false);
             this.panelGL.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).EndInit();
             this.panel7.ResumeLayout(false);
             this.progrespanel.ResumeLayout(false);
             this.progrespanel.PerformLayout();
@@ -6168,9 +6183,6 @@ namespace SkinInstaller
             this.splitContainer6.Panel2.ResumeLayout(false);
             this.splitContainer6.ResumeLayout(false);
             this.panel10.ResumeLayout(false);
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox2)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.pictureBoxCount)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -6650,7 +6662,7 @@ namespace SkinInstaller
         private void dbDelete_Click(object sender, EventArgs e)
         {
             if (Cliver.Message.Show("Are you sure?",
-                SystemIcons.Question, "Are you sure want delete these skins?", 0, new string[2] { "Yes", "No" }) == 0)
+                SystemIcons.Question, "Are you sure want delete these skins?\nThis will prevent you from being able to UNINSTALL or install", 0, new string[2] { "Yes", "No" }) == 0)
             {
                 foreach (ListViewItem item in this.listView1.CheckedItems)
                 {
@@ -7478,11 +7490,22 @@ namespace SkinInstaller
             Tao.DevIl.Il.ilGenImages(1, out imageID);
             Tao.DevIl.Il.ilBindImage(imageID);
 
-            if (false==Tao.DevIl.Il.ilLoadImage(fileName))
+            //FileStream fs = File.Open(fileName, FileMode.Open, FileAccess.Write, FileShare.None);
+            //bool loaded= Tao.DevIl.Il.ilLoadF(Tao.DevIl.Il.IL_PNG,fileName);
+            //bool loaded= Tao.DevIl.Il.ilLoad(Tao.DevIl.Il.IL_PNG,fileName);
+            bool loaded = Tao.DevIl.Il.ilLoadImage(fileName);
+            if (!loaded)
             {
                 debugadd("error loading image");
-                return null;
+                int aerror = Tao.DevIl.Il.ilGetError();
+                int op1 = Tao.DevIl.Il.IL_INVALID_ENUM;
+                int op2 = Tao.DevIl.Il.IL_COULD_NOT_OPEN_FILE;
+                int op3 = Tao.DevIl.Il.IL_INTERNAL_ERROR;
+                int op4 = Tao.DevIl.Il.IL_OUT_OF_MEMORY;
+                int op5 = Tao.DevIl.Il.IL_INVALID_EXTENSION;
+                return new Bitmap(2, 2);// null;
             }
+            int aerror2 = Tao.DevIl.Il.ilGetError();
             int iW = Tao.DevIl.Il.ilGetInteger(Tao.DevIl.Il.IL_IMAGE_WIDTH);
 	        int iH = Tao.DevIl.Il.ilGetInteger(Tao.DevIl.Il.IL_IMAGE_HEIGHT);
            // Tao.DevIl.Il.il
@@ -7507,12 +7530,56 @@ namespace SkinInstaller
             return bit;
 
         }
+        public bool LGGNvidiaSave(Bitmap bit, string fileName, string dtxType = "u888")
+        {
+            //First save a targa somewhere and then delete it once we are done...
+            string tgaFileName = fileName.Substring(0,fileName.LastIndexOf(".")) + ".tga";
+            int ImageId;
+            Tao.DevIl.Il.ilGenImages(1, out ImageId);
+            Tao.DevIl.Il.ilBindImage(ImageId);
+
+            int iW = bit.Width;
+            int iH = bit.Height;
+            Rectangle rect = new Rectangle(0, 0, iW, iH);
+            bit.RotateFlip(RotateFlipType.RotateNoneFlipY);
+
+            System.Drawing.Imaging.BitmapData pBd = bit.LockBits(rect,
+                System.Drawing.Imaging.ImageLockMode.ReadOnly,
+                System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
+            IntPtr pScan0 = (pBd.Scan0);
+
+            bool bSuccess = Tao.DevIl.Il.ilTexImage(iW, iH, 1, 4, Tao.DevIl.Il.IL_BGRA,
+                Tao.DevIl.Il.IL_UNSIGNED_BYTE, pScan0);
+            if (!bSuccess)
+            {
+                return false;
+            }
+            bool bRes = Tao.DevIl.Il.ilSaveImage(tgaFileName);            
+            Tao.DevIl.Il.ilDeleteImages(1, ref ImageId);
+
+            bit.UnlockBits(pBd);
+            bit.RotateFlip(RotateFlipType.RotateNoneFlipY);
+            //now convert that tga to a dds
+            Process process = new Process();
+            process.StartInfo.FileName = "nvdxt.exe";
+            process.StartInfo.Arguments = " -file \"" + tgaFileName + "\" -24 -" + dtxType + " -outfile \""+fileName+"\"";
+            debugadd(process.StartInfo.Arguments);
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.WorkingDirectory = Application.StartupPath;
+            process.Start();
+            process.WaitForExit();
+            //get rid of the tga
+            File.Delete(tgaFileName);
+            return true;
+        }
         public bool LGGDevilSave(Bitmap bit, string fileName, int dXTFileType=-1)
         {
             int fileSaveType = Tao.DevIl.Il.IL_DXT5;
             switch (dXTFileType)
             {
-                case 0: fileSaveType = Tao.DevIl.Il.IL_DXT5; ; break;
+                case 0: fileSaveType = Tao.DevIl.Il.IL_DXT_NO_COMP; ; break;
                 case 1: fileSaveType = Tao.DevIl.Il.IL_DXT1; break;
                 case 2: fileSaveType = Tao.DevIl.Il.IL_DXT2; break;
                 case 3: fileSaveType = Tao.DevIl.Il.IL_DXT3; break;
@@ -7520,8 +7587,13 @@ namespace SkinInstaller
                 case 5: fileSaveType = Tao.DevIl.Il.IL_DXT5; break;
                 default: fileSaveType = Tao.DevIl.Il.IL_DXT5; break;
             }
-            Tao.DevIl.Il.ilSetInteger(Tao.DevIl.Il.IL_DXTC_FORMAT, fileSaveType);
+            if (fileSaveType == Tao.DevIl.Il.IL_DXT_NO_COMP)
+            {
+                fileSaveType = Tao.DevIl.Il.IL_DXT3;
+                return LGGNvidiaSave(bit, fileName, "u888");
+            }
 
+            Tao.DevIl.Il.ilSetInteger(Tao.DevIl.Il.IL_DXTC_FORMAT, fileSaveType);
             int ImageId;
             Tao.DevIl.Il.ilGenImages(1, out ImageId);
             Tao.DevIl.Il.ilBindImage(ImageId);
@@ -7550,6 +7622,8 @@ namespace SkinInstaller
                 int aerror = Tao.DevIl.Il.ilGetError();
                 int op1 = Tao.DevIl.Il.IL_INVALID_ENUM;
                 int op2 = Tao.DevIl.Il.IL_COULD_NOT_OPEN_FILE;
+                int op3 = Tao.DevIl.Il.IL_INTERNAL_ERROR;
+                int op4 = Tao.DevIl.Il.IL_OUT_OF_MEMORY;
             }
             Tao.DevIl.Il.ilDeleteImages(1, ref ImageId);
 
@@ -7570,9 +7644,11 @@ namespace SkinInstaller
                 int newFile_dxtv = -1;
                 int newFile_width = -1;
                 int newFile_height = -1;
-                if (dxtVersions.ContainsKey(fi_dest.Name.ToLower().Trim()))
+                string fiDestPath = "\\"+getAfterRafName(fi_dest.FullName);
+                //+		fi_dest	{C:\Users\LGG\Desktop\g\LoL\Skin Installer Ultimate\bin\debug\st\\\rads\projects\lol_game_client\filearchives\0.0.0.142\archive_65415616.raf\data\characters\annie\skins\base\annieloadscreen.dds}	System.IO.FileInfo
+                if (dxtVersions.ContainsKey(fiDestPath))
                 {
-                    Dictionary<String, int> infos = dxtVersions[fi_dest.Name.ToLower().Trim()];
+                    Dictionary<String, int> infos = dxtVersions[fiDestPath];
                     newFile_dxtv = infos["dxtv"];
                     newFile_width = infos["width"];
                     newFile_height = infos["height"];

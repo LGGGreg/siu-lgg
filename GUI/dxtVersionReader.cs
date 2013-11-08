@@ -59,8 +59,9 @@ namespace SkinInstaller
                 {
                     lastP=rep=progress;
                 }
+                string pathName = fi.FullName.Replace(path, "");
                 ddsReaderWorker.ReportProgress(rep, "("+progress.ToString()+"%)"+num.ToString()+"/"+numFiles.ToString()+
-                    ": Reading File: "+fi.Name+"==="+dxt.ToString()+"==="+s.Width.ToString()+"==="+s.Height.ToString());
+                    ": Reading File: " + pathName + "===" + dxt.ToString() + "===" + s.Width.ToString() + "===" + s.Height.ToString());
             }
 
                 

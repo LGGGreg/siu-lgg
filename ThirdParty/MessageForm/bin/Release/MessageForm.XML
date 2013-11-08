@@ -95,104 +95,6 @@
             Whether this answer should be repeated automatically
             </summary>
         </member>
-        <member name="T:CliverSoft.Properties.Resources">
-            <summary>
-              A strongly-typed resource class, for looking up localized strings, etc.
-            </summary>
-        </member>
-        <member name="P:CliverSoft.Properties.Resources.ResourceManager">
-            <summary>
-              Returns the cached ResourceManager instance used by this class.
-            </summary>
-        </member>
-        <member name="P:CliverSoft.Properties.Resources.Culture">
-            <summary>
-              Overrides the current thread's CurrentUICulture property for all
-              resource lookups using this strongly typed resource class.
-            </summary>
-        </member>
-        <member name="T:Cliver.IconRoutines">
-            <summary>
-            Routines to extract icon from the binary (.NET ExtractAssociatedIcon does not get 16x16 icons)
-            </summary>
-        </member>
-        <member name="M:Cliver.IconRoutines.ExtractIconEx(System.String,System.Int32,System.IntPtr[],System.IntPtr[],System.Int32)">
-            <summary>
-            Extracts the specified icon from the file.
-            </summary>
-            <param name="lpszFile">path of the icon file</param>
-            <param name="nIconIndex">index of the icon with the file</param>
-            <param name="phIconLarge">32x32 icon</param>
-            <param name="phIconSmall">16x16 icon</param>
-            <param name="nIcons">number of icons to extract</param>
-            <returns>number of icons within the file</returns>
-        </member>
-        <member name="M:Cliver.IconRoutines.ExtractIconFromLibrary(System.String,Cliver.IconRoutines.IconSize)">
-            <summary>
-            Extracts icon from the binary file like .exe, .dll, etc. (because of .NET ExtractAssociatedIcon does not get 16x16 icons)
-            </summary>
-            <param name="file">fiel path from where icon is to be extracted</param>
-            <param name="size">size of the icon</param>
-            <returns>extracted icon</returns>
-        </member>
-        <member name="M:Cliver.IconRoutines.ExtractIconFromLibrary(System.String)">
-            <summary>
-            Extract all icon images from the library file like .exe, .dll, etc. 
-            .NET Icon Explorer (http://www.vbaccelerator.com/home/NET/Utilities/Icon_Extractor/article.asp) is used here.
-            </summary>
-            <param name="file">file where icon is extracted from</param>
-            <returns>extracted icon</returns>
-        </member>
-        <member name="T:Cliver.IconRoutines.IconSize">
-            <summary>
-            Used as a parameter type for ExtractIconFromFile
-            </summary>
-        </member>
-        <member name="F:Cliver.IconRoutines.IconSize.Large">
-            <summary>
-            32x32
-            </summary>
-        </member>
-        <member name="F:Cliver.IconRoutines.IconSize.Small">
-            <summary>
-            16x16
-            </summary>
-        </member>
-        <member name="T:vbAccelerator.Components.Win32.GroupIconResources">
-            <summary>
-            Enumerates Group Icon resources for the specified library
-            </summary>
-        </member>
-        <member name="M:vbAccelerator.Components.Win32.GroupIconResources.#ctor">
-            <summary>
-            Creates an instance of the class but doesn't
-            enumerate any resources
-            </summary>
-        </member>
-        <member name="M:vbAccelerator.Components.Win32.GroupIconResources.#ctor(System.String)">
-            <summary>
-            Creates an instance of the class and enumerates
-            icon resources for the specified file.
-            </summary>
-            <param name="libraryFile">File to get resources
-            for</param>
-        </member>
-        <member name="P:vbAccelerator.Components.Win32.GroupIconResources.Item(System.Int32)">
-            <summary>
-            Gets the GroupIconResource with the specified index
-            </summary>
-        </member>
-        <member name="P:vbAccelerator.Components.Win32.GroupIconResources.LibraryFile">
-            <summary>
-            Gets/sets the library file to load resources from
-            </summary>
-        </member>
-        <member name="T:vbAccelerator.Components.Win32.GroupIconResource">
-            <summary>
-            Stores the identifier for a single group
-            icon resource.
-            </summary>
-        </member>
         <member name="T:Cliver.Message">
             <summary>
             Show MessageForm with predefined features
@@ -378,6 +280,104 @@
             <summary>
             Colors that buttons will be colored to in the first next message. If no need color, must be set to null. 
             Not thread-safe!
+            </summary>
+        </member>
+        <member name="T:CliverSoft.Properties.Resources">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:CliverSoft.Properties.Resources.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:CliverSoft.Properties.Resources.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="T:vbAccelerator.Components.Win32.GroupIconResources">
+            <summary>
+            Enumerates Group Icon resources for the specified library
+            </summary>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.GroupIconResources.#ctor">
+            <summary>
+            Creates an instance of the class but doesn't
+            enumerate any resources
+            </summary>
+        </member>
+        <member name="M:vbAccelerator.Components.Win32.GroupIconResources.#ctor(System.String)">
+            <summary>
+            Creates an instance of the class and enumerates
+            icon resources for the specified file.
+            </summary>
+            <param name="libraryFile">File to get resources
+            for</param>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.GroupIconResources.Item(System.Int32)">
+            <summary>
+            Gets the GroupIconResource with the specified index
+            </summary>
+        </member>
+        <member name="P:vbAccelerator.Components.Win32.GroupIconResources.LibraryFile">
+            <summary>
+            Gets/sets the library file to load resources from
+            </summary>
+        </member>
+        <member name="T:vbAccelerator.Components.Win32.GroupIconResource">
+            <summary>
+            Stores the identifier for a single group
+            icon resource.
+            </summary>
+        </member>
+        <member name="T:Cliver.IconRoutines">
+            <summary>
+            Routines to extract icon from the binary (.NET ExtractAssociatedIcon does not get 16x16 icons)
+            </summary>
+        </member>
+        <member name="M:Cliver.IconRoutines.ExtractIconEx(System.String,System.Int32,System.IntPtr[],System.IntPtr[],System.Int32)">
+            <summary>
+            Extracts the specified icon from the file.
+            </summary>
+            <param name="lpszFile">path of the icon file</param>
+            <param name="nIconIndex">index of the icon with the file</param>
+            <param name="phIconLarge">32x32 icon</param>
+            <param name="phIconSmall">16x16 icon</param>
+            <param name="nIcons">number of icons to extract</param>
+            <returns>number of icons within the file</returns>
+        </member>
+        <member name="M:Cliver.IconRoutines.ExtractIconFromLibrary(System.String,Cliver.IconRoutines.IconSize)">
+            <summary>
+            Extracts icon from the binary file like .exe, .dll, etc. (because of .NET ExtractAssociatedIcon does not get 16x16 icons)
+            </summary>
+            <param name="file">fiel path from where icon is to be extracted</param>
+            <param name="size">size of the icon</param>
+            <returns>extracted icon</returns>
+        </member>
+        <member name="M:Cliver.IconRoutines.ExtractIconFromLibrary(System.String)">
+            <summary>
+            Extract all icon images from the library file like .exe, .dll, etc. 
+            .NET Icon Explorer (http://www.vbaccelerator.com/home/NET/Utilities/Icon_Extractor/article.asp) is used here.
+            </summary>
+            <param name="file">file where icon is extracted from</param>
+            <returns>extracted icon</returns>
+        </member>
+        <member name="T:Cliver.IconRoutines.IconSize">
+            <summary>
+            Used as a parameter type for ExtractIconFromFile
+            </summary>
+        </member>
+        <member name="F:Cliver.IconRoutines.IconSize.Large">
+            <summary>
+            32x32
+            </summary>
+        </member>
+        <member name="F:Cliver.IconRoutines.IconSize.Small">
+            <summary>
+            16x16
             </summary>
         </member>
         <member name="T:vbAccelerator.Components.Win32.IconExException">
