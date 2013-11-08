@@ -46,7 +46,7 @@
                 {
                     Directory.CreateDirectory(path);
                 }
-                if ((fileName != string.Empty) && (entry.Name.IndexOf(".ini") < 0))
+                if ((fileName != string.Empty))
                 {
                     string str3 = (path + @"\" + entry.Name).Replace(@"\ ", @"\");
                     string directoryName = Path.GetDirectoryName(str3);
