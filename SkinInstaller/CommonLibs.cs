@@ -24,6 +24,8 @@ using System.Text;
 using System.Globalization;
 using System.IO;
 using System.Drawing;
+using System.Diagnostics;
+using System.Windows.Forms;
 namespace SkinInstaller
 {
     public struct skinInfo
@@ -179,6 +181,109 @@ namespace SkinInstaller
             s.Width = iW;
             s.Height = iH;
             return s;
+        }
+        static public Dictionary<string,int> readDDSInfoNvidia(string file)
+        {
+            Dictionary<string, int> result = new Dictionary<string, int>()
+                {
+                    {"height",0},
+                    {"width",0},
+                    {"depth",0},
+                    {"linear size",0},
+                    {"mipmap count",0},
+                    {"dxtv",0},
+                    {"bit count",0}                    
+                };
+            Process process = new Process();
+            process.StartInfo.FileName = "nvddsinfo.exe";
+            process.StartInfo.Arguments = " \"" + file + "\"";
+            process.StartInfo.UseShellExecute = false;
+            process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+            process.StartInfo.CreateNoWindow = true;
+            process.StartInfo.WorkingDirectory = Application.StartupPath;
+            process.StartInfo.RedirectStandardOutput = true;   
+            process.Start();
+            string output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+            /*
+            Flags: 0x000A1007
+	            DDSD_CAPS
+	            DDSD_PIXELFORMAT
+	            DDSD_WIDTH
+	            DDSD_HEIGHT
+	            DDSD_LINEARSIZE
+	            DDSD_MIPMAPCOUNT
+            Height: 512
+            Width: 512
+            Depth: 0
+            Linear size: 131072
+            Mipmap count: 10
+            Pixel Format:
+	            Flags: 0x00000004
+		            DDPF_FOURCC
+	            FourCC: 'DXT1'
+	            Bit count: 0
+	            Red mask: 0x00000000
+	            Green mask: 0x00000000
+	            Blue mask: 0x00000000
+	            Alpha mask: 0x00000000
+            Caps:
+	            Caps 1: 0x00401008
+		            DDSCAPS_COMPLEX
+		            DDSCAPS_TEXTURE
+		            DDSCAPS_MIPMAP
+	            Caps 2: 0x00000000
+	            Caps 3: 0x00000000
+	            Caps 4: 0x00000000
+            */
+            string[] lines = output.Split(new string[4] { "\r\n", "\r", "\n", "\t" }, StringSplitOptions.RemoveEmptyEntries);
+            foreach(string line in lines)
+            {
+                if (line.Contains(": "))
+                {
+                    string[] parts = line.Split(new string[1] { ": " }, StringSplitOptions.RemoveEmptyEntries);
+                    if (parts.Length > 1)
+                    {
+                        string label = parts[0];
+                        string value = parts[1].Trim().ToLower();
+                        switch (label.ToLower().Trim())
+                        {
+                            case "height":
+                                result["height"]=int.Parse(value);
+                                break;
+                            case "width":
+                                result["width"]=int.Parse(value);
+                                break;
+                            case "depth":
+                                result["depth"]=int.Parse(value);
+                                break;
+                            case "linear size":
+                                result["linear size"]=int.Parse(value);
+                                break;
+                            case "fourcc":
+                                int dxtv = 0;
+                                string dxtstring = value.Replace("'","").Replace("dxt","").Trim();
+                                bool parsed = int.TryParse(dxtstring, out dxtv);
+                                if (!parsed) dxtv = 0;
+                                result["dxtv"]=dxtv;
+                                break;
+                            case "bit count":
+                                result["bit count"]=int.Parse(value);
+                                break;
+                            case "mipmap count":
+                                result["mipmap count"]=int.Parse(value);
+                                break;
+                            
+                            default: break;
+
+                        }
+                    }
+                }
+            }
+
+
+            return result;
+
         }
     }
 

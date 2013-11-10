@@ -113,7 +113,7 @@
             this.textBox2.Name = "textBox2";
             this.textBox2.Size = new System.Drawing.Size(251, 20);
             this.textBox2.TabIndex = 2;
-            this.textBox2.Text = "C:\\Users\\LGG\\Desktop\\HeroPak";
+            this.textBox2.Text = "C:\\Users\\LGG\\Desktop\\raf";
             // 
             // label1
             // 

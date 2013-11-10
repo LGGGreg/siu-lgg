@@ -149,7 +149,7 @@ namespace SkinInstaller
                   //  || Properties.Settings.Default.air
                    || Properties.Settings.Default.text)
                 {
-                    InfoForm form = new InfoForm(
+                    /*InfoForm form = new InfoForm(
                         "The Starred Items you have selected for install\r\n" +
                         "have the potential to cause a error the next time\r\n" +
                         "your LoL client updates.\r\n\r\n" +
@@ -157,7 +157,7 @@ namespace SkinInstaller
                         "remember to uninstall your skin before the update\r\n" +
                         "download completes", new Size(270, 180), "HEADS UP");
                     form.StartPosition = FormStartPosition.CenterParent;
-                    form.ShowDialog();
+                    form.ShowDialog();*/
                 }
             }
 
