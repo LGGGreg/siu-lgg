@@ -102,6 +102,7 @@ namespace SIU_Publish
             toReturn.Add("fsb\\ext.bat");
 
             toReturn.Add("nvdxt.exe");
+            toReturn.Add("nvddsinfo.exe");
             toReturn.Add("7-zip.dll");
             toReturn.Add("7z.dll");
             toReturn.Add("7z.exe");
@@ -154,8 +155,10 @@ namespace SIU_Publish
         #region completedWorkers
         private void progressChanged(object sender, ProgressChangedEventArgs e)
         {
-            if(e.ProgressPercentage!=progressBar1.Value)
-                progressBar1.Value = e.ProgressPercentage;
+            int percentage = e.ProgressPercentage;
+            if (percentage > 100) percentage = 100;
+            if(percentage !=progressBar1.Value)
+                progressBar1.Value = percentage;
             if ((string)e.UserState != "")
                 debugAdd((String)e.UserState);
         }

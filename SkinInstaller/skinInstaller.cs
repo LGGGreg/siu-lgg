@@ -6202,9 +6202,15 @@ namespace SkinInstaller
                         {
 
                             Dictionary<String, int> infos = new Dictionary<String, int>();
-                            infos.Add("dxtv", int.Parse(line[1]));
-                            infos.Add("width", int.Parse(line[2]));
-                            infos.Add("height", int.Parse(line[3]));
+                            //File Size|Height|Width|Depth|Linear Size|Mip Maps|dxtVersion|Bit Count (uncompressed)
+                            infos.Add("filesize", int.Parse(line[1]));
+                            infos.Add("height", int.Parse(line[2]));
+                            infos.Add("width", int.Parse(line[3]));
+                            infos.Add("depth", int.Parse(line[4]));
+                            infos.Add("linearsize", int.Parse(line[5]));
+                            infos.Add("mipmaps", int.Parse(line[6]));
+                            infos.Add("dxtv", int.Parse(line[7]));
+                            infos.Add("bitcount", int.Parse(line[8]));
                             dxtVersions.Add(line[0].Trim(), infos);
                         }
                     }
@@ -6873,7 +6879,7 @@ namespace SkinInstaller
             if (saveFileDialog1.ShowDialog() == DialogResult.OK)
             {
 
-                LGGDevilSave(m_bit, saveFileDialog1.FileName);
+                LGGImageSave(m_bit, saveFileDialog1.FileName);
                 //DevIL.SaveBitmap(saveFileDialog1.FileName, m_bit);
             }
         }
@@ -7530,7 +7536,7 @@ namespace SkinInstaller
             return bit;
 
         }
-        public bool LGGNvidiaSave(Bitmap bit, string fileName, string dtxType = "u888")
+        public bool LGGNvidiaSave(Bitmap bit, string fileName, string dtxType = "u888", int numMipMaps =-1)
         {
             //First save a targa somewhere and then delete it once we are done...
             string tgaFileName = fileName.Substring(0,fileName.LastIndexOf(".")) + ".tga";
@@ -7556,25 +7562,59 @@ namespace SkinInstaller
             }
             bool bRes = Tao.DevIl.Il.ilSaveImage(tgaFileName);            
             Tao.DevIl.Il.ilDeleteImages(1, ref ImageId);
+            string mipMapPart = "";
+            if (numMipMaps != -1)
+            {
+                if(numMipMaps==0)
+                {
+                    mipMapPart=" -nomipmap";
+                }else
+                {
+                    mipMapPart = " -nmips " + numMipMaps.ToString();
+                }
+            }
 
             bit.UnlockBits(pBd);
             bit.RotateFlip(RotateFlipType.RotateNoneFlipY);
             //now convert that tga to a dds
             Process process = new Process();
             process.StartInfo.FileName = "nvdxt.exe";
-            process.StartInfo.Arguments = " -file \"" + tgaFileName + "\" -24 -" + dtxType + " -outfile \""+fileName+"\"";
+            process.StartInfo.Arguments = " -file \"" + tgaFileName + "\" -" + dtxType + ""+mipMapPart+" -outfile \""+fileName+"\"";
             debugadd(process.StartInfo.Arguments);
             process.StartInfo.UseShellExecute = false;
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.WorkingDirectory = Application.StartupPath;
+            process.StartInfo.RedirectStandardOutput = true;
             process.Start();
+            string output = process.StandardOutput.ReadToEnd();
             process.WaitForExit();
             //get rid of the tga
             File.Delete(tgaFileName);
             return true;
         }
-        public bool LGGDevilSave(Bitmap bit, string fileName, int dXTFileType=-1)
+        public bool LGGImageSave(Bitmap bit, string fileName, int dXTFileType = -1, int numMipMaps = -1, int bits = 32)
+        {
+            string fileSaveType = "dxt5";
+            switch (dXTFileType)
+            {
+                case 0:
+                    switch (bits)
+                    {
+                        case 24: fileSaveType = "u888"; break;
+                        case 32: fileSaveType = "u8888"; break;
+                        default: fileSaveType = "u888"; break;
+                    }
+                    break;
+                case 1: fileSaveType  = "dxt1c"; break;
+                case 3: fileSaveType  = "dxt3";  break;
+                case 5: fileSaveType  = "dxt5";  break;
+                default: fileSaveType = "dxt5";  break;
+            }
+            return LGGNvidiaSave(bit, fileName, fileSaveType,numMipMaps);
+            
+        }
+        public bool LGGDevilSave(Bitmap bit, string fileName, int dXTFileType = -1, int numMipMaps = -1, int bits = 32)
         {
             int fileSaveType = Tao.DevIl.Il.IL_DXT5;
             switch (dXTFileType)
@@ -7589,7 +7629,6 @@ namespace SkinInstaller
             }
             if (fileSaveType == Tao.DevIl.Il.IL_DXT_NO_COMP)
             {
-                fileSaveType = Tao.DevIl.Il.IL_DXT3;
                 return LGGNvidiaSave(bit, fileName, "u888");
             }
 
@@ -7598,22 +7637,23 @@ namespace SkinInstaller
             Tao.DevIl.Il.ilGenImages(1, out ImageId);
             Tao.DevIl.Il.ilBindImage(ImageId);
 
-	        int iW = bit.Width;
+            int iW = bit.Width;
             int iH = bit.Height;
-            Rectangle rect = new Rectangle(0,0,iW,iH);
+            Rectangle rect = new Rectangle(0, 0, iW, iH);
             bit.RotateFlip(RotateFlipType.RotateNoneFlipY);
-	
+
             System.Drawing.Imaging.BitmapData pBd = bit.LockBits(rect,
                 System.Drawing.Imaging.ImageLockMode.ReadOnly,
                 System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
             IntPtr pScan0 = (pBd.Scan0);
-            
+
             bool bSuccess = Tao.DevIl.Il.ilTexImage(iW, iH, 1, 4, Tao.DevIl.Il.IL_BGRA,
                 Tao.DevIl.Il.IL_UNSIGNED_BYTE, pScan0);
             if (!bSuccess)
-	        {
-		        return false;
-	        }
+            {
+                return false;
+            }
+
             bool bRes = Tao.DevIl.Il.ilSaveImage(fileName);
             //bool bRes = Tao.DevIl.Il.ilSave(fileSaveType,fileName);
             if (!bRes)
@@ -7637,13 +7677,19 @@ namespace SkinInstaller
             FileInfo fi_dest = new FileInfo(destination);
             if (fi_orig.Extension == ".dds" && Properties.Settings.Default.fixDDSFiles_1)
             {
-                int origFile_dxtv = commonOps.getDXTVersion(fi_orig.FullName);
-                Size origFile_Size = commonOps.getFileDimensions(fi_orig.FullName);
-                int origFile_width = origFile_Size.Width;
-                int origFile_height = origFile_Size.Height;
+                Dictionary<string, int> origonalInfo = commonOps.readDDSInfoNvidia(fi_orig.FullName);
+                int origFile_dxtv = origonalInfo["dxtv"];
+                int origFile_width =origonalInfo["width"];
+                int origFile_height = origonalInfo["height"];
+                int origFile_mipMaps = origonalInfo["mipmap count"];
+                int origFile_bitCount = origonalInfo["bit count"];
+                long origFile_fileSize = fi_orig.Length;
                 int newFile_dxtv = -1;
                 int newFile_width = -1;
                 int newFile_height = -1;
+                int newFile_mipMaps = -1;
+                int newFile_bitCount = -1;
+                long newFile_fileSize = -1;
                 string fiDestPath = "\\"+getAfterRafName(fi_dest.FullName);
                 //+		fi_dest	{C:\Users\LGG\Desktop\g\LoL\Skin Installer Ultimate\bin\debug\st\\\rads\projects\lol_game_client\filearchives\0.0.0.142\archive_65415616.raf\data\characters\annie\skins\base\annieloadscreen.dds}	System.IO.FileInfo
                 if (dxtVersions.ContainsKey(fiDestPath))
@@ -7652,13 +7698,27 @@ namespace SkinInstaller
                     newFile_dxtv = infos["dxtv"];
                     newFile_width = infos["width"];
                     newFile_height = infos["height"];
+                    newFile_mipMaps = infos["mipmaps"];
+                    newFile_bitCount = infos["bitcount"];
+                    newFile_fileSize = infos["filesize"];
                 }
 
                 //hack to prevent trasnp rewritting, 3s will all be 5
                 int origComparator = (origFile_dxtv == 3) ? 5 : origFile_dxtv;
                 int newComparator = (newFile_dxtv == 3) ? 5 : newFile_dxtv;
 
-                if (((origComparator == newComparator) && (origFile_width == newFile_width) && (origFile_height == newFile_height)) || (newComparator == -1) || (newFile_width == -1) || (newFile_height == -1))
+                if (((origComparator == newComparator) &&
+                    (origFile_width == newFile_width) &&
+                    (origFile_mipMaps == newFile_mipMaps) &&
+                    (origFile_bitCount == newFile_bitCount) &&
+                    (origFile_fileSize == newFile_fileSize) &&  
+                    (origFile_height == newFile_height))
+                    || (newComparator == -1)
+                    || (newFile_width == -1)
+                    || (newFile_height == -1)
+                    || (newFile_bitCount == -1)
+                    || (newFile_mipMaps == -1)
+                    || (newFile_fileSize == origFile_fileSize))
                 {
                     this.SIFileOp.FileCopy(origination, destination);
                     debugadd("No Need to re-write " + origination+ " , riot file is "+newFile_dxtv.ToString()+" and input was "+origFile_dxtv.ToString());
@@ -7687,7 +7747,7 @@ namespace SkinInstaller
                                 debugadd(destination + " was saved correctly from dim " + origFile_width.ToString() + " x "+origFile_height.ToString() +
                                     " to what the origonal riot file is at dim " + newFile_width.ToString()+" x "+newFile_height.ToString());
                             }
-                            if (LGGDevilSave(bb, destination, newFile_dxtv))
+                            if (LGGImageSave(bb, destination, newFile_dxtv, newFile_mipMaps, newFile_bitCount))
                             {
                                 debugadd(destination + " was saved correctly from dxt "+origFile_dxtv.ToString()+" to what the origonal riot file is at dxt "+newFile_dxtv.ToString());
                             }
@@ -8501,7 +8561,7 @@ namespace SkinInstaller
                 Bitmap m_bit = LGGDevilLoadImage(skinImagePath);
                 if (m_bit != null)
                 {
-                    LGGDevilSave(m_bit, newImagePath);
+                    LGGImageSave(m_bit, newImagePath);
 
                 }
             }
