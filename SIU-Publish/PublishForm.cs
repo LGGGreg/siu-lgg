@@ -117,6 +117,7 @@ namespace SIU_Publish
             toReturn.Add("LOLViewer.exe");
             toReturn.Add("LeagueOfLegendsSkinInstallerLeagueCraftIntegration.user.js");
             toReturn.Add("License - nvidia.txt");
+            toReturn.Add("License - nvidia texture tools.txt");
             toReturn.Add("License - 7zip.txt");
             toReturn.Add("License - Be.HexBox.txt");
             toReturn.Add("License - ColorSlider.txt");

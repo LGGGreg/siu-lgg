@@ -1,0 +1,34 @@
+syntax: glob
+version.txt
+update msg.png
+1.4.0/*
+backup fikes/*
+_UpgradeReport*
+allfiles.ini
+Backup/*
+bin/*
+DDS_Viewer/*
+fix/*
+fix2/*
+obj/*
+RAF_Browser/*
+RAFManager/*
+rafbakups/*
+RAFManagerUpdater/*
+RAFMount/*
+SIU 3.291-Lite/*
+SIU 3.291/*
+prevoew3097.png
+Thumbs.db
+changes.txt
+lollgg.png
+StatCounter-Log-6898201.csv
+LolModelViewerGit/*
+LOLViewer1.1/*
+rafmanagersvn/*
+SIU 3.29*
+fixs/soundfix/*
+SIU 3.3*-Lite/7z.exe
+SIU 3.3*-Lite/*
+oldversion/*
+Base SIU/*
