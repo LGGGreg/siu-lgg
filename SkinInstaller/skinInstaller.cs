@@ -7690,7 +7690,7 @@ namespace SkinInstaller
                 int newFile_mipMaps = -1;
                 int newFile_bitCount = -1;
                 long newFile_fileSize = -1;
-                string fiDestPath = "\\"+getAfterRafName(fi_dest.FullName);
+                string fiDestPath = "\\"+getAfterRafName(fi_dest.FullName).ToLower();
                 //+		fi_dest	{C:\Users\LGG\Desktop\g\LoL\Skin Installer Ultimate\bin\debug\st\\\rads\projects\lol_game_client\filearchives\0.0.0.142\archive_65415616.raf\data\characters\annie\skins\base\annieloadscreen.dds}	System.IO.FileInfo
                 if (dxtVersions.ContainsKey(fiDestPath))
                 {
