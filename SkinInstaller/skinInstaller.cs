@@ -393,6 +393,7 @@ namespace SkinInstaller
         private SkinInstaller.ExtendedWebBrowser webBrowser2Test;
         private ToolStripMenuItem deleteBackupsToolStripMenuItem;
         private ToolStripMenuItem viewDXTVersionsToolStripMenuItem;
+        private BackgroundWorker addFilesWorker;
 
         TreeNode database = new TreeNode("dbRoot");
         #endregion
@@ -410,7 +411,8 @@ namespace SkinInstaller
         public void processArgs(string args)
         {
             if (args == "") return;
-            args = Uri.UnescapeDataString(args);
+            args = args.Replace("%22", "").Replace("%20", "[[P20]]").Replace("%", "").Replace("[[P20]]", "%20");
+            args = Uri.UnescapeDataString(args.Replace("#",""));
             //Cliver.Message.Inform(args);
             string dir = Application.StartupPath + "\\t1\\";
             if (Directory.Exists(dir)) SIFileOp.DirectoryDelete(dir, true);
@@ -548,6 +550,7 @@ namespace SkinInstaller
             if(files.Count>0)
             {
                 {
+                    //checked, ok
                     processNewDirectory(files.ToArray());
                 }
                 if (addItFlag)
@@ -1423,6 +1426,7 @@ namespace SkinInstaller
                 }
                 else
                 {
+                    //checked, ok
                     processNewDirectory(strArray3);
                 }
             }
@@ -1528,10 +1532,95 @@ namespace SkinInstaller
             }
             return currentFiles;
         }
-        private void processNewDirectory(string[] origonalInputFiles)
+        
+        private void addFilesWorker_DoWork(object sender, DoWorkEventArgs e)
         {
+            ProcessParams1 params1 = (ProcessParams1)e.Argument;
+            string[] origonalInputFiles = params1.files;//e.Argument as string[];
+            processNewDirectoryWork(origonalInputFiles);
+            e.Result = params1;
+        }
+
+        private void addFilesWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            UpdateProgressSafe(e.ProgressPercentage);
+            if (e.UserState != null)
+            {
+                string info = e.UserState as string;
+                //debugadd(info);
+                //this.statusText.Text = info;
+                //this.helpBar.Update();
+
+                this.installFiles_ListBox.Items.Add(info);
+            }
+        }
+
+        private void addFilesWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!(e.Error == null))
+            {
+                Cliver.Message.Inform("Error!\r\nSomething has gone wrong adding the skin,\r\n" +
+                    "You can normally stop this error from happening by downloading and installing dot net 3.5 from\r\n" +
+                    " here http://www.microsoft.com/downloads/en/details.aspx?familyid=ab99342f-5d1a-413d-8319-81da479ab0d7 " +
+                    "\r\n\r\nIf you have done that, and you still get this error, please contact LGG, tell him what you did, and give him this info" +
+                    "\r\n" + e.Error.ToString());
+                debugadd("Error: " + e.Error.Message);
+            }
+            else
+            {
+                ProcessParams1 params1 = (ProcessParams1)e.Result;
+                if (params1.runAutoCode)
+                {
+
+                    int doneAdding = Properties.Settings.Default.optionDoneAdding;
+                    if (doneAdding == -1)
+                    {
+                        Cliver.Message.NextTime_ButtonColors = new Color[] { Color.LightGreen, Color.LightGreen };
+                        bool saveThis = false;
+                        doneAdding
+                            = Cliver.Message.Show("Done Adding files?",
+                                SystemIcons.Information, out saveThis,
+                                "We have just added the files you dropped to the list of files\r\n"
+                            + "that will be part of your skin, do you have more files to add?\r\n"
+                            + "or are you ready to finalize this skin and add it to the database?",
+                                0, new string[2] { "I am done adding files, finalize this skin.", "I am not done yet." });
+                        if (saveThis) Properties.Settings.Default.optionDoneAdding = doneAdding;
+                        Properties.Settings.Default.Save();
+                    }
+                    if (doneAdding == 0)
+                    {
+                        //they are done, install skin
+                        button1.PerformClick();
+                    }
+                }
+            }
+
+        }
+
+        struct ProcessParams1
+        {
+            public string[] files;
+            public bool runAutoCode;
+        }
+        private void processNewDirectory(string[] origonalInputFiles, bool runAutoAddCode = false)
+        {
+            if (addFilesWorker.IsBusy)
+            {
+                Cliver.Message.Inform("Please wait for the current files to complete being added to the list before you add more");
+                return;
+            }
             addFilesPanel.BackColor = System.Drawing.SystemColors.Control;
             AddToDatabasePanel.BackColor = Color.Lime;
+            ProcessParams1 params1;
+            params1.runAutoCode = runAutoAddCode;
+            params1.files = origonalInputFiles;            
+            
+            addFilesWorker.RunWorkerAsync(params1);
+        }
+        private void processNewDirectoryWork(string[] origonalInputFiles)
+        {
+            //addFilesPanel.BackColor = System.Drawing.SystemColors.Control;
+            //AddToDatabasePanel.BackColor = Color.Lime;
 
             int num = 0;
             int num2 = 0;
@@ -1550,8 +1639,12 @@ namespace SkinInstaller
             {
                 this.SIFileOp.DirectoryDelete(Application.StartupPath + @"\" + c_TEMP_DIR_NAME_FIXED_SKIN_FILES, true);
             }
+            int fileNumber = 1;
             foreach (string origonalFile in origonalInputFiles)
             {
+
+                
+
                 if ((origonalFile.Trim().ToLower().EndsWith(".zip")) ||
                     (origonalFile.Trim().ToLower().EndsWith(".u9lolpatch")))
                 {
@@ -1559,6 +1652,7 @@ namespace SkinInstaller
                 }
                 else if (origonalFile.Trim().ToLower().EndsWith(".rar") ||
                         origonalFile.Trim().ToLower().EndsWith(".7z") ||
+                        origonalFile.Trim().ToLower().EndsWith(".yurixyworks")||
                         origonalFile.Trim().ToLower().EndsWith(".bzip2") ||
                         origonalFile.Trim().ToLower().EndsWith(".gzip") ||
                         origonalFile.Trim().ToLower().EndsWith(".tar"))
@@ -1607,7 +1701,8 @@ namespace SkinInstaller
                 string[] archiveFiles = Directory.GetFiles(Application.StartupPath + "\\"+c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL, "*.*",
                         SearchOption.AllDirectories).Where(s =>
                            s.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) ||
-                           s.EndsWith(".u9lolpatch", StringComparison.OrdinalIgnoreCase) ||                           
+                           s.EndsWith(".u9lolpatch", StringComparison.OrdinalIgnoreCase) ||  
+                           s.EndsWith(".yurixyworks",StringComparison.OrdinalIgnoreCase)||
                            s.EndsWith(".rar", StringComparison.OrdinalIgnoreCase) ||
                            s.EndsWith(".bzip2", StringComparison.OrdinalIgnoreCase) ||
                            s.EndsWith(".gzip", StringComparison.OrdinalIgnoreCase) ||
@@ -1647,9 +1742,11 @@ namespace SkinInstaller
             allFilesInTheSkin = addInOldFiles(allFilesInTheSkin);
 
             StringBuilder InfoLog = new StringBuilder("");
-
+            int maxFiles = allFilesInTheSkin.ToArray().Length;
             foreach (string fullNameAndPath in allFilesInTheSkin)
             {
+                int percent = (int)Math.Floor(((double)fileNumber++ / (double)maxFiles) * 100.0);
+                addFilesWorker.ReportProgress(percent);
                 //debugadd("starting on " + fullNameAndPath);
                 string foldername = null;
                 string fileName = null;
@@ -1734,7 +1831,8 @@ namespace SkinInstaller
                             num++;
                             //Cliver.Message.Inform("str4 is " + str4 + " and str5 is " + str5);
                             copyAndFix(fullNameAndPath, Application.StartupPath + @"\st\" + foldername + @"\" + fileName);
-                            this.installFiles_ListBox.Items.Add(foldername + fileName);
+                            addFilesWorker.ReportProgress(percent, foldername + fileName);
+                            //this.installFiles_ListBox.Items.Add(foldername + fileName);
                         }
                     }
                     else
@@ -1745,6 +1843,7 @@ namespace SkinInstaller
                             (!toTest.Contains("thumbs.db")) &&
                             (!toTest.Contains(".zip")) &&
                             (!toTest.Contains(".u9lolpatch")) &&
+                            (!toTest.Contains(".yurixyworks"))&&
                             (!toTest.Contains(".rar")) &&
                             (!toTest.Contains(".7z")) &&
                             (!toTest.Contains(".bzip2")) &&
@@ -2159,6 +2258,11 @@ namespace SkinInstaller
         }
         private void addToDatabase_click(object sender, EventArgs e)
         {
+            if (addFilesWorker.IsBusy)
+            {
+                Cliver.Message.Inform("Please wait for the current files to complete\nbeing added to the list before add it to the database");
+                return;
+            }
             int num = 0;
             bool updateing = false;
             if (!Directory.Exists(Application.StartupPath + @"\st"))
@@ -4111,16 +4215,6 @@ namespace SkinInstaller
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.listView1 = new SkinInstaller.ListViewItemHover();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.dataBaseListMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripSelectUninstalled = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSelectAllInstalled = new System.Windows.Forms.ToolStripMenuItem();
@@ -4246,8 +4340,19 @@ namespace SkinInstaller
             this.ParticleTreeWorkerNew = new System.ComponentModel.BackgroundWorker();
             this.splitContainer6 = new System.Windows.Forms.SplitContainer();
             this.panel10 = new System.Windows.Forms.Panel();
-            this.webBrowser2Test = new SkinInstaller.ExtendedWebBrowser();
             this.button3CloseAd = new System.Windows.Forms.Button();
+            this.addFilesWorker = new System.ComponentModel.BackgroundWorker();
+            this.listView1 = new SkinInstaller.ListViewItemHover();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.webBrowser2Test = new SkinInstaller.ExtendedWebBrowser();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -4801,81 +4906,6 @@ namespace SkinInstaller
             this.splitContainer2.Size = new System.Drawing.Size(714, 281);
             this.splitContainer2.SplitterDistance = 522;
             this.splitContainer2.TabIndex = 7;
-            // 
-            // listView1
-            // 
-            this.listView1.AutoArrange = false;
-            this.listView1.CheckBoxes = true;
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader5,
-            this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader6,
-            this.columnHeader8,
-            this.columnHeader9,
-            this.columnHeader7});
-            this.listView1.ContextMenuStrip = this.dataBaseListMenuStrip1;
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.GridLines = true;
-            this.listView1.LargeImageList = this.imageList1;
-            this.listView1.Location = new System.Drawing.Point(18, 15);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(504, 266);
-            this.listView1.SmallImageList = this.imageList1;
-            this.listView1.TabIndex = 0;
-            this.listView1.TileSize = new System.Drawing.Size(2, 2);
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.ItemHover += new SkinInstaller.ListViewItemHover.ItemHoverEventHandler(this.listView1_ItemMouseHover);
-            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
-            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = " ";
-            this.columnHeader1.Width = 43;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Skin Title";
-            this.columnHeader2.Width = 190;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Author";
-            this.columnHeader5.Width = 100;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "File Count";
-            this.columnHeader3.Width = 69;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Installed";
-            this.columnHeader4.Width = 53;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "Added";
-            this.columnHeader6.Width = 67;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "Date and Time Added";
-            this.columnHeader8.Width = 0;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "Date and Time Installed";
-            this.columnHeader9.Width = 0;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "Character";
-            this.columnHeader7.Width = 90;
             // 
             // dataBaseListMenuStrip1
             // 
@@ -6086,6 +6116,98 @@ namespace SkinInstaller
             this.panel10.Size = new System.Drawing.Size(154, 38);
             this.panel10.TabIndex = 0;
             // 
+            // button3CloseAd
+            // 
+            this.button3CloseAd.Location = new System.Drawing.Point(3, 6);
+            this.button3CloseAd.Name = "button3CloseAd";
+            this.button3CloseAd.Size = new System.Drawing.Size(30, 23);
+            this.button3CloseAd.TabIndex = 0;
+            this.button3CloseAd.Text = ">>";
+            this.button3CloseAd.UseVisualStyleBackColor = true;
+            this.button3CloseAd.Click += new System.EventHandler(this.button3CloseAd_Click);
+            // 
+            // addFilesWorker
+            // 
+            this.addFilesWorker.WorkerReportsProgress = true;
+            this.addFilesWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.addFilesWorker_DoWork);
+            this.addFilesWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.addFilesWorker_ProgressChanged);
+            this.addFilesWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.addFilesWorker_RunWorkerCompleted);
+            // 
+            // listView1
+            // 
+            this.listView1.AutoArrange = false;
+            this.listView1.CheckBoxes = true;
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader5,
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader6,
+            this.columnHeader8,
+            this.columnHeader9,
+            this.columnHeader7});
+            this.listView1.ContextMenuStrip = this.dataBaseListMenuStrip1;
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.GridLines = true;
+            this.listView1.LargeImageList = this.imageList1;
+            this.listView1.Location = new System.Drawing.Point(18, 15);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(504, 266);
+            this.listView1.SmallImageList = this.imageList1;
+            this.listView1.TabIndex = 0;
+            this.listView1.TileSize = new System.Drawing.Size(2, 2);
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ItemHover += new SkinInstaller.ListViewItemHover.ItemHoverEventHandler(this.listView1_ItemMouseHover);
+            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
+            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = " ";
+            this.columnHeader1.Width = 43;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Skin Title";
+            this.columnHeader2.Width = 190;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Author";
+            this.columnHeader5.Width = 100;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "File Count";
+            this.columnHeader3.Width = 69;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Installed";
+            this.columnHeader4.Width = 53;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Added";
+            this.columnHeader6.Width = 67;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "Date and Time Added";
+            this.columnHeader8.Width = 0;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "Date and Time Installed";
+            this.columnHeader9.Width = 0;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "Character";
+            this.columnHeader7.Width = 90;
+            // 
             // webBrowser2Test
             // 
             this.webBrowser2Test.AdditionalHeaders = null;
@@ -6098,16 +6220,6 @@ namespace SkinInstaller
             this.webBrowser2Test.Visible = false;
             this.webBrowser2Test.BeforeNavigate2 += new System.EventHandler<SkinInstaller.BeforeNavigate2EventArgs>(this.webBrowser2_BeforeNavigate2);
             this.webBrowser2Test.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser2Test_DocumentCompleted);
-            // 
-            // button3CloseAd
-            // 
-            this.button3CloseAd.Location = new System.Drawing.Point(3, 6);
-            this.button3CloseAd.Name = "button3CloseAd";
-            this.button3CloseAd.Size = new System.Drawing.Size(30, 23);
-            this.button3CloseAd.TabIndex = 0;
-            this.button3CloseAd.Text = ">>";
-            this.button3CloseAd.UseVisualStyleBackColor = true;
-            this.button3CloseAd.Click += new System.EventHandler(this.button3CloseAd_Click);
             // 
             // skinInstaller
             // 
@@ -7024,7 +7136,7 @@ namespace SkinInstaller
                 this.textBoxauthor.Text = skinAuthor;
                 //add it to the list
                 string[] strArray3 = Directory.GetFiles(tempPath, "*.*", SearchOption.AllDirectories);
-                processNewDirectory(strArray3);
+                processNewDirectoryWork(strArray3);
                 //add it to the database
                 //button1.PerformClick();
                 addToDatabase_click(this, null);
@@ -8114,27 +8226,9 @@ namespace SkinInstaller
                 }
                 //string[] strArray3 = Directory.GetFiles(tempPath, "*.*", SearchOption.AllDirectories);
                 tabControl1.SelectedIndex=0;
-                processNewDirectory(usable.ToArray()              );
-                int doneAdding = Properties.Settings.Default.optionDoneAdding;
-                if (doneAdding == -1)
-                {
-                    Cliver.Message.NextTime_ButtonColors = new Color[] { Color.LightGreen, Color.LightGreen };
-                    bool saveThis = false;
-                    doneAdding
-                        =Cliver.Message.Show("Done Adding files?",
-                            SystemIcons.Information,out saveThis,
-                            "We have just added the files you dropped to the list of files\r\n"
-                        + "that will be part of your skin, do you have more files to add?\r\n"
-                        + "or are you ready to finalize this skin and add it to the database?",
-                            0, new string[2] { "I am done adding files, finalize this skin.", "I am not done yet." });
-                    if (saveThis) Properties.Settings.Default.optionDoneAdding = doneAdding;
-                    Properties.Settings.Default.Save();
-                }
-                if(doneAdding==0)
-                {
-                    //they are done, install skin
-                    button1.PerformClick();
-                }
+                //checked, not ok
+                processNewDirectory(usable.ToArray()    ,true          );
+                
                 //add it to the database
                 //
                 //button1_Click(this, null);
@@ -9594,7 +9688,7 @@ namespace SkinInstaller
                      , 0, new string[] { "Yay!", "Please start adding this skin now" }) == 1)
                 {
                     string[] strArray3 = Directory.GetFiles(path, "*.*", SearchOption.AllDirectories);
-
+                    //checked, ok
                     processNewDirectory(strArray3);
                     this.tabControl1.SelectedIndex = 0;
                 }
@@ -10405,6 +10499,7 @@ namespace SkinInstaller
                 SIFileOp.DirectoryDelete(backupDir,true);
             }
         }
+
 
     }
     #region strucks
