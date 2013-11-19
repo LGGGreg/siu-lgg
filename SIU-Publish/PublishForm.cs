@@ -139,6 +139,7 @@ namespace SIU_Publish
             toReturn.Add("ParticleReferenceForSIU.exe");
             toReturn.Add("RAFLib.dll");
             toReturn.Add("RAF_Unpack_v1.00.exe");
+            toReturn.Add("RelManLib.dll");
             toReturn.Add("README Credits Info Instructions and License and change log.txt");
             toReturn.Add("SIU-Updater.exe");
             toReturn.Add("Skin Installer Ultimate.exe");

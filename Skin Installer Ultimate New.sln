@@ -33,6 +33,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NantGoogleCode", "ThirdPart
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParticleFinder", "ParticleFinder\ParticleFinder\ParticleFinder.csproj", "{49F22107-1ECB-4166-81A2-C49662446F6A}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RelManLib", "ThirdParty\RelManLib\RelManLib.csproj", "{50D202FC-BA96-4038-95A2-8BA6C33DF309}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		ClientProfileRelease|Any CPU = ClientProfileRelease|Any CPU
@@ -622,6 +624,41 @@ Global
 		{49F22107-1ECB-4166-81A2-C49662446F6A}.Release|x64.ActiveCfg = Release|x86
 		{49F22107-1ECB-4166-81A2-C49662446F6A}.Release|x86.ActiveCfg = Release|x86
 		{49F22107-1ECB-4166-81A2-C49662446F6A}.Release|x86.Build.0 = Release|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.ClientProfileRelease|Any CPU.ActiveCfg = Release|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.ClientProfileRelease|Mixed Platforms.ActiveCfg = Release|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.ClientProfileRelease|Mixed Platforms.Build.0 = Release|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.ClientProfileRelease|Win32.ActiveCfg = Release|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.ClientProfileRelease|x64.ActiveCfg = Release|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.ClientProfileRelease|x86.ActiveCfg = Release|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.ClientProfileRelease|x86.Build.0 = Release|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Debug_Nightly|Any CPU.ActiveCfg = Debug_Nightly|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Debug_Nightly|Mixed Platforms.ActiveCfg = Debug_Nightly|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Debug_Nightly|Mixed Platforms.Build.0 = Debug_Nightly|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Debug_Nightly|Win32.ActiveCfg = Debug_Nightly|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Debug_Nightly|x64.ActiveCfg = Debug_Nightly|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Debug_Nightly|x86.ActiveCfg = Debug_Nightly|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Debug_Nightly|x86.Build.0 = Debug_Nightly|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Debug|Any CPU.ActiveCfg = Debug|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Debug|Win32.ActiveCfg = Debug|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Debug|x64.ActiveCfg = Debug|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Debug|x86.ActiveCfg = Debug|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Debug|x86.Build.0 = Debug|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Profile|Any CPU.ActiveCfg = Debug_Nightly|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Profile|Mixed Platforms.ActiveCfg = Debug_Nightly|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Profile|Mixed Platforms.Build.0 = Debug_Nightly|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Profile|Win32.ActiveCfg = Debug_Nightly|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Profile|x64.ActiveCfg = Debug_Nightly|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Profile|x86.ActiveCfg = Debug_Nightly|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Profile|x86.Build.0 = Debug_Nightly|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Release|Any CPU.ActiveCfg = Release|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Release|Mixed Platforms.Build.0 = Release|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Release|Win32.ActiveCfg = Release|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Release|x64.ActiveCfg = Release|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Release|x86.ActiveCfg = Release|x86
+		{50D202FC-BA96-4038-95A2-8BA6C33DF309}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

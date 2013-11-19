@@ -482,6 +482,10 @@
       <Project>{4661A92E-7729-4021-B35F-D5BDA01A79F9}</Project>
       <Name>RAFLib</Name>
     </ProjectReference>
+    <ProjectReference Include="ThirdParty\RelManLib\RelManLib.csproj">
+      <Project>{50D202FC-BA96-4038-95A2-8BA6C33DF309}</Project>
+      <Name>RelManLib</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <WCFMetadata Include="Service References\" />
