@@ -1,4 +1,5 @@
-﻿/*
+﻿using RelManLib;
+/*
  * Skin Installer Ultimate + LGG (SIU+LGG)
  * Copyright 2011 Greg Hendrickson
  * This file is part of SIU+LGG.
@@ -66,6 +67,7 @@ namespace SkinInstaller
     using System.IO;
     using System.Windows.Forms;
     using RAFLib;
+    using RelManLib;
     using System.Text;
     using System.Text.RegularExpressions;
     
@@ -800,6 +802,12 @@ namespace SkinInstaller
                     }
                 }
             }
+
+            //RelManDirectoryFile rmdf = RelManDirectoryFile.RelManDirectoryFileFromRiotRoot(gameDirectory);
+
+           // RAFArchive raf = new RAFArchive("C:\\Riot Games\\League of Legends\\RADS\\projects\\lol_game_client\\filearchives\\0.0.0.155\\Archive_65414672.raf");
+            string compFile = "zacwgoomovemoving.luaobj";
+
             if (gameDirectory.ToLower().Contains("garena"))
             {
                 Cliver.Message.Show("Unsupported :<", SystemIcons.Error,
@@ -823,8 +831,8 @@ namespace SkinInstaller
                 this.ReadFilelistINI();
                 //this.CheckForUpdate(false);//remove this later
             }
+
             setImageValue(Properties.Settings.Default.iconSize,true);
-            
             this.UpdateListView();
             updateWorker2.RunWorkerAsync(new object[] { this, false });
             backgroundWorkerCountUpdate.RunWorkerAsync();
@@ -1152,11 +1160,12 @@ namespace SkinInstaller
             //raf.InsertFile(
               //  if (!raf.InsertFile(rafInnerLocation, File.ReadAllBytes(origonal)))
                // {
+            byte[] origonalBytes =File.ReadAllBytes(origonal);
                 try
                 {
                     raf.InsertFile(
                                   rafInnerLocation,
-                                  File.ReadAllBytes(origonal),
+                                  origonalBytes,
                                   new LogTextWriter(
                                       (Func<string, object>)delegate(string s)
                                       {
@@ -1167,12 +1176,16 @@ namespace SkinInstaller
                 }
                 catch
                 {
-                    debugadd("O shit big error trying to insert !!");
+                    debugadd("O no big error trying to insert !!");
                 }
                    // Cliver.Message.Inform("Error on " + rafInnerLocation + "\r\n and " + origonal);
                // }
                 raf.SaveDirectoryFile();
                 raf.GetDataFileContentStream().Close();
+
+                RelManDirectoryFile rmdf = RelManDirectoryFile.RelManDirectoryFileFromRiotRoot(gameDirectory);
+                rmdf.adjustSizeByBytes(origonalBytes, rafInnerLocation);
+                rmdf.saveFile();
             //RAFFileListEntry entry = (RAFFileListEntry)row.Cells[CN_RAFPATH].Tag;
             //        string rafPath = entry.FileName;
             //        string localPath = (string)row.Cells[CN_LOCALPATH].Tag;
@@ -4215,6 +4228,16 @@ namespace SkinInstaller
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.listView1 = new SkinInstaller.ListViewItemHover();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.dataBaseListMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripSelectUninstalled = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSelectAllInstalled = new System.Windows.Forms.ToolStripMenuItem();
@@ -4340,19 +4363,9 @@ namespace SkinInstaller
             this.ParticleTreeWorkerNew = new System.ComponentModel.BackgroundWorker();
             this.splitContainer6 = new System.Windows.Forms.SplitContainer();
             this.panel10 = new System.Windows.Forms.Panel();
+            this.webBrowser2Test = new SkinInstaller.ExtendedWebBrowser();
             this.button3CloseAd = new System.Windows.Forms.Button();
             this.addFilesWorker = new System.ComponentModel.BackgroundWorker();
-            this.listView1 = new SkinInstaller.ListViewItemHover();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.webBrowser2Test = new SkinInstaller.ExtendedWebBrowser();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -4906,6 +4919,81 @@ namespace SkinInstaller
             this.splitContainer2.Size = new System.Drawing.Size(714, 281);
             this.splitContainer2.SplitterDistance = 522;
             this.splitContainer2.TabIndex = 7;
+            // 
+            // listView1
+            // 
+            this.listView1.AutoArrange = false;
+            this.listView1.CheckBoxes = true;
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader5,
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader6,
+            this.columnHeader8,
+            this.columnHeader9,
+            this.columnHeader7});
+            this.listView1.ContextMenuStrip = this.dataBaseListMenuStrip1;
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.GridLines = true;
+            this.listView1.LargeImageList = this.imageList1;
+            this.listView1.Location = new System.Drawing.Point(18, 15);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(504, 266);
+            this.listView1.SmallImageList = this.imageList1;
+            this.listView1.TabIndex = 0;
+            this.listView1.TileSize = new System.Drawing.Size(2, 2);
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ItemHover += new SkinInstaller.ListViewItemHover.ItemHoverEventHandler(this.listView1_ItemMouseHover);
+            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
+            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = " ";
+            this.columnHeader1.Width = 43;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Skin Title";
+            this.columnHeader2.Width = 190;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Author";
+            this.columnHeader5.Width = 100;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "File Count";
+            this.columnHeader3.Width = 69;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Installed";
+            this.columnHeader4.Width = 53;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Added";
+            this.columnHeader6.Width = 67;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "Date and Time Added";
+            this.columnHeader8.Width = 0;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "Date and Time Installed";
+            this.columnHeader9.Width = 0;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "Character";
+            this.columnHeader7.Width = 90;
             // 
             // dataBaseListMenuStrip1
             // 
@@ -6116,6 +6204,19 @@ namespace SkinInstaller
             this.panel10.Size = new System.Drawing.Size(154, 38);
             this.panel10.TabIndex = 0;
             // 
+            // webBrowser2Test
+            // 
+            this.webBrowser2Test.AdditionalHeaders = null;
+            this.webBrowser2Test.Location = new System.Drawing.Point(50, 8);
+            this.webBrowser2Test.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser2Test.Name = "webBrowser2Test";
+            this.webBrowser2Test.Size = new System.Drawing.Size(39, 21);
+            this.webBrowser2Test.TabIndex = 1;
+            this.webBrowser2Test.Tag = true;
+            this.webBrowser2Test.Visible = false;
+            this.webBrowser2Test.BeforeNavigate2 += new System.EventHandler<SkinInstaller.BeforeNavigate2EventArgs>(this.webBrowser2_BeforeNavigate2);
+            this.webBrowser2Test.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser2Test_DocumentCompleted);
+            // 
             // button3CloseAd
             // 
             this.button3CloseAd.Location = new System.Drawing.Point(3, 6);
@@ -6132,94 +6233,6 @@ namespace SkinInstaller
             this.addFilesWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.addFilesWorker_DoWork);
             this.addFilesWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.addFilesWorker_ProgressChanged);
             this.addFilesWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.addFilesWorker_RunWorkerCompleted);
-            // 
-            // listView1
-            // 
-            this.listView1.AutoArrange = false;
-            this.listView1.CheckBoxes = true;
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader5,
-            this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader6,
-            this.columnHeader8,
-            this.columnHeader9,
-            this.columnHeader7});
-            this.listView1.ContextMenuStrip = this.dataBaseListMenuStrip1;
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.GridLines = true;
-            this.listView1.LargeImageList = this.imageList1;
-            this.listView1.Location = new System.Drawing.Point(18, 15);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(504, 266);
-            this.listView1.SmallImageList = this.imageList1;
-            this.listView1.TabIndex = 0;
-            this.listView1.TileSize = new System.Drawing.Size(2, 2);
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.ItemHover += new SkinInstaller.ListViewItemHover.ItemHoverEventHandler(this.listView1_ItemMouseHover);
-            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
-            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = " ";
-            this.columnHeader1.Width = 43;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Skin Title";
-            this.columnHeader2.Width = 190;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Author";
-            this.columnHeader5.Width = 100;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "File Count";
-            this.columnHeader3.Width = 69;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Installed";
-            this.columnHeader4.Width = 53;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "Added";
-            this.columnHeader6.Width = 67;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "Date and Time Added";
-            this.columnHeader8.Width = 0;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "Date and Time Installed";
-            this.columnHeader9.Width = 0;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "Character";
-            this.columnHeader7.Width = 90;
-            // 
-            // webBrowser2Test
-            // 
-            this.webBrowser2Test.AdditionalHeaders = null;
-            this.webBrowser2Test.Location = new System.Drawing.Point(50, 8);
-            this.webBrowser2Test.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser2Test.Name = "webBrowser2Test";
-            this.webBrowser2Test.Size = new System.Drawing.Size(39, 21);
-            this.webBrowser2Test.TabIndex = 1;
-            this.webBrowser2Test.Tag = true;
-            this.webBrowser2Test.Visible = false;
-            this.webBrowser2Test.BeforeNavigate2 += new System.EventHandler<SkinInstaller.BeforeNavigate2EventArgs>(this.webBrowser2_BeforeNavigate2);
-            this.webBrowser2Test.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser2Test_DocumentCompleted);
             // 
             // skinInstaller
             // 
