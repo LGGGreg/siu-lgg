@@ -32,6 +32,7 @@
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.checkBoxShowCharSelection = new System.Windows.Forms.CheckBox();
             this.checkBox1hideAddedFiles = new System.Windows.Forms.CheckBox();
             this.comboBox3overwriteFolder = new System.Windows.Forms.ComboBox();
             this.comboBox2overwriteSkin = new System.Windows.Forms.ComboBox();
@@ -57,7 +58,8 @@
             this.ProgramLa = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.checkBoxShowCharSelection = new System.Windows.Forms.CheckBox();
+            this.checkBox1forceDDSSize = new System.Windows.Forms.CheckBox();
+            this.checkBox2ForceDDSFormat = new System.Windows.Forms.CheckBox();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -74,7 +76,7 @@
             this.button1.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.button1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.button1.ForeColor = System.Drawing.SystemColors.ControlText;
-            this.button1.Location = new System.Drawing.Point(0, 603);
+            this.button1.Location = new System.Drawing.Point(0, 672);
             this.button1.Name = "button1";
             this.button1.Size = new System.Drawing.Size(294, 23);
             this.button1.TabIndex = 0;
@@ -105,7 +107,7 @@
             "Show Uninstall Warning for Starred Items"});
             this.checkedListBox1.Location = new System.Drawing.Point(0, 29);
             this.checkedListBox1.Name = "checkedListBox1";
-            this.checkedListBox1.Size = new System.Drawing.Size(294, 200);
+            this.checkedListBox1.Size = new System.Drawing.Size(294, 207);
             this.checkedListBox1.TabIndex = 1;
             this.checkedListBox1.SelectedIndexChanged += new System.EventHandler(this.checkedListBox1_SelectedIndexChanged);
             // 
@@ -125,12 +127,14 @@
             // 
             this.splitContainer1.Panel2.Controls.Add(this.checkedListBox1);
             this.splitContainer1.Panel2.Controls.Add(this.panel1);
-            this.splitContainer1.Size = new System.Drawing.Size(294, 603);
-            this.splitContainer1.SplitterDistance = 370;
+            this.splitContainer1.Size = new System.Drawing.Size(294, 672);
+            this.splitContainer1.SplitterDistance = 432;
             this.splitContainer1.TabIndex = 2;
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.checkBox2ForceDDSFormat);
+            this.panel3.Controls.Add(this.checkBox1forceDDSSize);
             this.panel3.Controls.Add(this.checkBoxShowCharSelection);
             this.panel3.Controls.Add(this.checkBox1hideAddedFiles);
             this.panel3.Controls.Add(this.comboBox3overwriteFolder);
@@ -156,15 +160,25 @@
             this.panel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel3.Location = new System.Drawing.Point(0, 22);
             this.panel3.Name = "panel3";
-            this.panel3.Size = new System.Drawing.Size(294, 348);
+            this.panel3.Size = new System.Drawing.Size(294, 410);
             this.panel3.TabIndex = 1;
+            // 
+            // checkBoxShowCharSelection
+            // 
+            this.checkBoxShowCharSelection.AutoSize = true;
+            this.checkBoxShowCharSelection.Location = new System.Drawing.Point(15, 366);
+            this.checkBoxShowCharSelection.Name = "checkBoxShowCharSelection";
+            this.checkBoxShowCharSelection.Size = new System.Drawing.Size(186, 17);
+            this.checkBoxShowCharSelection.TabIndex = 21;
+            this.checkBoxShowCharSelection.Text = "Show Character Selection Screen";
+            this.checkBoxShowCharSelection.UseVisualStyleBackColor = true;
             // 
             // checkBox1hideAddedFiles
             // 
             this.checkBox1hideAddedFiles.AutoSize = true;
-            this.checkBox1hideAddedFiles.Location = new System.Drawing.Point(149, 175);
+            this.checkBox1hideAddedFiles.Location = new System.Drawing.Point(149, 219);
             this.checkBox1hideAddedFiles.Name = "checkBox1hideAddedFiles";
-            this.checkBox1hideAddedFiles.Size = new System.Drawing.Size(126, 17);
+            this.checkBox1hideAddedFiles.Size = new System.Drawing.Size(127, 17);
             this.checkBox1hideAddedFiles.TabIndex = 20;
             this.checkBox1hideAddedFiles.Text = "Hide Added Files Info";
             this.checkBox1hideAddedFiles.UseVisualStyleBackColor = true;
@@ -176,7 +190,7 @@
             "Always Ask",
             "Always Yes",
             "Always No"});
-            this.comboBox3overwriteFolder.Location = new System.Drawing.Point(149, 292);
+            this.comboBox3overwriteFolder.Location = new System.Drawing.Point(149, 336);
             this.comboBox3overwriteFolder.Name = "comboBox3overwriteFolder";
             this.comboBox3overwriteFolder.Size = new System.Drawing.Size(121, 21);
             this.comboBox3overwriteFolder.TabIndex = 19;
@@ -188,7 +202,7 @@
             "Always Ask",
             "Always No",
             "Always Yes"});
-            this.comboBox2overwriteSkin.Location = new System.Drawing.Point(149, 269);
+            this.comboBox2overwriteSkin.Location = new System.Drawing.Point(149, 313);
             this.comboBox2overwriteSkin.Name = "comboBox2overwriteSkin";
             this.comboBox2overwriteSkin.Size = new System.Drawing.Size(121, 21);
             this.comboBox2overwriteSkin.TabIndex = 18;
@@ -200,7 +214,7 @@
             "Always Ask",
             "Always Don\'t",
             "Always Install"});
-            this.comboBox1installAfter.Location = new System.Drawing.Point(149, 245);
+            this.comboBox1installAfter.Location = new System.Drawing.Point(149, 289);
             this.comboBox1installAfter.Name = "comboBox1installAfter";
             this.comboBox1installAfter.Size = new System.Drawing.Size(121, 21);
             this.comboBox1installAfter.TabIndex = 17;
@@ -208,9 +222,9 @@
             // checkBox1hideTempDir
             // 
             this.checkBox1hideTempDir.AutoSize = true;
-            this.checkBox1hideTempDir.Location = new System.Drawing.Point(12, 175);
+            this.checkBox1hideTempDir.Location = new System.Drawing.Point(12, 219);
             this.checkBox1hideTempDir.Name = "checkBox1hideTempDir";
-            this.checkBox1hideTempDir.Size = new System.Drawing.Size(136, 17);
+            this.checkBox1hideTempDir.Size = new System.Drawing.Size(137, 17);
             this.checkBox1hideTempDir.TabIndex = 16;
             this.checkBox1hideTempDir.Text = "Hide Temp Dir Warning";
             this.checkBox1hideTempDir.UseVisualStyleBackColor = true;
@@ -222,7 +236,7 @@
             "Always Ask",
             "Always Yes",
             "Always No"});
-            this.comboBox1doneAdding.Location = new System.Drawing.Point(149, 221);
+            this.comboBox1doneAdding.Location = new System.Drawing.Point(149, 265);
             this.comboBox1doneAdding.Name = "comboBox1doneAdding";
             this.comboBox1doneAdding.Size = new System.Drawing.Size(121, 21);
             this.comboBox1doneAdding.TabIndex = 15;
@@ -230,7 +244,7 @@
             // label6
             // 
             this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(12, 297);
+            this.label6.Location = new System.Drawing.Point(12, 341);
             this.label6.Name = "label6";
             this.label6.Size = new System.Drawing.Size(90, 13);
             this.label6.TabIndex = 14;
@@ -239,7 +253,7 @@
             // label5
             // 
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(13, 273);
+            this.label5.Location = new System.Drawing.Point(13, 317);
             this.label5.Name = "label5";
             this.label5.Size = new System.Drawing.Size(82, 13);
             this.label5.TabIndex = 13;
@@ -248,7 +262,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(12, 250);
+            this.label4.Location = new System.Drawing.Point(12, 294);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(131, 13);
             this.label4.TabIndex = 12;
@@ -257,7 +271,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 224);
+            this.label3.Location = new System.Drawing.Point(12, 268);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(99, 13);
             this.label3.TabIndex = 11;
@@ -266,9 +280,9 @@
             // checkBox1graifcsGlow
             // 
             this.checkBox1graifcsGlow.AutoSize = true;
-            this.checkBox1graifcsGlow.Location = new System.Drawing.Point(128, 151);
+            this.checkBox1graifcsGlow.Location = new System.Drawing.Point(128, 195);
             this.checkBox1graifcsGlow.Name = "checkBox1graifcsGlow";
-            this.checkBox1graifcsGlow.Size = new System.Drawing.Size(100, 17);
+            this.checkBox1graifcsGlow.Size = new System.Drawing.Size(101, 17);
             this.checkBox1graifcsGlow.TabIndex = 10;
             this.checkBox1graifcsGlow.Text = "Draw Line Glow";
             this.checkBox1graifcsGlow.UseVisualStyleBackColor = true;
@@ -276,7 +290,7 @@
             // label2
             // 
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(29, 196);
+            this.label2.Location = new System.Drawing.Point(29, 240);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(82, 13);
             this.label2.TabIndex = 9;
@@ -285,10 +299,10 @@
             // trackBar1logostrenth
             // 
             this.trackBar1logostrenth.LargeChange = 25;
-            this.trackBar1logostrenth.Location = new System.Drawing.Point(117, 193);
+            this.trackBar1logostrenth.Location = new System.Drawing.Point(117, 237);
             this.trackBar1logostrenth.Maximum = 100;
             this.trackBar1logostrenth.Name = "trackBar1logostrenth";
-            this.trackBar1logostrenth.Size = new System.Drawing.Size(104, 40);
+            this.trackBar1logostrenth.Size = new System.Drawing.Size(104, 45);
             this.trackBar1logostrenth.SmallChange = 5;
             this.trackBar1logostrenth.TabIndex = 8;
             this.trackBar1logostrenth.TickFrequency = 25;
@@ -296,9 +310,9 @@
             // checkBox1drawLines
             // 
             this.checkBox1drawLines.AutoSize = true;
-            this.checkBox1drawLines.Location = new System.Drawing.Point(12, 151);
+            this.checkBox1drawLines.Location = new System.Drawing.Point(12, 195);
             this.checkBox1drawLines.Name = "checkBox1drawLines";
-            this.checkBox1drawLines.Size = new System.Drawing.Size(108, 17);
+            this.checkBox1drawLines.Size = new System.Drawing.Size(109, 17);
             this.checkBox1drawLines.TabIndex = 7;
             this.checkBox1drawLines.Text = "Draw Pretty Lines";
             this.checkBox1drawLines.UseVisualStyleBackColor = true;
@@ -306,9 +320,9 @@
             // checkBox1webIntegrate
             // 
             this.checkBox1webIntegrate.AutoSize = true;
-            this.checkBox1webIntegrate.Location = new System.Drawing.Point(12, 127);
+            this.checkBox1webIntegrate.Location = new System.Drawing.Point(12, 171);
             this.checkBox1webIntegrate.Name = "checkBox1webIntegrate";
-            this.checkBox1webIntegrate.Size = new System.Drawing.Size(184, 17);
+            this.checkBox1webIntegrate.Size = new System.Drawing.Size(185, 17);
             this.checkBox1webIntegrate.TabIndex = 6;
             this.checkBox1webIntegrate.Text = "Try to integrate with skin websites";
             this.checkBox1webIntegrate.UseVisualStyleBackColor = true;
@@ -332,7 +346,7 @@
             this.checkBox1fixDDS.AutoSize = true;
             this.checkBox1fixDDS.Location = new System.Drawing.Point(12, 102);
             this.checkBox1fixDDS.Name = "checkBox1fixDDS";
-            this.checkBox1fixDDS.Size = new System.Drawing.Size(169, 17);
+            this.checkBox1fixDDS.Size = new System.Drawing.Size(170, 17);
             this.checkBox1fixDDS.TabIndex = 4;
             this.checkBox1fixDDS.Text = "Fix Skin Textures with Format :";
             this.checkBox1fixDDS.UseVisualStyleBackColor = true;
@@ -342,7 +356,7 @@
             this.checkBox1sendstats.AutoSize = true;
             this.checkBox1sendstats.Location = new System.Drawing.Point(12, 78);
             this.checkBox1sendstats.Name = "checkBox1sendstats";
-            this.checkBox1sendstats.Size = new System.Drawing.Size(175, 17);
+            this.checkBox1sendstats.Size = new System.Drawing.Size(176, 17);
             this.checkBox1sendstats.TabIndex = 3;
             this.checkBox1sendstats.Text = "Send Anonymous Useage Stats";
             this.checkBox1sendstats.UseVisualStyleBackColor = true;
@@ -352,7 +366,7 @@
             this.checkBox1checkupdates.AutoSize = true;
             this.checkBox1checkupdates.Location = new System.Drawing.Point(12, 54);
             this.checkBox1checkupdates.Name = "checkBox1checkupdates";
-            this.checkBox1checkupdates.Size = new System.Drawing.Size(117, 17);
+            this.checkBox1checkupdates.Size = new System.Drawing.Size(118, 17);
             this.checkBox1checkupdates.TabIndex = 2;
             this.checkBox1checkupdates.Text = "Check For Updates";
             this.checkBox1checkupdates.UseVisualStyleBackColor = true;
@@ -362,7 +376,7 @@
             this.checkBox1autoReplace.AutoSize = true;
             this.checkBox1autoReplace.Location = new System.Drawing.Point(12, 30);
             this.checkBox1autoReplace.Name = "checkBox1autoReplace";
-            this.checkBox1autoReplace.Size = new System.Drawing.Size(250, 17);
+            this.checkBox1autoReplace.Size = new System.Drawing.Size(251, 17);
             this.checkBox1autoReplace.TabIndex = 1;
             this.checkBox1autoReplace.Text = "Auto Replace Duplicate Files On Database Add";
             this.checkBox1autoReplace.UseVisualStyleBackColor = true;
@@ -372,7 +386,7 @@
             this.checkBox1AddVerbose.AutoSize = true;
             this.checkBox1AddVerbose.Location = new System.Drawing.Point(12, 6);
             this.checkBox1AddVerbose.Name = "checkBox1AddVerbose";
-            this.checkBox1AddVerbose.Size = new System.Drawing.Size(189, 17);
+            this.checkBox1AddVerbose.Size = new System.Drawing.Size(190, 17);
             this.checkBox1AddVerbose.TabIndex = 0;
             this.checkBox1AddVerbose.Text = "Show Message Box on Every Error";
             this.checkBox1AddVerbose.UseVisualStyleBackColor = true;
@@ -413,22 +427,32 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Install Preferences";
             // 
-            // checkBoxShowCharSelection
+            // checkBox1forceDDSSize
             // 
-            this.checkBoxShowCharSelection.AutoSize = true;
-            this.checkBoxShowCharSelection.Location = new System.Drawing.Point(15, 322);
-            this.checkBoxShowCharSelection.Name = "checkBoxShowCharSelection";
-            this.checkBoxShowCharSelection.Size = new System.Drawing.Size(185, 17);
-            this.checkBoxShowCharSelection.TabIndex = 21;
-            this.checkBoxShowCharSelection.Text = "Show Character Selection Screen";
-            this.checkBoxShowCharSelection.UseVisualStyleBackColor = true;
+            this.checkBox1forceDDSSize.AutoSize = true;
+            this.checkBox1forceDDSSize.Location = new System.Drawing.Point(12, 125);
+            this.checkBox1forceDDSSize.Name = "checkBox1forceDDSSize";
+            this.checkBox1forceDDSSize.Size = new System.Drawing.Size(192, 17);
+            this.checkBox1forceDDSSize.TabIndex = 22;
+            this.checkBox1forceDDSSize.Text = "Force All Textures to Standard Size";
+            this.checkBox1forceDDSSize.UseVisualStyleBackColor = true;
+            // 
+            // checkBox2ForceDDSFormat
+            // 
+            this.checkBox2ForceDDSFormat.AutoSize = true;
+            this.checkBox2ForceDDSFormat.Location = new System.Drawing.Point(12, 148);
+            this.checkBox2ForceDDSFormat.Name = "checkBox2ForceDDSFormat";
+            this.checkBox2ForceDDSFormat.Size = new System.Drawing.Size(219, 17);
+            this.checkBox2ForceDDSFormat.TabIndex = 23;
+            this.checkBox2ForceDDSFormat.Text = "Force All Textures to be Standard Format";
+            this.checkBox2ForceDDSFormat.UseVisualStyleBackColor = true;
             // 
             // FullPreferencesForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(294, 626);
+            this.ClientSize = new System.Drawing.Size(294, 695);
             this.Controls.Add(this.splitContainer1);
             this.Controls.Add(this.button1);
             this.ForeColor = System.Drawing.SystemColors.ControlText;
@@ -480,5 +504,7 @@
         private System.Windows.Forms.ComboBox comboBox2overwriteSkin;
         private System.Windows.Forms.CheckBox checkBox1hideAddedFiles;
         private System.Windows.Forms.CheckBox checkBoxShowCharSelection;
+        private System.Windows.Forms.CheckBox checkBox2ForceDDSFormat;
+        private System.Windows.Forms.CheckBox checkBox1forceDDSSize;
 	}
 }

@@ -146,5 +146,11 @@
     <Setting Name="fixDDSFiles_1" Provider="SkinInstaller.PortableSettingsProvider" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">True</Value>
     </Setting>
+    <Setting Name="ddsResizeToSD" Provider="SkinInstaller.PortableSettingsProvider" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
+    <Setting Name="ddsForceRiotFormat" Provider="SkinInstaller.PortableSettingsProvider" Type="System.Boolean" Scope="User">
+      <Value Profile="(Default)">False</Value>
+    </Setting>
   </Settings>
 </SettingsFile>
