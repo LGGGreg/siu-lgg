@@ -32,6 +32,8 @@ namespace SkinInstaller
             this.checkBox1checkupdates.Checked = Properties.Settings.Default.checkForUpdates;
             this.checkBox1sendstats.Checked = Properties.Settings.Default.sendStats;
             this.checkBox1fixDDS.Checked = Properties.Settings.Default.fixDDSFiles_1;
+            this.checkBox1forceDDSSize.Checked = Properties.Settings.Default.ddsResizeToSD;
+            this.checkBox2ForceDDSFormat.Checked = Properties.Settings.Default.ddsForceRiotFormat;
             this.checkBox1webIntegrate.Checked = Properties.Settings.Default.webURLHandleing;
             this.checkBox1drawLines.Checked = Properties.Settings.Default.drawGraficsLines;
             this.checkBox1graifcsGlow.Checked = Properties.Settings.Default.graficsGlow;
@@ -114,6 +116,10 @@ namespace SkinInstaller
                 this.trackBar1logostrenth.Value;
             Properties.Settings.Default.dxFormat =
                 this.comboBox1dxFormat.Text;
+            Properties.Settings.Default.ddsResizeToSD =
+                this.checkBox1forceDDSSize.Checked;
+            Properties.Settings.Default.ddsForceRiotFormat =
+                this.checkBox2ForceDDSFormat.Checked;
 
             Properties.Settings.Default.ch3d =
                 checkedListBox1.GetItemChecked(0);

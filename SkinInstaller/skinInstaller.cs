@@ -7800,7 +7800,7 @@ namespace SkinInstaller
         {//Application.StartupPath + @"\st\" + str4 + @"\" + str5
             FileInfo fi_orig = new FileInfo(origination);
             FileInfo fi_dest = new FileInfo(destination);
-            if (fi_orig.Extension == ".dds" && Properties.Settings.Default.fixDDSFiles_1)
+            if (fi_orig.Extension == ".dds" && (Properties.Settings.Default.ddsResizeToSD || Properties.Settings.Default.ddsForceRiotFormat))
             {
                 Dictionary<string, int> origonalInfo = commonOps.readDDSInfoNvidia(fi_orig.FullName);
                 int origFile_dxtv = origonalInfo["dxtv"];
@@ -7867,12 +7867,27 @@ namespace SkinInstaller
                         {
                             if ((origFile_width != newFile_width) || (origFile_height != newFile_height))
                             {
-                                bb = commonOps.ResizeImage(bb, new System.Drawing.Size(newFile_width, newFile_height));
+                                if(Properties.Settings.Default.ddsResizeToSD)
+                                {
 
-                                debugadd(destination + " was saved correctly from dim " + origFile_width.ToString() + " x "+origFile_height.ToString() +
+                                
+                                    bb = commonOps.ResizeImage(bb, new System.Drawing.Size(newFile_width, newFile_height));
+
+                                    debugadd(destination + " was saved correctly from dim " + origFile_width.ToString() + " x "+origFile_height.ToString() +
                                     " to what the origonal riot file is at dim " + newFile_width.ToString()+" x "+newFile_height.ToString());
+                                }
                             }
-                            if (LGGImageSave(bb, destination, newFile_dxtv, newFile_mipMaps, newFile_bitCount))
+                            int dest_dxtv = origFile_dxtv;
+                            int dest_mipMaps = origFile_mipMaps;
+                            int dest_bitCount = origFile_bitCount;
+                            if(Properties.Settings.Default.ddsForceRiotFormat)
+                            {
+                                dest_dxtv=newFile_dxtv;
+                                dest_mipMaps = newFile_mipMaps;
+                                dest_bitCount = newFile_bitCount;
+                            }
+
+                            if (LGGImageSave(bb, destination, dest_dxtv, dest_mipMaps,dest_bitCount))
                             {
                                 debugadd(destination + " was saved correctly from dxt "+origFile_dxtv.ToString()+" to what the origonal riot file is at dxt "+newFile_dxtv.ToString());
                             }

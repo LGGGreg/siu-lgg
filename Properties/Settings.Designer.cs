@@ -646,5 +646,31 @@ namespace SkinInstaller.Properties {
                 this["fixDDSFiles_1"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(SkinInstaller.PortableSettingsProvider))]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ddsResizeToSD {
+            get {
+                return ((bool)(this["ddsResizeToSD"]));
+            }
+            set {
+                this["ddsResizeToSD"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(SkinInstaller.PortableSettingsProvider))]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool ddsForceRiotFormat {
+            get {
+                return ((bool)(this["ddsForceRiotFormat"]));
+            }
+            set {
+                this["ddsForceRiotFormat"] = value;
+            }
+        }
     }
 }
