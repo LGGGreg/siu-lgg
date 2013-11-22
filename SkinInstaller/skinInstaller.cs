@@ -396,6 +396,8 @@ namespace SkinInstaller
         private ToolStripMenuItem deleteBackupsToolStripMenuItem;
         private ToolStripMenuItem viewDXTVersionsToolStripMenuItem;
         private BackgroundWorker addFilesWorker;
+        private Button button3FixCrashAfterPatch;
+        private BackgroundWorker patchFixerWorker;
 
         TreeNode database = new TreeNode("dbRoot");
         #endregion
@@ -846,6 +848,10 @@ namespace SkinInstaller
         public void loadNameReplacements()
         {
             charFixs = new Dictionary<string, string>();
+
+            //hud fix
+            charFixs.Add("hudatlas2.tga", "hudatlas.tga");
+
             charFixs.Add("chemicalman", "singed");
             //f rammus man
             charFixs.Add("\\armordillo_", "\\rammus");
@@ -4173,7 +4179,7 @@ namespace SkinInstaller
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(skinInstaller));
-            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
+            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
             this.exit = new System.Windows.Forms.Button();
             this.skinFile = new System.Windows.Forms.OpenFileDialog();
             this.helpBar = new System.Windows.Forms.StatusStrip();
@@ -4336,6 +4342,7 @@ namespace SkinInstaller
             this.label5 = new System.Windows.Forms.Label();
             this.pictureBoxCount = new System.Windows.Forms.PictureBox();
             this.panel7 = new System.Windows.Forms.Panel();
+            this.button3FixCrashAfterPatch = new System.Windows.Forms.Button();
             this.progrespanel = new System.Windows.Forms.Panel();
             this.label2Percent = new System.Windows.Forms.Label();
             this.buttoncancel = new System.Windows.Forms.Button();
@@ -4366,6 +4373,7 @@ namespace SkinInstaller
             this.webBrowser2Test = new SkinInstaller.ExtendedWebBrowser();
             this.button3CloseAd = new System.Windows.Forms.Button();
             this.addFilesWorker = new System.ComponentModel.BackgroundWorker();
+            this.patchFixerWorker = new System.ComponentModel.BackgroundWorker();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -5437,11 +5445,11 @@ namespace SkinInstaller
             this.treeView1.ItemHeight = 16;
             this.treeView1.Location = new System.Drawing.Point(0, 0);
             this.treeView1.Name = "treeView1";
-            treeNode1.Name = "Please Wait";
-            treeNode1.Text = "Please wait for the progress bar to finish loading bellow...";
-            treeNode1.ToolTipText = "Please wait...";
+            treeNode3.Name = "Please Wait";
+            treeNode3.Text = "Please wait for the progress bar to finish loading bellow...";
+            treeNode3.ToolTipText = "Please wait...";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode1});
+            treeNode3});
             this.treeView1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.treeView1.ShowNodeToolTips = true;
             this.treeView1.Size = new System.Drawing.Size(685, 283);
@@ -5997,6 +6005,7 @@ namespace SkinInstaller
             // 
             // panel7
             // 
+            this.panel7.Controls.Add(this.button3FixCrashAfterPatch);
             this.panel7.Controls.Add(this.progrespanel);
             this.panel7.Controls.Add(this.button3startLoL);
             this.panel7.Controls.Add(this.button3lcintegrate);
@@ -6009,6 +6018,16 @@ namespace SkinInstaller
             this.panel7.Name = "panel7";
             this.panel7.Size = new System.Drawing.Size(886, 54);
             this.panel7.TabIndex = 42;
+            // 
+            // button3FixCrashAfterPatch
+            // 
+            this.button3FixCrashAfterPatch.Location = new System.Drawing.Point(392, 3);
+            this.button3FixCrashAfterPatch.Name = "button3FixCrashAfterPatch";
+            this.button3FixCrashAfterPatch.Size = new System.Drawing.Size(132, 23);
+            this.button3FixCrashAfterPatch.TabIndex = 45;
+            this.button3FixCrashAfterPatch.Text = "Fix Crashes after Patch";
+            this.button3FixCrashAfterPatch.UseVisualStyleBackColor = true;
+            this.button3FixCrashAfterPatch.Click += new System.EventHandler(this.button3FixCrashAfterPatch_Click);
             // 
             // progrespanel
             // 
@@ -6233,6 +6252,13 @@ namespace SkinInstaller
             this.addFilesWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.addFilesWorker_DoWork);
             this.addFilesWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.addFilesWorker_ProgressChanged);
             this.addFilesWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.addFilesWorker_RunWorkerCompleted);
+            // 
+            // patchFixerWorker
+            // 
+            this.patchFixerWorker.WorkerReportsProgress = true;
+            this.patchFixerWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.patchFixerWorker_DoWork);
+            this.patchFixerWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.patchFixerWorker_ProgressChanged);
+            this.patchFixerWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.patchFixerWorker_RunWorkerCompleted);
             // 
             // skinInstaller
             // 
@@ -7191,6 +7217,7 @@ namespace SkinInstaller
                 )
             {
                 this.UpdateFileList();
+                
             }
             else
             {
@@ -7430,10 +7457,10 @@ namespace SkinInstaller
                     {
                         fileExtensions.Add(fileInfo.Extension);
                     }
-                    string text2 = fileInfo.FullName.ToLower();
-                    string relativePath = text2.Substring(baseDir.Length - 1);
-                    string text3 = fileInfo.Name.ToLower();
-                    string text4 = text3 + "|" + relativePath.Replace("\\", "\\\\");
+                    string lowerFirstName = fileInfo.FullName.ToLower();
+                    string relativePath = lowerFirstName.Substring(baseDir.Length - 1);
+                    string lowerName = fileInfo.Name.ToLower();
+                    string text4 = lowerName + "|" + relativePath.Replace("\\", "\\\\");
                     int depth = (relativePath.Split('\\')).Length;
                     if (depth <= 2) flag = true;
 
@@ -10526,6 +10553,127 @@ namespace SkinInstaller
                 String backupDir = Application.StartupPath + @"\backup\";
                 SIFileOp.DirectoryDelete(backupDir,true);
             }
+        }
+
+        private void button3FixCrashAfterPatch_Click(object sender, EventArgs e)
+        {
+            if (Cliver.Message.Show("Are you sure?",
+                                SystemIcons.Information,
+                                "This process will attempt to repair LoL to a working state after a patch\r\n" +
+                                "You do not need to run this if a LoL Patch has not happened.\r\n"+
+                                "Sometimes even without removing your skins (You can always press install again if you need to\r\n"+
+                "\r\nDo not install any skins untill the progress bar completes\r\n\r\nAre you sure you want to do this now?",
+                                0, new string[2] { "Yes", "Not Now" }) == 0)
+            {
+
+                if (patchFixerWorker.IsBusy)
+                {
+                    Cliver.Message.Show("Already fixing!", SystemIcons.Error,
+                    "We are already fixing the lol patch, please watch the progress bar bellow."
+                    , 0, new string[1] { "Ok", });
+                    return;
+                }
+                patchFixerWorker.RunWorkerAsync();
+            }
+
+        }
+
+        private void patchFixerWorker_DoWork(object sender, DoWorkEventArgs e)
+        {
+            string[] files = Directory.GetFiles(gameDirectory, "*.raf.dat", SearchOption.AllDirectories);
+            //		[0]	"C:\\Riot Games\\League of Legends\\RADS\\projects\\lol_game_client\\filearchives\\0.0.0.99\\Archive_155085344.raf.dat"	string
+            Dictionary<int, RAFArchive> rafs = new Dictionary<int, RAFArchive>();
+
+            foreach (string file in files)
+            {
+                Regex r1 = new Regex(@"\\(\d+\.\d+\.\d+\.\d+)\\");
+                Match match = r1.Match(file);
+                string versionString = "";
+                if (match.Success)
+                {
+                    int version = 0;
+                    versionString = match.Groups[1].Value;
+                    string[] parts = versionString.Split(new string[1] { "." }, StringSplitOptions.RemoveEmptyEntries);
+                    foreach (string part in parts)
+                    {
+                        int innerV = 0;
+                        int.TryParse(part, out innerV);
+                        version += innerV;
+                    }
+                    string rafFile = file.Substring(0, file.Length - 4);
+                    if (File.Exists(rafFile))
+                    {
+                        RAFArchive raf = new RAFArchive(rafFile);
+                        rafs.Add(version, raf);
+                    }
+
+                }
+                
+            }
+            List<string> notSames = new List<string>();
+            RelManDirectoryFile rmdf = RelManDirectoryFile.RelManDirectoryFileFromRiotRoot(gameDirectory);
+            int inc = 0;
+            int count = rmdf.fileList.fileEntries.Count;
+            int lastP = -1;
+            int entriesFixed = 0;
+            foreach (RelFileEntry entry in rmdf.fileList.fileEntries)
+            {
+                int percent = (int)Math.Floor((double)inc++ / (double)(count + 1) * (double)100.0);
+                if (lastP != percent)
+                {
+                    lastP = percent;
+                    patchFixerWorker.ReportProgress(percent);
+                }
+                if (entry.folder == null) continue;
+                if (entry.folder.name == "") continue;
+                int version = (int)entry.version;
+                string rmdfPath = entry.getPathAndName().Substring(1);
+                if (rafs.ContainsKey(version))
+                {
+                    RAFArchive raf = rafs[version];
+                    RAFFileListEntry rafEntry = raf.GetDirectoryFile().GetFileList().GetFileEntry(rmdfPath);
+                    if (rafEntry != null)
+                    {
+                        int rafFileSize = (int)rafEntry.FileSize;
+                        int rmdfFileSizeCompressed = (int)entry.compressedFileSize;
+                        int rmdfFileSizeUncompressed = (int)entry.uncompressedFileSize;
+                        if (rafFileSize != rmdfFileSizeCompressed && rafFileSize != rmdfFileSizeUncompressed)
+                        {
+                            string debugInfo = entry.getPathAndName().ToString() + " does not match.";
+                            notSames.Add(debugInfo);
+                            debugadd(debugInfo);
+                            int uncompressedRafSize = rafEntry.GetContent().Length;
+                            entry.uncompressedFileSize = (UInt32)uncompressedRafSize;
+                            entry.compressedFileSize = (UInt32)rafFileSize;
+                            entriesFixed++;
+                        }
+                    }
+
+                }
+            }
+            foreach (KeyValuePair<int,RAFArchive> rafEntry in rafs)
+            {
+                rafEntry.Value.GetDataFileContentStream().Close();
+            }
+            rmdf.saveFile();
+            e.Result = entriesFixed;
+
+        }
+
+        private void patchFixerWorker_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            UpdateProgressSafe(e.ProgressPercentage);
+        }
+
+        private void patchFixerWorker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            int numFixed = (int)e.Result;
+            Cliver.Message.Show("Fix Complete", SystemIcons.Information,
+                "We fixed "+numFixed.ToString()+ " files!"+
+                    "Please test lol, it should not crash because of a patch any more.\r\n\r\n"+
+                    "Please note this process only fixes crashes caused by a patch\r\nInvalid skins can still crash LoL, and will need to be uninstalled."
+                    , 0, new string[1] { "Ok", });
+            UpdateProgressSafe(100);
         }
 
 
