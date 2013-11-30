@@ -125,6 +125,7 @@ namespace SkinInstaller
         private Point openedAt;
         private static List<string> fileExtensions = new List<string>();
         private static List<string> fileList = new List<string>();
+        private Dictionary<string, List<string>> excludedFiles = new Dictionary<string, List<string>>();
         private static long fileSize = 0L;
         private static string baseDir;
         //other
@@ -398,6 +399,8 @@ namespace SkinInstaller
         private BackgroundWorker addFilesWorker;
         private Button button3FixCrashAfterPatch;
         private BackgroundWorker patchFixerWorker;
+        private ToolStripMenuItem createDesktopShortcutToolStripMenuItem;
+        private ToolStripMenuItem associateFilesToolStripMenuItem;
 
         TreeNode database = new TreeNode("dbRoot");
         #endregion
@@ -425,6 +428,7 @@ namespace SkinInstaller
                 Directory.CreateDirectory(dir);
             }
             bool addItFlag = false;
+            bool addItFileFlag = false;
             List<String> files = new List<string>();
             //Cliver.Message.Inform("got args to proc " + args);
             //got args to proc --webArgs|--url|skininstallerultimatelgg://test/||
@@ -542,8 +546,24 @@ namespace SkinInstaller
                         debugadd(ex1.ToString());
                     }
                 }
+                else if (part.Contains("--file"))
+                {
+                    if (i++ < parts.Length - 1)
+                    {
+                        part = parts[i].Trim();
+                    }
+                    files.Add(part);
+                    addItFileFlag = true;
+
+                }
+                else if (File.Exists(part))
+                {
+                    files.Add(part);
+                    addItFileFlag = true;
+                }
                 else if (part == "")
                 {
+
                 }
                 else
                 {
@@ -555,17 +575,19 @@ namespace SkinInstaller
             {
                 {
                     //checked, ok
-                    processNewDirectory(files.ToArray());
+                    processNewDirectory(files.ToArray(),addItFlag||addItFileFlag);
                 }
-                if (addItFlag)
+                /*if (addItFlag||addItFileFlag)
                 {
                     int setDone = Properties.Settings.Default.optionDoneAdding;
                     if (setDone == -1)
                     {
                         bool saveFlag = false;
+                        string msgPart1 = "We have just added the files you downloaded from the website to the list of files\r\n";
+                        if (addItFileFlag) msgPart1 = "We have added the files to the list in SIU ";
                         setDone = Cliver.Message.Show("Done Adding files?",
                                 SystemIcons.Information, out saveFlag,
-                                "We have just added the files you downloaded from the website to the list of files\r\n"
+                             msgPart1
                             + "that will be part of your skin, do you have more files to add?\r\n"
                             + "or are you ready to finalize this skin and add it to the database?",
                                 0, new string[2] { "I am done adding files, finalize this skin.", "I am not done yet." });
@@ -581,7 +603,7 @@ namespace SkinInstaller
                             //they are done, install skin
                             button1.PerformClick();                    
                     }
-                }
+                }*/
             }
         }
         protected override void WndProc(ref Message m)
@@ -675,7 +697,34 @@ namespace SkinInstaller
             this.argsToProc = args;  
             
         }
-
+        private void registerFiles()
+        {
+            Microsoft.Win32.RegistryKey yurixy = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".yurixyworks");
+            bool runReg = false;
+            if (yurixy == null)
+            {
+                runReg = true;
+            }else
+            {
+                string val = yurixy.GetValue("").ToString();
+                if (val!= "siulggyurixyworks")
+                {
+                    runReg = true;
+                }
+            }
+            if(runReg)
+            {
+                Process process = new Process();
+                process.StartInfo.FileName = "sai.exe";
+                process.StartInfo.Arguments = "";
+                //process.StartInfo.UseShellExecute = false;
+                //process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                //process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.WorkingDirectory = Application.StartupPath;
+                process.Start();
+                process.WaitForExit();
+            }
+        }
         private void skinInstaller_Load(object sender, EventArgs e)
         {
 #if(USkin)
@@ -689,7 +738,10 @@ namespace SkinInstaller
 #endif
             doBrowser(Properties.Settings.Default.showAds);
             loadNameReplacements();
+            loadExcludedFiles();
             UpdateProgressSafe(0);
+            registerFiles();
+
             if (Application.StartupPath.Length > 63)
             {
                 Cliver.Message.Inform("The path that this program is running from\n\"" +
@@ -851,6 +903,8 @@ namespace SkinInstaller
 
             //hud fix
             charFixs.Add("hudatlas2.tga", "hudatlas.tga");
+
+            charFixs.Add("\\wallofgrass.dds", "\\brush_sr.dds");
 
             charFixs.Add("chemicalman", "singed");
             //f rammus man
@@ -1636,6 +1690,12 @@ namespace SkinInstaller
             
             addFilesWorker.RunWorkerAsync(params1);
         }
+        private string add_0_toName(string inName)
+        {
+            int extensionLocation = inName.LastIndexOf(".");
+            inName = inName.Insert(extensionLocation, "_0");
+            return inName;
+        }
         private void processNewDirectoryWork(string[] origonalInputFiles)
         {
             //addFilesPanel.BackColor = System.Drawing.SystemColors.Control;
@@ -1782,19 +1842,28 @@ namespace SkinInstaller
                     FileInfo fiold = new FileInfo(oldFullNameAndPath);
                     FileInfo finew = new FileInfo(newFullNameAndPath);
                     String mixedNewPathOldName = finew.DirectoryName + "\\" + fiold.Name;
+                    String newPathWith0 = add_0_toName(newFullNameAndPath);
+                    String mixedPathWith0 = add_0_toName(mixedNewPathOldName);
+
                     //String mixedOldPathNewName = fiold.DirectoryName + "\\" + finew.Name;
 
                     fileLocReturn namePath = this.FileNameToLocation(newFullNameAndPath, true,null);//try new names first
                     if (!namePath.valid)
                     {
-                        namePath = this.FileNameToLocation(mixedNewPathOldName, true,namePath.moreOptions);
+                        namePath = this.FileNameToLocation(mixedNewPathOldName, true, namePath.moreOptions);
+                    } if (!namePath.valid)
+                    {
+                        namePath = this.FileNameToLocation(newPathWith0, true, namePath.moreOptions);
+                    } if (!namePath.valid)
+                    {
+                        namePath = this.FileNameToLocation(mixedPathWith0, true, namePath.moreOptions);
                     }
                     //fileName = this.FileNameToLocation(brokenUpPathWithFileName[brokenUpPathWithFileName.Length - 1], false,true);
                     if (!namePath.valid)//foldername == null || fileName == null)
                     {
                         //fix names here armodillo_ to rammus folder
                         //String newfullNameAndPath = this.fixRiotv40Name(fullNameAndPath);
-                        namePath = this.FileNameToLocation(oldFullNameAndPath, false,namePath.moreOptions);
+                        namePath = this.FileNameToLocation(oldFullNameAndPath, false, namePath.moreOptions);
 
                     }
                     if (!namePath.valid  && (namePath.moreOptions!=null))
@@ -3210,7 +3279,7 @@ namespace SkinInstaller
                 List<installFileInfo> filteredFileInfo = new List<installFileInfo>(); 
                 foreach (string skinFileName in files)
                 {
-                    int percent = (int)Math.Floor(((double)fn++ / (double)files.Length) * 100.0);
+                    int percent = (int)Math.Floor(((double)fn++ / (double)files.Length) * 10.0);
                     installWorker2.ReportProgress(percent, "Installing file " + fn.ToString() + " of " + files.Length.ToString() + " :: " + skinFileName);
 
                     string[] folderNames = skinFileName.Split(new char[] { '\\' });
@@ -3782,8 +3851,11 @@ namespace SkinInstaller
         }
         private void fileCopyFiles(ref List<installFileInfo> filteredFileInfo)
         {
+            int fn = 0;
             foreach (installFileInfo installInfo in filteredFileInfo)
             {
+                int percent = (int)Math.Floor(((double)fn++ / (double)filteredFileInfo.Count) * 90.0)+10;
+                installWorker2.ReportProgress(percent, "Installing file " + fn.ToString() + " of " + filteredFileInfo.Count.ToString() + " :: " + installInfo.fileName);
 
                 if (installInfo.getFileNamePath().Contains(".raf"))
                 {
@@ -4179,7 +4251,7 @@ namespace SkinInstaller
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(skinInstaller));
-            System.Windows.Forms.TreeNode treeNode3 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
+            System.Windows.Forms.TreeNode treeNode1 = new System.Windows.Forms.TreeNode("Please wait for the progress bar to finish loading bellow...");
             this.exit = new System.Windows.Forms.Button();
             this.skinFile = new System.Windows.Forms.OpenFileDialog();
             this.helpBar = new System.Windows.Forms.StatusStrip();
@@ -4307,6 +4379,7 @@ namespace SkinInstaller
             this.editAllPreferencesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.checkForUpdateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.registerAppForWebUrlsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.createDesktopShortcutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.debugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.moreDebugToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getVersionFilePathToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -4374,6 +4447,7 @@ namespace SkinInstaller
             this.button3CloseAd = new System.Windows.Forms.Button();
             this.addFilesWorker = new System.ComponentModel.BackgroundWorker();
             this.patchFixerWorker = new System.ComponentModel.BackgroundWorker();
+            this.associateFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -5445,11 +5519,11 @@ namespace SkinInstaller
             this.treeView1.ItemHeight = 16;
             this.treeView1.Location = new System.Drawing.Point(0, 0);
             this.treeView1.Name = "treeView1";
-            treeNode3.Name = "Please Wait";
-            treeNode3.Text = "Please wait for the progress bar to finish loading bellow...";
-            treeNode3.ToolTipText = "Please wait...";
+            treeNode1.Name = "Please Wait";
+            treeNode1.Text = "Please wait for the progress bar to finish loading bellow...";
+            treeNode1.ToolTipText = "Please wait...";
             this.treeView1.Nodes.AddRange(new System.Windows.Forms.TreeNode[] {
-            treeNode3});
+            treeNode1});
             this.treeView1.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.treeView1.ShowNodeToolTips = true;
             this.treeView1.Size = new System.Drawing.Size(685, 283);
@@ -5669,7 +5743,8 @@ namespace SkinInstaller
             this.updateFileListToolStripMenuItem,
             this.editAllPreferencesToolStripMenuItem,
             this.checkForUpdateToolStripMenuItem,
-            this.registerAppForWebUrlsToolStripMenuItem});
+            this.registerAppForWebUrlsToolStripMenuItem,
+            this.createDesktopShortcutToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -5717,6 +5792,13 @@ namespace SkinInstaller
             this.registerAppForWebUrlsToolStripMenuItem.Text = "Register App For WebUrls";
             this.registerAppForWebUrlsToolStripMenuItem.Click += new System.EventHandler(this.registerAppForWebUrlsToolStripMenuItem_Click);
             // 
+            // createDesktopShortcutToolStripMenuItem
+            // 
+            this.createDesktopShortcutToolStripMenuItem.Name = "createDesktopShortcutToolStripMenuItem";
+            this.createDesktopShortcutToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.createDesktopShortcutToolStripMenuItem.Text = "Create Desktop Shortcut";
+            this.createDesktopShortcutToolStripMenuItem.Click += new System.EventHandler(this.createDesktopShortcutToolStripMenuItem_Click);
+            // 
             // debugToolStripMenuItem
             // 
             this.debugToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -5753,7 +5835,8 @@ namespace SkinInstaller
             this.readVersionsToolStripMenuItem,
             this.clientLocationToolStripMenuItem,
             this.getLastModDateToolStripMenuItem,
-            this.viewDXTVersionsToolStripMenuItem});
+            this.viewDXTVersionsToolStripMenuItem,
+            this.associateFilesToolStripMenuItem});
             this.moreDebugToolStripMenuItem.Name = "moreDebugToolStripMenuItem";
             this.moreDebugToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
             this.moreDebugToolStripMenuItem.Text = "More Debug";
@@ -6260,6 +6343,13 @@ namespace SkinInstaller
             this.patchFixerWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.patchFixerWorker_ProgressChanged);
             this.patchFixerWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.patchFixerWorker_RunWorkerCompleted);
             // 
+            // associateFilesToolStripMenuItem
+            // 
+            this.associateFilesToolStripMenuItem.Name = "associateFilesToolStripMenuItem";
+            this.associateFilesToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.associateFilesToolStripMenuItem.Text = "Associate Files";
+            this.associateFilesToolStripMenuItem.Click += new System.EventHandler(this.associateFilesToolStripMenuItem_Click);
+            // 
             // skinInstaller
             // 
             this.AllowDrop = true;
@@ -6402,7 +6492,8 @@ namespace SkinInstaller
                             //allFiles[allFilesCt - 1, 1] = strArray[1];
                             //allFilesCt++;
                             //allFilesDic.Add(strArray[0], strArray[1]);
-                            allFilesList.Add(new KeyValuePair<string, string>(strArray[0], strArray[1]));
+                            if(isNotAnExcludedFile(strArray[0],strArray[1]))
+                                allFilesList.Add(new KeyValuePair<string, string>(strArray[0], strArray[1]));
                         }
                     }
                 }
@@ -6420,6 +6511,39 @@ namespace SkinInstaller
             setInstallButtons(true);
             ted = new TextEditor.TextEditorMain(getMenuFilePath(false));      
 
+        }
+        private void loadExcludedFiles()
+        {
+            excludedFiles.Clear();
+            List<string> armsmaster_square = new List<string>();
+            armsmaster_square.Add("\\data\\characters\\malphite\\info\\armsmaster_square.dds");
+            armsmaster_square.Add("\\data\\characters\\shen\\info\\armsmaster_square.dds");
+            excludedFiles.Add("armsmaster_square.dds", armsmaster_square);
+
+
+            List<string> armsmaster_circle = new List<string>();
+            armsmaster_circle.Add("\\data\\characters\\malphite\\info\\armsmaster_circle.dds");
+            armsmaster_circle.Add("\\data\\characters\\shen\\info\\armsmaster_circle.dds");
+            excludedFiles.Add("armsmaster_circle.dds", armsmaster_circle);
+
+            List<string> annieLoadScreen = new List<string>();
+            annieLoadScreen.Add("\\data\\characters\\lux\\annieloadscreen.dds");
+            excludedFiles.Add("annieloadscreen.dds", annieLoadScreen);
+        }
+        private bool isNotAnExcludedFile(string fileName, string filePath)
+        {
+            if(excludedFiles.ContainsKey(fileName.ToLower()))
+            {
+                
+                foreach (string badPaths in excludedFiles[fileName.ToLower()])
+                {                    
+                    if (filePath.ToLower().Replace("\\\\","\\").Contains(badPaths.ToLower()))
+                    {
+                        return false;
+                    }
+                }
+            }
+            return true;
         }
         private void tabControl1_DrawItem(object sender, DrawItemEventArgs e)
         {
@@ -7589,7 +7713,7 @@ namespace SkinInstaller
                     "\r\nThis probably means that this program needs administrator rights.." +
                     "\r\nTry closing this program, then start it up again, but this time, do" +
                     "\r\nRight Click-> Run as Administrator" +
-                    "\r\nIf this does not fix the issue, try moving this program to a diferent directory,\r\nlike inside your documents folder");
+                    "\r\nIf this does not fix the issue, try moving this program to a different directory,\r\nlike inside your documents folder");
             }
 
             //SIFileOp.FileCopy(Application.StartupPath+"\\allfiles_temp.ini",Application.StartupPath+ "\\allfiles.ini");
@@ -10674,6 +10798,43 @@ namespace SkinInstaller
                     "Please note this process only fixes crashes caused by a patch\r\nInvalid skins can still crash LoL, and will need to be uninstalled."
                     , 0, new string[1] { "Ok", });
             UpdateProgressSafe(100);
+        }
+
+        private void createDesktopShortcutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+
+            using (StreamWriter writer = new StreamWriter(deskDir + "\\" + "Skin Installer Ultimate" + ".url"))
+            {
+                string app = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                writer.WriteLine("[InternetShortcut]");
+                writer.WriteLine("URL=file:///" + app);
+                writer.WriteLine("IconIndex=0");
+                string icon = app.Replace('\\', '/');
+                writer.WriteLine("IconFile=" + icon);
+                writer.Flush();
+            }
+            Cliver.Message.Show("Shortcut created on desktop", SystemIcons.Information,
+                "The Shortcut \n\"Skin Installer Ultimate\" \nhas been created on your desktop at\n" + deskDir
+                    , 0, new string[1] { "Ok", });
+        }
+
+        private void associateFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Microsoft.Win32.RegistryKey yurixy = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(".yurixyworksa");
+            if (yurixy == null)
+            {
+                Process process = new Process();
+                process.StartInfo.FileName = "sai.exe";
+                process.StartInfo.Arguments = "";
+                //process.StartInfo.UseShellExecute = false;
+                //process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                //process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.WorkingDirectory = Application.StartupPath;
+                process.Start();
+                process.WaitForExit();
+            }
+            
         }
 
 
