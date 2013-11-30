@@ -151,6 +151,7 @@ namespace SIU_Publish
             toReturn.Add("nocompress.txt");
             toReturn.Add("sai.exe");
             toReturn.Add("wLib.dll");
+            toReturn.Add("YuixyIcon.ico");
             toReturn.Add("zlib.net.dll");
             return toReturn;
         }

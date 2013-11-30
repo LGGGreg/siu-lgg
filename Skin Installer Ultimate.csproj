@@ -257,8 +257,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
@@ -273,6 +273,10 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Yurixy.ico" />
+    <Content Include="YuixyIcon.ico">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <None Include="fsb\ext.bat">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
