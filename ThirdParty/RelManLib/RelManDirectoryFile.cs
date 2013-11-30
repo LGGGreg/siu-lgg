@@ -8,6 +8,7 @@ using ItzWarty;
 using System.IO;
 using System.Threading;
 using System.Globalization;
+using System.Text.RegularExpressions;
 
 namespace RelManLib
 {
@@ -192,24 +193,37 @@ namespace RelManLib
                     if (File.Exists(path + "/lol.launcher.exe") || File.Exists(path + "/League Of Legends.exe"))
                     {
                         //found riot folder
-
+                        string winnerName = "";
+                        int winnerTotal = 0;
                         DirectoryInfo di = new DirectoryInfo(path + "/RADS/projects/lol_game_client/releases");
                         if(di.Exists)
                         {
                             DirectoryInfo[] versionFolders = di.GetDirectories();
                             foreach (DirectoryInfo idi in versionFolders)
                             {
-                                //find the SOK
-                                FileInfo sokfi = new FileInfo(idi.FullName + "/S_OK");
-                                if (sokfi.Exists)
+                                string[] versions = idi.Name.Split('.');
+                                int total = 0;
+                                int multiplier = 1;
+                                for (int ii = versions.Length - 1; ii >= 0; ii--)
                                 {
-                                    FileInfo rmfi = new FileInfo(idi.FullName + "/releasemanifest");
-                                    if (rmfi.Exists)
-                                    {
-                                        return new RelManDirectoryFile(rmfi.FullName);
-                                    }
+                                    int vA = int.Parse(versions[ii].Trim());
+                                    total += (vA * multiplier);
+                                    multiplier += 500;
                                 }
+                                if (total > winnerTotal)
+                                {
+                                    winnerName = idi.FullName;
+                                    winnerTotal = total;
+                                }                                
                             }
+                               
+                            FileInfo rmfi = new FileInfo(winnerName + "/releasemanifest");
+                            if (rmfi.Exists)
+                            {
+                                return new RelManDirectoryFile(rmfi.FullName);
+                            
+                            }
+                            
                         }
                     }else if(File.Exists(path + "/releasemanifest"))
                     {

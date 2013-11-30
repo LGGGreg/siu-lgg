@@ -7244,6 +7244,41 @@ namespace SkinInstaller
             PartRef.ParticleReference p = new PartRef.ParticleReference();
             p.Show();
         }
+        private void createDesktopShortcutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
+
+            using (StreamWriter writer = new StreamWriter(deskDir + "\\" + "Skin Installer Ultimate" + ".url"))
+            {
+                string app = System.Reflection.Assembly.GetExecutingAssembly().Location;
+                writer.WriteLine("[InternetShortcut]");
+                writer.WriteLine("URL=file:///" + app);
+                writer.WriteLine("IconIndex=0");
+                string icon = app.Replace('\\', '/');
+                writer.WriteLine("IconFile=" + icon);
+                writer.Flush();
+            }
+            Cliver.Message.Show("Shortcut created on desktop", SystemIcons.Information,
+                "The Shortcut \n\"Skin Installer Ultimate\" \nhas been created on your desktop at\n" + deskDir
+                    , 0, new string[1] { "Ok", });
+        }
+        private void associateFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Microsoft.Win32.RegistryKey yurixy = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(".yurixyworksa");
+            if (yurixy == null)
+            {
+                Process process = new Process();
+                process.StartInfo.FileName = "sai.exe";
+                process.StartInfo.Arguments = "";
+                //process.StartInfo.UseShellExecute = false;
+                //process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
+                //process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.WorkingDirectory = Application.StartupPath;
+                process.Start();
+                process.WaitForExit();
+            }
+
+        }
         #endregion
         #region repathing
         private void button3repath_Click(object sender, EventArgs e)
@@ -7766,6 +7801,7 @@ namespace SkinInstaller
             return success;
         }
 #endregion
+        #region DDSSavingLoading
         public Bitmap LGGDevilLoadImage(string fileName)
         {
             int imageID;
@@ -8065,6 +8101,7 @@ namespace SkinInstaller
             }
             File.SetAttributes(destination, FileAttributes.Normal);                                    
         }
+        #endregion DDSSavingLoading
         #region GLPaint
         void glControl1_Resize(object sender, EventArgs e)
         {
@@ -9159,6 +9196,7 @@ namespace SkinInstaller
         private Color colorFromRafPower(int rafPower)
         {
             int numberOfRafVersions = previewWindow.reader.rafArchives.Count;
+
             return new HSLColor(
                 ((double)(numberOfRafVersions - rafPower) /
                 (double)numberOfRafVersions) /
@@ -10678,7 +10716,7 @@ namespace SkinInstaller
                 SIFileOp.DirectoryDelete(backupDir,true);
             }
         }
-
+        #region PatchFixer
         private void button3FixCrashAfterPatch_Click(object sender, EventArgs e)
         {
             if (Cliver.Message.Show("Are you sure?",
@@ -10799,43 +10837,7 @@ namespace SkinInstaller
                     , 0, new string[1] { "Ok", });
             UpdateProgressSafe(100);
         }
-
-        private void createDesktopShortcutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            string deskDir = Environment.GetFolderPath(Environment.SpecialFolder.DesktopDirectory);
-
-            using (StreamWriter writer = new StreamWriter(deskDir + "\\" + "Skin Installer Ultimate" + ".url"))
-            {
-                string app = System.Reflection.Assembly.GetExecutingAssembly().Location;
-                writer.WriteLine("[InternetShortcut]");
-                writer.WriteLine("URL=file:///" + app);
-                writer.WriteLine("IconIndex=0");
-                string icon = app.Replace('\\', '/');
-                writer.WriteLine("IconFile=" + icon);
-                writer.Flush();
-            }
-            Cliver.Message.Show("Shortcut created on desktop", SystemIcons.Information,
-                "The Shortcut \n\"Skin Installer Ultimate\" \nhas been created on your desktop at\n" + deskDir
-                    , 0, new string[1] { "Ok", });
-        }
-
-        private void associateFilesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Microsoft.Win32.RegistryKey yurixy = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(".yurixyworksa");
-            if (yurixy == null)
-            {
-                Process process = new Process();
-                process.StartInfo.FileName = "sai.exe";
-                process.StartInfo.Arguments = "";
-                //process.StartInfo.UseShellExecute = false;
-                //process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-                //process.StartInfo.CreateNoWindow = true;
-                process.StartInfo.WorkingDirectory = Application.StartupPath;
-                process.Start();
-                process.WaitForExit();
-            }
-            
-        }
+        #endregion PatchFixer
 
 
     }
