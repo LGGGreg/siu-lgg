@@ -471,6 +471,10 @@ namespace LOLViewer.IO
                 DirectoryInfo di = new DirectoryInfo(dir.FullName);
                 // Read directories in reverse order to prioritize newer files.
                 DirectoryInfo[] children = di.GetDirectories();
+                try
+                {
+                    children = children.OrderBy(x => int.Parse(x.Name.Replace(".", ""))).ToArray();
+                } catch { }
                 for (int i = 1; i <= children.Length; ++i)
                 {
                     result = OpenGameClientVersion(children[children.Length - i]);
@@ -507,7 +511,8 @@ namespace LOLViewer.IO
             RAFArchive archive = null;
             try
             {
-                foreach(FileInfo f in dir.GetFiles())
+                FileInfo[] files = dir.GetFiles();
+                foreach(FileInfo f in files)
                 {
                     // Ignore non RAF files.
                     if (f.Extension != ".raf")
@@ -533,6 +538,7 @@ namespace LOLViewer.IO
                 result = false;
             }
 #endif
+
 
             // Note: archive will always equal the last RAFArchive in the directory.
             // So, we always append files to the last one if there's more than one in a directory.
