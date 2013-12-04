@@ -274,6 +274,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Yurixy.ico" />
+    <Content Include="LGGSIU2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
     <Content Include="YuixyIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

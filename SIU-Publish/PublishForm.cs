@@ -114,6 +114,7 @@ namespace SIU_Publish
             toReturn.Add("ILU.dll");
             toReturn.Add("Ionic.Zip.dll");
             toReturn.Add("LGGSIU1.bmp");
+            toReturn.Add("LGGSIU2.png");
             toReturn.Add("LOLViewer.exe");
             toReturn.Add("LeagueOfLegendsSkinInstallerLeagueCraftIntegration.user.js");
             toReturn.Add("License - nvidia.txt");
