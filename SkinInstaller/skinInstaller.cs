@@ -904,7 +904,7 @@ namespace SkinInstaller
             //hud fix
             charFixs.Add("hudatlas2.tga", "hudatlas.tga");
 
-            charFixs.Add("\\wallofgrass.dds", "\\brush_sr.dds");
+            //charFixs.Add("wallofgrass.dds", "brush_sr.dds");
 
             charFixs.Add("chemicalman", "singed");
             //f rammus man
@@ -1663,7 +1663,8 @@ namespace SkinInstaller
                     if (doneAdding == 0)
                     {
                         //they are done, install skin
-                        button1.PerformClick();
+                        addToDatabase_click(null, null);
+                        //button1.PerformClick();
                     }
                 }
             }
@@ -1750,10 +1751,17 @@ namespace SkinInstaller
                 }
                 else if (origonalFile.Trim().ToLower().EndsWith("animations.list"))
                 {
-                    if (!Directory.Exists(Application.StartupPath + "\\"+c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL))
-                        Directory.CreateDirectory(Application.StartupPath + "\\"+c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL);
+                    if (!Directory.Exists(Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL))
+                        Directory.CreateDirectory(Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL);
                     FileInfo fi = new FileInfo(origonalFile);
-                    SIFileOp.FileCopy(origonalFile, Application.StartupPath + "\\"+c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL+"\\" + fi.Name.Replace(".list", ".ini"));
+                    SIFileOp.FileCopy(origonalFile, Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL + "\\" + fi.Name.Replace(".list", ".ini"));
+                }
+                else if (origonalFile.Trim().ToLower().EndsWith("wallofgrass.dds") && origonalFile.Trim().ToLower().Contains("map1"))
+                {
+                    if (!Directory.Exists(Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL))
+                        Directory.CreateDirectory(Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL);
+                    FileInfo fi = new FileInfo(origonalFile);
+                    SIFileOp.FileCopy(origonalFile, Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL + "\\" + fi.Name.Replace("wallofgrass.dds", "brush_sr.dds"));
                 }
 
             }
@@ -1811,9 +1819,20 @@ namespace SkinInstaller
             //at this point all arhives have been extracted into the sti dir
             List<string> allFilesInTheSkin = new List<string>();
             allFilesInTheSkin.AddRange(origonalInputFiles);
-            if (Directory.Exists(Application.StartupPath + "\\"+c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL))
+            if (Directory.Exists(Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL))
             {
-                string[] filesInSTIdir = Directory.GetFiles(Application.StartupPath + "\\"+c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL, "*.*", SearchOption.AllDirectories);
+                string[] wallOfGrassFiles = Directory.GetFiles(Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL, "*.*",
+                        SearchOption.AllDirectories).Where(s => s.EndsWith("wallofgrass.dds", StringComparison.OrdinalIgnoreCase)).ToArray<string>();
+                foreach (string wog in wallOfGrassFiles)
+                {
+                    if (wog.Trim().ToLower().Contains("map1"))
+                    {
+                        FileInfo fi = new FileInfo(wog);
+                        SIFileOp.FileCopy(fi.FullName, Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL + "\\" + fi.Name.Replace("wallofgrass.dds", "brush_sr.dds"));
+                    }
+                }
+
+                string[] filesInSTIdir = Directory.GetFiles(Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL, "*.*", SearchOption.AllDirectories);
                 allFilesInTheSkin.AddRange(filesInSTIdir);
             }
 
@@ -4387,6 +4406,7 @@ namespace SkinInstaller
             this.clientLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.getLastModDateToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.viewDXTVersionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.associateFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.soundFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteBackupsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.repathAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -4447,7 +4467,6 @@ namespace SkinInstaller
             this.button3CloseAd = new System.Windows.Forms.Button();
             this.addFilesWorker = new System.ComponentModel.BackgroundWorker();
             this.patchFixerWorker = new System.ComponentModel.BackgroundWorker();
-            this.associateFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -5876,6 +5895,13 @@ namespace SkinInstaller
             this.viewDXTVersionsToolStripMenuItem.Text = "View DXT Versions";
             this.viewDXTVersionsToolStripMenuItem.Click += new System.EventHandler(this.viewDXTVersionsToolStripMenuItem_Click);
             // 
+            // associateFilesToolStripMenuItem
+            // 
+            this.associateFilesToolStripMenuItem.Name = "associateFilesToolStripMenuItem";
+            this.associateFilesToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
+            this.associateFilesToolStripMenuItem.Text = "Associate Files";
+            this.associateFilesToolStripMenuItem.Click += new System.EventHandler(this.associateFilesToolStripMenuItem_Click);
+            // 
             // soundFileLocationToolStripMenuItem
             // 
             this.soundFileLocationToolStripMenuItem.Name = "soundFileLocationToolStripMenuItem";
@@ -6342,13 +6368,6 @@ namespace SkinInstaller
             this.patchFixerWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.patchFixerWorker_DoWork);
             this.patchFixerWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.patchFixerWorker_ProgressChanged);
             this.patchFixerWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.patchFixerWorker_RunWorkerCompleted);
-            // 
-            // associateFilesToolStripMenuItem
-            // 
-            this.associateFilesToolStripMenuItem.Name = "associateFilesToolStripMenuItem";
-            this.associateFilesToolStripMenuItem.Size = new System.Drawing.Size(182, 22);
-            this.associateFilesToolStripMenuItem.Text = "Associate Files";
-            this.associateFilesToolStripMenuItem.Click += new System.EventHandler(this.associateFilesToolStripMenuItem_Click);
             // 
             // skinInstaller
             // 
