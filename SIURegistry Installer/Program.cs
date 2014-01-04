@@ -137,16 +137,18 @@ namespace SIURegistry_Installer
         }
         static void doYurixyAssociation()
         {
-            
-            
-            string iconPath = "\"" + Application.StartupPath + "\\YuixyIcon.ico\"";
+
+
+            string yurixyiconPath = "\"" + Application.StartupPath + "\\YuixyIcon.ico\"";
+            string lolmodiconPath = "\"" + Application.StartupPath + "\\LoLModIcon.ico\"";
             string[] getRidOf = new string[] { "skininstallerultimatelgg.yurixy",
                 "siulgg.yurixyworks", "siulggyurixyworks",
                 "skininstallerultimatelggfile.yurixyworks",
                 "skininstallerultimatelggfileyurixyworks",
                 ".yurixyworks",
                 ".yurixyworks2",
-                ".yurixyworks5" };
+                ".yurixyworks5",
+            ".lolmod","siulgglolmod"};
             foreach (string regEntry in getRidOf)
             {
                 try
@@ -159,7 +161,7 @@ namespace SIURegistry_Installer
                     //Cliver.Message.Inform("Its ok, but \n"+ex.ToString());
                 }
             }
-            string[] makeKeysOn = new string[] {".yurixyworks",".yurixyworks2",".yurixyworks5" };
+            string[] makeKeysOn = new string[] {".yurixyworks",".yurixyworks2",".yurixyworks5",".lolmod"};
             foreach (string makeKeyOn in makeKeysOn)
             {
                 //try to register my key
@@ -167,15 +169,22 @@ namespace SIURegistry_Installer
                 //Microsoft.Win32.RegistryKey dikey;
                 Microsoft.Win32.RegistryKey appkey;
                 filekey = Microsoft.Win32.Registry.ClassesRoot.CreateSubKey(makeKeyOn);
-                filekey.SetValue("", "siulggyurixyworks");
+                string asocName = "siulgglolmod";
+                string iconPath = lolmodiconPath;
+                if(makeKeyOn.Contains("yurixy"))
+                {
+                    asocName = "siulggyurixyworks";
+                    iconPath = yurixyiconPath;
+                }
+                filekey.SetValue("", asocName);
                 Microsoft.Win32.RegistryKey fileDefault;
                 fileDefault = filekey.CreateSubKey("DefaultIcon");
                 fileDefault.SetValue("", iconPath);
                 fileDefault.Close();
                 filekey.Close();
 
-                appkey = Microsoft.Win32.Registry.ClassesRoot.CreateSubKey("siulggyurixyworks");
-                appkey.SetValue("", "Yurixy League of Legends Skin");
+                appkey = Microsoft.Win32.Registry.ClassesRoot.CreateSubKey(asocName);
+                appkey.SetValue("", "League of Legends Skin");
                 appkey.SetValue("DefaultIcon", iconPath);
 
 
