@@ -60,7 +60,7 @@
             }
             catch (Exception exception)
             {
-                MessageBox.Show(exception.Message + "\r\n on the file " + fileName + "\r\ngoing to \r\n" + fileDest);
+               // MessageBox.Show(exception.Message + "\r\n on the file " + fileName + "\r\ngoing to \r\n" + fileDest);
             }
         }
 

@@ -153,6 +153,7 @@ namespace SIU_Publish
             toReturn.Add("sai.exe");
             toReturn.Add("wLib.dll");
             toReturn.Add("YuixyIcon.ico");
+            toReturn.Add("LolModIcon.ico");
             toReturn.Add("zlib.net.dll");
             return toReturn;
         }

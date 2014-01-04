@@ -104,8 +104,16 @@ namespace RelManLib
         }
         public bool adjustSize(RelFileEntry entry, int uncompressedSize, int compressedSize)
         {
-            entry.uncompressedFileSize = (UInt32)uncompressedSize;
-            entry.compressedFileSize = (UInt32)compressedSize;
+            if (entry.uncompressedFileSize == entry.compressedFileSize)
+            {
+                //must be a uncompressed file
+                entry.uncompressedFileSize = entry.compressedFileSize = (UInt32)uncompressedSize;
+            }
+            else
+            {
+                entry.uncompressedFileSize = (UInt32)uncompressedSize;
+                entry.compressedFileSize = (UInt32)compressedSize;
+            }
             return true;
         }
         public bool saveFile(bool debug=false,string filename = "")
@@ -212,8 +220,13 @@ namespace RelManLib
                                 }
                                 if (total > winnerTotal)
                                 {
-                                    winnerName = idi.FullName;
-                                    winnerTotal = total;
+                                    //dont declare winner unless this also has a release manifest
+                                    FileInfo rmfie = new FileInfo(idi.FullName + "/releasemanifest");
+                                    if (rmfie.Exists)
+                                    {
+                                        winnerName = idi.FullName;
+                                        winnerTotal = total;
+                                    }
                                 }                                
                             }
                                

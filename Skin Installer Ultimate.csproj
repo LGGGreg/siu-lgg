@@ -70,6 +70,12 @@
     <Compile Include="GUI\CharacterSelectionForm.Designer.cs">
       <DependentUpon>CharacterSelectionForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="GUI\DuplicateFileToMatchSkinForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GUI\DuplicateFileToMatchSkinForm.Designer.cs">
+      <DependentUpon>DuplicateFileToMatchSkinForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="GUI\dxtVersionReader.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -137,6 +143,9 @@
     </Compile>
     <EmbeddedResource Include="GUI\CharacterSelectionForm.resx">
       <DependentUpon>CharacterSelectionForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="GUI\DuplicateFileToMatchSkinForm.resx">
+      <DependentUpon>DuplicateFileToMatchSkinForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="GUI\dxtVersionReader.resx">
       <DependentUpon>dxtVersionReader.cs</DependentUpon>
@@ -275,6 +284,9 @@
   <ItemGroup>
     <None Include="Resources\Yurixy.ico" />
     <Content Include="LGGSIU2.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="LoLModIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
     <Content Include="YuixyIcon.ico">

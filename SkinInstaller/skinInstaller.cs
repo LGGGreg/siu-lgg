@@ -401,6 +401,9 @@ namespace SkinInstaller
         private BackgroundWorker patchFixerWorker;
         private ToolStripMenuItem createDesktopShortcutToolStripMenuItem;
         private ToolStripMenuItem associateFilesToolStripMenuItem;
+        private ToolStripMenuItem skinHelpersToolStripMenuItem;
+        private ToolStripMenuItem copyLikeFilesToolStripMenuItem;
+        private BackgroundWorker uninstallWorker1;
 
         TreeNode database = new TreeNode("dbRoot");
         #endregion
@@ -700,8 +703,9 @@ namespace SkinInstaller
         private void registerFiles()
         {
             Microsoft.Win32.RegistryKey yurixy = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".yurixyworks");
+            Microsoft.Win32.RegistryKey lolmodkey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".lolmod");
             bool runReg = false;
-            if (yurixy == null)
+            if (yurixy == null||lolmodkey==null)
             {
                 runReg = true;
             }else
@@ -710,6 +714,15 @@ namespace SkinInstaller
                 if (val!= "siulggyurixyworks")
                 {
                     runReg = true;
+                }
+                else
+                {
+                    val = lolmodkey.GetValue("").ToString();
+                    if (val != "siulgglolmod")
+                    {
+                        runReg = true;
+                    }
+
                 }
             }
             if(runReg)
@@ -787,24 +800,28 @@ namespace SkinInstaller
                 this.SIFileOp.DirectoryDelete(Application.StartupPath + @"\spctemp\", true);
             }
             if (File.Exists(Properties.Settings.Default.gameDir + "lol.launcher.exe") ||
-                File.Exists(Properties.Settings.Default.gameDir + "League Of Legends.exe"))
+                File.Exists(Properties.Settings.Default.gameDir + "League Of Legends.exe")||
+                File.Exists(Properties.Settings.Default.gameDir + "LoLLauncher.exe"))
             {
                 gameDirectory = Properties.Settings.Default.gameDir;
-                if (!File.Exists(Properties.Settings.Default.gameDir + "lol.launcher.exe"))
-                { gameDirectory = gameDirectory.Replace("game\\", "").Replace("Game\\", ""); }
+                //if (!File.Exists(Properties.Settings.Default.gameDir + "lol.launcher.exe"))
+                //{ gameDirectory = gameDirectory.Replace("game\\", "").Replace("Game\\", ""); }
 
                 //gameDirectory = gameDirectory.Replace("game\\", "").Replace("Game\\", "");
                 //gameDirectory = gameDirectory.Substring(0, gameDirectory.Length - 5);
             }
-            else if (File.Exists(usGameDirectory + "lol.launcher.exe"))
+            else if (File.Exists(usGameDirectory + "lol.launcher.exe") ||
+                File.Exists(usGameDirectory + "LoLLauncher.exe"))
             {
                 gameDirectory = usGameDirectory;
             }
-            else if (File.Exists(euGameDirectory + "lol.launcher.exe"))
+            else if (File.Exists(euGameDirectory + "lol.launcher.exe") ||
+                File.Exists(euGameDirectory + "LoLLauncher.exe"))
             {
                 gameDirectory = euGameDirectory;
             }
-            else if (File.Exists(euGameDirectory64 + "lol.launcher.exe"))
+            else if (File.Exists(euGameDirectory64 + "lol.launcher.exe") ||
+                File.Exists(euGameDirectory64 + "LoLLauncher.exe"))
             {
                 gameDirectory = euGameDirectory64;
             }
@@ -822,12 +839,12 @@ namespace SkinInstaller
                 {
                     if (dialog.ShowDialog() == DialogResult.OK)
                     {
-                        string[] strArray = dialog.FileName.ToString().ToLower().Split(new char[] { '\\' });
-                        for (int i = 0; i < (strArray.Length - 1); i++)
+                        string[] dialogFileNamesSplitPath = dialog.FileName.ToString().ToLower().Split(new char[] { '\\' });
+                        for (int i = 0; i < (dialogFileNamesSplitPath.Length - 1); i++)
                         {
-                            gameDirectory = gameDirectory + strArray[i] + @"\";
+                            gameDirectory = gameDirectory + dialogFileNamesSplitPath[i] + @"\";
                         }
-                        if ((strArray[strArray.Length - 1] == "lol.launcher.exe") || (strArray[strArray.Length - 1] == "league of legends.exe"))
+                        if ((dialogFileNamesSplitPath[dialogFileNamesSplitPath.Length - 1] == "lol.launcher.exe") || (dialogFileNamesSplitPath[dialogFileNamesSplitPath.Length - 1] == "league of legends.exe")|| (dialogFileNamesSplitPath[dialogFileNamesSplitPath.Length - 1] == "lollauncher.exe"))
                         {
                             Properties.Settings.Default.gameDir = gameDirectory;
                             Properties.Settings.Default.Save();
@@ -862,14 +879,14 @@ namespace SkinInstaller
            // RAFArchive raf = new RAFArchive("C:\\Riot Games\\League of Legends\\RADS\\projects\\lol_game_client\\filearchives\\0.0.0.155\\Archive_65414672.raf");
             string compFile = "zacwgoomovemoving.luaobj";
 
-            if (gameDirectory.ToLower().Contains("garena"))
-            {
-                Cliver.Message.Show("Unsupported :<", SystemIcons.Error,
-                    "The garena client is currently not supported by SIU,\r\nPlans are to add this soon,\r\n\r\n" +
-                    "Most features will not work right now, but you can still use it to check for updates", 0,
-                 new string[1] { "OK" });
-            }
-            else if (!File.Exists(Application.StartupPath + "\\allfiles.ini"))// && File.Exists(gameDirectory + "HeroPak_client.zip"))
+            //if (gameDirectory.ToLower().Contains("garena"))
+            //{
+            //    Cliver.Message.Show("Unsupported :<", SystemIcons.Error,
+            //        "The garena client is currently not supported by SIU,\r\nPlans are to add this soon,\r\n\r\n" +
+            //        "Most features will not work right now, but you can still use it to check for updates", 0,
+            //     new string[1] { "OK" });
+            //}            else
+            if (!File.Exists(Application.StartupPath + "\\allfiles.ini"))// && File.Exists(gameDirectory + "HeroPak_client.zip"))
             {
                 Cliver.Message.Inform("Looks like this is your First Time Running this program.\r\n" +
                     "Please be patient while we inspect your LoL installation, and format any pre-packed skins\r\n\r\n" +
@@ -991,6 +1008,7 @@ namespace SkinInstaller
             charFixs.Add("teemo_plant_motion_sensor.anm","teemo_spell4.anm");
             charFixs.Add("teemo_spellcast.anm","teemo_spell3.anm");
 
+            charFixs.Add("masteryi.dds", "masteryi_2013_tx_cm.dds");
 
 
         }
@@ -1066,9 +1084,13 @@ namespace SkinInstaller
         void UpdateProgressSafe(int value)
         {
             if (value > this.progressBar1.Maximum) value = this.progressBar1.Maximum;
-            this.progressBar1.Value = value;
-            this.label2Percent.Text = ((value!=0)?value.ToString() + "%":"");
-            this.progressBar1.Refresh();
+            MethodInvoker action = delegate
+            {
+                this.progressBar1.Value = value;
+                this.label2Percent.Text = ((value != 0) ? value.ToString() + "%" : "");
+                this.progressBar1.Refresh();
+            };
+            this.progressBar1.BeginInvoke(action);
         }
         private void Log(string s)
         {
@@ -1732,7 +1754,8 @@ namespace SkinInstaller
                 }
                 else if (origonalFile.Trim().ToLower().EndsWith(".rar") ||
                         origonalFile.Trim().ToLower().EndsWith(".7z") ||
-                        origonalFile.Trim().ToLower().EndsWith(".yurixyworks")||
+                        origonalFile.Trim().ToLower().EndsWith(".yurixyworks") ||
+                        origonalFile.Trim().ToLower().EndsWith(".lolmod") ||
                         origonalFile.Trim().ToLower().EndsWith(".bzip2") ||
                         origonalFile.Trim().ToLower().EndsWith(".gzip") ||
                         origonalFile.Trim().ToLower().EndsWith(".tar"))
@@ -1788,8 +1811,9 @@ namespace SkinInstaller
                 string[] archiveFiles = Directory.GetFiles(Application.StartupPath + "\\"+c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL, "*.*",
                         SearchOption.AllDirectories).Where(s =>
                            s.EndsWith(".zip", StringComparison.OrdinalIgnoreCase) ||
-                           s.EndsWith(".u9lolpatch", StringComparison.OrdinalIgnoreCase) ||  
-                           s.EndsWith(".yurixyworks",StringComparison.OrdinalIgnoreCase)||
+                           s.EndsWith(".u9lolpatch", StringComparison.OrdinalIgnoreCase) ||
+                           s.EndsWith(".yurixyworks", StringComparison.OrdinalIgnoreCase) ||
+                           s.EndsWith(".lolmod", StringComparison.OrdinalIgnoreCase) ||
                            s.EndsWith(".rar", StringComparison.OrdinalIgnoreCase) ||
                            s.EndsWith(".bzip2", StringComparison.OrdinalIgnoreCase) ||
                            s.EndsWith(".gzip", StringComparison.OrdinalIgnoreCase) ||
@@ -1904,7 +1928,7 @@ namespace SkinInstaller
                     }
                     if (namePath.valid)//foldername != null && fileName!=null)
                     {
-                        foldername = namePath.folderName;
+                        foldername = namePath.folderName.Replace(Application.StartupPath,"");
                         fileName = namePath.fileName;
 
                         Directory.CreateDirectory(Application.StartupPath + @"\st\" + foldername);
@@ -1950,7 +1974,8 @@ namespace SkinInstaller
                             (!toTest.Contains("thumbs.db")) &&
                             (!toTest.Contains(".zip")) &&
                             (!toTest.Contains(".u9lolpatch")) &&
-                            (!toTest.Contains(".yurixyworks"))&&
+                            (!toTest.Contains(".yurixyworks")) &&
+                            (!toTest.Contains(".lolmod")) &&
                             (!toTest.Contains(".rar")) &&
                             (!toTest.Contains(".7z")) &&
                             (!toTest.Contains(".bzip2")) &&
@@ -2604,13 +2629,29 @@ namespace SkinInstaller
             }
             if (fileName.ToLower().Contains("siuinfo.txt"))
             {
-                
+
                 debugadd("trying to read " + foldernamewFileName);
                 string[] info = readInfoFile(foldernamewFileName);
-                if (info[0] != "")
-                   this.skinNameTextbox.Text = info[0];
-                if (info[1] != "")
-                   this.textBoxauthor.Text = info[1];
+                try
+                {
+                    if (info[0] != "")
+                    {
+                        MethodInvoker action = delegate
+                        { this.skinNameTextbox.Text = info[0]; };
+                        this.skinNameTextbox.BeginInvoke(action);
+                    }
+                    if (info[1] != "")
+                    {
+                        MethodInvoker action = delegate
+                        { this.textBoxauthor.Text = info[1]; };
+                        this.textBoxauthor.BeginInvoke(action);
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                	//lgg todo
+                }
+                
                 return new fileLocReturn("\\\\skinInfo\\\\",fileName);
             }
             if (fileName.ToLower().Contains("customtext.txt"))
@@ -3051,7 +3092,7 @@ namespace SkinInstaller
         private void restoreSounds()
         {
             this.statusText.Text="restoring sounds";
-            this.Refresh();
+            //this.Refresh();
             String restoreFile = Application.StartupPath + @"\backup"
                 + findSoundsFSBLocation();
             if (File.Exists(restoreFile))
@@ -3284,6 +3325,7 @@ namespace SkinInstaller
             installWorker2.ReportProgress(2);
             int num = 0;
             int skipped = 0;
+            bool airFlag = false;
             foreach (ListViewItem item in a)
             {
                 debugadd("installing " + item.ToString());
@@ -3485,9 +3527,15 @@ namespace SkinInstaller
                                 noFlag = true;
                             }
                             if (!Properties.Settings.Default.air &
-                                fixedFilePath.ToLower().Contains("air\\"))
+                               ( fixedFilePath.ToLower().Contains("air\\")||
+                               fixedFilePath.ToLower().Contains("\\lol_air_client\\") || fixedFilePath.ToLower().Contains("air\\")))
                             {
                                 noFlag = true;
+                            }
+                            if (fixedFilePath.ToLower().Contains("air\\") ||
+                              fixedFilePath.ToLower().Contains("\\lol_air_client\\") || fixedFilePath.ToLower().Contains("air\\"))
+                            {
+                                airFlag = true;
                             }
 
                             if (!Properties.Settings.Default.text & fixedFilePath.ToLower().Contains("menu"))
@@ -3540,10 +3588,14 @@ namespace SkinInstaller
             else
             {
                 this.installWorker2.ReportProgress(100, "Done!");
-                
+                string info = "Installed " + num.ToString() + " files.\r\n" +
+               "Skipped " + skipped.ToString() + " files based on your settings.";
+                if (airFlag)
+                {
+                    info += "\r\n\r\nYou have also installed an air client mod,\r\nThis will only take effect after a restart of LoL";
+                }
                 InfoForm form = new InfoForm(
-               "Installed " + num.ToString() + " files.\r\n" +
-               "Skipped " + skipped.ToString() + " files based on your settings.",
+               info,
                new Size(270, 150),
                "Install Complete");
                 form.StartPosition = FormStartPosition.CenterParent;
@@ -3884,6 +3936,15 @@ namespace SkinInstaller
                     debugadd("raf Installing " + installInfo.getFileNamePath());
                     rafInject(installInfo.origonal, gameDirectory + installInfo.getFileNamePath());
                 }
+                else if (installInfo.getFileNamePath().Contains("zipfile"))
+                {
+                    //GarenaLoL\GameData\Apps\LoL\Game
+                    //no backup to do here, just delete late
+                    string pathTOInstallTo = installInfo.getFileNamePath();
+                    pathTOInstallTo=pathTOInstallTo.Replace("zipfile", "GameData\\Apps\\LoL\\Game");
+                    this.SIFileOp.FileMove(installInfo.origonal,
+                        gameDirectory + pathTOInstallTo);
+                }
                 else
                 {
                     debugadd("Backup " + installInfo.getFileNamePath());
@@ -3976,30 +4037,28 @@ namespace SkinInstaller
         }
         #endregion
         #region Uninstalling
-
-        private void dbUninstall_Click(object sender, EventArgs e)
+        private void uninstallWorker1_DoWork(object sender, DoWorkEventArgs e)
         {
-            //Cliver.Message.Inform("UnInstall currently does not work, please repair your client to undo skins.\n\nOpen up your launcher, click the gear on the top right, then click repair.");
-            //return;
-            if (fileListWorker1.IsBusy)
-            {
-                Cliver.Message.Inform("Please wait a moment for this program to finish updating\r\nThe Progress Bar below will show you the status of this");
-                return;
-            }
-            this.dbInstall.Enabled = this.dbUninstall.Enabled = this.dbDelete.Enabled = this.UpdateFL.Enabled = false;
-
             bool soundsflag = false;
-
+            List<ListViewItem> a = (List<ListViewItem>)e.Argument;
             string msgs = "";
-            foreach (ListViewItem item in this.listView1.CheckedItems)
+            int totalCheckedItems = a.Count;
+            int checksCompleted = 0;
+            float checkIsWorth = 100.0f / (float)totalCheckedItems;
+            foreach (ListViewItem item in a)
             {
+                
 
                 List<string> charsToUninstall = new List<string>();
                 if (true)//item.SubItems[4].Text == "Yes")
                 {
-
-                    foreach (string str in Directory.GetFiles(Application.StartupPath + @"\skins\" + item.SubItems[1].Text, "*.*", SearchOption.AllDirectories))
+                    string [] skinFiles = Directory.GetFiles(Application.StartupPath + @"\skins\" + item.SubItems[1].Text, "*.*", SearchOption.AllDirectories);
+                    int filesDone = 0;
+                    foreach (string str in skinFiles)
                     {
+                        int percent = (int)((Math.Floor(((double)filesDone++ / (double)skinFiles.Length) * checkIsWorth))+(checkIsWorth*checksCompleted));
+                        uninstallWorker1.ReportProgress(percent, "Installing file " + str.ToString() + " of " + skinFiles.Length.ToString() + "");
+
                         string[] strArray2 = str.Split(new char[] { '\\' });
                         string path = string.Empty;
                         bool flag = false;
@@ -4057,12 +4116,12 @@ namespace SkinInstaller
                                         }
                                     }
                                 }
-                                
-                                
-                                
+
+
+
                                 string lowestVersion = "";
                                 //todo get for all air files
-                                for (int airV = 0; airV <= 10; airV++ )
+                                for (int airV = 0; airV <= 10; airV++)
                                 {
                                     string fileNameOption = Regex.Replace(fileName, @"\d+", airV.ToString(), RegexOptions.IgnoreCase);
 
@@ -4115,6 +4174,12 @@ namespace SkinInstaller
                             {
                                 debugadd("Missing backup for " + path + " and " + fileName + ", this probably means it was skipped during install");
                             }
+                        }
+                        else if (path.Contains("zipfile"))
+                        {
+                            string pathTOInstallTo = path.Replace("zipfile", "\\GameData\\Apps\\LoL\\Game");
+                            pathTOInstallTo=gameDirectory + pathTOInstallTo + fileName;
+                            this.SIFileOp.FileDelete(pathTOInstallTo);
                         }
                         else if (path.Contains(".raf"))
                         {
@@ -4178,19 +4243,60 @@ namespace SkinInstaller
 
                     }
                 }
-                item.SubItems[4].Text = "No";
                 this.ExecuteQuery("UPDATE skins SET sInstalled=0, dateinstalled=\"" + "-" + "\"" +
                     " WHERE sName=\"" +
                    item.SubItems[1].Text + "\"");
                 this.SIFileOp.FileDelete(Application.StartupPath + @"\skins\" + item.SubItems[1].Text + @"\installed");
                 msgs += "Successfully un-installed " + item.SubItems[1].Text +
                     "\r\n";
+                e.Result += msgs;
                 //Cliver.Message.Inform("Successfuly uninstalled " + item.SubItems[1].Text);
+
+                checksCompleted++;
             }
+        }
+
+        private void uninstallWorker1_ProgressChanged(object sender, ProgressChangedEventArgs e)
+        {
+            UpdateProgressSafe(e.ProgressPercentage);
+            if (e.UserState != null)
+            {
+                string info = e.UserState as string;
+                debugadd(info);
+                this.statusText.Text = info;
+                this.helpBar.Update();
+            }
+        }
+
+        private void uninstallWorker1_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            UpdateProgressSafe(100);
+            string msgs = (string)e.Result;
             Cliver.Message.Inform(msgs);
+            UpdateProgressSafe(0);
             this.UpdateListView();
 
-            this.dbInstall.Enabled = this.dbUninstall.Enabled = this.dbDelete.Enabled = this.UpdateFL.Enabled = true;
+            this.dbInstall.Enabled = this.dbUninstall.Enabled = this.dbDelete.Enabled = this.UpdateFL.Enabled = this.button3reinstallText.Enabled = this.button3FixCrashAfterPatch.Enabled= true;
+        }
+
+        private void dbUninstall_Click(object sender, EventArgs e)
+        {
+            //Cliver.Message.Inform("UnInstall currently does not work, please repair your client to undo skins.\n\nOpen up your launcher, click the gear on the top right, then click repair.");
+            //return;
+            if (fileListWorker1.IsBusy)
+            {
+                Cliver.Message.Inform("Please wait a moment for this program to finish updating\r\nThe Progress Bar below will show you the status of this");
+                return;
+            }
+            this.dbInstall.Enabled = this.dbUninstall.Enabled = this.dbDelete.Enabled = this.UpdateFL.Enabled = this.button3reinstallText.Enabled = this.button3FixCrashAfterPatch.Enabled = false;
+            List<ListViewItem> args = new List<ListViewItem>();
+            foreach (ListViewItem item in this.listView1.CheckedItems)
+            {
+                args.Add(item);
+            }
+            UpdateProgressSafe(1);
+            uninstallWorker1.RunWorkerAsync(args);
+
         }
         private void uninstallTextMod(string textModPath)
         {
@@ -4430,6 +4536,8 @@ namespace SkinInstaller
             this.showMenuFileLocationToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openTextTreeEditorToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.openPublisherToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.skinHelpersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyLikeFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.panel2 = new System.Windows.Forms.Panel();
             this.panelGL = new System.Windows.Forms.Panel();
             this.label5 = new System.Windows.Forms.Label();
@@ -4467,6 +4575,7 @@ namespace SkinInstaller
             this.button3CloseAd = new System.Windows.Forms.Button();
             this.addFilesWorker = new System.ComponentModel.BackgroundWorker();
             this.patchFixerWorker = new System.ComponentModel.BackgroundWorker();
+            this.uninstallWorker1 = new System.ComponentModel.BackgroundWorker();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -5842,7 +5951,8 @@ namespace SkinInstaller
             this.openParticleReferenceToolStripMenuItem,
             this.showMenuFileLocationToolStripMenuItem,
             this.openTextTreeEditorToolStripMenuItem,
-            this.openPublisherToolStripMenuItem});
+            this.openPublisherToolStripMenuItem,
+            this.skinHelpersToolStripMenuItem});
             this.debugToolStripMenuItem.Name = "debugToolStripMenuItem";
             this.debugToolStripMenuItem.Size = new System.Drawing.Size(54, 20);
             this.debugToolStripMenuItem.Text = "Debug";
@@ -6065,6 +6175,21 @@ namespace SkinInstaller
             this.openPublisherToolStripMenuItem.Text = "Open Publisher";
             this.openPublisherToolStripMenuItem.Click += new System.EventHandler(this.openPublisherToolStripMenuItem_Click);
             // 
+            // skinHelpersToolStripMenuItem
+            // 
+            this.skinHelpersToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.copyLikeFilesToolStripMenuItem});
+            this.skinHelpersToolStripMenuItem.Name = "skinHelpersToolStripMenuItem";
+            this.skinHelpersToolStripMenuItem.Size = new System.Drawing.Size(235, 22);
+            this.skinHelpersToolStripMenuItem.Text = "Skin Helpers";
+            // 
+            // copyLikeFilesToolStripMenuItem
+            // 
+            this.copyLikeFilesToolStripMenuItem.Name = "copyLikeFilesToolStripMenuItem";
+            this.copyLikeFilesToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.copyLikeFilesToolStripMenuItem.Text = "Copy Like Files";
+            this.copyLikeFilesToolStripMenuItem.Click += new System.EventHandler(this.copyLikeFilesToolStripMenuItem_Click);
+            // 
             // panel2
             // 
             this.panel2.Controls.Add(this.panelGL);
@@ -6132,9 +6257,9 @@ namespace SkinInstaller
             // 
             this.button3FixCrashAfterPatch.Location = new System.Drawing.Point(392, 3);
             this.button3FixCrashAfterPatch.Name = "button3FixCrashAfterPatch";
-            this.button3FixCrashAfterPatch.Size = new System.Drawing.Size(132, 23);
+            this.button3FixCrashAfterPatch.Size = new System.Drawing.Size(275, 23);
             this.button3FixCrashAfterPatch.TabIndex = 45;
-            this.button3FixCrashAfterPatch.Text = "Fix Crashes after Patch";
+            this.button3FixCrashAfterPatch.Text = "Fix Crashes/Invisable Chars/Blue Textures after Patch";
             this.button3FixCrashAfterPatch.UseVisualStyleBackColor = true;
             this.button3FixCrashAfterPatch.Click += new System.EventHandler(this.button3FixCrashAfterPatch_Click);
             // 
@@ -6171,7 +6296,7 @@ namespace SkinInstaller
             // 
             // button3startLoL
             // 
-            this.button3startLoL.Location = new System.Drawing.Point(544, 3);
+            this.button3startLoL.Location = new System.Drawing.Point(673, 3);
             this.button3startLoL.Name = "button3startLoL";
             this.button3startLoL.Size = new System.Drawing.Size(75, 23);
             this.button3startLoL.TabIndex = 43;
@@ -6368,6 +6493,13 @@ namespace SkinInstaller
             this.patchFixerWorker.DoWork += new System.ComponentModel.DoWorkEventHandler(this.patchFixerWorker_DoWork);
             this.patchFixerWorker.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.patchFixerWorker_ProgressChanged);
             this.patchFixerWorker.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.patchFixerWorker_RunWorkerCompleted);
+            // 
+            // uninstallWorker1
+            // 
+            this.uninstallWorker1.WorkerReportsProgress = true;
+            this.uninstallWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.uninstallWorker1_DoWork);
+            this.uninstallWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.uninstallWorker1_ProgressChanged);
+            this.uninstallWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.uninstallWorker1_RunWorkerCompleted);
             // 
             // skinInstaller
             // 
@@ -6837,6 +6969,10 @@ namespace SkinInstaller
                                 rafBackup(gameDirectory +
                                     foundAt, FileName);
                             }
+                            else if (pair.Value.ToLower().Contains("zipfile"))
+                            {
+                                //todo lgg
+                            }
                             else
                             {
                                 
@@ -7110,13 +7246,14 @@ namespace SkinInstaller
                             str = str + strArray[i] + @"\";
                         }
                         if ((strArray[strArray.Length - 1].ToLower() == "lol.launcher.exe") ||
-                        (strArray[strArray.Length - 1].ToLower() == "League Of Legends.exe"))
+                        (strArray[strArray.Length - 1].ToLower() == "league of legends.exe") ||
+                        (strArray[strArray.Length - 1].ToLower() == "lollauncher.exe"))
                         {
                             gameDirectory = str;
                             //gameDirectory = gameDirectory;
 
-                            if (strArray[strArray.Length - 1].ToLower() == "League Of Legends.exe")
-                            { gameDirectory = gameDirectory.Replace("game\\", "").Replace("Game\\", ""); }
+                            //if (strArray[strArray.Length - 1].ToLower() == "League Of Legends.exe")
+                            //{ gameDirectory = gameDirectory.Replace("game\\", "").Replace("Game\\", ""); }
                             //gameDirectory = gameDirectory.Substring(0, gameDirectory.Length - 5);
                             Properties.Settings.Default.gameDir = gameDirectory;
                             Properties.Settings.Default.Save();
@@ -7283,8 +7420,9 @@ namespace SkinInstaller
         }
         private void associateFilesToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            Microsoft.Win32.RegistryKey yurixy = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(".yurixyworksa");
-            if (yurixy == null)
+            Microsoft.Win32.RegistryKey yurixy = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(".yurixyworks");
+            Microsoft.Win32.RegistryKey lolmodkey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey(".lolmod");
+            if (yurixy == null||lolmodkey==null)
             {
                 Process process = new Process();
                 process.StartInfo.FileName = "sai.exe";
@@ -7578,98 +7716,157 @@ namespace SkinInstaller
                     }
                 }
             }
-            //just read the zip file.. now we need the other stuff
-            string[] files = Directory.GetFiles(baseDir, "*", SearchOption.AllDirectories);
-            Directory.GetDirectories(baseDir);
-            string[] array = files;
             List<String> rafFiles = new List<string>();
-            int lastpP = 0;
-            for (int i = 0; i < array.Length; i++)
+            try
             {
-                if (fileListWorker1.CancellationPending)
-                    return false;
-                string text = array[i];
-                FileInfo fileInfo = new FileInfo(text);
-
-                if (fileInfo.Extension != ".rar" && fileInfo.Extension != ".7z" && fileInfo.Extension != ".db" && fileInfo.Extension != ".zip" && fileInfo.Extension != "")
+                //just read the zip file.. now we need the other stuff
+                string[] files = Directory.GetFiles(baseDir, "*", SearchOption.AllDirectories);
+                Directory.GetDirectories(baseDir);
+                string[] array = files;
+                
+                int lastpP = 0;
+                for (int i = 0; i < array.Length; i++)
                 {
-                    if (fileInfo.FullName.Contains("HeroPak_client\\"))
-                    {
-                        fileInfo = new FileInfo(fileInfo.FullName.Replace("HeroPak_client\\", ""));
-                    }
-                    String startupPath = System.IO.Path.GetDirectoryName(
-                        System.Reflection.Assembly.GetExecutingAssembly().Location);
-                    
-                    bool flag = false;
-                    if (
-                        fileInfo.FullName.ToLower().Contains("\\skins")||
-                        fileInfo.FullName.ToLower().Contains("\\backup")||
-                        fileInfo.FullName.ToLower().Contains("\\dump")||
-                        fileInfo.FullName.ToLower().Contains("\\pack")
-                        //||fileInfo.FullName.ToLower().Contains("\\managedfiles")
-                        )
-                    {
-                        //Console.WriteLine("Creepy... not adding " + fileInfo.FullName);
-                        flag = true;
-                    }
-                    if (fileInfo.Extension != ".raf" &&
-                        fileInfo.FullName.ToLower().Contains(".raf"))
-                    {
-                        //dont use folders with .raf in the name 
-                        flag = true;
-                    }
-                    if(
-                        fileInfo.FullName.ToLower().Contains("filearchives")
-                        &&
+                    if (fileListWorker1.CancellationPending)
+                        return false;
+                    string text = array[i];
+                    FileInfo fileInfo = new FileInfo(text);
 
-                           (
-                              fileInfo.FullName.ToLower().Contains("data")
-                             || fileInfo.FullName.ToLower().Contains("levels")
-                           )
-                        )
+                    if (fileInfo.Extension != ".rar" && fileInfo.Extension != ".7z" && fileInfo.Extension != ".db" && fileInfo.Extension != ".zip" && fileInfo.Extension != "")
                     {
-                        flag=true;
-                    }
-
-                    if (!fileExtensions.Contains(fileInfo.Extension))
-                    {
-                        fileExtensions.Add(fileInfo.Extension);
-                    }
-                    string lowerFirstName = fileInfo.FullName.ToLower();
-                    string relativePath = lowerFirstName.Substring(baseDir.Length - 1);
-                    string lowerName = fileInfo.Name.ToLower();
-                    string text4 = lowerName + "|" + relativePath.Replace("\\", "\\\\");
-                    int depth = (relativePath.Split('\\')).Length;
-                    if (depth <= 2) flag = true;
-
-                    if (!fileList.Contains(text4))
-                    {
-                        if (!flag)
+                        if (fileInfo.FullName.Contains("HeroPak_client\\"))
                         {
-                            if (fileInfo.Extension == ".raf")
-                            {
-                                if (fileInfo.FullName.Contains("\\filearchives\\"))
-                                {
-                                    if (File.Exists(fileInfo.FullName + ".dat"))
-                                    {
-                                        rafFiles.Add(fileInfo.FullName);//add raf files to read afterwards
-                                    }
+                            fileInfo = new FileInfo(fileInfo.FullName.Replace("HeroPak_client\\", ""));
+                        }
+                        String startupPath = System.IO.Path.GetDirectoryName(
+                            System.Reflection.Assembly.GetExecutingAssembly().Location);
 
+                        bool flag = false;
+                        if (
+                            fileInfo.FullName.ToLower().Contains("\\skins") ||
+                            fileInfo.FullName.ToLower().Contains("\\backup") ||
+                            fileInfo.FullName.ToLower().Contains("\\dump") ||
+                            fileInfo.FullName.ToLower().Contains("\\pack")
+                            //||fileInfo.FullName.ToLower().Contains("\\managedfiles")
+                            )
+                        {
+                            //Console.WriteLine("Creepy... not adding " + fileInfo.FullName);
+                            flag = true;
+                        }
+                        if (fileInfo.Extension != ".raf" &&
+                            fileInfo.FullName.ToLower().Contains(".raf"))
+                        {
+                            //dont use folders with .raf in the name 
+                            flag = true;
+                        }
+                        if (
+                            fileInfo.FullName.ToLower().Contains("filearchives")
+                            &&
+
+                               (
+                                  fileInfo.FullName.ToLower().Contains("data")
+                                 || fileInfo.FullName.ToLower().Contains("levels")
+                               )
+                            )
+                        {
+                            flag = true;
+                        }
+
+                        if (!fileExtensions.Contains(fileInfo.Extension))
+                        {
+                            fileExtensions.Add(fileInfo.Extension);
+                        }
+                        string lowerFirstName = fileInfo.FullName.ToLower();
+                        string relativePath = lowerFirstName.Substring(baseDir.Length - 1);
+                        string lowerName = fileInfo.Name.ToLower();
+                        string text4 = lowerName + "|" + relativePath.Replace("\\", "\\\\");
+                        int depth = (relativePath.Split('\\')).Length;
+                        if (depth <= 2) flag = true;
+
+                        if (!fileList.Contains(text4))
+                        {
+                            if (!flag)
+                            {
+                                if (fileInfo.Extension == ".raf")
+                                {
+                                    if (fileInfo.FullName.Contains("\\filearchives\\"))
+                                    {
+                                        if (File.Exists(fileInfo.FullName + ".dat"))
+                                        {
+                                            rafFiles.Add(fileInfo.FullName);//add raf files to read afterwards
+                                        }
+
+                                    }
+                                }
+
+                                fileList.Add(text4);
+                            }
+                            int percent = (int)Math.Floor((double)i / (double)array.Length * (double)100.0);
+                            //if(new Random().Next(100)>96)
+                            if (percent - lastpP >= 10)
+                            {
+                                lastpP = percent;
+                                //Console.WriteLine("Please wait..." + ((percent / 2) + 0).ToString() + "%");
+                                fileListWorker1.ReportProgress(percent / 2);
+                            }
+                        }
+                    }
+                    else if (fileInfo.Extension == ".zip")
+                    {
+                        //we need to extract these..and like.. keep track of them
+
+                        using (ZipFile zipFile = ZipFile.Read(fileInfo.FullName))
+                        {
+                            int num = 0;
+                            int lastP = 0;
+
+                            foreach (ZipEntry current in zipFile)
+                            {
+                                num++;
+                                if (!current.FileName.Contains(".")) continue;
+
+                                string empty = string.Empty;
+                                string FileName = "zipfile\\" + current.FileName.Replace("/", "\\");
+                                string ext = FileName.Substring(FileName.LastIndexOf('.'));
+                                //Cliver.Message.Inform(FileName);
+                                //FileInfo st = new FileInfo(current.FileName);
+
+
+                                //FileInfo st = new FileInfo(strrr);
+                                if (ext != (".rar") && ext != (".7z") && ext != ".db" && ext != ".zip" && ext != "")
+                                {
+                                    //Console.WriteLine(st.FullName);
+                                    //string mypath = "";
+
+                                    if (!fileExtensions.Contains(ext))
+                                    {
+                                        fileExtensions.Add(ext);
+                                    }
+                                    String niceName = FileName.ToLower();
+                                    String tfileName = niceName.Substring(niceName.LastIndexOf("\\") + 1);
+                                    niceName = tfileName + "|" + niceName.Replace("\\", "\\\\");
+
+                                    if (!fileList.Contains(niceName))
+                                    {
+                                        fileList.Add(niceName);
+                                        int percent = (int)Math.Floor((double)num / (double)zipFile.Count * (double)100.0);
+
+                                        //if(new Random().Next(100)>96)
+                                        if (percent - lastP >= 10)
+                                        {
+                                            lastP = percent;
+                                            Console.WriteLine("Please wait..." + (percent / 2).ToString() + "%");
+                                        }
+                                    }
                                 }
                             }
-                
-                            fileList.Add(text4);
-                        }
-                        int percent = (int)Math.Floor((double)i / (double)array.Length * (double)100.0);
-                        //if(new Random().Next(100)>96)
-                        if (percent - lastpP >= 10)
-                        {
-                            lastpP = percent;
-                            //Console.WriteLine("Please wait..." + ((percent / 2) + 0).ToString() + "%");
-                            fileListWorker1.ReportProgress(percent/2);
                         }
                     }
                 }
+            }
+            catch (Exception e)
+            {
+
             }
             int inc = 0;
             bool openflag = false;
@@ -10474,31 +10671,40 @@ namespace SkinInstaller
             //Cliver.Message.Inform("version date i s" + newestDate.ToLongDateString() +" - "+ newestDate.ToLongTimeString());
             //C:\Riot Games\League of Legends\RADS\projects\lol_game_client\filearchives\0.0.0.25
             string rafPath = gameDirectory + @"RADS\projects\lol_game_client\filearchives\";
-            string[] files = Directory.GetFiles(rafPath, "*.raf.dat*", SearchOption.AllDirectories);
-            foreach (string file in files)
+            if (Directory.Exists(rafPath))
             {
-                FileInfo rafFile = new FileInfo(file);
-                if (rafFile.CreationTime > newestDate) newestDate = rafFile.CreationTime;
-               // Cliver.Message.Inform("raf date i s"+rafFile+" is " + newestDate.ToLongDateString() + " - " + newestDate.ToLongTimeString());
-            
-                string dataFolerPath = rafFile.DirectoryName + "\\DATA\\";
-                //Cliver.Message.Inform("data folder is " + dataFolerPath);
-                FileInfo datafolder = new FileInfo(dataFolerPath);
-                if (datafolder.CreationTime > newestDate) newestDate = datafolder.CreationTime;
-                //if (datafolder.LastAccessTime > newestDate) newestDate = datafolder.LastAccessTime;
-                if (datafolder.LastWriteTime > newestDate) newestDate = datafolder.LastWriteTime;
-                //Cliver.Message.Inform("data date i s" + rafFile + " is " + newestDate.ToLongDateString() + " - " + newestDate.ToLongTimeString());
-            
-                //Cliver.Message.Inform("file name is " + file);
-            }     
-            string airDir = gameDirectory+@"RADS\projects\lol_air_client\releases";
-            files = Directory.GetDirectories(airDir, "*", SearchOption.TopDirectoryOnly);
-            foreach (string file in files)
+                string[] files = Directory.GetFiles(rafPath, "*.raf.dat*", SearchOption.AllDirectories);
+                foreach (string file in files)
+                {
+                    FileInfo rafFile = new FileInfo(file);
+                    if (rafFile.CreationTime > newestDate) newestDate = rafFile.CreationTime;
+                    // Cliver.Message.Inform("raf date i s"+rafFile+" is " + newestDate.ToLongDateString() + " - " + newestDate.ToLongTimeString());
+
+                    string dataFolerPath = rafFile.DirectoryName + "\\DATA\\";
+                    //Cliver.Message.Inform("data folder is " + dataFolerPath);
+                    FileInfo datafolder = new FileInfo(dataFolerPath);
+                    if (datafolder.CreationTime > newestDate) newestDate = datafolder.CreationTime;
+                    //if (datafolder.LastAccessTime > newestDate) newestDate = datafolder.LastAccessTime;
+                    if (datafolder.LastWriteTime > newestDate) newestDate = datafolder.LastWriteTime;
+                    //Cliver.Message.Inform("data date i s" + rafFile + " is " + newestDate.ToLongDateString() + " - " + newestDate.ToLongTimeString());
+
+                    //Cliver.Message.Inform("file name is " + file);
+                }
+
+                string airDir = gameDirectory + @"RADS\projects\lol_air_client\releases";
+                files = Directory.GetDirectories(airDir, "*", SearchOption.TopDirectoryOnly);
+                foreach (string file in files)
+                {
+                    FileInfo airFolderInfo = new FileInfo(file);
+                    if (airFolderInfo.CreationTime > newestDate) newestDate = airFolderInfo.CreationTime;
+                    // Cliver.Message.Inform("air date i s" + file + " is " + newestDate.ToLongDateString() + " - " + newestDate.ToLongTimeString());
+
+                }
+            }
+            else
             {
-                FileInfo airFolderInfo = new FileInfo(file);
-                if (airFolderInfo.CreationTime > newestDate) newestDate = airFolderInfo.CreationTime;
-               // Cliver.Message.Inform("air date i s" + file + " is " + newestDate.ToLongDateString() + " - " + newestDate.ToLongTimeString());
-            
+                newestDate = DateTime.Now;
+                newestDate = new DateTime(newestDate.Year, newestDate.Month, newestDate.Day);
             }
             
             return newestDate;
@@ -10858,6 +11064,13 @@ namespace SkinInstaller
         }
         #endregion PatchFixer
 
+        private void copyLikeFilesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DuplicateFileToMatchSkinForm dftmsf = new DuplicateFileToMatchSkinForm(this);
+            dftmsf.Show();
+        }
+
+        
 
     }
     #region strucks
