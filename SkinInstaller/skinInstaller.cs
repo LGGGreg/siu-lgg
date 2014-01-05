@@ -92,6 +92,7 @@ namespace SkinInstaller
         #region consts
         const String c_TEMP_DIR_NAME_FIXED_SKIN_FILES = "fx";
         const String c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL = "sti";
+        const String c_DIRECTORY_NAME_FOR_FIXING_ZIPS = "ztmp";
         const String c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_OPTIONS = "hlp";
         
         #endregion
@@ -795,33 +796,27 @@ namespace SkinInstaller
             {
                 this.SIFileOp.DirectoryDelete(Application.StartupPath + "\\"+c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL+"\\", true);
             }
+            if (Directory.Exists(Application.StartupPath + "\\" + c_DIRECTORY_NAME_FOR_FIXING_ZIPS + "\\"))
+            {
+                this.SIFileOp.DirectoryDelete(Application.StartupPath + "\\" + c_DIRECTORY_NAME_FOR_FIXING_ZIPS + "\\", true);
+            }
             if (Directory.Exists(Application.StartupPath + @"\spctemp\"))
             {
                 this.SIFileOp.DirectoryDelete(Application.StartupPath + @"\spctemp\", true);
             }
-            if (File.Exists(Properties.Settings.Default.gameDir + "lol.launcher.exe") ||
-                File.Exists(Properties.Settings.Default.gameDir + "League Of Legends.exe")||
-                File.Exists(Properties.Settings.Default.gameDir + "LoLLauncher.exe"))
+            if (isValidLoLDir(Properties.Settings.Default.gameDir ))
             {
                 gameDirectory = Properties.Settings.Default.gameDir;
-                //if (!File.Exists(Properties.Settings.Default.gameDir + "lol.launcher.exe"))
-                //{ gameDirectory = gameDirectory.Replace("game\\", "").Replace("Game\\", ""); }
-
-                //gameDirectory = gameDirectory.Replace("game\\", "").Replace("Game\\", "");
-                //gameDirectory = gameDirectory.Substring(0, gameDirectory.Length - 5);
             }
-            else if (File.Exists(usGameDirectory + "lol.launcher.exe") ||
-                File.Exists(usGameDirectory + "LoLLauncher.exe"))
+            else if (isValidLoLDir(usGameDirectory))
             {
                 gameDirectory = usGameDirectory;
             }
-            else if (File.Exists(euGameDirectory + "lol.launcher.exe") ||
-                File.Exists(euGameDirectory + "LoLLauncher.exe"))
+            else if (isValidLoLDir(euGameDirectory ))
             {
                 gameDirectory = euGameDirectory;
             }
-            else if (File.Exists(euGameDirectory64 + "lol.launcher.exe") ||
-                File.Exists(euGameDirectory64 + "LoLLauncher.exe"))
+            else if (isValidLoLDir(euGameDirectory64))
             {
                 gameDirectory = euGameDirectory64;
             }
@@ -844,7 +839,7 @@ namespace SkinInstaller
                         {
                             gameDirectory = gameDirectory + dialogFileNamesSplitPath[i] + @"\";
                         }
-                        if ((dialogFileNamesSplitPath[dialogFileNamesSplitPath.Length - 1] == "lol.launcher.exe") || (dialogFileNamesSplitPath[dialogFileNamesSplitPath.Length - 1] == "league of legends.exe")|| (dialogFileNamesSplitPath[dialogFileNamesSplitPath.Length - 1] == "lollauncher.exe"))
+                        if (isValidLoLName(dialogFileNamesSplitPath[dialogFileNamesSplitPath.Length - 1]))
                         {
                             Properties.Settings.Default.gameDir = gameDirectory;
                             Properties.Settings.Default.Save();
@@ -1081,13 +1076,15 @@ namespace SkinInstaller
             if(true)
             debug.Append(tooAdd + "\r\n");
         }
-        void UpdateProgressSafe(int value)
+        void UpdateProgressSafe(int value, string extra="")
         {
             if (value > this.progressBar1.Maximum) value = this.progressBar1.Maximum;
             MethodInvoker action = delegate
             {
                 this.progressBar1.Value = value;
-                this.label2Percent.Text = ((value != 0) ? value.ToString() + "%" : "");
+                string extras = "";
+                if (extra != "") extras = " (" + extra + ")";
+                this.label2Percent.Text = ((value != 0) ? value.ToString() + "%"+extras: "");
                 this.progressBar1.Refresh();
             };
             this.progressBar1.BeginInvoke(action);
@@ -2649,7 +2646,7 @@ namespace SkinInstaller
                 }
                 catch (System.Exception ex)
                 {
-                	//lgg todo
+                	
                 }
                 
                 return new fileLocReturn("\\\\skinInfo\\\\",fileName);
@@ -3920,6 +3917,136 @@ namespace SkinInstaller
             }
             debugadd("fin");
         }
+        private void zipBackup(string destination, string altDestination="", bool addLocalDirsToPath=false)
+        {
+            String zipLocation = destination.Substring(0, destination.IndexOf(".zip") + 4);
+            
+            String zipInnerLocation = destination.Substring(destination.IndexOf(".zip") + 5).Replace("\\", "/");
+            String localLocation = destination.Replace(gameDirectory, "");
+            String backupDir = Application.StartupPath + @"\backup\";
+            if (!Directory.Exists(backupDir)) Directory.CreateDirectory(backupDir);
+            string backupDest = backupDir + localLocation;
+            if (altDestination != "")
+            {
+                backupDest = altDestination;
+                if (addLocalDirsToPath) backupDest +=
+                    zipInnerLocation.Replace("/", "\\");
+                    //rafInnerLocation.Substring(0,rafInnerLocation.LastIndexOf("/")).Replace("/","\\");
+            }
+            
+
+            string infos = "attempting to backup A ZIP FILE\r\n\r\ndesitnation is\r\n" + destination + "\r\n raf file is\r\n" + zipLocation
+             + "\r\ninner location is\r\n" + zipInnerLocation+"\r\n backup destination is \r\n"+backupDest;
+
+            string[] strArray = backupDest.Split(new char[] { '\\' });
+            string path = backupDest.Remove(backupDest.Length - strArray[strArray.Length - 1].Length);
+            if (!Directory.Exists(path))
+            {
+                Directory.CreateDirectory(path);
+            }
+
+            debugadd(infos);
+            try
+            {
+                using (FileStream fs = new FileStream(backupDest, FileMode.OpenOrCreate))
+                {
+                    using (ZipFile zip = ZipFile.Read(zipLocation))
+                    {
+                        //find the right entry
+                        foreach (ZipEntry potentry in zip.Entries)
+                        {
+                            string entryPath = potentry.FileName.ToLower().Replace("\\", "/");
+                            if (entryPath == zipInnerLocation)
+                            {                            
+                                potentry.Extract(fs);
+
+                                zip.Dispose();
+                                break;
+                            }
+                        }
+                    
+                    }
+
+                    fs.Close();
+                }
+            }
+            catch (System.Exception ex)
+            {
+
+            }
+        }
+        public void zipInject(string origonal, string destination)
+        {
+            FileInfo origonalFI = new FileInfo(origonal);
+            String zipLocation = destination.Substring(0, destination.IndexOf(".zip") + 4);
+            String zipInnerLocation = destination.Substring(destination.IndexOf(".zip") + 5).Replace("\\", "/");
+            string infos = "THIS IS A ZIP FILE\r\n\r\nOrigonal is\r\n" + origonal +
+              "\r\ndesitnation is\r\n" + destination + "\r\n zip file is\r\n" + zipLocation
+             + "\r\ninner location is\r\n" + zipInnerLocation;
+            debugadd(infos);
+            //Cliver.Message.Inform(infos);
+            try
+            {
+            using (ZipFile zip = ZipFile.Read(zipLocation))
+            {
+                //find the right entry
+                for (int x = zip.Count - 1; x >= 0; x--)
+                {
+                    ZipEntry potentry = zip[x];
+                    string entryPath = potentry.FileName.ToLower().Replace("\\", "/");
+                    if (entryPath == zipInnerLocation)
+                    {
+                        string zipRealName = potentry.FileName;
+                        //zipRealName = zipRealName.Replace("\\", "/");
+                        string zipRealPath = zipRealName.Substring(0, zipRealName.Length - origonalFI.Name.Length -1);
+                        if (zip.ContainsEntry(zipRealName))
+                        {
+                            //expected
+                            zip.RemoveEntry(zipRealName);
+                            zip.RemoveEntry(potentry);
+                            if (zip.ContainsEntry(zipRealName))
+                            {
+                                //unable to delete!!
+                            }
+                            //todo make this caps
+                            zip.AddEntry(zipRealName, File.ReadAllBytes(origonal));
+                            //zip.AddFile(origonal, zipRealPath);
+                            zip.Save();
+                        }
+                        else
+                        {
+                            /*zip.Dispose();
+                            //This zip is fubar!!
+                            if (!Directory.Exists(Application.StartupPath + "\\"+c_DIRECTORY_NAME_FOR_FIXING_ZIPS))
+                                Directory.CreateDirectory(Application.StartupPath + "\\"+c_DIRECTORY_NAME_FOR_FIXING_ZIPS);
+
+                            zip.ExtractAll(Application.StartupPath + "\\" + c_DIRECTORY_NAME_FOR_FIXING_ZIPS);
+                            string moveTo = Application.StartupPath + "\\" + c_DIRECTORY_NAME_FOR_FIXING_ZIPS + "\\" + zipRealName.Replace("/","\\");
+
+                            this.SIFileOp.FileMove(origonal,moveTo);
+                            string newZipLocation=Application.StartupPath + "\\" + c_DIRECTORY_NAME_FOR_FIXING_ZIPS + "\\" +"Archive.zip";
+                            using (ZipFile zipFixed = new ZipFile())
+                            {
+                                zipFixed.AddDirectory(Application.StartupPath + "\\" + c_DIRECTORY_NAME_FOR_FIXING_ZIPS);
+                                zipFixed.Save(newZipLocation);
+                            }
+                            this.SIFileOp.FileMove(newZipLocation, zipLocation);
+
+                            this.SIFileOp.DirectoryDelete(Application.StartupPath + "\\"+c_DIRECTORY_NAME_FOR_FIXING_ZIPS+"\\", true);
+                            */
+
+                        }
+                        
+                        break;
+                    }
+                }
+            }
+            }
+            catch (System.Exception ex)
+            {
+
+            }
+        }
         private void fileCopyFiles(ref List<installFileInfo> filteredFileInfo)
         {
             int fn = 0;
@@ -3936,14 +4063,14 @@ namespace SkinInstaller
                     debugadd("raf Installing " + installInfo.getFileNamePath());
                     rafInject(installInfo.origonal, gameDirectory + installInfo.getFileNamePath());
                 }
-                else if (installInfo.getFileNamePath().Contains("zipfile"))
+                else if (installInfo.getFileNamePath().Contains(".zip"))
                 {
-                    //GarenaLoL\GameData\Apps\LoL\Game
-                    //no backup to do here, just delete late
-                    string pathTOInstallTo = installInfo.getFileNamePath();
-                    pathTOInstallTo=pathTOInstallTo.Replace("zipfile", "GameData\\Apps\\LoL\\Game");
-                    this.SIFileOp.FileMove(installInfo.origonal,
-                        gameDirectory + pathTOInstallTo);
+                    
+                    // lgg todo
+                    debugadd("zip backup " + installInfo.getFileNamePath());
+                    zipBackup(gameDirectory + installInfo.getFileNamePath(), "");
+                    debugadd("zip Installing " + installInfo.getFileNamePath());
+                    zipInject(installInfo.origonal, gameDirectory + installInfo.getFileNamePath());
                 }
                 else
                 {
@@ -4175,8 +4302,9 @@ namespace SkinInstaller
                                 debugadd("Missing backup for " + path + " and " + fileName + ", this probably means it was skipped during install");
                             }
                         }
-                        else if (path.Contains("zipfile"))
+                        else if (path.Contains(".zip"))
                         {
+                            //lgg todo
                             string pathTOInstallTo = path.Replace("zipfile", "\\GameData\\Apps\\LoL\\Game");
                             pathTOInstallTo=gameDirectory + pathTOInstallTo + fileName;
                             this.SIFileOp.FileDelete(pathTOInstallTo);
@@ -6969,9 +7097,12 @@ namespace SkinInstaller
                                 rafBackup(gameDirectory +
                                     foundAt, FileName);
                             }
-                            else if (pair.Value.ToLower().Contains("zipfile"))
+                            else if (pair.Value.ToLower().Contains(".zip"))
                             {
-                                //todo lgg
+                                if (fileListWorker1.IsBusy) return new Bitmap(2, 2);
+
+                                zipBackup(gameDirectory +
+                                    foundAt, FileName);
                             }
                             else
                             {
@@ -7125,6 +7256,10 @@ namespace SkinInstaller
                 {
                     this.SIFileOp.DirectoryDelete(Application.StartupPath + "\\" + c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL + "\\", true);
                 }
+                if (Directory.Exists(Application.StartupPath + "\\" + c_DIRECTORY_NAME_FOR_FIXING_ZIPS + "\\"))
+                {
+                    this.SIFileOp.DirectoryDelete(Application.StartupPath + "\\" + c_DIRECTORY_NAME_FOR_FIXING_ZIPS + "\\", true);
+                }
                 if (Directory.Exists(Application.StartupPath + @"\spctemp\"))
                 {
                     this.SIFileOp.DirectoryDelete(Application.StartupPath + @"\spctemp\", true);
@@ -7221,6 +7356,31 @@ namespace SkinInstaller
             Cliver.Message.Inform("Sound file location is \n" +
                 findSoundsFSBLocation());
         }
+        public bool isValidLoLName(string inputName)
+        {
+            bool ret = false;
+            inputName = inputName.ToLower();
+            if (inputName.Contains("lol") && inputName.Contains("launcher"))
+            {
+                ret = true;
+            }
+            if (inputName.Contains("league of legends"))
+            {
+                ret = true;
+            }
+            return ret;
+        }
+        public bool isValidLoLDir(string inputDir)
+        {
+            bool ret = false;
+            if (!Directory.Exists(inputDir)) return false;
+            string[] files = Directory.GetFiles(inputDir, "*", SearchOption.TopDirectoryOnly);
+            foreach (string file in files)
+            {
+                if (isValidLoLName(file)) ret = true;
+            }
+            return ret;
+        }
         private void locateGameClient_Click(object sender, EventArgs e)
         {
             bool flag = true;
@@ -7233,7 +7393,7 @@ namespace SkinInstaller
             dialog.Filter = "Executable (*.exe)|*.exe|All files (*.*)|*.*";
 
             if (
-                (!File.Exists(gameDirectory + "lol.launcher.exe") && !File.Exists(gameDirectory + "League Of Legends.exe"))
+                (!isValidLoLDir(gameDirectory))
                 || (Cliver.Message.Show("Confirm", SystemIcons.Question, "Current game directory is set to:\n" + gameDirectory + "\nWould you like to change it?", 0, new string[2] { "Yes", "No" }) != 1))
             {
                 while ((str == string.Empty) && flag)
@@ -7245,9 +7405,7 @@ namespace SkinInstaller
                         {
                             str = str + strArray[i] + @"\";
                         }
-                        if ((strArray[strArray.Length - 1].ToLower() == "lol.launcher.exe") ||
-                        (strArray[strArray.Length - 1].ToLower() == "league of legends.exe") ||
-                        (strArray[strArray.Length - 1].ToLower() == "lollauncher.exe"))
+                        if (isValidLoLName(strArray[strArray.Length - 1]))
                         {
                             gameDirectory = str;
                             //gameDirectory = gameDirectory;
@@ -7657,7 +7815,16 @@ namespace SkinInstaller
 
         private void backgroudProgress_Changed(object sender, ProgressChangedEventArgs e)
         {
-            UpdateProgressSafe(e.ProgressPercentage);
+            if (e.UserState != null)
+            {
+                int extra = (int)e.UserState;
+                UpdateProgressSafe(e.ProgressPercentage, extra.ToString() + "%");
+            }
+            else
+            {
+
+                UpdateProgressSafe(e.ProgressPercentage);
+            }
             //Cliver.Message.Inform("progress is now" + e.ProgressPercentage);
         }
         private bool CreateAllFileListCS(string base2Dir, string fileName, string gameDirectory)
@@ -7710,6 +7877,8 @@ namespace SkinInstaller
                                 {
                                     lastP = percent;
                                     Console.WriteLine("Please wait..." + (percent / 2).ToString() + "%");
+
+                                    fileListWorker1.ReportProgress(percent / 2);
                                 }
                             }
                         }
@@ -7807,26 +7976,27 @@ namespace SkinInstaller
                             {
                                 lastpP = percent;
                                 //Console.WriteLine("Please wait..." + ((percent / 2) + 0).ToString() + "%");
-                                fileListWorker1.ReportProgress(percent / 2);
+                                fileListWorker1.ReportProgress(percent);
                             }
                         }
                     }
                     else if (fileInfo.Extension == ".zip")
                     {
                         //we need to extract these..and like.. keep track of them
-
+                        string lowerFirstName = fileInfo.FullName.ToLower();
+                        string relativePath = lowerFirstName.Substring(baseDir.Length - 1);
                         using (ZipFile zipFile = ZipFile.Read(fileInfo.FullName))
                         {
                             int num = 0;
-                            int lastP = 0;
-
+                            int lastzP = 0;
+                            
                             foreach (ZipEntry current in zipFile)
                             {
                                 num++;
                                 if (!current.FileName.Contains(".")) continue;
 
                                 string empty = string.Empty;
-                                string FileName = "zipfile\\" + current.FileName.Replace("/", "\\");
+                                string FileName = relativePath+"\\" + current.FileName.Replace("/", "\\");
                                 string ext = FileName.Substring(FileName.LastIndexOf('.'));
                                 //Cliver.Message.Inform(FileName);
                                 //FileInfo st = new FileInfo(current.FileName);
@@ -7849,13 +8019,18 @@ namespace SkinInstaller
                                     if (!fileList.Contains(niceName))
                                     {
                                         fileList.Add(niceName);
-                                        int percent = (int)Math.Floor((double)num / (double)zipFile.Count * (double)100.0);
-
+                                        int zpercent = (int)Math.Floor((double)num / (double)zipFile.Count * (double)100.0);
+                                        float zpartWorth = 100.0f / (float)array.Length;
+                                        int percent =1+ (int)((Math.Floor((double)i / (double)array.Length * (double)100.0))+((float)zpercent*zpartWorth));
+                                        
                                         //if(new Random().Next(100)>96)
-                                        if (percent - lastP >= 10)
+                                       if (percent - lastpP >= 1||zpercent-lastzP>=1)
                                         {
-                                            lastP = percent;
-                                            Console.WriteLine("Please wait..." + (percent / 2).ToString() + "%");
+                                            lastzP = zpercent;
+                                           lastpP = percent;
+
+                                            fileListWorker1.ReportProgress(percent ,zpercent);
+                                            Console.WriteLine("Please wait..." + (percent ).ToString() + "%");
                                         }
                                     }
                                 }
