@@ -51,30 +51,34 @@ namespace RelManLib
             myLocation = location;
             
             //this.RelMan = RelMan;
-            content = System.IO.File.ReadAllBytes(location);
-            magic = System.Text.Encoding.ASCII.GetString(content.SubArray(0, 4));
-            magicInt = BitConverter.ToUInt32(content.SubArray(0, 4),0);
-            fileType = BitConverter.ToString(content.SubArray(4, 4), 0);
-            fileTypeInt= BitConverter.ToUInt32(content.SubArray(4, 4), 0);
-            numberItems = BitConverter.ToUInt32(content.SubArray(8, 4), 0);
-            version = BitConverter.ToUInt32(content.SubArray(12, 4), 0);
-            uint dirHeaderLoc = 16;
-            UInt32 dirCount1 = BitConverter.ToUInt32(content.SubArray((int)dirHeaderLoc, 4), 0);//test
+            if (File.Exists(location))
+            {
 
-            uint fileHeaderLoc = dirHeaderLoc + 4 + (dirCount1 * 20);
-            UInt32 fileCount1 = BitConverter.ToUInt32(content.SubArray((int)fileHeaderLoc, 4), 0);//test
+                content = System.IO.File.ReadAllBytes(location);
+                magic = System.Text.Encoding.ASCII.GetString(content.SubArray(0, 4));
+                magicInt = BitConverter.ToUInt32(content.SubArray(0, 4), 0);
+                fileType = BitConverter.ToString(content.SubArray(4, 4), 0);
+                fileTypeInt = BitConverter.ToUInt32(content.SubArray(4, 4), 0);
+                numberItems = BitConverter.ToUInt32(content.SubArray(8, 4), 0);
+                version = BitConverter.ToUInt32(content.SubArray(12, 4), 0);
+                uint dirHeaderLoc = 16;
+                UInt32 dirCount1 = BitConverter.ToUInt32(content.SubArray((int)dirHeaderLoc, 4), 0);//test
 
-            uint totalEntriesTest = dirCount1 + fileCount1;
-            uint stringHeaderLoc = fileHeaderLoc + 4 + (fileCount1 * 44);
+                uint fileHeaderLoc = dirHeaderLoc + 4 + (dirCount1 * 20);
+                UInt32 fileCount1 = BitConverter.ToUInt32(content.SubArray((int)fileHeaderLoc, 4), 0);//test
+
+                uint totalEntriesTest = dirCount1 + fileCount1;
+                uint stringHeaderLoc = fileHeaderLoc + 4 + (fileCount1 * 44);
 
 
-            strList = new RelStringList(this, content, stringHeaderLoc);
-            dirList = new RelDirectoryList(this, content, dirHeaderLoc);
-            fileList = new RelFileList(this,content,fileHeaderLoc);
-            //iterate through directories, add files and paths
-            
-            readRelDirEntry();
-            ;
+                strList = new RelStringList(this, content, stringHeaderLoc);
+                dirList = new RelDirectoryList(this, content, dirHeaderLoc);
+                fileList = new RelFileList(this, content, fileHeaderLoc);
+                //iterate through directories, add files and paths
+
+                readRelDirEntry();
+                ;
+            }
             
         }
         public bool adjustSizeByFile(string filename, string rafLocationName)
@@ -218,9 +222,14 @@ namespace RelManLib
                                     total += (vA * multiplier);
                                     multiplier += 500;
                                 }
+                                FileInfo sok = new FileInfo(idi.FullName + "/S_OK");
+                                if (sok.Exists)
+                                {
+                                    total += 99999999;
+                                }
                                 if (total > winnerTotal)
                                 {
-                                    //dont declare winner unless this also has a release manifest
+                                    //don't declare winner unless this also has a release manifest
                                     FileInfo rmfie = new FileInfo(idi.FullName + "/releasemanifest");
                                     if (rmfie.Exists)
                                     {
