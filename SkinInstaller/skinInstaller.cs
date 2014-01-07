@@ -483,9 +483,11 @@ namespace SkinInstaller
                                 System.Net.WebClient client = new WebClient();
                                 try
                                 {
-                                    client.DownloadFile(theURL, dir+"downloaded.zip");
-                                    files.Add(dir + "downloaded.zip");
-                                    addItFlag = true;
+                                    client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(client_DownloadProgressChanged);
+                                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
+                                    client.DownloadFileAsync(new Uri(theURL), dir + "downloaded.7z");
+
+                                    addItFlag = false;
                                     //string response = client.DownloadString(dlURL).Trim();
                                 }
                                 catch (Exception ex1)
@@ -541,9 +543,11 @@ namespace SkinInstaller
                     System.Net.WebClient client = new WebClient();
                     try
                     {
-                        client.DownloadFile(downloadURL, dir + "downloaded.zip");
-                        files.Add(dir + "downloaded.zip");
-                        addItFlag = true;
+                        client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(client_DownloadProgressChanged);
+                        client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
+                        client.DownloadFileAsync(new Uri(downloadURL), dir + "downloaded.7z");
+                        //files.Add(dir + "downloaded.7z");
+                        addItFlag =false;
                     }
                     catch (Exception ex1)
                     {
@@ -577,39 +581,27 @@ namespace SkinInstaller
             }
             if(files.Count>0)
             {
-                {
-                    //checked, ok
-                    processNewDirectory(files.ToArray(),addItFlag||addItFileFlag);
-                }
-                /*if (addItFlag||addItFileFlag)
-                {
-                    int setDone = Properties.Settings.Default.optionDoneAdding;
-                    if (setDone == -1)
-                    {
-                        bool saveFlag = false;
-                        string msgPart1 = "We have just added the files you downloaded from the website to the list of files\r\n";
-                        if (addItFileFlag) msgPart1 = "We have added the files to the list in SIU ";
-                        setDone = Cliver.Message.Show("Done Adding files?",
-                                SystemIcons.Information, out saveFlag,
-                             msgPart1
-                            + "that will be part of your skin, do you have more files to add?\r\n"
-                            + "or are you ready to finalize this skin and add it to the database?",
-                                0, new string[2] { "I am done adding files, finalize this skin.", "I am not done yet." });
-                        if (saveFlag)
-                        {
-                            Properties.Settings.Default.optionDoneAdding = setDone;
-                        }
-                        Properties.Settings.Default.Save();
-                        
-                    }
-                    if(setDone==0)
-                    {
-                            //they are done, install skin
-                            button1.PerformClick();                    
-                    }
-                }*/
+                processNewDirectory(files.ToArray(),addItFlag||addItFileFlag);
+
             }
         }
+        void client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
+        {
+            double bytesIn = double.Parse(e.BytesReceived.ToString());
+            double totalBytes = double.Parse(e.TotalBytesToReceive.ToString());
+            double percentage = bytesIn / totalBytes * 100;
+            UpdateProgressSafe((int)percentage);
+        }
+        void client_DownloadFileCompleted(object sender, AsyncCompletedEventArgs e)
+        {
+            UpdateProgressSafe(100);
+
+            string dir = Application.StartupPath + "\\t1\\"; 
+            processNewDirectory(new string[] {dir + "downloaded.7z"},true);
+
+        }
+
+
         protected override void WndProc(ref Message m)
         {
             switch (m.Msg)
@@ -869,8 +861,8 @@ namespace SkinInstaller
                 }
             }
 
-            //RelManDirectoryFile rmdf = RelManDirectoryFile.RelManDirectoryFileFromRiotRoot(gameDirectory);
-
+           // RelManDirectoryFile rmdf = RelManDirectoryFile.RelManDirectoryFileFromRiotRoot(gameDirectory);
+            //List<RelFileEntry> entries = rmdf.fileList.SearchFileEntries("lol_sfx_hud.fsb");
            // RAFArchive raf = new RAFArchive("C:\\Riot Games\\League of Legends\\RADS\\projects\\lol_game_client\\filearchives\\0.0.0.155\\Archive_65414672.raf");
             string compFile = "zacwgoomovemoving.luaobj";
 
@@ -2070,7 +2062,21 @@ namespace SkinInstaller
             process.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
             process.StartInfo.CreateNoWindow = true;
             process.StartInfo.WorkingDirectory = Application.StartupPath;
+            process.StartInfo.RedirectStandardOutput = true;
+            process.StartInfo.RedirectStandardInput = true;
+
             process.Start();
+            int nc = -1;
+            string redirectedOutput = string.Empty;
+            do 
+            {
+                nc = process.StandardOutput.Read();
+                if ((redirectedOutput += (char)nc).Contains("(will not be echoed)"))
+                {
+                    process.StandardInput.WriteLine("lorixy");
+                    redirectedOutput = String.Empty;
+                }
+            } while (nc != -1);
             process.WaitForExit();
         }
         private void b_IAddFiles_Click(object sender, EventArgs e)
