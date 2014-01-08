@@ -190,6 +190,66 @@ namespace RelManLib
             }
             return currentEntry;
         }
+        public static string getGameVersionFromSolution(string riotRootLocation)
+        {
+            string version = "0.0.0.0";
+            DirectoryInfo di = new DirectoryInfo(riotRootLocation + "/RADS/solutions/lol_game_client_sln/releases");
+            if (di.Exists)
+            {
+                DirectoryInfo[] versionFolders = di.GetDirectories();
+                string winnerName = "";
+                int winnerTotal = 0;
+                foreach (DirectoryInfo idi in versionFolders)
+                {
+                    string[] versions = idi.Name.Split('.');
+                    int total = 0;
+                    int multiplier = 1;
+                    for (int ii = versions.Length - 1; ii >= 0; ii--)
+                    {
+                        int vA = int.Parse(versions[ii].Trim());
+                        total += (vA * multiplier);
+                        multiplier += 500;
+                    }
+                    FileInfo sok = new FileInfo(idi.FullName + "/S_OK");
+                    if (sok.Exists)
+                    {
+                        total += 999;
+                    }
+                    if (total > winnerTotal)
+                    {
+                        //don't declare winner unless this also has a release manifest
+                        FileInfo rmfie = new FileInfo(idi.FullName + "/solutionmanifest");
+                        if (rmfie.Exists)
+                        {
+                            winnerName = idi.FullName;
+                            winnerTotal = total;
+                        }
+                    }
+                }
+                //we got the right folder now
+                FileInfo solutionConfig = new FileInfo(winnerName + "/solutionmanifest");
+                if (solutionConfig.Exists)
+                {
+                    string[] lines = System.IO.File.ReadAllLines(solutionConfig.FullName);
+                    bool foundGCLine = false;
+                    foreach (string line in lines)
+                    {
+                        if (foundGCLine)
+                        {
+                            version = line;
+                            foundGCLine = false;
+                            break;                            
+                        }
+                        if (line.ToLower().CompareTo("lol_game_client")==0)
+                        {
+                            foundGCLine = true;
+                        }
+                    }
+
+                }
+            }
+            return version;
+        }
         public static RelManDirectoryFile RelManDirectoryFileFromRiotRoot(String riotRootLocation)
         {
             //C:\Riot Games\League of Legends
@@ -205,6 +265,7 @@ namespace RelManLib
                     if (File.Exists(path + "/lol.launcher.exe") || File.Exists(path + "/League Of Legends.exe"))
                     {
                         //found riot folder
+                        string riotWantsVersion = getGameVersionFromSolution(path);
                         string winnerName = "";
                         int winnerTotal = 0;
                         DirectoryInfo di = new DirectoryInfo(path + "/RADS/projects/lol_game_client/releases");
@@ -224,6 +285,10 @@ namespace RelManLib
                                 }
                                 FileInfo sok = new FileInfo(idi.FullName + "/S_OK");
                                 if (sok.Exists)
+                                {
+                                    total += 999;
+                                }
+                                if (idi.Name.CompareTo(riotWantsVersion) == 0)
                                 {
                                     total += 99999999;
                                 }
