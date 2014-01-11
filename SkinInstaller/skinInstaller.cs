@@ -97,6 +97,7 @@ namespace SkinInstaller
         
         #endregion
         #region vars
+        RelManDirectoryFile rmdf = null;
         string dlURL = "https://sites.google.com/site/siuupdates/version.txt";
         TextEditor.TextEditorMain ted;            
         TreeNode newRafNode=new TreeNode("RAF");
@@ -405,6 +406,7 @@ namespace SkinInstaller
         private ToolStripMenuItem skinHelpersToolStripMenuItem;
         private ToolStripMenuItem copyLikeFilesToolStripMenuItem;
         private BackgroundWorker uninstallWorker1;
+        private ToolStripMenuItem lookUpReleaseManifestInfoToolStripMenuItem;
 
         TreeNode database = new TreeNode("dbRoot");
         #endregion
@@ -742,7 +744,7 @@ namespace SkinInstaller
             USkinSDK.USkinInit("", "", skinUPath);
                 USkinSDK.USkinLoadSkin(skinUPath);
 #endif
-            doBrowser(Properties.Settings.Default.showAds);
+            
             loadNameReplacements();
             loadExcludedFiles();
             UpdateProgressSafe(0);
@@ -861,7 +863,7 @@ namespace SkinInstaller
                 }
             }
 
-           // RelManDirectoryFile rmdf = RelManDirectoryFile.RelManDirectoryFileFromRiotRoot(gameDirectory);
+            this.rmdf = RelManDirectoryFile.RelManDirectoryFileFromRiotRoot(gameDirectory);
             //List<RelFileEntry> entries = rmdf.fileList.SearchFileEntries("lol_sfx_hud.fsb");
            // RAFArchive raf = new RAFArchive("C:\\Riot Games\\League of Legends\\RADS\\projects\\lol_game_client\\filearchives\\0.0.0.155\\Archive_65414672.raf");
             string compFile = "zacwgoomovemoving.luaobj";
@@ -899,6 +901,7 @@ namespace SkinInstaller
             lvwColumnSorter.Order = Properties.Settings.Default.sortAscending ? SortOrder.Ascending : SortOrder.Descending;
             this.listView1.Sort();
             this.loadListViewSettings();
+            doBrowser(Properties.Settings.Default.showAds);
 
         }
         public void loadNameReplacements()
@@ -4565,16 +4568,6 @@ namespace SkinInstaller
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
-            this.listView1 = new SkinInstaller.ListViewItemHover();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.dataBaseListMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripSelectUninstalled = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSelectAllInstalled = new System.Windows.Forms.ToolStripMenuItem();
@@ -4705,11 +4698,22 @@ namespace SkinInstaller
             this.ParticleTreeWorkerNew = new System.ComponentModel.BackgroundWorker();
             this.splitContainer6 = new System.Windows.Forms.SplitContainer();
             this.panel10 = new System.Windows.Forms.Panel();
-            this.webBrowser2Test = new SkinInstaller.ExtendedWebBrowser();
             this.button3CloseAd = new System.Windows.Forms.Button();
             this.addFilesWorker = new System.ComponentModel.BackgroundWorker();
             this.patchFixerWorker = new System.ComponentModel.BackgroundWorker();
             this.uninstallWorker1 = new System.ComponentModel.BackgroundWorker();
+            this.listView1 = new SkinInstaller.ListViewItemHover();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.webBrowser2Test = new SkinInstaller.ExtendedWebBrowser();
+            this.lookUpReleaseManifestInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -5263,81 +5267,6 @@ namespace SkinInstaller
             this.splitContainer2.Size = new System.Drawing.Size(714, 281);
             this.splitContainer2.SplitterDistance = 522;
             this.splitContainer2.TabIndex = 7;
-            // 
-            // listView1
-            // 
-            this.listView1.AutoArrange = false;
-            this.listView1.CheckBoxes = true;
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader5,
-            this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader6,
-            this.columnHeader8,
-            this.columnHeader9,
-            this.columnHeader7});
-            this.listView1.ContextMenuStrip = this.dataBaseListMenuStrip1;
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.GridLines = true;
-            this.listView1.LargeImageList = this.imageList1;
-            this.listView1.Location = new System.Drawing.Point(18, 15);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(504, 266);
-            this.listView1.SmallImageList = this.imageList1;
-            this.listView1.TabIndex = 0;
-            this.listView1.TileSize = new System.Drawing.Size(2, 2);
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.ItemHover += new SkinInstaller.ListViewItemHover.ItemHoverEventHandler(this.listView1_ItemMouseHover);
-            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
-            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = " ";
-            this.columnHeader1.Width = 43;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Skin Title";
-            this.columnHeader2.Width = 190;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Author";
-            this.columnHeader5.Width = 100;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "File Count";
-            this.columnHeader3.Width = 69;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Installed";
-            this.columnHeader4.Width = 53;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "Added";
-            this.columnHeader6.Width = 67;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "Date and Time Added";
-            this.columnHeader8.Width = 0;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "Date and Time Installed";
-            this.columnHeader9.Width = 0;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "Character";
-            this.columnHeader7.Width = 90;
             // 
             // dataBaseListMenuStrip1
             // 
@@ -5899,29 +5828,30 @@ namespace SkinInstaller
             this.treeViewMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.exportSelectedFilesToolStripMenuItem,
             this.deselectAllFilesToolStripMenuItem,
-            this.helpToolStripMenuItem1});
+            this.helpToolStripMenuItem1,
+            this.lookUpReleaseManifestInfoToolStripMenuItem});
             this.treeViewMenuStrip1.Name = "treeViewMenuStrip1";
             this.treeViewMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.treeViewMenuStrip1.Size = new System.Drawing.Size(181, 70);
+            this.treeViewMenuStrip1.Size = new System.Drawing.Size(231, 114);
             // 
             // exportSelectedFilesToolStripMenuItem
             // 
             this.exportSelectedFilesToolStripMenuItem.Name = "exportSelectedFilesToolStripMenuItem";
-            this.exportSelectedFilesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.exportSelectedFilesToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
             this.exportSelectedFilesToolStripMenuItem.Text = "Export Selected Files";
             this.exportSelectedFilesToolStripMenuItem.Click += new System.EventHandler(this.exportSelectedFilesToolStripMenuItem_Click);
             // 
             // deselectAllFilesToolStripMenuItem
             // 
             this.deselectAllFilesToolStripMenuItem.Name = "deselectAllFilesToolStripMenuItem";
-            this.deselectAllFilesToolStripMenuItem.Size = new System.Drawing.Size(180, 22);
+            this.deselectAllFilesToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
             this.deselectAllFilesToolStripMenuItem.Text = "Deselect All Files";
             this.deselectAllFilesToolStripMenuItem.Click += new System.EventHandler(this.deselectAllFilesToolStripMenuItem_Click);
             // 
             // helpToolStripMenuItem1
             // 
             this.helpToolStripMenuItem1.Name = "helpToolStripMenuItem1";
-            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(180, 22);
+            this.helpToolStripMenuItem1.Size = new System.Drawing.Size(230, 22);
             this.helpToolStripMenuItem1.Text = "Help!";
             this.helpToolStripMenuItem1.Click += new System.EventHandler(this.helpToolStripMenuItem1_Click);
             // 
@@ -6591,19 +6521,6 @@ namespace SkinInstaller
             this.panel10.Size = new System.Drawing.Size(154, 38);
             this.panel10.TabIndex = 0;
             // 
-            // webBrowser2Test
-            // 
-            this.webBrowser2Test.AdditionalHeaders = null;
-            this.webBrowser2Test.Location = new System.Drawing.Point(50, 8);
-            this.webBrowser2Test.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser2Test.Name = "webBrowser2Test";
-            this.webBrowser2Test.Size = new System.Drawing.Size(39, 21);
-            this.webBrowser2Test.TabIndex = 1;
-            this.webBrowser2Test.Tag = true;
-            this.webBrowser2Test.Visible = false;
-            this.webBrowser2Test.BeforeNavigate2 += new System.EventHandler<SkinInstaller.BeforeNavigate2EventArgs>(this.webBrowser2_BeforeNavigate2);
-            this.webBrowser2Test.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser2Test_DocumentCompleted);
-            // 
             // button3CloseAd
             // 
             this.button3CloseAd.Location = new System.Drawing.Point(3, 6);
@@ -6634,6 +6551,101 @@ namespace SkinInstaller
             this.uninstallWorker1.DoWork += new System.ComponentModel.DoWorkEventHandler(this.uninstallWorker1_DoWork);
             this.uninstallWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.uninstallWorker1_ProgressChanged);
             this.uninstallWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.uninstallWorker1_RunWorkerCompleted);
+            // 
+            // listView1
+            // 
+            this.listView1.AutoArrange = false;
+            this.listView1.CheckBoxes = true;
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader5,
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader6,
+            this.columnHeader8,
+            this.columnHeader9,
+            this.columnHeader7});
+            this.listView1.ContextMenuStrip = this.dataBaseListMenuStrip1;
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.GridLines = true;
+            this.listView1.LargeImageList = this.imageList1;
+            this.listView1.Location = new System.Drawing.Point(18, 15);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(504, 266);
+            this.listView1.SmallImageList = this.imageList1;
+            this.listView1.TabIndex = 0;
+            this.listView1.TileSize = new System.Drawing.Size(2, 2);
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ItemHover += new SkinInstaller.ListViewItemHover.ItemHoverEventHandler(this.listView1_ItemMouseHover);
+            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
+            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = " ";
+            this.columnHeader1.Width = 43;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Skin Title";
+            this.columnHeader2.Width = 190;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Author";
+            this.columnHeader5.Width = 100;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "File Count";
+            this.columnHeader3.Width = 69;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Installed";
+            this.columnHeader4.Width = 53;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Added";
+            this.columnHeader6.Width = 67;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "Date and Time Added";
+            this.columnHeader8.Width = 0;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "Date and Time Installed";
+            this.columnHeader9.Width = 0;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "Character";
+            this.columnHeader7.Width = 90;
+            // 
+            // webBrowser2Test
+            // 
+            this.webBrowser2Test.AdditionalHeaders = null;
+            this.webBrowser2Test.Location = new System.Drawing.Point(50, 8);
+            this.webBrowser2Test.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser2Test.Name = "webBrowser2Test";
+            this.webBrowser2Test.Size = new System.Drawing.Size(39, 21);
+            this.webBrowser2Test.TabIndex = 1;
+            this.webBrowser2Test.Tag = true;
+            this.webBrowser2Test.Visible = false;
+            this.webBrowser2Test.BeforeNavigate2 += new System.EventHandler<SkinInstaller.BeforeNavigate2EventArgs>(this.webBrowser2_BeforeNavigate2);
+            this.webBrowser2Test.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser2Test_DocumentCompleted);
+            // 
+            // lookUpReleaseManifestInfoToolStripMenuItem
+            // 
+            this.lookUpReleaseManifestInfoToolStripMenuItem.Name = "lookUpReleaseManifestInfoToolStripMenuItem";
+            this.lookUpReleaseManifestInfoToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.lookUpReleaseManifestInfoToolStripMenuItem.Text = "Look Up ReleaseManifest Info";
+            this.lookUpReleaseManifestInfoToolStripMenuItem.Click += new System.EventHandler(this.lookUpReleaseManifestInfoToolStripMenuItem_Click);
             // 
             // skinInstaller
             // 
@@ -10357,6 +10369,17 @@ namespace SkinInstaller
             }
             exportNodes(nodes,treeView1.SelectedNode.Text);
         }
+
+        private void lookUpReleaseManifestInfoToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            TreeNode selected  = treeView1.SelectedNode;
+            String path = selected.FullPath.Replace("RAF", "").Replace("\\","/");
+            List<RelFileEntry> founds = this.rmdf.fileList.SearchFileEntries(path,true);
+            RelManLib.ReleaseManifestEntryForm form = new RelManLib.ReleaseManifestEntryForm(founds[0]);
+            form.Show();
+        }
+
+        
         private void getCheckedNodes(TreeNode node, ref List<TreeNode> checkedNodes)
         {
             if (node.Checked)
@@ -10901,24 +10924,31 @@ namespace SkinInstaller
         private void webBrowser1_NewWindow(object sender, CancelEventArgs e)
         {
             //Cliver.Message.Inform("new windows\r\n" + e.ToString());
-
-            HtmlElement link = webBrowser1.Document.ActiveElement;
-            String url = link.GetAttribute("href");
-            if (url.Equals(""))
+            try
             {
-                e.Cancel = false;
-                return;
+            
+                HtmlElement link = webBrowser1.Document.ActiveElement;
+                String url = link.GetAttribute("href");
+                if (url.Equals(""))
+                {
+                    e.Cancel = false;
+                    return;
+                }
+                if (url.StartsWith("//"))
+                {
+
+                }
+                else if (url.StartsWith("/"))
+                    url = webBrowser1.Url.Host + url;
+
+                //Cliver.Message.Inform("link is \r\n" + url);
+                System.Diagnostics.Process.Start(url);
+                e.Cancel = true;
             }
-            if (url.StartsWith("//"))
+            catch (System.Exception ex)
             {
 
             }
-            else if (url.StartsWith("/"))
-                url = webBrowser1.Url.Host + url;
-
-            //Cliver.Message.Inform("link is \r\n" + url);
-            System.Diagnostics.Process.Start(url);
-            e.Cancel = true;
         }
         private void link_MouseUp(object sender, HtmlElementEventArgs e)
         {
@@ -10949,22 +10979,37 @@ namespace SkinInstaller
         }
         private void webBrowser1_NewWindow2(object sender, NewWindow2EventArgs e)
         {
-            clicked = true;
-          //  Cliver.Message.Inform("new windows2\r\n" + e.ToString()+"\r\n\r\n");
-            e.PPDisp = webBrowser2Test.Application;
+            
+            try
+            {
+	            clicked = true;
+	                      //  Cliver.Message.Inform("new windows2\r\n" + e.ToString()+"\r\n\r\n");
+	                        e.PPDisp = webBrowser2Test.Application;
+            }
+            catch (System.Exception ex)
+            {
+	
+            }
         }
         private void webBrowser1_Navigating(object sender, WebBrowserNavigatingEventArgs e)
         {
-            if (mainWebReady)
+            try
             {
-                //Cliver.Message.Inform("Nav " + e.Url + "\r\n\r\nAt " + e.TargetFrameName.ToString());
-                //_MyUrl = e.Url;
-                string url = e.Url.ToString();
-                if (url.StartsWith("/"))
-                url = webBrowser1.Url.Host + url;
-                
-                System.Diagnostics.Process.Start(url);
-               e.Cancel=true;
+	            if (mainWebReady)
+	                        {
+	                            //Cliver.Message.Inform("Nav " + e.Url + "\r\n\r\nAt " + e.TargetFrameName.ToString());
+	                            //_MyUrl = e.Url;
+	                            string url = e.Url.ToString();
+	                            if (url.StartsWith("/"))
+	                            url = webBrowser1.Url.Host + url;
+	                
+	                            System.Diagnostics.Process.Start(url);
+	                           e.Cancel=true;
+	                        }
+            }
+            catch (System.Exception ex)
+            {
+	
             }
            
         }
@@ -10982,27 +11027,34 @@ namespace SkinInstaller
         public bool mainWebReady = false;
         void webBrowser2_BeforeNavigate2(object sender, BeforeNavigate2EventArgs e)
         {
-           if (waitForWeb) return;
-           if (!clicked) return;
+           try
+           {
+               if (waitForWeb) return;
+               if (!clicked) return;
 
-            if ((bool)this.webBrowser2Test.Tag == true)
-            {
-                if (
-                  ((int)e.flags == 64 || true)
+               if ((bool)this.webBrowser2Test.Tag == true)
+               {
+                   if (
+                     ((int)e.flags == 64 || true)
 
-                    && e.url.ToString() != "about:blank")
-                {
-                    e.Cancel = true;
-                    if (e.url.ToString().ToLower().Contains("http"))
-                        System.Diagnostics.Process.Start(e.url.ToString());
+                       && e.url.ToString() != "about:blank")
+                   {
+                       e.Cancel = true;
+                       if (e.url.ToString().ToLower().Contains("http"))
+                           System.Diagnostics.Process.Start(e.url.ToString());
 
-                    e.Cancel = true;
-                    waitForWeb = true;
+                       e.Cancel = true;
+                       waitForWeb = true;
 
-                    clicked = false;
-                    
-                }
-            }
+                       clicked = false;
+
+                   }
+               }
+           }
+           catch (System.Exception ex)
+           {
+
+           }
             //  waitForWeb = true;
           //  while (webBrowser2Test.ReadyState != WebBrowserReadyState.Complete)
            // {
@@ -11014,90 +11066,146 @@ namespace SkinInstaller
         }
         void webBrowser1_BeforeNavigate2(object sender, BeforeNavigate2EventArgs e)
         {
-            if (mainWebReady)
+            try
             {
-                //Cliver.Message.Inform("Srs click! @@\r\n\r\n " + e.url.ToString());
-                //e.url = "about:blank";
-                string url = e.url.ToString();
-                if (url.StartsWith("/"))
-                url = webBrowser1.Url.Host + url;
-                
-                System.Diagnostics.Process.Start(url);
-                e.Cancel = true;
-            }//else
-                //Cliver.Message.Inform("Normal click to follow click! @@\r\n\r\n " + e.url.ToString());
+	            if (mainWebReady)
+	                        {
+	                            //Cliver.Message.Inform("Srs click! @@\r\n\r\n " + e.url.ToString());
+	                            //e.url = "about:blank";
+	                            string url = e.url.ToString();
+	                            if (url.StartsWith("/"))
+	                            url = webBrowser1.Url.Host + url;
+	                
+	                            System.Diagnostics.Process.Start(url);
+	                            e.Cancel = true;
+	                        }//else
+	                            //Cliver.Message.Inform("Normal click to follow click! @@\r\n\r\n " + e.url.ToString());
+            }
+            catch (System.Exception ex)
+            {
+	
+            }
         }
-        
+        private static bool TrySetSuppressScriptErrors(WebBrowser webBrowser, bool value)
+        {
+            FieldInfo field = typeof(WebBrowser).GetField("_axIWebBrowser2", BindingFlags.Instance | BindingFlags.NonPublic);
+            if (field != null)
+            {
+                object axIWebBrowser2 = field.GetValue(webBrowser);
+                if (axIWebBrowser2 != null)
+                {
+                    axIWebBrowser2.GetType().InvokeMember("Silent", BindingFlags.SetProperty, null, axIWebBrowser2, new object[] { value });
+                    return true;
+                }
+            }
+
+            return false;
+        }
         private void doBrowser(bool on)
         {
-            on = false;//screw it :|
-            if (on)
+            try
             {
-                if (this.webBrowser1 == null)
+
+                //on = false;//screw it :|
+                if (on)
                 {
-                    this.webBrowser1 = new SkinInstaller.ExtendedWebBrowser();
-                    //this.webBrowser1 = new Axwebbroswer;
-                    this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
-                    this.webBrowser1.Location = new System.Drawing.Point(0, 0);
-                    this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
-                    this.webBrowser1.Name = "webBrowser1";
-                    this.webBrowser1.ScrollBarsEnabled = false;
-                    this.webBrowser1.Size = new System.Drawing.Size(154, 306);
-                    this.webBrowser1.TabIndex = 1;
-                    this.webBrowser1.Url = new System.Uri("http://sites.google.com/site/siuupdates/helpful-links", System.UriKind.Absolute);
-                    this.webBrowser1.NewWindow2 += new System.EventHandler<SkinInstaller.NewWindow2EventArgs>(this.webBrowser1_NewWindow2);
-                    this.webBrowser1.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser1_Navigating);
-                    this.webBrowser1.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser1_NewWindow);
-                    this.webBrowser1.BeforeNavigate2 += new EventHandler<BeforeNavigate2EventArgs>(webBrowser1_BeforeNavigate2);
-                    this.webBrowser1.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(webBrowser1_DocumentCompleted);
-                    this.splitContainer6.Panel2.Controls.Add(this.webBrowser1);
+                    if (this.webBrowser1 == null)
+                    {
+                        this.webBrowser1 = new SkinInstaller.ExtendedWebBrowser();
+                        //this.webBrowser1 = new Axwebbroswer;
+                        this.webBrowser1.Dock = System.Windows.Forms.DockStyle.Fill;
+                        this.webBrowser1.Location = new System.Drawing.Point(0, 0);
+                        this.webBrowser1.MinimumSize = new System.Drawing.Size(20, 20);
+                        this.webBrowser1.Name = "webBrowser1";
+                        this.webBrowser1.ScrollBarsEnabled = false;
+                        this.webBrowser1.Size = new System.Drawing.Size(154, 306);
+                        this.webBrowser1.TabIndex = 1;
+                        this.webBrowser1.ScriptErrorsSuppressed = true;
+
+                        this.webBrowser1.Url = new System.Uri("http://lgg1.comeze.com/Home/", System.UriKind.Absolute);
+                        this.webBrowser1.NewWindow2 += new System.EventHandler<SkinInstaller.NewWindow2EventArgs>(this.webBrowser1_NewWindow2);
+                        this.webBrowser1.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser1_Navigating);
+                        this.webBrowser1.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser1_NewWindow);
+                        this.webBrowser1.BeforeNavigate2 += new EventHandler<BeforeNavigate2EventArgs>(webBrowser1_BeforeNavigate2);
+                        this.webBrowser1.DocumentCompleted += new WebBrowserDocumentCompletedEventHandler(webBrowser1_DocumentCompleted);
+
+                        TrySetSuppressScriptErrors(this.webBrowser1, true);
+                        this.splitContainer6.Panel2.Controls.Add(this.webBrowser1);
+                        //this.webBrowser1.Navigate("http://lgg1.comeze.com/Home/");
+                    }
+                    else
+                    {
+
+                        //this.webBrowser1.Navigate("http://lgg1.comeze.com/Home/");
+                    }
                 }
-            }
-            /*if (webBrowser1 != null)
-            {
-                webBrowser1.Visible = on;
-                //webBrowser1.Refresh();
-                while (webBrowser1.ReadyState != WebBrowserReadyState.Complete)
+                /*if (webBrowser1 != null)
                 {
-                    Application.DoEvents();
-                    System.Threading.Thread.Sleep(20);
-                }
-                IHTMLElement2 body = webBrowser1.Document.Body.DomElement as IHTMLElement2;
-                IHTMLElement2 doc = (webBrowser1.Document.DomDocument as IHTMLDocument3).documentElement as IHTMLElement2;
+                    webBrowser1.Visible = on;
+                    //webBrowser1.Refresh();
+                    while (webBrowser1.ReadyState != WebBrowserReadyState.Complete)
+                    {
+                        Application.DoEvents();
+                        System.Threading.Thread.Sleep(20);
+                    }
+                    IHTMLElement2 body = webBrowser1.Document.Body.DomElement as IHTMLElement2;
+                    IHTMLElement2 doc = (webBrowser1.Document.DomDocument as IHTMLDocument3).documentElement as IHTMLElement2;
                 
-                doc.scrollLeft = 20;
-                doc.scrollTop = 1;
+                    doc.scrollLeft = 20;
+                    doc.scrollTop = 1;
 
-            }*/
-            button3CloseAd.Enabled = button3CloseAd.Visible = on;
-            button3openAd.Visible = button3openAds2.Visible = button3openAds3.Visible =
-                button3openAd.Enabled = button3openAds2.Enabled = button3openAds3.Enabled =
-                !on;
-            int roomForWeb = (splitContainer6.Size.Width - (/*886 - 728*/190));
-            if (roomForWeb < 200) roomForWeb = 200;
-            splitContainer6.SplitterDistance = on ? roomForWeb: splitContainer6.Size.Width - 0;
+                }*/
+                button3CloseAd.Enabled = button3CloseAd.Visible = on;
+                button3openAd.Visible = button3openAds2.Visible = button3openAds3.Visible =
+                    button3openAd.Enabled = button3openAds2.Enabled = button3openAds3.Enabled =
+                    !on;
+                int roomForWeb = (splitContainer6.Size.Width - (/*886 - 728*/190));
+                if (roomForWeb < 200) roomForWeb = 200;
+                splitContainer6.SplitterDistance = on ? roomForWeb : splitContainer6.Size.Width - 0;
 
-            Properties.Settings.Default.showAds = on;
-            Properties.Settings.Default.Save();
+                Properties.Settings.Default.showAds = on;
+                Properties.Settings.Default.Save();
+            }
+            catch (System.Exception ex)
+            {
+
+            }
 
         }
-
+        private void Window_Error(object sender,
+            HtmlElementErrorEventArgs e)
+        {
+            // Ignore the error and suppress the error dialog box. 
+            e.Handled = true;
+        }
         void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-            foreach (HtmlElement tag in webBrowser1.Document.All)
+
+            try
             {
-                tag.Id = String.Empty;
-                switch (tag.TagName.ToUpper())
+                 ((WebBrowser)sender).Document.Window.Error += 
+                new HtmlElementErrorEventHandler(Window_Error);
+
+
+                foreach (HtmlElement tag in webBrowser1.Document.All)
                 {
-                    case "A":
-                        {
-                            tag.MouseUp += new HtmlElementEventHandler(link_MouseUp);
-                            break;
-                        }
+                    tag.Id = String.Empty;
+                    switch (tag.TagName.ToUpper())
+                    {
+                        case "A":
+                            {
+                                tag.MouseUp += new HtmlElementEventHandler(link_MouseUp);
+                                break;
+                            }
+                    }
                 }
+                mainWebReady = true;
+                webBrowser1.Document.MouseUp += new HtmlElementEventHandler(Document_MouseUp);
             }
-            mainWebReady = true;
-            webBrowser1.Document.MouseUp += new HtmlElementEventHandler(Document_MouseUp);
+            catch (System.Exception ex)
+            {
+
+            }
         }
         void Document_MouseUp(object sender, HtmlElementEventArgs e)
         {
@@ -11251,7 +11359,6 @@ namespace SkinInstaller
             dftmsf.Show();
         }
 
-        
 
     }
     #region strucks
