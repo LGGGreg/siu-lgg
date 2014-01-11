@@ -32,3 +32,6 @@ SIU 3.3*-Lite/7z.exe
 SIU 3.3*-Lite/*
 oldversion/*
 Base SIU/*
+DotNetZip/*
+Backup1/*
+ionic zip/*

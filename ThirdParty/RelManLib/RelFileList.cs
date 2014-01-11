@@ -54,13 +54,17 @@ namespace RelManLib
             List<RelFileEntry> result = new List<RelFileEntry>();
 
             List<RelFileEntry> fileEntries = this.fileEntries;
+            List<int> foundIndexs = new List<int>();
             for (int i = 0; i < fileEntries.Count; i++)
             {
                 string lowerFilename = fileEntries[i].name.ToLower();
                 if (lowerFilename.EndsWith(lowerPath))
                 {
                     if (!strict || lowerFilename == lowerPath)
+                    {
                         result.Add(fileEntries[i]);
+                        foundIndexs.Add(i);
+                    }
                 }
             }
             for (int i = 0; i < fileEntries.Count; i++)
@@ -68,8 +72,11 @@ namespace RelManLib
                 string lowerFilename = fileEntries[i].getPathAndName().ToLower();
                 if (lowerFilename.EndsWith(lowerPath))
                 {
-                    if (!strict || lowerFilename == lowerPath||lowerFilename ==("/"+lowerPath))
-                        result.Add(fileEntries[i]);
+                    if (!strict || lowerFilename == lowerPath || lowerFilename == ("/" + lowerPath))
+                    {
+                        if(!foundIndexs.Contains(i))
+                            result.Add(fileEntries[i]);
+                    }
                 }
             }
             return result;
