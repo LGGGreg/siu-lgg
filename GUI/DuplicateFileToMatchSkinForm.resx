@@ -1,0 +1,135 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="textBoxFilesToCopyLike.Text" xml:space="preserve">
+    <value>C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\barrel_tx_dm.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\base_center_mark3.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\base_chasm1.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\base_chasm2.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\base_stone_steps.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\bcolumn_blue_vine.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\bluetower_decal.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\btown_brown.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\chaos_dirt.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\chaos_dirt_grass_blend.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\chaos_root_base_decal_mid.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\chaos_shrine.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\chaos_stonesb.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\chaosgate.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\chaoshouse02.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\chaosshrinewall02.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\creep_camp_base.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\decal_blue_flower.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\decal_purple_flower.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\drybush01.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\fence01.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\fire_cauldron.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\flower_sr_order1.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\flower_sr_order2.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\flower_sr_xaos1.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\flower_sr_xaos2.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\flower012.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\flowerz3.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\flowerz4.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\foliage_sr_leaves.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\goodstatue01.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\grass_tx_cm.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\gravel_stone_tx_cm.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\inhibitor_stonebase.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\lakemask01.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\mushroom_cap1.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\mushroom_cap2.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\mushroompatch02.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\mushroompatch03.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\nature_mushrooms_small_01.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\new_stone_road.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\nexus_stonebase.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\order_base_decal_mid.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\order_dirt.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\order_ground_mix2.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\order_ground_moss_patch1.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\order_seam.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\order_tile_floor.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\order_tile_floor_border.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\order_tile_floor_mark2.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\ordergate.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\orderpantheon.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\ordertorch01.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\plant01.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\pole_with_3_helmets_tx_dm.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\river_corner.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\riverbed_cliff_blend.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\rock_lane.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\rocks.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\shield&amp;ladder&amp;book_stack&amp;sign&amp;shield_tx_dm.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\shop_base.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\shop_diffuse.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\shop_trol_prop.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\shrine.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\shrinevine.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\sign01.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\sr_firepit_ash_decal_tx_dm.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\sr_lane_tile.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\stone_steps.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\stonehenge_03.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\stonehenge_revised.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\stonehenge_revised_02.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\swamplog01.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\swamptree_01.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\tallrock02.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\tombstone01.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\torchset01.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\tree01_burned.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\tree01_md.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\tree02_.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\treelogfallen03.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\treestump02.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\turret_stonebase.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\turret_stonebase_hq.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\wagon_tx_dm.dds|C:\Users\LGG\Desktop\AREA91 Rift v1 HD\levels\map1\scene\textures\wallofgrass.dds</value>
+  </data>
+  <metadata name="folderBrowserDirectoryToCopyTo.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>17, 17</value>
+  </metadata>
+  <metadata name="openFileDialogFilesToCopyLike.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>250, 17</value>
+  </metadata>
+  <metadata name="openFileDialogFileToCopy.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>470, 17</value>
+  </metadata>
+  <metadata name="backgroundWorkerCopyFilesLike.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>664, 17</value>
+  </metadata>
+</root>
