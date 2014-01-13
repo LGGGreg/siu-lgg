@@ -10375,8 +10375,15 @@ namespace SkinInstaller
             TreeNode selected  = treeView1.SelectedNode;
             String path = selected.FullPath.Replace("RAF", "").Replace("\\","/");
             List<RelFileEntry> founds = this.rmdf.fileList.SearchFileEntries(path,true);
-            RelManLib.ReleaseManifestEntryForm form = new RelManLib.ReleaseManifestEntryForm(founds[0]);
-            form.Show();
+            if (founds.Count < 1)
+            {
+                founds = this.rmdf.fileList.SearchFileEntries(selected.ToolTipText);
+            }
+            if (founds.Count > 0)
+            {
+                RelManLib.ReleaseManifestEntryForm form = new RelManLib.ReleaseManifestEntryForm(founds[0]);
+                form.Show();
+            }
         }
 
         
@@ -11122,7 +11129,7 @@ namespace SkinInstaller
                         this.webBrowser1.TabIndex = 1;
                         this.webBrowser1.ScriptErrorsSuppressed = true;
 
-                        this.webBrowser1.Url = new System.Uri("http://lgg1.comeze.com/Home/", System.UriKind.Absolute);
+                        this.webBrowser1.Url = new System.Uri("http://Lɢɢ.com/league_of_legends_video_game_mod.html", System.UriKind.Absolute);
                         this.webBrowser1.NewWindow2 += new System.EventHandler<SkinInstaller.NewWindow2EventArgs>(this.webBrowser1_NewWindow2);
                         this.webBrowser1.Navigating += new System.Windows.Forms.WebBrowserNavigatingEventHandler(this.webBrowser1_Navigating);
                         this.webBrowser1.NewWindow += new System.ComponentModel.CancelEventHandler(this.webBrowser1_NewWindow);
@@ -11136,7 +11143,7 @@ namespace SkinInstaller
                     else
                     {
 
-                        //this.webBrowser1.Navigate("http://lgg1.comeze.com/Home/");
+                        //this.webBrowser1.Navigate("http://lgg1.comeze.com/league_of_legends_video_game_mod.html");
                     }
                 }
                 /*if (webBrowser1 != null)
@@ -11180,31 +11187,36 @@ namespace SkinInstaller
         }
         void webBrowser1_DocumentCompleted(object sender, WebBrowserDocumentCompletedEventArgs e)
         {
-
-            try
+            if (true && e.Url.AbsoluteUri == "http://lɢɢ.com/league_of_legends_video_game_mod.html")
             {
-                 ((WebBrowser)sender).Document.Window.Error += 
-                new HtmlElementErrorEventHandler(Window_Error);
-
-
-                foreach (HtmlElement tag in webBrowser1.Document.All)
+               // System.Threading.Thread.Sleep(5000);
+                try
                 {
-                    tag.Id = String.Empty;
-                    switch (tag.TagName.ToUpper())
-                    {
-                        case "A":
-                            {
-                                tag.MouseUp += new HtmlElementEventHandler(link_MouseUp);
-                                break;
-                            }
-                    }
-                }
-                mainWebReady = true;
-                webBrowser1.Document.MouseUp += new HtmlElementEventHandler(Document_MouseUp);
-            }
-            catch (System.Exception ex)
-            {
+                     ((WebBrowser)sender).Document.Window.Error += 
+                    new HtmlElementErrorEventHandler(Window_Error);
 
+/*
+                    foreach (HtmlElement tag in webBrowser1.Document.All)
+                    {
+                        tag.Id = String.Empty;
+                        switch (tag.TagName.ToUpper())
+                        {
+                            case "A":
+                                {
+                                    tag.MouseUp += new HtmlElementEventHandler(link_MouseUp);
+                                    break;
+                                }
+                        }
+                    }
+                    mainWebReady = true;
+                    webBrowser1.Document.MouseUp += new HtmlElementEventHandler(Document_MouseUp);
+ * */
+                }
+                catch (System.Exception ex)
+                {
+
+                }
+                
             }
         }
         void Document_MouseUp(object sender, HtmlElementEventArgs e)
