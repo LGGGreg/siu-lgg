@@ -186,12 +186,6 @@
       <SpecificVersion>False</SpecificVersion>
       <HintPath>ThirdParty\OpenTK\OpenTK.GLControl.dll</HintPath>
     </Reference>
-    <Reference Include="SharpDX">
-      <HintPath>ThirdParty\sharpdx\SharpDX.dll</HintPath>
-    </Reference>
-    <Reference Include="SharpDX.Toolkit.Graphics">
-      <HintPath>ThirdParty\sharpdx\SharpDX.Toolkit.Graphics.dll</HintPath>
-    </Reference>
     <Reference Include="skincrafter.net-vs2003">
       <HintPath>..\..\..\..\Program Files (x86)\SkinCrafter3\SkinCrafterDemo\SkinCrafterDotNet_vs2003\skincrafter.net-vs2003.dll</HintPath>
     </Reference>
