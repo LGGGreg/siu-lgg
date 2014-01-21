@@ -32,6 +32,8 @@
             this.checkedListBox1 = new System.Windows.Forms.CheckedListBox();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.panel3 = new System.Windows.Forms.Panel();
+            this.checkBox2ForceDDSFormat = new System.Windows.Forms.CheckBox();
+            this.checkBox1forceDDSSize = new System.Windows.Forms.CheckBox();
             this.checkBoxShowCharSelection = new System.Windows.Forms.CheckBox();
             this.checkBox1hideAddedFiles = new System.Windows.Forms.CheckBox();
             this.comboBox3overwriteFolder = new System.Windows.Forms.ComboBox();
@@ -58,8 +60,7 @@
             this.ProgramLa = new System.Windows.Forms.Label();
             this.panel1 = new System.Windows.Forms.Panel();
             this.label1 = new System.Windows.Forms.Label();
-            this.checkBox1forceDDSSize = new System.Windows.Forms.CheckBox();
-            this.checkBox2ForceDDSFormat = new System.Windows.Forms.CheckBox();
+            this.checkBox1removeUnsafeFiles = new System.Windows.Forms.CheckBox();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
@@ -133,6 +134,7 @@
             // 
             // panel3
             // 
+            this.panel3.Controls.Add(this.checkBox1removeUnsafeFiles);
             this.panel3.Controls.Add(this.checkBox2ForceDDSFormat);
             this.panel3.Controls.Add(this.checkBox1forceDDSSize);
             this.panel3.Controls.Add(this.checkBoxShowCharSelection);
@@ -162,6 +164,26 @@
             this.panel3.Name = "panel3";
             this.panel3.Size = new System.Drawing.Size(294, 410);
             this.panel3.TabIndex = 1;
+            // 
+            // checkBox2ForceDDSFormat
+            // 
+            this.checkBox2ForceDDSFormat.AutoSize = true;
+            this.checkBox2ForceDDSFormat.Location = new System.Drawing.Point(12, 148);
+            this.checkBox2ForceDDSFormat.Name = "checkBox2ForceDDSFormat";
+            this.checkBox2ForceDDSFormat.Size = new System.Drawing.Size(219, 17);
+            this.checkBox2ForceDDSFormat.TabIndex = 23;
+            this.checkBox2ForceDDSFormat.Text = "Force All Textures to be Standard Format";
+            this.checkBox2ForceDDSFormat.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1forceDDSSize
+            // 
+            this.checkBox1forceDDSSize.AutoSize = true;
+            this.checkBox1forceDDSSize.Location = new System.Drawing.Point(12, 125);
+            this.checkBox1forceDDSSize.Name = "checkBox1forceDDSSize";
+            this.checkBox1forceDDSSize.Size = new System.Drawing.Size(192, 17);
+            this.checkBox1forceDDSSize.TabIndex = 22;
+            this.checkBox1forceDDSSize.Text = "Force All Textures to Standard Size";
+            this.checkBox1forceDDSSize.UseVisualStyleBackColor = true;
             // 
             // checkBoxShowCharSelection
             // 
@@ -427,25 +449,15 @@
             this.label1.TabIndex = 0;
             this.label1.Text = "Install Preferences";
             // 
-            // checkBox1forceDDSSize
+            // checkBox1removeUnsafeFiles
             // 
-            this.checkBox1forceDDSSize.AutoSize = true;
-            this.checkBox1forceDDSSize.Location = new System.Drawing.Point(12, 125);
-            this.checkBox1forceDDSSize.Name = "checkBox1forceDDSSize";
-            this.checkBox1forceDDSSize.Size = new System.Drawing.Size(192, 17);
-            this.checkBox1forceDDSSize.TabIndex = 22;
-            this.checkBox1forceDDSSize.Text = "Force All Textures to Standard Size";
-            this.checkBox1forceDDSSize.UseVisualStyleBackColor = true;
-            // 
-            // checkBox2ForceDDSFormat
-            // 
-            this.checkBox2ForceDDSFormat.AutoSize = true;
-            this.checkBox2ForceDDSFormat.Location = new System.Drawing.Point(12, 148);
-            this.checkBox2ForceDDSFormat.Name = "checkBox2ForceDDSFormat";
-            this.checkBox2ForceDDSFormat.Size = new System.Drawing.Size(219, 17);
-            this.checkBox2ForceDDSFormat.TabIndex = 23;
-            this.checkBox2ForceDDSFormat.Text = "Force All Textures to be Standard Format";
-            this.checkBox2ForceDDSFormat.UseVisualStyleBackColor = true;
+            this.checkBox1removeUnsafeFiles.AutoSize = true;
+            this.checkBox1removeUnsafeFiles.Location = new System.Drawing.Point(15, 389);
+            this.checkBox1removeUnsafeFiles.Name = "checkBox1removeUnsafeFiles";
+            this.checkBox1removeUnsafeFiles.Size = new System.Drawing.Size(184, 17);
+            this.checkBox1removeUnsafeFiles.TabIndex = 24;
+            this.checkBox1removeUnsafeFiles.Text = "Remove Potentaially Unsafe Files";
+            this.checkBox1removeUnsafeFiles.UseVisualStyleBackColor = true;
             // 
             // FullPreferencesForm
             // 
@@ -506,5 +518,6 @@
         private System.Windows.Forms.CheckBox checkBoxShowCharSelection;
         private System.Windows.Forms.CheckBox checkBox2ForceDDSFormat;
         private System.Windows.Forms.CheckBox checkBox1forceDDSSize;
+        private System.Windows.Forms.CheckBox checkBox1removeUnsafeFiles;
 	}
 }

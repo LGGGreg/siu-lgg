@@ -1597,19 +1597,23 @@ namespace SkinInstaller
             }
             {//shen fix
                 //bool oldShen = false;
-                string list = "";
-                string inibin = "";
-                foreach (string fileName in currentFiles)
+                if (Properties.Settings.Default.removeUnsafeFiles)
                 {
-                    FileInfo fi = new FileInfo(fileName);
-                    //if (fi.Extension.ToLower().Contains("shen_idle1_surrendering.anm")) oldShen = true;
-                    if (fi.Name.ToLower().Contains(".list")) list = fileName;
-                    if (fi.Name.ToLower().Contains(".inibin")) inibin = fileName;
+
+                    string list = "";
+                    string inibin = "";
+                    foreach (string fileName in currentFiles)
+                    {
+                        FileInfo fi = new FileInfo(fileName);
+                        //if (fi.Extension.ToLower().Contains("shen_idle1_surrendering.anm")) oldShen = true;
+                        if (fi.Name.ToLower().Contains(".list")) list = fileName;
+                        if (fi.Name.ToLower().Contains(".inibin")) inibin = fileName;
+                    }
+                    if (list != "")
+                        currentFiles.Remove(list);
+                    if (inibin != "")
+                        currentFiles.Remove(inibin);
                 }
-                if (list != "")
-                    currentFiles.Remove(list);
-                if (inibin != "")
-                    currentFiles.Remove(inibin);
 
             }
             if (Directory.Exists(Application.StartupPath + @"\" + c_TEMP_DIR_NAME_FIXED_SKIN_FILES))
@@ -7930,7 +7934,7 @@ namespace SkinInstaller
 
                         bool flag = false;
                         if (
-                            fileInfo.FullName.ToLower().Contains("\\skins") ||
+                            //fileInfo.FullName.ToLower().Contains("\\skins") ||
                             fileInfo.FullName.ToLower().Contains("\\backup") ||
                             fileInfo.FullName.ToLower().Contains("\\dump") ||
                             fileInfo.FullName.ToLower().Contains("\\pack")
