@@ -672,5 +672,18 @@ namespace SkinInstaller.Properties {
                 this["ddsForceRiotFormat"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Configuration.SettingsProviderAttribute(typeof(SkinInstaller.PortableSettingsProvider))]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool removeUnsafeFiles {
+            get {
+                return ((bool)(this["removeUnsafeFiles"]));
+            }
+            set {
+                this["removeUnsafeFiles"] = value;
+            }
+        }
     }
 }

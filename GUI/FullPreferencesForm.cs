@@ -41,6 +41,8 @@ namespace SkinInstaller
             this.checkBox1hideAddedFiles.Checked = Properties.Settings.Default.hideAddedFilesMessage;
             this.checkBoxShowCharSelection.Checked = Properties.Settings.Default.showCharSelection;
 
+            this.checkBox1removeUnsafeFiles.Checked = Properties.Settings.Default.removeUnsafeFiles;
+
             this.trackBar1logostrenth.Value = Properties.Settings.Default.lgglogostrangth;
 
             this.comboBox1dxFormat.Text = Properties.Settings.Default.dxFormat;
@@ -120,6 +122,9 @@ namespace SkinInstaller
                 this.checkBox1forceDDSSize.Checked;
             Properties.Settings.Default.ddsForceRiotFormat =
                 this.checkBox2ForceDDSFormat.Checked;
+
+            Properties.Settings.Default.removeUnsafeFiles =
+                this.checkBox1removeUnsafeFiles.Checked;
 
             Properties.Settings.Default.ch3d =
                 checkedListBox1.GetItemChecked(0);
