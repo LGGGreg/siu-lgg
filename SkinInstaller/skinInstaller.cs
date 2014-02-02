@@ -583,7 +583,7 @@ namespace SkinInstaller
             }
             if(files.Count>0)
             {
-                processNewDirectory(files.ToArray(),addItFlag||addItFileFlag);
+                processNewDirectory(files.ToArray(),addItFlag||addItFileFlag,addItFlag);
 
             }
         }
@@ -699,8 +699,9 @@ namespace SkinInstaller
         {
             Microsoft.Win32.RegistryKey yurixy = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".yurixyworks");
             Microsoft.Win32.RegistryKey lolmodkey = Microsoft.Win32.Registry.ClassesRoot.OpenSubKey(".lolmod");
+            Microsoft.Win32.RegistryKey softkey = Microsoft.Win32.Registry.LocalMachine.OpenSubKey("SOFTWARE\\Classes\\lolsh");
             bool runReg = false;
-            if (yurixy == null||lolmodkey==null)
+            if (yurixy == null||lolmodkey==null||softkey==null)
             {
                 runReg = true;
             }else
@@ -718,6 +719,23 @@ namespace SkinInstaller
                         runReg = true;
                     }
 
+                }
+
+                string lolshVal = softkey.GetValue("").ToString();
+                if (lolshVal != "URL:LoL Skin Installer LC LGG")
+                {
+                    runReg = true;
+
+                }
+                else
+                {
+                    Microsoft.Win32.RegistryKey commandKey = softkey.OpenSubKey("shell\\open\\command");
+                    string commandVal = commandKey.GetValue("").ToString();
+                    string matchVal = "\"" + Application.StartupPath + "\\Skin Installer Ultimate.exe" + "\" --url \"%1\"";
+                    if (commandVal.CompareTo(matchVal) != 0)
+                    {
+                        runReg = true;
+                    }
                 }
             }
             if(runReg)
@@ -1628,7 +1646,7 @@ namespace SkinInstaller
         {
             ProcessParams1 params1 = (ProcessParams1)e.Argument;
             string[] origonalInputFiles = params1.files;//e.Argument as string[];
-            processNewDirectoryWork(origonalInputFiles);
+            processNewDirectoryWork(origonalInputFiles,params1.allowDialog);
             e.Result = params1;
         }
 
@@ -1693,8 +1711,9 @@ namespace SkinInstaller
         {
             public string[] files;
             public bool runAutoCode;
+            public bool allowDialog;
         }
-        private void processNewDirectory(string[] origonalInputFiles, bool runAutoAddCode = false)
+        private void processNewDirectory(string[] origonalInputFiles, bool runAutoAddCode = false, bool allowDialog = true)
         {
             if (addFilesWorker.IsBusy)
             {
@@ -1705,7 +1724,8 @@ namespace SkinInstaller
             AddToDatabasePanel.BackColor = Color.Lime;
             ProcessParams1 params1;
             params1.runAutoCode = runAutoAddCode;
-            params1.files = origonalInputFiles;            
+            params1.files = origonalInputFiles;
+            params1.allowDialog = allowDialog;
             
             addFilesWorker.RunWorkerAsync(params1);
         }
@@ -1715,7 +1735,7 @@ namespace SkinInstaller
             inName = inName.Insert(extensionLocation, "_0");
             return inName;
         }
-        private void processNewDirectoryWork(string[] origonalInputFiles)
+        private void processNewDirectoryWork(string[] origonalInputFiles, bool allowDialog=true)
         {
             //addFilesPanel.BackColor = System.Drawing.SystemColors.Control;
             //AddToDatabasePanel.BackColor = Color.Lime;
@@ -2020,7 +2040,7 @@ namespace SkinInstaller
             string extra = "";
             if (InfoLog.ToString().Length > 1)
                 extra = "\r\n\r\nINFO\r\n" + InfoLog.ToString();
-            if (!Properties.Settings.Default.hideAddedFilesMessage)
+            if (!Properties.Settings.Default.hideAddedFilesMessage && allowDialog)
             {
                 if (Cliver.Message.Show("Successfully Added " + num.ToString() + " files",
                     SystemIcons.Information, string.Concat(new object[]
@@ -2919,6 +2939,10 @@ namespace SkinInstaller
                             {
                                 matches+= 1 + ( .001 *  worthBasedOnEndOfPathNameBeingWorthMore);
                             }
+                        }
+                        else
+                        {
+                            matches -= (.001 * worthBasedOnEndOfPathNameBeingWorthMore);
                         }
                     }
                 }
@@ -7390,6 +7414,10 @@ namespace SkinInstaller
             {
                 ret = true;
             }
+            if (inputName.Contains("lien minh huyen thoai"))
+            {
+                ret = true;
+            }
             return ret;
         }
         public bool isValidLoLDir(string inputDir)
@@ -7972,7 +8000,7 @@ namespace SkinInstaller
                         string lowerName = fileInfo.Name.ToLower();
                         string text4 = lowerName + "|" + relativePath.Replace("\\", "\\\\");
                         int depth = (relativePath.Split('\\')).Length;
-                        if (depth <= 2) flag = true;
+                        //if (depth <= 2) flag = true;
 
                         if (!fileList.Contains(text4))
                         {
