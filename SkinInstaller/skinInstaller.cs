@@ -730,11 +730,20 @@ namespace SkinInstaller
                 else
                 {
                     Microsoft.Win32.RegistryKey commandKey = softkey.OpenSubKey("shell\\open\\command");
-                    string commandVal = commandKey.GetValue("").ToString();
-                    string matchVal = "\"" + Application.StartupPath + "\\Skin Installer Ultimate.exe" + "\" --url \"%1\"";
-                    if (commandVal.CompareTo(matchVal) != 0)
+                    if (commandKey == null)
                     {
                         runReg = true;
+                    }
+                    else
+                    {
+
+                 
+                        string commandVal = commandKey.GetValue("").ToString();
+                        string matchVal = "\"" + Application.StartupPath + "\\Skin Installer Ultimate.exe" + "\" --url \"%1\"";
+                        if (commandVal.CompareTo(matchVal) != 0)
+                        {
+                            runReg = true;
+                        }
                     }
                 }
             }
@@ -1215,79 +1224,39 @@ namespace SkinInstaller
 
                 FileInfo rafFile = new FileInfo(rafLocation);
                 RAFArchive raf = new RAFArchive(rafFile.FullName);
-                //FileStream fStream = raf.GetDataFileContentStream();
-            /*try
-            {
-                using (FileStream fsSource = new FileStream(origonal,
-            FileMode.Open, FileAccess.Read))
-                {
-
-                    // Read the source file into a byte array.
-                    byte[] bytes = new byte[fsSource.Length];
-                    int numBytesToRead = (int)fsSource.Length;
-                    int numBytesRead = 0;
-                    while (numBytesToRead > 0)
-                    {
-                        // Read may return anything from 0 to numBytesToRead.
-                        int n = fsSource.Read(bytes, numBytesRead, numBytesToRead);
-
-                        // Break when the end of the file is reached.
-                        if (n == 0)
-                            break;
-
-                        numBytesRead += n;
-                        numBytesToRead -= n;
-                    }
-                    numBytesToRead = bytes.Length;
-
-                    FileInfo origonalFile = new FileInfo(origonal);
-                    raf.InsertFile(rafInnerLocation,bytes);
-                    
-                }
-            }
-            catch (FileNotFoundException ioEx)
-            {
-                Console.WriteLine(ioEx.Message);
-            }*/
-            //raf.InsertFile(
-              //  if (!raf.InsertFile(rafInnerLocation, File.ReadAllBytes(origonal)))
-               // {
             byte[] origonalBytes =File.ReadAllBytes(origonal);
-                try
-                {
-                    raf.InsertFile(
-                                  rafInnerLocation,
-                                  origonalBytes,
-                                  new LogTextWriter(
-                                      (Func<string, object>)delegate(string s)
-                                      {
-                                          Log(s);
-                                          return null;
-                                      }
-                                  ));
-                }
-                catch
-                {
-                    debugadd("O no big error trying to insert !!");
-                }
-                   // Cliver.Message.Inform("Error on " + rafInnerLocation + "\r\n and " + origonal);
-               // }
-                raf.SaveDirectoryFile();
-                raf.GetDataFileContentStream().Close();
+            try
+            {
+                raf.InsertFile(
+                                rafInnerLocation,
+                                origonalBytes,
+                                new LogTextWriter(
+                                    (Func<string, object>)delegate(string s)
+                                    {
+                                        Log(s);
+                                        return null;
+                                    }
+                                ));
+            }
+            catch
+            {
+                debugadd("O no big error trying to insert !!");
+            }
+                // Cliver.Message.Inform("Error on " + rafInnerLocation + "\r\n and " + origonal);
+            // }
+            raf.SaveDirectoryFile();
+            raf.GetDataFileContentStream().Close();
 
-                RelManDirectoryFile rmdf = RelManDirectoryFile.RelManDirectoryFileFromRiotRoot(gameDirectory);
+            RelManDirectoryFile rmdf = RelManDirectoryFile.RelManDirectoryFileFromRiotRoot(gameDirectory);
+            if (rmdf.valid)
+            {
                 rmdf.adjustSizeByBytes(origonalBytes, rafInnerLocation);
                 rmdf.saveFile();
-            //RAFFileListEntry entry = (RAFFileListEntry)row.Cells[CN_RAFPATH].Tag;
-            //        string rafPath = entry.FileName;
-            //        string localPath = (string)row.Cells[CN_LOCALPATH].Tag;
-
-                    //Open the RAF archive, insert.
-             //       entry.RAFArchive.InsertFile(rafPath, File.ReadAllBytes(localPath));
-             //   }
-             //   List<RAFArchive> archives = new List<RAFArchive>(rafArchives.Values);
-             //   for (int i = 0; i < archives.Count; i++)
-            //        archives[i].SaveDirectoryFile();
+            }
+            else
+            {
+                //we already showed an error
+            }
         }
         #region notImportant
         private void tabPage1_Click(object sender, EventArgs e)
@@ -2036,6 +2005,19 @@ namespace SkinInstaller
                     //num2++;
                 }
                 //debugadd("Finished " + fullNameAndPath);
+            }
+            float percentAdded = ((float)num/((float)(num+num2)))*100.0f;
+            if (percentAdded < 20)
+            {
+                Cliver.Message.Show("Error: Not Many Files Found!", SystemIcons.Error, "Warning, there was a problem finding where these\nfiles belong in your LoL installation!\n\n" +
+                     "This means one of two issues.\n\n1. You added a skin that was not really a skin for LoL\n(Skins for LoL have files named the same way that riot named them)\n"+
+                     "To fix this, just add in a skin that other people have tested as working\n\n"+
+                     "2. That SIU can't find the names of the files in your LoL!\n"+
+                     "Right now SIU things that your LoL is installed at " + gameDirectory + "\n"+
+                     "Please make sure this is correct, if it is not, please press the \"Game Client\" Button in SIU to change it, and let it scan, then try again.\n\n"+
+                     "If that does not work, then that might mean that something is weird inside your LoL directory\nIt is probably best to do a full repair.\n" +
+                     "Go To " + gameDirectory + "\\RADS\\projects\\ and delete the folder \"lol_game_client\"\nThen open up your launcher for LoL, click the gear on the top right, and choose repair.\n\n" +
+                     "It may also help to right click -> run as administrator, this program as well", 0, new string[] { "OK!" });
             }
             string extra = "";
             if (InfoLog.ToString().Length > 1)
@@ -3352,6 +3334,19 @@ namespace SkinInstaller
         private void installWork(object sender, DoWorkEventArgs e)
         {
             debugadd("install process started");
+            RelManDirectoryFile rmdf = RelManDirectoryFile.RelManDirectoryFileFromRiotRoot(gameDirectory);
+            if (rmdf.valid)
+            {
+                
+            }
+            else
+            {
+                Cliver.Message.Show("Error Modifying Release Manifest", SystemIcons.Error, "Warning, there was an error finding your release manifest file!\n\n" +
+                     "This means that something is weird inside your LoL directory\n\nIt is probably best to do a full repair.\n"+
+                     "Go To "+gameDirectory+"\\RADS\\projects\\ and delete the folder \"lol_game_client\"\nThen open up your launcher for LoL, click the gear on the top right, and choose repair.\n\n"+
+                     "It may also help to right click -> run as administrator, this program as well", 0, new string[] { "OK!"});
+                return;
+            }
 
             List<ListViewItem> a = (List<ListViewItem>)e.Argument;
             debugadd("installing " + a.Count.ToString() + " skins");
@@ -4645,6 +4640,7 @@ namespace SkinInstaller
             this.exportSelectedFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deselectAllFilesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpToolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
+            this.lookUpReleaseManifestInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.UpdateFL = new System.Windows.Forms.Button();
             this.locateGameClient = new System.Windows.Forms.Button();
             this.progressBar1 = new System.Windows.Forms.ProgressBar();
@@ -4741,7 +4737,6 @@ namespace SkinInstaller
             this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.webBrowser2Test = new SkinInstaller.ExtendedWebBrowser();
-            this.lookUpReleaseManifestInfoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -5860,7 +5855,7 @@ namespace SkinInstaller
             this.lookUpReleaseManifestInfoToolStripMenuItem});
             this.treeViewMenuStrip1.Name = "treeViewMenuStrip1";
             this.treeViewMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.treeViewMenuStrip1.Size = new System.Drawing.Size(231, 114);
+            this.treeViewMenuStrip1.Size = new System.Drawing.Size(231, 92);
             // 
             // exportSelectedFilesToolStripMenuItem
             // 
@@ -5882,6 +5877,13 @@ namespace SkinInstaller
             this.helpToolStripMenuItem1.Size = new System.Drawing.Size(230, 22);
             this.helpToolStripMenuItem1.Text = "Help!";
             this.helpToolStripMenuItem1.Click += new System.EventHandler(this.helpToolStripMenuItem1_Click);
+            // 
+            // lookUpReleaseManifestInfoToolStripMenuItem
+            // 
+            this.lookUpReleaseManifestInfoToolStripMenuItem.Name = "lookUpReleaseManifestInfoToolStripMenuItem";
+            this.lookUpReleaseManifestInfoToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
+            this.lookUpReleaseManifestInfoToolStripMenuItem.Text = "Look Up ReleaseManifest Info";
+            this.lookUpReleaseManifestInfoToolStripMenuItem.Click += new System.EventHandler(this.lookUpReleaseManifestInfoToolStripMenuItem_Click);
             // 
             // UpdateFL
             // 
@@ -6351,7 +6353,7 @@ namespace SkinInstaller
             this.button3FixCrashAfterPatch.Name = "button3FixCrashAfterPatch";
             this.button3FixCrashAfterPatch.Size = new System.Drawing.Size(275, 23);
             this.button3FixCrashAfterPatch.TabIndex = 45;
-            this.button3FixCrashAfterPatch.Text = "Fix Crashes/Invisable Chars/Blue Textures after Patch";
+            this.button3FixCrashAfterPatch.Text = "Fix Crashes/Invisible Chars/Blue Textures after Patch";
             this.button3FixCrashAfterPatch.UseVisualStyleBackColor = true;
             this.button3FixCrashAfterPatch.Click += new System.EventHandler(this.button3FixCrashAfterPatch_Click);
             // 
@@ -6402,7 +6404,7 @@ namespace SkinInstaller
             this.button3lcintegrate.Name = "button3lcintegrate";
             this.button3lcintegrate.Size = new System.Drawing.Size(153, 23);
             this.button3lcintegrate.TabIndex = 42;
-            this.button3lcintegrate.Text = "Use with LeagueCraft.com";
+            this.button3lcintegrate.Text = "Use with WebSites";
             this.button3lcintegrate.UseVisualStyleBackColor = true;
             this.button3lcintegrate.Click += new System.EventHandler(this.button3lcintegrate_Click);
             // 
@@ -6667,13 +6669,6 @@ namespace SkinInstaller
             this.webBrowser2Test.Visible = false;
             this.webBrowser2Test.BeforeNavigate2 += new System.EventHandler<SkinInstaller.BeforeNavigate2EventArgs>(this.webBrowser2_BeforeNavigate2);
             this.webBrowser2Test.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser2Test_DocumentCompleted);
-            // 
-            // lookUpReleaseManifestInfoToolStripMenuItem
-            // 
-            this.lookUpReleaseManifestInfoToolStripMenuItem.Name = "lookUpReleaseManifestInfoToolStripMenuItem";
-            this.lookUpReleaseManifestInfoToolStripMenuItem.Size = new System.Drawing.Size(230, 22);
-            this.lookUpReleaseManifestInfoToolStripMenuItem.Text = "Look Up ReleaseManifest Info";
-            this.lookUpReleaseManifestInfoToolStripMenuItem.Click += new System.EventHandler(this.lookUpReleaseManifestInfoToolStripMenuItem_Click);
             // 
             // skinInstaller
             // 

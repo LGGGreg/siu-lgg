@@ -44,6 +44,7 @@ namespace RelManLib
         public RelDirectoryList dirList = null;
         public RelStringList strList = null;
         public RelFileList fileList = null;
+        public bool valid = false;
         public RelManDirectoryFile(string location)
         {
             Thread.CurrentThread.CurrentCulture = new CultureInfo("en-US");
@@ -53,7 +54,7 @@ namespace RelManLib
             //this.RelMan = RelMan;
             if (File.Exists(location))
             {
-
+                valid = true;
                 content = System.IO.File.ReadAllBytes(location);
                 magic = System.Text.Encoding.ASCII.GetString(content.SubArray(0, 4));
                 magicInt = BitConverter.ToUInt32(content.SubArray(0, 4), 0);
@@ -280,6 +281,7 @@ namespace RelManLib
                                 for (int ii = versions.Length - 1; ii >= 0; ii--)
                                 {
                                     int vA = int.Parse(versions[ii].Trim());
+                                    if (vA.ToString().CompareTo(versions[ii]) != 0) total -= 1;//ignore copy folders and others
                                     total += (vA * multiplier);
                                     multiplier += 500;
                                 }

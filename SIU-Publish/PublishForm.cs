@@ -462,5 +462,33 @@ namespace SIU_Publish
             }
             
         }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            NantGoogleCode.GoogleCodeUploadTask gut = new NantGoogleCode.GoogleCodeUploadTask();
+            try
+            {
+                DialogResult result = openFileDialog1.ShowDialog();
+                if (result == DialogResult.OK) // Test result.
+                {
+                    FileInfo file = new FileInfo(openFileDialog1.FileName);
+                    string input = Microsoft.VisualBasic.Interaction.InputBox("Provide project name", "Project Name?", "Default", -1, -1);
+                    gut.FileName = file.FullName;
+                    gut.ProjectName = input;
+                    gut.Password = password;
+                    gut.UserName = userName;
+                    gut.Summary = file.Name;
+                    gut.TargetFileName = file.Name;
+                    ;
+
+                    gut.ExecuteTask();
+                }
+            }
+            catch (Exception ee)
+            {
+                
+            }
+
+        }
     }
 }
