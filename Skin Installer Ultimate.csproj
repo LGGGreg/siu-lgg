@@ -9,7 +9,7 @@
     <AssemblyName>Skin Installer Ultimate</AssemblyName>
     <OutputType>WinExe</OutputType>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <ApplicationIcon>Other\LGGIcon.ico</ApplicationIcon>
+    <ApplicationIcon>SIUIcon1.ico</ApplicationIcon>
     <IsWebBootstrapper>false</IsWebBootstrapper>
     <ApplicationManifest>Other\app.manifest</ApplicationManifest>
     <TargetFrameworkProfile>
@@ -283,6 +283,8 @@
     <Content Include="LoLModIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
+    <Content Include="SIUIcon1.ico" />
+    <Content Include="SIUIcon1.png" />
     <Content Include="YuixyIcon.ico">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>

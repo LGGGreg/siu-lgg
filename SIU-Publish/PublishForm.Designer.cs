@@ -73,6 +73,8 @@
             this.workerDeleteFiles = new System.ComponentModel.BackgroundWorker();
             this.workerCreateZip = new System.ComponentModel.BackgroundWorker();
             this.workerUpload = new System.ComponentModel.BackgroundWorker();
+            this.button1 = new System.Windows.Forms.Button();
+            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.panel1.SuspendLayout();
             this.panel5.SuspendLayout();
             this.panel4.SuspendLayout();
@@ -292,6 +294,7 @@
             // 
             // panel4
             // 
+            this.panel4.Controls.Add(this.button1);
             this.panel4.Controls.Add(this.label11);
             this.panel4.Controls.Add(this.label10);
             this.panel4.Controls.Add(this.textBox1user);
@@ -548,6 +551,20 @@
             this.workerUpload.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.progressChanged);
             this.workerUpload.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.workerUpload_RunWorkerCompleted);
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(661, 21);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(75, 23);
+            this.button1.TabIndex = 7;
+            this.button1.Text = "Custom Test";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // openFileDialog1
+            // 
+            this.openFileDialog1.FileName = "openFileDialog1";
+            // 
             // PublishForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -624,6 +641,8 @@
         private System.Windows.Forms.Button button1TestWebURL;
         private System.Windows.Forms.TextBox textBox1WebURL;
         private System.Windows.Forms.Label label12;
+        private System.Windows.Forms.Button button1;
+        private System.Windows.Forms.OpenFileDialog openFileDialog1;
     }
 }
 
