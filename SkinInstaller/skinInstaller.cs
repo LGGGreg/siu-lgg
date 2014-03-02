@@ -407,6 +407,7 @@ namespace SkinInstaller
         private ToolStripMenuItem copyLikeFilesToolStripMenuItem;
         private BackgroundWorker uninstallWorker1;
         private ToolStripMenuItem lookUpReleaseManifestInfoToolStripMenuItem;
+        private ToolStripMenuItem fixRiotWarningsToolStripMenuItem;
 
         TreeNode database = new TreeNode("dbRoot");
         #endregion
@@ -424,7 +425,7 @@ namespace SkinInstaller
         public void processArgs(string args)
         {
             if (args == "") return;
-            args = args.Replace("%22", "").Replace("%20", "[[P20]]").Replace("%", "").Replace("[[P20]]", "%20");
+            args = args.Replace("%22", "").Replace("%20", "[[P20]]").Replace("[[P20]]", "%20");
             args = Uri.UnescapeDataString(args.Replace("#",""));
             //Cliver.Message.Inform(args);
             string dir = Application.StartupPath + "\\t1\\";
@@ -439,6 +440,7 @@ namespace SkinInstaller
             //Cliver.Message.Inform("got args to proc " + args);
             //got args to proc --webArgs|--url|skininstallerultimatelgg://test/||
             string[] parts = args.Split('|');
+            string urlToDownloadAsync = "";
             //string[] parts = Regex.Split(args,"\\[param\\]");
             for (int i = 0; i < parts.Length; i++)
             {
@@ -485,9 +487,7 @@ namespace SkinInstaller
                                 System.Net.WebClient client = new WebClient();
                                 try
                                 {
-                                    client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(client_DownloadProgressChanged);
-                                    client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-                                    client.DownloadFileAsync(new Uri(theURL), dir + "downloaded.7z");
+                                    urlToDownloadAsync=theURL;
 
                                     addItFlag = false;
                                     //string response = client.DownloadString(dlURL).Trim();
@@ -542,12 +542,9 @@ namespace SkinInstaller
                     //Cliver.Message.Inform("Good"+args+" and \r\n"+parts[1]);
                     this.tabControl1.SelectedIndex = 0;
                     string downloadURL = "http"+parts[1].Substring(5);
-                    System.Net.WebClient client = new WebClient();
                     try
                     {
-                        client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(client_DownloadProgressChanged);
-                        client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
-                        client.DownloadFileAsync(new Uri(downloadURL), dir + "downloaded.7z");
+                        urlToDownloadAsync = downloadURL;
                         //files.Add(dir + "downloaded.7z");
                         addItFlag =false;
                     }
@@ -583,9 +580,26 @@ namespace SkinInstaller
             }
             if(files.Count>0)
             {
-                processNewDirectory(files.ToArray(),addItFlag||addItFileFlag,addItFlag);
+                processNewDirectory(files.ToArray(),addItFlag||addItFileFlag,addItFlag,urlToDownloadAsync);
 
             }
+            else
+            {
+                downloadWaitingFile(urlToDownloadAsync);
+            }
+        }
+        void downloadWaitingFile(string urlToDownloadAsync)
+        {
+            if (urlToDownloadAsync == "") return;
+            string dir = Application.StartupPath + "\\t1\\";
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+            System.Net.WebClient client = new WebClient();
+            client.DownloadProgressChanged += new DownloadProgressChangedEventHandler(client_DownloadProgressChanged);
+            client.DownloadFileCompleted += new AsyncCompletedEventHandler(client_DownloadFileCompleted);
+            client.DownloadFileAsync(new Uri(urlToDownloadAsync), dir + "downloaded.7z", urlToDownloadAsync);
         }
         void client_DownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
         {
@@ -598,8 +612,24 @@ namespace SkinInstaller
         {
             UpdateProgressSafe(100);
 
-            string dir = Application.StartupPath + "\\t1\\"; 
-            processNewDirectory(new string[] {dir + "downloaded.7z"},true);
+            string dir = Application.StartupPath + "\\t1\\";
+            string fileLocation = dir + "downloaded.7z";
+            try
+            {
+                System.Net.WebClient senderC = (System.Net.WebClient)sender;
+                WebHeaderCollection heds = senderC.ResponseHeaders;
+                string type = heds["Content-Type"].ToString();
+                if (type.ToLower().Contains("/zip"))
+                {
+                    this.SIFileOp.FileMove(fileLocation, fileLocation+".zip");
+                    fileLocation = fileLocation + ".zip";
+                }
+            }
+            catch (System.Exception ex)
+            {
+            	
+            }
+            processNewDirectory(new string[] { fileLocation }, true);
 
         }
 
@@ -891,6 +921,7 @@ namespace SkinInstaller
             }
 
             this.rmdf = RelManDirectoryFile.RelManDirectoryFileFromRiotRoot(gameDirectory);
+            removeSoftRepairFile();
             //List<RelFileEntry> entries = rmdf.fileList.SearchFileEntries("lol_sfx_hud.fsb");
            // RAFArchive raf = new RAFArchive("C:\\Riot Games\\League of Legends\\RADS\\projects\\lol_game_client\\filearchives\\0.0.0.155\\Archive_65414672.raf");
             string compFile = "zacwgoomovemoving.luaobj";
@@ -929,6 +960,30 @@ namespace SkinInstaller
             this.listView1.Sort();
             this.loadListViewSettings();
             doBrowser(Properties.Settings.Default.showAds);
+
+        }
+        public void removeSoftRepairFile()
+        {
+            string dirToSearch = gameDirectory + "/RADS/projects/lol_game_client/";
+            if (Directory.Exists(dirToSearch))
+            {
+                try
+                {
+                    string[] filesInDir = Directory.GetFiles(dirToSearch, "*.*", SearchOption.AllDirectories);
+                    foreach (string file in filesInDir)
+                    {
+                        FileInfo info = new FileInfo(file);
+                        if (info.Name == "SOFT_REPAIR")
+                        {
+                            SIFileOp.FileDelete(info.FullName);
+                        }
+                    }
+                }
+                catch (System.Exception ex)
+                {
+                	
+                }
+            }            
 
         }
         public void loadNameReplacements()
@@ -1255,7 +1310,12 @@ namespace SkinInstaller
             }
             else
             {
-                //we already showed an error
+                    Cliver.Message.Show("Error Modifying Release Manifest", SystemIcons.Error, "Warning, there was an error finding your release manifest file!\n\n" +
+                         "This means that something is weird inside your LoL directory\n\nIt is probably best to do a full repair.\n" +
+                         "Go To " + gameDirectory + "\\RADS\\projects\\ and delete the folder \"lol_game_client\"\nThen open up your launcher for LoL, click the gear on the top right, and choose repair.\n\n" +
+                         "It may also help to right click -> run as administrator, this program as well", 0, new string[] { "OK!" });
+                    return;
+                
             }
         }
         #region notImportant
@@ -1672,6 +1732,7 @@ namespace SkinInstaller
                         //button1.PerformClick();
                     }
                 }
+                downloadWaitingFile(params1.urlToDownloadAsyncAfter);
             }
 
         }
@@ -1681,17 +1742,19 @@ namespace SkinInstaller
             public string[] files;
             public bool runAutoCode;
             public bool allowDialog;
+            public string urlToDownloadAsyncAfter;
         }
-        private void processNewDirectory(string[] origonalInputFiles, bool runAutoAddCode = false, bool allowDialog = true)
+        private void processNewDirectory(string[] origonalInputFiles, bool runAutoAddCode = false, bool allowDialog = true, string urlToDownloadAsynAfter = "")
         {
             if (addFilesWorker.IsBusy)
             {
-                Cliver.Message.Inform("Please wait for the current files to complete being added to the list before you add more");
-                return;
+               Cliver.Message.Inform("Please wait for the current files to complete being added to the list before you add more");
+               return;
             }
             addFilesPanel.BackColor = System.Drawing.SystemColors.Control;
             AddToDatabasePanel.BackColor = Color.Lime;
             ProcessParams1 params1;
+            params1.urlToDownloadAsyncAfter = urlToDownloadAsynAfter;
             params1.runAutoCode = runAutoAddCode;
             params1.files = origonalInputFiles;
             params1.allowDialog = allowDialog;
@@ -1701,6 +1764,7 @@ namespace SkinInstaller
         private string add_0_toName(string inName)
         {
             int extensionLocation = inName.LastIndexOf(".");
+            if (extensionLocation < 0) extensionLocation = inName.Length;
             inName = inName.Insert(extensionLocation, "_0");
             return inName;
         }
@@ -1732,13 +1796,15 @@ namespace SkinInstaller
 
                 
 
-                if ((origonalFile.Trim().ToLower().EndsWith(".zip")) ||
-                    (origonalFile.Trim().ToLower().EndsWith(".u9lolpatch")))
+                if ((origonalFile.Trim().ToLower().EndsWith(".testzip")) ||
+                    (origonalFile.Trim().ToLower().EndsWith(".testu9lolpatch")))
                 {
                     ZipUtil.UnZipFiles(origonalFile, Application.StartupPath + "\\"+c_EXTRACTED_AND_EXTRA_TEMP_FILES_FOR_SKIN_INSTALL, "", false);
                 }
                 else if (origonalFile.Trim().ToLower().EndsWith(".rar") ||
                         origonalFile.Trim().ToLower().EndsWith(".7z") ||
+                        origonalFile.Trim().ToLower().EndsWith(".zip") ||
+                        origonalFile.Trim().ToLower().EndsWith(".u9lolpatch") ||
                         origonalFile.Trim().ToLower().EndsWith(".yurixyworks") ||
                         origonalFile.Trim().ToLower().EndsWith(".lolmod") ||
                         origonalFile.Trim().ToLower().EndsWith(".bzip2") ||
@@ -3334,19 +3400,8 @@ namespace SkinInstaller
         private void installWork(object sender, DoWorkEventArgs e)
         {
             debugadd("install process started");
-            RelManDirectoryFile rmdf = RelManDirectoryFile.RelManDirectoryFileFromRiotRoot(gameDirectory);
-            if (rmdf.valid)
-            {
-                
-            }
-            else
-            {
-                Cliver.Message.Show("Error Modifying Release Manifest", SystemIcons.Error, "Warning, there was an error finding your release manifest file!\n\n" +
-                     "This means that something is weird inside your LoL directory\n\nIt is probably best to do a full repair.\n"+
-                     "Go To "+gameDirectory+"\\RADS\\projects\\ and delete the folder \"lol_game_client\"\nThen open up your launcher for LoL, click the gear on the top right, and choose repair.\n\n"+
-                     "It may also help to right click -> run as administrator, this program as well", 0, new string[] { "OK!"});
-                return;
-            }
+            removeSoftRepairFile();
+            
 
             List<ListViewItem> a = (List<ListViewItem>)e.Argument;
             debugadd("installing " + a.Count.ToString() + " skins");
@@ -4591,6 +4646,16 @@ namespace SkinInstaller
             this.tabControl1 = new System.Windows.Forms.TabControl();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.listView1 = new SkinInstaller.ListViewItemHover();
+            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
+            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
             this.dataBaseListMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.toolStripSelectUninstalled = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSelectAllInstalled = new System.Windows.Forms.ToolStripMenuItem();
@@ -4722,21 +4787,12 @@ namespace SkinInstaller
             this.ParticleTreeWorkerNew = new System.ComponentModel.BackgroundWorker();
             this.splitContainer6 = new System.Windows.Forms.SplitContainer();
             this.panel10 = new System.Windows.Forms.Panel();
+            this.webBrowser2Test = new SkinInstaller.ExtendedWebBrowser();
             this.button3CloseAd = new System.Windows.Forms.Button();
             this.addFilesWorker = new System.ComponentModel.BackgroundWorker();
             this.patchFixerWorker = new System.ComponentModel.BackgroundWorker();
             this.uninstallWorker1 = new System.ComponentModel.BackgroundWorker();
-            this.listView1 = new SkinInstaller.ListViewItemHover();
-            this.columnHeader1 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader5 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader3 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader4 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader6 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader8 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader9 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.columnHeader7 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.webBrowser2Test = new SkinInstaller.ExtendedWebBrowser();
+            this.fixRiotWarningsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tabPage2.SuspendLayout();
             this.panel4.SuspendLayout();
             this.panel5.SuspendLayout();
@@ -5290,6 +5346,81 @@ namespace SkinInstaller
             this.splitContainer2.Size = new System.Drawing.Size(714, 281);
             this.splitContainer2.SplitterDistance = 522;
             this.splitContainer2.TabIndex = 7;
+            // 
+            // listView1
+            // 
+            this.listView1.AutoArrange = false;
+            this.listView1.CheckBoxes = true;
+            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
+            this.columnHeader1,
+            this.columnHeader2,
+            this.columnHeader5,
+            this.columnHeader3,
+            this.columnHeader4,
+            this.columnHeader6,
+            this.columnHeader8,
+            this.columnHeader9,
+            this.columnHeader7});
+            this.listView1.ContextMenuStrip = this.dataBaseListMenuStrip1;
+            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.listView1.GridLines = true;
+            this.listView1.LargeImageList = this.imageList1;
+            this.listView1.Location = new System.Drawing.Point(18, 15);
+            this.listView1.Name = "listView1";
+            this.listView1.Size = new System.Drawing.Size(504, 266);
+            this.listView1.SmallImageList = this.imageList1;
+            this.listView1.TabIndex = 0;
+            this.listView1.TileSize = new System.Drawing.Size(2, 2);
+            this.listView1.UseCompatibleStateImageBehavior = false;
+            this.listView1.View = System.Windows.Forms.View.Details;
+            this.listView1.ItemHover += new SkinInstaller.ListViewItemHover.ItemHoverEventHandler(this.listView1_ItemMouseHover);
+            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
+            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
+            // 
+            // columnHeader1
+            // 
+            this.columnHeader1.Text = " ";
+            this.columnHeader1.Width = 43;
+            // 
+            // columnHeader2
+            // 
+            this.columnHeader2.Text = "Skin Title";
+            this.columnHeader2.Width = 190;
+            // 
+            // columnHeader5
+            // 
+            this.columnHeader5.Text = "Author";
+            this.columnHeader5.Width = 100;
+            // 
+            // columnHeader3
+            // 
+            this.columnHeader3.Text = "File Count";
+            this.columnHeader3.Width = 69;
+            // 
+            // columnHeader4
+            // 
+            this.columnHeader4.Text = "Installed";
+            this.columnHeader4.Width = 53;
+            // 
+            // columnHeader6
+            // 
+            this.columnHeader6.Text = "Added";
+            this.columnHeader6.Width = 67;
+            // 
+            // columnHeader8
+            // 
+            this.columnHeader8.Text = "Date and Time Added";
+            this.columnHeader8.Width = 0;
+            // 
+            // columnHeader9
+            // 
+            this.columnHeader9.Text = "Date and Time Installed";
+            this.columnHeader9.Width = 0;
+            // 
+            // columnHeader7
+            // 
+            this.columnHeader7.Text = "Character";
+            this.columnHeader7.Width = 90;
             // 
             // dataBaseListMenuStrip1
             // 
@@ -5966,7 +6097,8 @@ namespace SkinInstaller
             this.editAllPreferencesToolStripMenuItem,
             this.checkForUpdateToolStripMenuItem,
             this.registerAppForWebUrlsToolStripMenuItem,
-            this.createDesktopShortcutToolStripMenuItem});
+            this.createDesktopShortcutToolStripMenuItem,
+            this.fixRiotWarningsToolStripMenuItem});
             this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
             this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
             this.optionsToolStripMenuItem.Text = "Options";
@@ -6551,6 +6683,19 @@ namespace SkinInstaller
             this.panel10.Size = new System.Drawing.Size(154, 38);
             this.panel10.TabIndex = 0;
             // 
+            // webBrowser2Test
+            // 
+            this.webBrowser2Test.AdditionalHeaders = null;
+            this.webBrowser2Test.Location = new System.Drawing.Point(50, 8);
+            this.webBrowser2Test.MinimumSize = new System.Drawing.Size(20, 20);
+            this.webBrowser2Test.Name = "webBrowser2Test";
+            this.webBrowser2Test.Size = new System.Drawing.Size(39, 21);
+            this.webBrowser2Test.TabIndex = 1;
+            this.webBrowser2Test.Tag = true;
+            this.webBrowser2Test.Visible = false;
+            this.webBrowser2Test.BeforeNavigate2 += new System.EventHandler<SkinInstaller.BeforeNavigate2EventArgs>(this.webBrowser2_BeforeNavigate2);
+            this.webBrowser2Test.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser2Test_DocumentCompleted);
+            // 
             // button3CloseAd
             // 
             this.button3CloseAd.Location = new System.Drawing.Point(3, 6);
@@ -6582,93 +6727,12 @@ namespace SkinInstaller
             this.uninstallWorker1.ProgressChanged += new System.ComponentModel.ProgressChangedEventHandler(this.uninstallWorker1_ProgressChanged);
             this.uninstallWorker1.RunWorkerCompleted += new System.ComponentModel.RunWorkerCompletedEventHandler(this.uninstallWorker1_RunWorkerCompleted);
             // 
-            // listView1
+            // fixRiotWarningsToolStripMenuItem
             // 
-            this.listView1.AutoArrange = false;
-            this.listView1.CheckBoxes = true;
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.columnHeader1,
-            this.columnHeader2,
-            this.columnHeader5,
-            this.columnHeader3,
-            this.columnHeader4,
-            this.columnHeader6,
-            this.columnHeader8,
-            this.columnHeader9,
-            this.columnHeader7});
-            this.listView1.ContextMenuStrip = this.dataBaseListMenuStrip1;
-            this.listView1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.listView1.GridLines = true;
-            this.listView1.LargeImageList = this.imageList1;
-            this.listView1.Location = new System.Drawing.Point(18, 15);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(504, 266);
-            this.listView1.SmallImageList = this.imageList1;
-            this.listView1.TabIndex = 0;
-            this.listView1.TileSize = new System.Drawing.Size(2, 2);
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.ItemHover += new SkinInstaller.ListViewItemHover.ItemHoverEventHandler(this.listView1_ItemMouseHover);
-            this.listView1.ColumnClick += new System.Windows.Forms.ColumnClickEventHandler(this.listView1_ColumnClick);
-            this.listView1.MouseUp += new System.Windows.Forms.MouseEventHandler(this.listView1_MouseUp);
-            // 
-            // columnHeader1
-            // 
-            this.columnHeader1.Text = " ";
-            this.columnHeader1.Width = 43;
-            // 
-            // columnHeader2
-            // 
-            this.columnHeader2.Text = "Skin Title";
-            this.columnHeader2.Width = 190;
-            // 
-            // columnHeader5
-            // 
-            this.columnHeader5.Text = "Author";
-            this.columnHeader5.Width = 100;
-            // 
-            // columnHeader3
-            // 
-            this.columnHeader3.Text = "File Count";
-            this.columnHeader3.Width = 69;
-            // 
-            // columnHeader4
-            // 
-            this.columnHeader4.Text = "Installed";
-            this.columnHeader4.Width = 53;
-            // 
-            // columnHeader6
-            // 
-            this.columnHeader6.Text = "Added";
-            this.columnHeader6.Width = 67;
-            // 
-            // columnHeader8
-            // 
-            this.columnHeader8.Text = "Date and Time Added";
-            this.columnHeader8.Width = 0;
-            // 
-            // columnHeader9
-            // 
-            this.columnHeader9.Text = "Date and Time Installed";
-            this.columnHeader9.Width = 0;
-            // 
-            // columnHeader7
-            // 
-            this.columnHeader7.Text = "Character";
-            this.columnHeader7.Width = 90;
-            // 
-            // webBrowser2Test
-            // 
-            this.webBrowser2Test.AdditionalHeaders = null;
-            this.webBrowser2Test.Location = new System.Drawing.Point(50, 8);
-            this.webBrowser2Test.MinimumSize = new System.Drawing.Size(20, 20);
-            this.webBrowser2Test.Name = "webBrowser2Test";
-            this.webBrowser2Test.Size = new System.Drawing.Size(39, 21);
-            this.webBrowser2Test.TabIndex = 1;
-            this.webBrowser2Test.Tag = true;
-            this.webBrowser2Test.Visible = false;
-            this.webBrowser2Test.BeforeNavigate2 += new System.EventHandler<SkinInstaller.BeforeNavigate2EventArgs>(this.webBrowser2_BeforeNavigate2);
-            this.webBrowser2Test.DocumentCompleted += new System.Windows.Forms.WebBrowserDocumentCompletedEventHandler(this.webBrowser2Test_DocumentCompleted);
+            this.fixRiotWarningsToolStripMenuItem.Name = "fixRiotWarningsToolStripMenuItem";
+            this.fixRiotWarningsToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
+            this.fixRiotWarningsToolStripMenuItem.Text = "Fix Riot Corruption Warnings";
+            this.fixRiotWarningsToolStripMenuItem.Click += new System.EventHandler(this.fixRiotWarningsToolStripMenuItem_Click);
             // 
             // skinInstaller
             // 
@@ -11272,6 +11336,7 @@ namespace SkinInstaller
         #region PatchFixer
         private void button3FixCrashAfterPatch_Click(object sender, EventArgs e)
         {
+            removeSoftRepairFile();
             if (Cliver.Message.Show("Are you sure?",
                                 SystemIcons.Information,
                                 "This process will attempt to repair LoL to a working state after a patch\r\n" +
@@ -11396,6 +11461,15 @@ namespace SkinInstaller
         {
             DuplicateFileToMatchSkinForm dftmsf = new DuplicateFileToMatchSkinForm(this);
             dftmsf.Show();
+        }
+
+        private void fixRiotWarningsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            removeSoftRepairFile();
+            Cliver.Message.Show("Fix Complete", SystemIcons.Information,
+                "Fix Complete, you should no longer see this warning." +"\r\n\r\n" +
+                    "If you still have issue, you may need to do a full repair."
+                    , 0, new string[1] { "Ok", });
         }
 
 
