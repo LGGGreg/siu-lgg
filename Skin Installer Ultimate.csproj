@@ -82,9 +82,7 @@
     <Compile Include="GUI\dxtVersionReader.Designer.cs">
       <DependentUpon>dxtVersionReader.cs</DependentUpon>
     </Compile>
-    <Compile Include="GUI\ExtendedWebBrowser.cs">
-      <SubType>Component</SubType>
-    </Compile>
+    <Compile Include="GUI\ExtendedWebBrowser.cs" />
     <Compile Include="GUI\ImageVersionView.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -473,10 +471,6 @@
       <Project>{6087D6FE-BA69-43AF-86FF-D375D28AC980}</Project>
       <Name>TextEditor</Name>
     </ProjectReference>
-    <ProjectReference Include="ThirdParty\Be.Windows.Forms.HexBox\Be.Windows.Forms.HexBox.csproj">
-      <Project>{26C5F25F-B450-4CAF-AD8B-B8D11AE73457}</Project>
-      <Name>Be.Windows.Forms.HexBox</Name>
-    </ProjectReference>
     <ProjectReference Include="ThirdParty\ColorSlider\ColorSlider.csproj">
       <Project>{16E224DC-7FF0-4908-8318-D6A3AC2E797A}</Project>
       <Name>ColorSlider</Name>
@@ -486,7 +480,7 @@
       <Name>LOLViewer</Name>
     </ProjectReference>
     <ProjectReference Include="ThirdParty\MessageForm\MessageForm.csproj">
-      <Project>{6E7D9609-B82F-48A9-8E79-7E3340855AD6}</Project>
+      <Project>{6e7d9609-b82f-48a9-8e79-7e3340855ad6}</Project>
       <Name>MessageForm</Name>
     </ProjectReference>
     <ProjectReference Include="ThirdParty\RAF Manager\RAFManager.csproj">

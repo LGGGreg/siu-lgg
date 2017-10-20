@@ -254,6 +254,7 @@ namespace RelManLib
         public static RelManDirectoryFile RelManDirectoryFileFromRiotRoot(String riotRootLocation)
         {
             //C:\Riot Games\League of Legends
+            if (riotRootLocation == "") return null;
             FileInfo origFi = new FileInfo(riotRootLocation);
             if (origFi.Name == "releasemanifest") return new RelManDirectoryFile(riotRootLocation);
 
